@@ -125,8 +125,7 @@ class Albums_Controller extends Items_Controller
             $album->type = 'album';
             $album->parent_id = $parent_id;
             $album->name = $form->add_album->inputs['name']->value;
-            $album->title = $form->add_album->title->value ?
-        $form->add_album->title->value : $form->add_album->inputs['name']->value;
+            $album->title = $form->add_album->title->value ?: $form->add_album->inputs['name']->value;
             $album->description = $form->add_album->description->value;
             $album->slug = $form->add_album->slug->value;
             $album->validate();

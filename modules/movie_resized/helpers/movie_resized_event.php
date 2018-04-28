@@ -16,9 +16,9 @@ class movie_resized_event_Core
             // copied this from modules/gallery/models/items.php
             $view = new View('movieplayer.html');
             $view->max_size = $movie_img->max_size;
-            $view->width = $width ? $width : $movie_img->width;
+            $view->width = $width ?: $movie_img->width;
             ;
-            $view->height = $height ? $height : $movie_img->height;
+            $view->height = $height ?: $movie_img->height;
             ;
             $view->attrs = $movie_img->attrs;
             $view->url = str_replace($relative_file, $relative_file.'.mp4', $resize_url);

@@ -398,7 +398,7 @@ abstract class Kohana_Core
                         }
 
                         // If cache is false (as above) return NULL, otherwise, return the cache
-                        return ($cache ? $cache : null);
+                        return ($cache ?: null);
                     } else {
                         return unserialize(file_get_contents($path));
                     }

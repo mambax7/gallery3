@@ -6,7 +6,7 @@
   <body>
     <h2><?= t('Password reset request') ?> </h2>
     <p>
-      <?= t('Hello, %name,', array('name' => $user->full_name ? $user->full_name : $user->name)) ?>
+      <?= t('Hello, %name,', array('name' => $user->full_name ?: $user->name)) ?>
     </p>
     <p>
   <?= t(

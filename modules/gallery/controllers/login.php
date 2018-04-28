@@ -59,7 +59,7 @@ class Login_Controller extends Controller
         list($valid, $form) = $this->_auth('login/auth_html');
         if ($valid) {
             $continue_url = $form->continue_url->value;
-            url::redirect($continue_url ? $continue_url : item::root()->abs_url());
+            url::redirect($continue_url ?: item::root()->abs_url());
         } else {
             $view = new Theme_View('page.html', 'other', 'login');
             $view->page_title = t('Log in to Gallery');
