@@ -23,6 +23,7 @@ class random_Core
     /**
      * Return a random 32 byte hash value.
      * @param string extra entropy data
+     * @return string
      */
     public static function hash($length=32)
     {

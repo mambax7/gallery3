@@ -144,6 +144,7 @@ class Item_Model_Core extends ORM_MPTT
      *   movie: /gallery3/index.php/Bobs%20Wedding/First-Dance
      *
      * @param string $query the query string (eg "page=2")
+     * @return string
      */
     public function url($query=null)
     {
@@ -161,6 +162,7 @@ class Item_Model_Core extends ORM_MPTT
      *   movie: http://example.com/gallery3/index.php/Bobs%20Wedding/First-Dance
      *
      * @param string $query the query string (eg "page=2")
+     * @return string
      */
     public function abs_url($query=null)
     {
@@ -1157,6 +1159,7 @@ class Item_Model_Core extends ORM_MPTT
      * Same as ORM::as_array() but convert id fields into their RESTful form.
      *
      * @param array if specified, only return the named fields
+     * @return array
      */
     public function as_restful_array($fields=array())
     {

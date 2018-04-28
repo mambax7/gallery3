@@ -68,6 +68,7 @@ class photo_Core
      * @param integer $height
      * @param integer $max    the target size for the largest dimension
      * @param string  $format the output format using %d placeholders for width and height
+     * @return string
      */
     public static function img_dimensions($width, $height, $max, $format="width=\"%d\" height=\"%d\"")
     {

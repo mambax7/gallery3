@@ -50,6 +50,7 @@ class module_Core
     /**
      * Load the corresponding Module_Model
      * @param string $module_name
+     * @return mixed
      */
     public static function get($module_name)
     {
@@ -73,6 +74,7 @@ class module_Core
     /**
      * Check to see if a module is installed
      * @param string $module_name
+     * @return bool
      */
     public static function is_installed($module_name)
     {
@@ -82,6 +84,7 @@ class module_Core
     /**
      * Check to see if a module is active
      * @param string $module_name
+     * @return bool
      */
     public static function is_active($module_name)
     {
@@ -600,6 +603,7 @@ class module_Core
     /**
      * Return the version of the installed module.
      * @param string $module_name
+     * @return
      */
     public static function get_version($module_name)
     {

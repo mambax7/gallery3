@@ -298,14 +298,15 @@ class Image_Core
     }
 
     /**
-         * Overlay a second image on top of this one.
-         *
-         * @throws Kohana_Exception
-         * @param  string  $overlay_file          path to an image file
-         * @param  integer $x                     x offset for the overlay
-         * @param  integer $y                     y offset for the overlay
-         * @param  integer $transparency          transparency percent
-         */
+     * Overlay a second image on top of this one.
+     *
+     * @return \Image_Core
+     * @throws Kohana_Exception
+     * @param  string  $overlay_file path to an image file
+     * @param  integer $x            x offset for the overlay
+     * @param  integer $y            y offset for the overlay
+     * @param  integer $transparency transparency percent
+     */
     public function composite($overlay_file, $x, $y, $transparency)
     {
         $image_info = getimagesize($overlay_file);

@@ -42,6 +42,7 @@ class Combined_Controller extends Controller
      * Print out a cached entry.
      * @param string   the combined entry type (either "javascript" or "css")
      * @param string   the key (typically an md5 sum)
+     * @return string
      */
     private function _emit($type, $key)
     {

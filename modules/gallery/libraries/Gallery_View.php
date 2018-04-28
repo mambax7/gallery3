@@ -100,6 +100,7 @@ class Gallery_View_Core extends View
      *               it needs to be relative to DOCROOT. Just specifying a file name will result
      *               in searching Kohana's cascading file system.
      * @param $group the group of scripts to combine this with.  defaults to "core"
+     * @return string
      */
     public function script($file, $group="core")
     {
@@ -123,6 +124,7 @@ class Gallery_View_Core extends View
      *               it needs to be relative to DOCROOT. Just specifying a file name will result
      *               in searching Kohana's cascading file system.
      * @param $group the group of css to combine this with.  defaults to "core"
+     * @return string
      */
     public function css($file, $group="core")
     {
@@ -141,6 +143,7 @@ class Gallery_View_Core extends View
      * Combine a series of files into a single one and cache it in the database.
      * @param $type  the data type (script or css)
      * @param $group the group of scripts or css we want (null will combine all groups)
+     * @return string
      */
     public function get_combined($type, $group=null)
     {
@@ -239,6 +242,7 @@ class Gallery_View_Core extends View
      * Convert relative references inside a CSS file to absolute ones so that when it's served from
      * a new location as part of a combined bundle the references are still correct.
      * @param string  the path to the css file
+     * @return bool|mixed|string
      */
     private function process_css($css_file)
     {

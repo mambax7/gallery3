@@ -1078,13 +1078,14 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
      * specified byte order. The offsets will be calculated from the
      * offset given.
      *
-     * @param int $offset
+     * @param int          $offset
      *            the offset of the first byte of this directory.
      *
      * @param PelByteOrder $order
      *            the byte order that should be used when
      *            turning integers into bytes. This should be one of {@link
      *            PelConvert::LITTLE_ENDIAN} and {@link PelConvert::BIG_ENDIAN}.
+     * @return string
      */
     public function getBytes($offset, $order)
     {

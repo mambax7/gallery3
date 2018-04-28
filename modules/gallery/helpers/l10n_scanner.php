@@ -176,6 +176,7 @@ class l10n_scanner_Core
      * quote type used.
      *
      * @param $str The strings to escape
+     * @return bool|string|\The
      */
     private static function _escape_quoted_string($str)
     {

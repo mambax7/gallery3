@@ -35,6 +35,7 @@ class Session_Core
      * Singleton instance of Session.
      *
      * @param string Force a specific session_id
+     * @return
      */
     public static function instance($session_id = null)
     {

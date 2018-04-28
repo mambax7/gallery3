@@ -166,6 +166,7 @@ class rest_Core
      * Return an absolute url used for REST resource location.
      * @param  string  resource type (eg, "item", "tag")
      * @param  object  resource
+     * @return mixed|string
      */
     public static function url()
     {

@@ -87,6 +87,7 @@ class url extends url_Core
      * Merge extra an query string onto a given url safely.
      * @param string the original url
      * @param array the query string data in key=value form
+     * @return string
      */
     public static function merge_querystring($url, $query_params)
     {
