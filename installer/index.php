@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-define('DOCROOT', dirname(dirname(__FILE__)) . '/');
+define('DOCROOT', dirname(__DIR__) . '/');
 define('VARPATH', DOCROOT . 'var/');
 define('SYSPATH', 'DEFINED_TO_SOMETHING_SO_THAT_WE_CAN_KEEP_CONSISTENT_PREAMBLES_IN_THE_INSTALLER');
 
