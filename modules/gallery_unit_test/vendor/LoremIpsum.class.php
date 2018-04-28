@@ -29,7 +29,7 @@ class LoremIpsumGenerator {
 	
 	private $words, $wordsPerParagraph, $wordsPerSentence;
 	
-	function __construct($wordsPer = 100)
+	public function __construct($wordsPer = 100)
 	{
 		$this->wordsPerParagraph = $wordsPer;
 		$this->wordsPerSentence = 24.460;
@@ -214,7 +214,7 @@ class LoremIpsumGenerator {
 		'cras' );
 	}
 		
-	function getContent($count, $format = 'html', $loremipsum = true)
+	public function getContent($count, $format = 'html', $loremipsum = true)
 	{
 		$format = strtolower($format);
 		
