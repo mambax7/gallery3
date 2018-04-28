@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') || die('No direct script access.');
 /**
  * Kohana_Config abstract driver to get and set
  * configuration options.
@@ -113,12 +113,12 @@ abstract class Config_Driver
         // Get the value of the key string
         $value = Kohana::key_string($this->config, $key);
 
-        if (true === $slash and is_string($value) and '' !== $value) {
+        if (true === $slash && is_string($value) && '' !== $value) {
             // Force the value to end with "/"
             $value = rtrim($value, '/').'/';
         }
 
-        if ((true === $required) and (null === $value)) {
+        if ((true === $required) && (null === $value)) {
             throw new Kohana_Config_Exception('Value not found in config driver');
         }
 
@@ -237,7 +237,7 @@ abstract class Config_Driver
     public function save_cache()
     {
         // If this configuration has changed
-        if (false !== $this->get('core.internal_cache') and $this->changed) {
+        if (false !== $this->get('core.internal_cache') && $this->changed) {
             $data = $this->config;
 
             // Save the cache

@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * Memcache-based Cache driver.
  *
@@ -19,7 +19,7 @@ class Cache_File_Driver extends Cache_Driver
         $this->config = $config;
         $this->config['directory'] = str_replace('\\', '/', realpath($this->config['directory'])).'/';
 
-        if (! is_dir($this->config['directory']) or ! is_writable($this->config['directory'])) {
+        if (! is_dir($this->config['directory']) || ! is_writable($this->config['directory'])) {
             throw new Cache_Exception('The configured cache directory, :directory:, is not writable.', [':directory:' => $this->config['directory']]);
         }
     }
@@ -52,7 +52,7 @@ class Cache_File_Driver extends Cache_Driver
                 $tags = explode('~', basename($path));
 
                 // Find valid tags
-                if (3 !== count($tags) or empty($tags[1])) {
+                if (3 !== count($tags) || empty($tags[1])) {
                     continue;
                 }
 
@@ -89,7 +89,7 @@ class Cache_File_Driver extends Cache_Driver
         }
 
 
-        if (null !== $tags and ! empty($tags)) {
+        if (null !== $tags && ! empty($tags)) {
             // Convert the tags into a string list
             $tags = implode('+', (array) $tags);
         }
@@ -228,6 +228,6 @@ class Cache_File_Driver extends Cache_Driver
         $expires = (int) substr($file, strrpos($file, '~') + 1);
 
         // Expirations of 0 are "never expire"
-        return (0 !== $expires and $expires <= time());
+        return (0 !== $expires && $expires <= time());
     }
 } // End Cache Memcache Driver

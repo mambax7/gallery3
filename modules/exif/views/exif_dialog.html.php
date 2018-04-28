@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <style type="text/css">
   #g-exif-data { font-size: .85em; }
   .g-odd { background: #bdd2ff; }

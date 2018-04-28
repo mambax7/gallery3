@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <div id="g-recaptcha"></div>
 <script type="text/javascript" src="<?= request::protocol() ?>://www.google.com/recaptcha/api/js/recaptcha_ajax.js">
 </script>

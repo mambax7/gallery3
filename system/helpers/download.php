@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * Download helper class.
  *
@@ -100,7 +100,7 @@ class download_Core
         // Prevent caching
         header('Expires: Thu, 01 Jan 1970 00:00:00 GMT');
 
-        if ('Internet Explorer' === request::user_agent('browser') and request::user_agent('version') <= '6.0') {
+        if ('Internet Explorer' === request::user_agent('browser') && request::user_agent('version') <= '6.0') {
             // HTTP 1.0
             header('Pragma:');
 

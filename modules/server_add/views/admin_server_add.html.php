@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <?= $theme->css('server_add.css') ?>
 <script type="text/javascript">
 $("document").ready(function() {

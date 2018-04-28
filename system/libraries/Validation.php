@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * Validation library.
  *
@@ -130,7 +130,7 @@ class Validation_Core extends ArrayObject
 
         $safe = [];
         foreach ($fields as $field) {
-            if (null === $choices or isset($choices[$field])) {
+            if (null === $choices || isset($choices[$field])) {
                 if (isset($this[$field])) {
                     $value = $this[$field];
 
@@ -179,7 +179,7 @@ class Validation_Core extends ArrayObject
     */
     public function label($field, $label = null)
     {
-        if (null === $label and (true !== $field or '*' !== $field) and ! isset($this->labels[$field])) {
+        if (null === $label && (true !== $field or '*' !== $field) && ! isset($this->labels[$field])) {
             // Set the field label to the field name
             $this->labels[$field] = ucfirst(preg_replace('/[^\pL]+/u', ' ', $field));
         } elseif (null !== $label) {
@@ -463,7 +463,7 @@ class Validation_Core extends ArrayObject
                             continue;
                         }
 
-                        if (empty($array[$f]) and ! in_array($rule, $this->empty_rules)) {
+                        if (empty($array[$f]) && ! in_array($rule, $this->empty_rules)) {
                             // This rule does not need to be processed on empty fields
                             continue;
                         }
@@ -483,7 +483,7 @@ class Validation_Core extends ArrayObject
                         break;
                     }
 
-                    if (! in_array($rule, $this->empty_rules) and ! $this->required($array[$field])) {
+                    if (! in_array($rule, $this->empty_rules) && ! $this->required($array[$field])) {
                         // This rule does not need to be processed on empty fields
                         continue;
                     }
@@ -624,7 +624,7 @@ class Validation_Core extends ArrayObject
      */
     public function required($str)
     {
-        if (is_object($str) and $str instanceof ArrayObject) {
+        if (is_object($str) && $str instanceof ArrayObject) {
             // Get the array from the ArrayObject
             $str = $str->getArrayCopy();
         }
@@ -695,7 +695,7 @@ class Validation_Core extends ArrayObject
     public function depends_on($field, array $fields)
     {
         foreach ($fields as $depends_on) {
-            if (! isset($this[$depends_on]) or null == $this[$depends_on]) {
+            if (! isset($this[$depends_on]) || null == $this[$depends_on]) {
                 return false;
             }
         }

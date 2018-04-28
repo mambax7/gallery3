@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <?php if ($anchor): ?>
 <a name="<?= $anchor ?>"></a>
 <?php endif ?>

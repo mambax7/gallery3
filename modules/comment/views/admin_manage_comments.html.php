@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <script type="text/javascript">
   var set_state_url =
     <?= html::js_string(url::site("admin/manage_comments/set_state/__ID__/__STATE__?csrf=$csrf")) ?>;

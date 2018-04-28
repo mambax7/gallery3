@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * Date helper class.
  *
@@ -290,25 +290,25 @@ class date_Core
         // Years and months do not match the formula exactly, due to leap years.
 
         // Years ago, 60 * 60 * 24 * 365
-        isset($years) and $timespan -= 31556926 * ($years = (int) floor($timespan / 31556926));
+        isset($years) && $timespan -= 31556926 * ($years = (int) floor($timespan / 31556926));
 
         // Months ago, 60 * 60 * 24 * 30
-        isset($months) and $timespan -= 2629744 * ($months = (int) floor($timespan / 2629743.83));
+        isset($months) && $timespan -= 2629744 * ($months = (int) floor($timespan / 2629743.83));
 
         // Weeks ago, 60 * 60 * 24 * 7
-        isset($weeks) and $timespan -= 604800 * ($weeks = (int) floor($timespan / 604800));
+        isset($weeks) && $timespan -= 604800 * ($weeks = (int) floor($timespan / 604800));
 
         // Days ago, 60 * 60 * 24
-        isset($days) and $timespan -= 86400 * ($days = (int) floor($timespan / 86400));
+        isset($days) && $timespan -= 86400 * ($days = (int) floor($timespan / 86400));
 
         // Hours ago, 60 * 60
-        isset($hours) and $timespan -= 3600 * ($hours = (int) floor($timespan / 3600));
+        isset($hours) && $timespan -= 3600 * ($hours = (int) floor($timespan / 3600));
 
         // Minutes ago, 60
-        isset($minutes) and $timespan -= 60 * ($minutes = (int) floor($timespan / 60));
+        isset($minutes) && $timespan -= 60 * ($minutes = (int) floor($timespan / 60));
 
         // Seconds ago, 1
-        isset($seconds) and $seconds = $timespan;
+        isset($seconds) && $seconds = $timespan;
 
         // Remove the variables that cannot be accessed
         unset($timespan, $time1, $time2);
@@ -319,7 +319,7 @@ class date_Core
         // Return the difference
         $difference = [];
         foreach ($output as $key) {
-            if (isset($$key) and ! isset($deny[$key])) {
+            if (isset($$key) && ! isset($deny[$key])) {
                 // Add requested key to the output
                 $difference[$key] = $$key;
             }
@@ -350,7 +350,7 @@ class date_Core
      */
     public static function timespan_string($time1, $time2 = null, $output = 'years,months,weeks,days,hours,minutes,seconds')
     {
-        if ($difference = date::timespan($time1, $time2, $output) and is_array($difference)) {
+        if ($difference = date::timespan($time1, $time2, $output) && is_array($difference)) {
             // Determine the key of the last item in the array
             $last = end($difference);
             $last = key($difference);

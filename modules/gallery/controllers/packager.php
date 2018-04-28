@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') || die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -197,7 +197,7 @@ class Packager_Controller extends Controller
         sort($paths);
 
         $fd = fopen($var_file, 'w');
-        fwrite($fd, "<?php defined(\"SYSPATH\") or die(\"No direct script access.\") ?>\n");
+        fwrite($fd, "<?php defined(\"SYSPATH\") || die(\"No direct script access.\") ?>\n");
         fwrite($fd, "<?php\n");
         foreach ($paths as $path) {
             fwrite($fd, "!file_exists($path) && mkdir($path);\n");

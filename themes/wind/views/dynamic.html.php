@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <div id="g-album-header">
   <div id="g-album-header-buttons">
     <?= $theme->dynamic_top() ?>

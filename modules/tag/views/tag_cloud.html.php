@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <ul>
   <?php foreach ($tags as $tag): ?>
   <li class="size<?=(int)(($tag->count / $max_count) * 7) ?>">

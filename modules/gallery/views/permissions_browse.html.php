@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <script type="text/javascript">
   var form_url = "<?= url::site('permissions/form/__ITEM__') ?>";
   show = function(id) {

@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * Object Relational Mapping (ORM) result iterator.
  *

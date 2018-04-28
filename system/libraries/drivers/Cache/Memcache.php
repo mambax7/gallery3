@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * Memcache-based Cache driver.
  *
@@ -21,12 +21,12 @@ class Cache_Memcache_Driver extends Cache_Driver
             throw new Cache_Exception('The memcache PHP extension must be loaded to use this driver.');
         }
 
-        ini_set('memcache.allow_failover', (isset($config['allow_failover']) and $config['allow_failover']) ? true : false);
+        ini_set('memcache.allow_failover', (isset($config['allow_failover']) && $config['allow_failover']) ? true : false);
 
         $this->config = $config;
         $this->backend = new Memcache;
 
-        $this->flags = (isset($config['compression']) and $config['compression']) ? MEMCACHE_COMPRESSED : false;
+        $this->flags = (isset($config['compression']) && $config['compression']) ? MEMCACHE_COMPRESSED : false;
 
         foreach ($config['servers'] as $server) {
             // Make sure all required keys are set

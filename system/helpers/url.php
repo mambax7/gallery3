@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * URL helper class.
  *
@@ -45,15 +45,15 @@ class url_Core
         $site_domain = (string) Kohana::config('core.site_domain', true);
 
         if (false == $protocol) {
-            if ('' === $site_domain or '/' === $site_domain[0]) {
+            if ('' === $site_domain || '/' === $site_domain[0]) {
                 // Use the configured site domain
                 $base_url = $site_domain;
             } else {
                 // Guess the protocol to provide full http://domain/path URL
-                $base_url = ((empty($_SERVER['HTTPS']) or 'off' === $_SERVER['HTTPS']) ? 'http' : 'https') . '://' . $site_domain;
+                $base_url = ((empty($_SERVER['HTTPS']) || 'off' === $_SERVER['HTTPS']) ? 'http' : 'https') . '://' . $site_domain;
             }
         } else {
-            if ('' === $site_domain or '/' === $site_domain[0]) {
+            if ('' === $site_domain || '/' === $site_domain[0]) {
                 // Guess the server name if the domain starts with slash
                 $port = $_SERVER['SERVER_PORT'];
                 $port = (((80 == $port) && ('http' == $protocol)) || ((443 == $port) && ('https' == $protocol)) || !$port) ? '' : ":$port";
@@ -64,7 +64,7 @@ class url_Core
             }
         }
 
-        if (true === $index and $index = Kohana::config('core.index_page')) {
+        if (true === $index && $index = Kohana::config('core.index_page')) {
             // Append the index page
             $base_url = $base_url.$index;
         }

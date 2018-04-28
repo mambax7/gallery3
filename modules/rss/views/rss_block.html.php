@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <ul id="g-feeds">
 <?php foreach ($feeds as $url => $title): ?>
   <li style="clear: both;">

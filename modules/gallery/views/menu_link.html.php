@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <li>
   <a <?= $menu->css_id ? "id='{$menu->css_id}'" : '' ?>
      class="g-menu-link <?= $menu->css_class ?>"

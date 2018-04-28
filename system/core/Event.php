@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * Process queuing/execution class. Allows an unlimited number of callbacks
  * to be added to 'events'. Events can be run multiple times, and can also
@@ -35,7 +35,7 @@ abstract class Event_Core
         if (! isset(Event::$events[$name])) {
             // Create an empty event if it is not yet defined
             Event::$events[$name] = [];
-        } elseif ($unique and in_array($callback, Event::$events[$name], true)) {
+        } elseif ($unique && in_array($callback, Event::$events[$name], true)) {
             // The event already exists
             return false;
         }
@@ -56,7 +56,7 @@ abstract class Event_Core
      */
     public static function add_before($name, $existing, $callback)
     {
-        if (empty(Event::$events[$name]) or false === ($key = array_search($existing, Event::$events[$name]))) {
+        if (empty(Event::$events[$name]) || false === ($key = array_search($existing, Event::$events[$name]))) {
             // Just add the event if there are no events
             return Event::add($name, $callback);
         } else {
@@ -75,7 +75,7 @@ abstract class Event_Core
      */
     public static function add_after($name, $existing, $callback)
     {
-        if (empty(Event::$events[$name]) or false === ($key = array_search($existing, Event::$events[$name]))) {
+        if (empty(Event::$events[$name]) || false === ($key = array_search($existing, Event::$events[$name]))) {
             // Just add the event if there are no events
             return Event::add($name, $callback);
         } else {
@@ -121,7 +121,7 @@ abstract class Event_Core
      */
     public static function replace($name, $existing, $callback)
     {
-        if (empty(Event::$events[$name]) or false === ($key = array_search($existing, Event::$events[$name], true))) {
+        if (empty(Event::$events[$name]) || false === ($key = array_search($existing, Event::$events[$name], true))) {
             return false;
         }
 

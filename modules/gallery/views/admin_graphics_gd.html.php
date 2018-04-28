@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <div id="gd" class="g-block<?= $is_active ? ' g-selected' : '' ?><?= $tk->installed ? ' g-installed-toolkit' : ' g-unavailable' ?>">
   <img class="logo" width="170" height="110" src="<?= url::file('modules/gallery/images/gd.png'); ?>" alt="<?php t('Visit the GD lib project site') ?>" />
   <h3> <?= t('GD') ?> </h3>

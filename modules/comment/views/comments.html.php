@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <?php if (comment::can_comment()): ?>
 <a href="<?= url::site("form/add/comments/{$item->id}") ?>#comment-form" id="g-add-comment"
    class="g-button ui-corner-all ui-icon-left ui-state-default">

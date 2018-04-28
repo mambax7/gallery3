@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') || die('No direct script access.');
 /**
  * MySQL database connection.
  *
@@ -56,7 +56,7 @@ class Database_Mysqli_Core extends Database_Mysql
     public function set_charset($charset)
     {
         // Make sure the database is connected
-        is_object($this->connection) or $this->connect();
+        is_object($this->connection) || $this->connect();
 
         if (! $this->connection->set_charset($charset)) {
             // Unable to set charset
@@ -73,7 +73,7 @@ class Database_Mysqli_Core extends Database_Mysql
     public function query_execute($sql)
     {
         // Make sure the database is connected
-        is_object($this->connection) or $this->connect();
+        is_object($this->connection) || $this->connect();
 
         $result = $this->connection->query($sql);
 
@@ -86,7 +86,7 @@ class Database_Mysqli_Core extends Database_Mysql
     public function escape($value)
     {
         // Make sure the database is connected
-        is_object($this->connection) or $this->connect();
+        is_object($this->connection) || $this->connect();
 
         return $this->connection->real_escape_string($value);
     }

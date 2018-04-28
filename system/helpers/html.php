@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * HTML helper class.
  *
@@ -135,10 +135,10 @@ class html_Core
         $safe = html::email($email);
 
         // Title defaults to the encoded email address
-        empty($title) and $title = $safe;
+        empty($title) && $title = $safe;
 
         // Parse attributes
-        empty($attributes) or $attributes = html::attributes($attributes);
+        empty($attributes) || $attributes = html::attributes($attributes);
 
         // Encoded start of the href="" is a static encoded version of 'mailto:'
         return '<a href="&#109;&#097;&#105;&#108;&#116;&#111;&#058;'.$safe.$params.'"'.$attributes.'>'.$title.'</a>';
@@ -152,7 +152,7 @@ class html_Core
      */
     public static function breadcrumb($segments = null)
     {
-        empty($segments) and $segments = Router::$segments;
+        empty($segments) && $segments = Router::$segments;
 
         $array = [];
         while ($segment = array_pop($segments)) {

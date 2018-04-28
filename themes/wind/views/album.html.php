@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <?php // @todo Set hover on AlbumGrid list items for guest users?>
 <div id="g-info">
   <?= $theme->album_top() ?>

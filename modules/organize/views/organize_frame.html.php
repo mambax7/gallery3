@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <link rel="stylesheet" type="text/css" href="<?= url::file('modules/organize/vendor/ext/css/ext-all.css') ?>" />
 <link rel="stylesheet" type="text/css" href="<?= url::file('modules/organize/vendor/ext/css/ux-all.css') ?>" />
 <link rel="stylesheet" type="text/css" href="<?= url::file('modules/organize/css/organize_frame.css') ?>" />

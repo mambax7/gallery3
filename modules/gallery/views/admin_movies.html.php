@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <div id="g-movies-admin" class="g-block ui-helper-clearfix">
   <h1> <?= t('Movies settings') ?> </h1>
   <p>

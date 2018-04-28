@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <p>
   <?= t('Gallery can check to see if there is a new version available for you to use.  It is a good idea to upgrade your Gallery to get the latest features and security fixes.  Your privacy is important so no information about your Gallery is shared during this process.  You can disable this feature below.') ?>
 </p>

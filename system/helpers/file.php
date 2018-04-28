@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * File helper class.
  *
@@ -22,7 +22,7 @@ class file_Core
     public static function mime($filename)
     {
         // Make sure the file is readable
-        if (! (is_file($filename) and is_readable($filename))) {
+        if (! (is_file($filename) && is_readable($filename))) {
             return false;
         }
 
@@ -55,19 +55,19 @@ class file_Core
             return $mime;
         }
 
-        if (ini_get('mime_magic.magicfile') and function_exists('mime_content_type')) {
+        if (ini_get('mime_magic.magicfile') && function_exists('mime_content_type')) {
             // Return the mime type using mime_content_type
             return mime_content_type($filename);
         }
 
         if (! KOHANA_IS_WIN) {
             // Attempt to locate use the file command, checking the return value
-            if ($command = trim(exec('which file', $output, $return)) and 0 === $return) {
+            if ($command = trim(exec('which file', $output, $return)) && 0 === $return) {
                 return trim(exec($command.' -bi '.escapeshellarg($filename)));
             }
         }
 
-        if (! empty($extension) and is_array($mime = Kohana::config('mimes.'.$extension))) {
+        if (! empty($extension) && is_array($mime = Kohana::config('mimes.'.$extension))) {
             // Return the mime-type guess, based on the extension
             return $mime[0];
         }
@@ -105,11 +105,11 @@ class file_Core
         while (! feof($input_file)) {
             // Open a new piece
             $piece_name = $filename.'.'.str_pad($piece, 3, '0', STR_PAD_LEFT);
-            $piece_open = @fopen($piece_name, 'wb+') or die('Could not write piece '.$piece_name);
+            $piece_open = @fopen($piece_name, 'wb+') || die('Could not write piece '.$piece_name);
 
             // Fill the current piece
-            while ($read < $piece_size and $data = fread($input_file, $chunk)) {
-                fwrite($piece_open, $data) or die('Could not write to open piece '.$piece_name);
+            while ($read < $piece_size && $data = fread($input_file, $chunk)) {
+                fwrite($piece_open, $data) || die('Could not write to open piece '.$piece_name);
                 $read += $chunk;
             }
 
@@ -121,7 +121,7 @@ class file_Core
             $piece++;
 
             // Make sure that piece is valid
-            ($piece < 999) or die('Maximum of 999 pieces exceeded, try a larger piece size');
+            ($piece < 999) || die('Maximum of 999 pieces exceeded, try a larger piece size');
         }
 
         // Close input file
@@ -149,7 +149,7 @@ class file_Core
         $chunk = 1024 * 8; // Chunk size to read
 
         // Open output file
-        $output_file = @fopen($output, 'wb+') or die('Could not open output file '.$output);
+        $output_file = @fopen($output, 'wb+') || die('Could not open output file '.$output);
 
         // Read each piece
         while ($piece_open = @fopen(($piece_name = $filename.'.'.str_pad($piece, 3, '0', STR_PAD_LEFT)), 'rb')) {
@@ -165,7 +165,7 @@ class file_Core
             $piece++;
 
             // Make sure piece is valid
-            ($piece < 999) or die('Maximum of 999 pieces exceeded');
+            ($piece < 999) || die('Maximum of 999 pieces exceeded');
         }
 
         // Close the output file

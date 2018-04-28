@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * Cookie helper class.
  *
@@ -29,13 +29,13 @@ class cookie_Core
         }
 
         // If the name param is an array, we import it
-        is_array($name) and extract($name, EXTR_OVERWRITE);
+        is_array($name) && extract($name, EXTR_OVERWRITE);
 
         // Fetch default options
         $config = Kohana::config('cookie');
 
         foreach (['value', 'expire', 'domain', 'path', 'secure', 'httponly'] as $item) {
-            if (null === $$item and isset($config[$item])) {
+            if (null === $$item && isset($config[$item])) {
                 $$item = $config[$item];
             }
         }
@@ -80,12 +80,12 @@ class cookie_Core
         // Find the position of the split between salt and contents
         $split = strlen(cookie::salt($name, null));
 
-        if (isset($cookie[$split]) and '~' === $cookie[$split]) {
+        if (isset($cookie[$split]) && '~' === $cookie[$split]) {
             // Separate the salt and the value
             list($hash, $value) = explode('~', $cookie, 2);
 
             if (cookie::salt($name, $value) === $hash) {
-                if (true === $xss_clean and false === Kohana::config('core.global_xss_filtering')) {
+                if (true === $xss_clean && false === Kohana::config('core.global_xss_filtering')) {
                     return Input::instance()->xss_clean($value);
                 }
                 // Cookie signature is valid

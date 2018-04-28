@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') || die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -113,7 +113,7 @@ class g2_import_Core
              "require('$base_dir/modules/core/classes/GalleryEmbed.class');"
              ],
              array_merge(
-                 ["<?php defined(\"SYSPATH\") or die(\"No direct script access.\") ?>\n"],
+                 ["<?php defined(\"SYSPATH\") || die(\"No direct script access.\") ?>\n"],
                  file("$base_dir/embed.php")
            )
          )
@@ -131,7 +131,7 @@ class g2_import_Core
              "require_once('$base_dir/init.inc');"
              ],
              array_merge(
-                 ["<?php defined(\"SYSPATH\") or die(\"No direct script access.\") ?>\n"],
+                 ["<?php defined(\"SYSPATH\") || die(\"No direct script access.\") ?>\n"],
                  file("$base_dir/main.php")
            )
          )
@@ -157,7 +157,7 @@ class g2_import_Core
                '$gallery = new G2_Gallery();'
              ],
              array_merge(
-                 ["<?php defined(\"SYSPATH\") or die(\"No direct script access.\") ?>\n"],
+                 ["<?php defined(\"SYSPATH\") || die(\"No direct script access.\") ?>\n"],
                  file("$base_dir/bootstrap.inc")
            )
          )
@@ -175,7 +175,7 @@ class g2_import_Core
                'function G2_Gallery'
              ],
              array_merge(
-                 ["<?php defined(\"SYSPATH\") or die(\"No direct script access.\") ?>\n"],
+                 ["<?php defined(\"SYSPATH\") || die(\"No direct script access.\") ?>\n"],
                  file("$base_dir/modules/core/classes/Gallery.class")
            )
          )
@@ -569,7 +569,7 @@ class g2_import_Core
     {
         $album->name = $g2_album->getPathComponent();
         $album->title = self::_decode_html_special_chars($g2_album->getTitle());
-        $album->title or $album->title = $album->name;
+        $album->title || $album->title = $album->name;
         $album->description = self::_decode_html_special_chars(self::extract_description($g2_album));
         $album->owner_id = self::map($g2_album->getOwnerId());
         try {
@@ -735,7 +735,7 @@ class g2_import_Core
           $item->set_data_file($g2_path);
           $item->name = $g2_item->getPathComponent();
           $item->title = self::_decode_html_special_chars($g2_item->getTitle());
-          $item->title or $item->title = $item->name;
+          $item->title || $item->title = $item->name;
           $item->description = self::_decode_html_special_chars(self::extract_description($g2_item));
           $item->owner_id = self::map($g2_item->getOwnerId());
           $item->save();
@@ -776,7 +776,7 @@ class g2_import_Core
               $item->set_data_file($g2_path);
               $item->name = $g2_item->getPathComponent();
               $item->title = self::_decode_html_special_chars($g2_item->getTitle());
-              $item->title or $item->title = $item->name;
+              $item->title || $item->title = $item->name;
               $item->description = self::_decode_html_special_chars(self::extract_description($g2_item));
               $item->owner_id = self::map($g2_item->getOwnerId());
               $item->save();
@@ -847,7 +847,7 @@ class g2_import_Core
         if ($corrupt) {
             if (!empty($item)) {
                 $title = $g2_item->getTitle();
-                $title or $title = $g2_item->getPathComponent();
+                $title || $title = $g2_item->getPathComponent();
                 $messages[] =
           t(
               '<a href="%g2_url">%title</a> from Gallery 2 could not be processed; (imported as <a href="%g3_url">%title</a>)',
@@ -1047,7 +1047,7 @@ class g2_import_Core
         $comment->guest_name = '';
         if ($comment->author_id == identity::guest()->id) {
             $comment->guest_name = $g2_comment->getAuthor();
-            $comment->guest_name or $comment->guest_name = (string) t('Anonymous coward');
+            $comment->guest_name || $comment->guest_name = (string) t('Anonymous coward');
             $comment->guest_email = 'unknown@nobody.com';
         }
         $comment->item_id = $item_id;

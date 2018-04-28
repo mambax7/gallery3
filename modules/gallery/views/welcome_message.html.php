@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <div id="g-welcome-message">
   <h1 style="display: none">
     <?= t('Welcome to Gallery 3!') ?>

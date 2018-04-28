@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * Adds useful information to the bottom of the current page for debugging and optimization purposes.
  *
@@ -59,7 +59,7 @@ class Profiler_Core
      */
     public static function show($name)
     {
-        return (true === Profiler::$show or (is_array(Profiler::$show) and in_array($name, Profiler::$show))) ? true : false;
+        return (true === Profiler::$show || (is_array(Profiler::$show) && in_array($name, Profiler::$show))) ? true : false;
     }
 
     /**

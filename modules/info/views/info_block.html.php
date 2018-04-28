@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <ul class="g-metadata">
   <?php foreach ($metadata as $info): ?>
   <li>

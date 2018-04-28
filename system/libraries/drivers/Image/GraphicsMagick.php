@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * GraphicsMagick Image Driver.
  *
@@ -74,7 +74,7 @@ class Image_GraphicsMagick_Driver extends Image_Driver
         $quality = (int) arr::remove('quality', $actions);
 
         // Use 95 for the default quality
-        empty($quality) and $quality = 95;
+        empty($quality) && $quality = 95;
 
         // All calls to these will need to be escaped, so do it now
         $this->cmd_image = escapeshellarg($this->tmp_image);

@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <h4>
   <a href="<?= url::site("admin/users/edit_group_form/$group->id") ?>"
    title="<?= t("Edit the %name group's name", ['name' => $group->name])->for_html_attr() ?>"

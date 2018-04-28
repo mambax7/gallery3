@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <li class="ui-icon-left">
   <span class="ui-icon ui-icon-folder-open"></span>
   <span class="g-directory" ref="">

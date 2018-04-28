@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <?php
 // This is a generic paginator for admin collections.  Depending on the page type, there are
 // different sets of variables available.  With this data, you can make a paginator that

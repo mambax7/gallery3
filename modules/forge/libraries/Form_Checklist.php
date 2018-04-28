@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') || die('No direct script access.');
 /**
  * FORGE checklist input library.
  *
@@ -32,7 +32,7 @@ class Form_Checklist_Core extends Form_Input
             $array = [];
             foreach ($this->data['options'] as $id => $opt) {
                 // Return the options that are checked
-                (true === $opt[1]) and $array[] = $id;
+                (true === $opt[1]) && $array[] = $id;
             }
             return $array;
         }

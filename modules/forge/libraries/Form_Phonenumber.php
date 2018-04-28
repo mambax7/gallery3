@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') || die('No direct script access.');
 /**
  * FORGE phone number input library.
  *
@@ -49,7 +49,7 @@ class Form_Phonenumber_Core extends Form_Input
 
         $input = '';
         foreach ($this->parts as $type => $val) {
-            isset($data['value']) or $data['value'] = '';
+            isset($data['value']) || $data['value'] = '';
             $temp = $data;
             $temp['name'] = $this->data['name'].'['.$type.']';
             $offset = (10 == strlen($data['value'])) ? 0 : 3;

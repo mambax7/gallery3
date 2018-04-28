@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * Loads and displays Kohana view files. Can also handle output of some binary
  * files, such as image, Javascript, and CSS files.
@@ -44,12 +44,12 @@ class View_Core
      */
     public function __construct($name = null, $data = null, $type = null)
     {
-        if (is_string($name) and '' !== $name) {
+        if (is_string($name) && '' !== $name) {
             // Set the filename
             $this->set_filename($name, $type);
         }
 
-        if (is_array($data) and ! empty($data)) {
+        if (is_array($data) && ! empty($data)) {
             // Preload data using array_merge, to allow user extensions
             $this->kohana_local_data = array_merge($this->kohana_local_data, $data);
         }
@@ -233,14 +233,14 @@ class View_Core
             // Merge global and local data, local overrides global with the same name
             $data = $this->kohana_local_data;
 
-            if (false !== $modifier and is_callable($modifier, true)) {
+            if (false !== $modifier && is_callable($modifier, true)) {
                 // Pass the data through the user defined modifier
                 $data = call_user_func($modifier, $data);
             }
 
             $output = $this->load_view($this->kohana_filename, $data);
 
-            if (false !== $renderer and is_callable($renderer, true)) {
+            if (false !== $renderer && is_callable($renderer, true)) {
                 // Pass the output through the user defined renderer
                 $output = call_user_func($renderer, $output);
             }

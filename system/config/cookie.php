@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * Cookie config settings. These are the default settings used by the [cookie]
  * helper. You can override these settings by passing parameters to the cookie

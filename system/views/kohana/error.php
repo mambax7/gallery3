@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 // Unique error identifier
 $error_id = uniqid('error');
 ?>
@@ -144,7 +144,7 @@ $error_id = uniqid('error');
 			</span>
 		</p>
 
-<?php if (Kohana_Exception::$source_output and $source_code = Kohana_Exception::debug_source($file, $line)) : ?>
+<?php if (Kohana_Exception::$source_output && $source_code = Kohana_Exception::debug_source($file, $line)) : ?>
 		<pre class="source"><code><?php foreach ($source_code as $num => $row) : ?><span class="line <?php if ($num == $line) {
     echo 'highlight';
 } ?>"><span class="number"><?php echo $num ?></span><?php echo htmlspecialchars($row, ENT_NOQUOTES, Kohana::CHARSET) ?></span><?php endforeach ?></code></pre>
@@ -157,7 +157,7 @@ $error_id = uniqid('error');
 				<p>
 					<span class="file">
 						<?php if ($step['file']): $source_id = $error_id.'source'.$i; ?>
-						<?php if (Kohana_Exception::$source_output and $step['source']) : ?>
+						<?php if (Kohana_Exception::$source_output && $step['source']) : ?>
 						<a href="#<?php echo $source_id ?>" onclick="return koggle('<?php echo $source_id ?>')"><?php echo Kohana_Exception::debug_path($step['file'])?>[ <?php echo $step['line']?> ]</a>
 						<?php else : ?>
 						<span class="file"><?php echo Kohana_Exception::debug_path($step['file'])?>[ <?php echo $step['line']?> ]</span>
@@ -188,7 +188,7 @@ $error_id = uniqid('error');
 					</table>
 				</div>
 				<?php endif?>
-				<?php if (Kohana_Exception::$source_output and $step['source'] and isset($source_id)): ?>
+				<?php if (Kohana_Exception::$source_output && $step['source'] && isset($source_id)): ?>
 				<pre id="<?php echo $source_id ?>" class="source collapsed"><code><?php foreach ($step['source'] as $num => $row) : ?><span class="line <?php if ($num == $step['line']) {
     echo 'highlight';
 } ?>"><span class="number"><?php echo $num ?></span><?php echo htmlspecialchars($row, ENT_NOQUOTES, Kohana::CHARSET) ?></span><?php endforeach ?></code></pre>
@@ -233,7 +233,7 @@ $error_id = uniqid('error');
 			</table>
 		</div>
 		<?php foreach (['_SESSION', '_GET', '_POST', '_FILES', '_COOKIE', '_SERVER'] as $var): ?>
-		<?php if (empty($GLOBALS[$var]) or ! is_array($GLOBALS[$var])) {
+		<?php if (empty($GLOBALS[$var]) || ! is_array($GLOBALS[$var])) {
     continue;
 } ?>
 		<h3><a href="#<?php echo $env_id = $error_id.'environment'.strtolower($var) ?>" onclick="return koggle('<?php echo $env_id ?>')">$<?php echo $var?></a></h3>

@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <li>
   <?php $name = $menu->label->for_html() ?>
   <?php $hover_text = t('Your profile')->for_html_attr() ?>

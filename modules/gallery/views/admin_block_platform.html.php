@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <ul>
   <li>
     <?= t('Host name: %host_name', ['host_name' => php_uname('n')]) ?>

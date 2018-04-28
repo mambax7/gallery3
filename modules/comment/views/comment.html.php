@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <li id="g-comment-<?= $comment->id; ?>" class="g-comment-state-<?= $comment->state ?>">
   <p class="g-author">
     <a href="#">

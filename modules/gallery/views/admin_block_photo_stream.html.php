@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <ul>
 <?php foreach ($photos as $photo): ?>
   <li class="g-item g-photo">

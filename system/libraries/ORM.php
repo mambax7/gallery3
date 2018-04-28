@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * [Object Relational Mapping][ref-orm] (ORM) is a method of abstracting database
  * access to standard PHP calls. All table rows are represented as model objects,
@@ -265,7 +265,7 @@ class ORM_Core
     public function __get($column)
     {
         if (array_key_exists($column, $this->object)) {
-            if (! $this->loaded() and ! $this->empty_primary_key()) {
+            if (! $this->loaded() && ! $this->empty_primary_key()) {
                 // Column asked for but the object hasn't been loaded yet, so do it now
                 // Ignore loading of any columns that have been changed
                 $this->find($this->object[$this->primary_key], true);
@@ -391,7 +391,7 @@ class ORM_Core
     {
         if (isset($this->ignored_columns[$column])) {
             return null;
-        } elseif (isset($this->object[$column]) or array_key_exists($column, $this->object)) {
+        } elseif (isset($this->object[$column]) || array_key_exists($column, $this->object)) {
             if (isset($this->table_columns[$column])) {
                 // Data has changed
                 $this->changed[$column] = $column;
@@ -453,7 +453,7 @@ class ORM_Core
      */
     public function __isset($column)
     {
-        return (isset($this->object[$column]) or isset($this->related[$column]));
+        return (isset($this->object[$column]) || isset($this->related[$column]));
     }
 
     /**
@@ -1106,7 +1106,7 @@ class ORM_Core
             // Use the defined foreign key name, no magic here!
             $foreign_key = $this->foreign_key[$table];
         } else {
-            if (! is_string($table) or ! array_key_exists($table.'_'.$this->primary_key, $this->object)) {
+            if (! is_string($table) || ! array_key_exists($table.'_'.$this->primary_key, $this->object)) {
                 // Use this table
                 $table = $this->table_name;
 
@@ -1162,7 +1162,7 @@ class ORM_Core
             $object = ORM::factory($this->has_one[$object]);
         } elseif (isset($this->belongs_to[$object])) {
             $object = ORM::factory($this->belongs_to[$object]);
-        } elseif (in_array($object, $this->has_one) or in_array($object, $this->belongs_to)) {
+        } elseif (in_array($object, $this->has_one) || in_array($object, $this->belongs_to)) {
             $object = ORM::factory($object);
         } else {
             return false;

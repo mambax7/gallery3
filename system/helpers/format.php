@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * Format helper class.
  *
@@ -69,7 +69,7 @@ class format_Core
     public static function url($str = '')
     {
         // Clear protocol-only strings like "http://"
-        if ('' === $str or '://' === substr($str, -3)) {
+        if ('' === $str || '://' === substr($str, -3)) {
             return '';
         }
 

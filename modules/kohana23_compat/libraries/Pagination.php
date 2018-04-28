@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') || die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -193,7 +193,7 @@ class Pagination_Core
     public function render($style = null)
     {
         // Hide single page pagination
-        if (true === $this->auto_hide and $this->total_pages <= 1) {
+        if (true === $this->auto_hide && $this->total_pages <= 1) {
             return '';
         }
 

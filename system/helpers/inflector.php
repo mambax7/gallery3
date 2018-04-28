@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * Inflector helper class.
  *
@@ -76,7 +76,7 @@ class inflector_Core
         }
 
         // Do nothing with a single count
-        if (0 === $count or $count > 1) {
+        if (0 === $count || $count > 1) {
             return $str;
         }
 
@@ -98,12 +98,12 @@ class inflector_Core
 
         if ($irregular = array_search($str, inflector::$irregular)) {
             $str = $irregular;
-        } elseif (preg_match('/[sxz]es$/', $str) or preg_match('/[^aeioudgkprt]hes$/', $str)) {
+        } elseif (preg_match('/[sxz]es$/', $str) || preg_match('/[^aeioudgkprt]hes$/', $str)) {
             // Remove "es"
             $str = substr($str, 0, -2);
         } elseif (preg_match('/[^aeiou]ies$/', $str)) {
             $str = substr($str, 0, -3).'y';
-        } elseif ('s' === substr($str, -1) and 'ss' !== substr($str, -2)) {
+        } elseif ('s' === substr($str, -1) && 'ss' !== substr($str, -2)) {
             $str = substr($str, 0, -1);
         }
 
@@ -174,7 +174,7 @@ class inflector_Core
 
         if (isset(inflector::$irregular[$str])) {
             $str = inflector::$irregular[$str];
-        } elseif (preg_match('/[sxz]$/', $str) or preg_match('/[^aeioudgkprt]h$/', $str)) {
+        } elseif (preg_match('/[sxz]$/', $str) || preg_match('/[^aeioudgkprt]h$/', $str)) {
             $str .= 'es';
         } elseif (preg_match('/[^aeiou]y$/', $str)) {
             // Change "y" to "ies"

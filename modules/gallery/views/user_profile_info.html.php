@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <table>
   <?php foreach ($user_profile_data as $label => $value): ?>
   <tr>

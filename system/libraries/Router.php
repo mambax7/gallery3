@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * Router
  *
@@ -102,13 +102,13 @@ class Router_Core
                 // Search within controllers only
                 $dir .= 'controllers/';
 
-                if (is_dir($dir.$controller_path) or is_file($dir.$controller_path.EXT)) {
+                if (is_dir($dir.$controller_path) || is_file($dir.$controller_path.EXT)) {
                     // Valid path
                     $found = true;
 
                     // The controller must be a file that exists with the search path
                     if ($c = str_replace('\\', '/', realpath($dir.$controller_path.EXT))
-                        and is_file($c) and 0 === strpos($c, $dir)) {
+                        and is_file($c) && 0 === strpos($c, $dir)) {
                         // Set controller name
                         Router::$controller = $segment;
 
@@ -185,16 +185,16 @@ class Router_Core
             // Remove the URI from $_SERVER['QUERY_STRING']
             $_SERVER['QUERY_STRING'] = preg_replace('~\bkohana_uri\b[^&]*+&?~', '', $_SERVER['QUERY_STRING']);
         } else {
-            if (isset($_SERVER['PATH_INFO']) and $_SERVER['PATH_INFO']) {
+            if (isset($_SERVER['PATH_INFO']) && $_SERVER['PATH_INFO']) {
                 Router::$current_uri = $_SERVER['PATH_INFO'];
-            } elseif (isset($_SERVER['ORIG_PATH_INFO']) and $_SERVER['ORIG_PATH_INFO']) {
+            } elseif (isset($_SERVER['ORIG_PATH_INFO']) && $_SERVER['ORIG_PATH_INFO']) {
                 Router::$current_uri = $_SERVER['ORIG_PATH_INFO'];
-            } elseif (isset($_SERVER['PHP_SELF']) and $_SERVER['PHP_SELF']) {
+            } elseif (isset($_SERVER['PHP_SELF']) && $_SERVER['PHP_SELF']) {
                 // PATH_INFO is empty during requests to the front controller
                 Router::$current_uri = $_SERVER['PHP_SELF'];
             }
 
-            if (isset($_SERVER['SCRIPT_NAME']) and $_SERVER['SCRIPT_NAME']) {
+            if (isset($_SERVER['SCRIPT_NAME']) && $_SERVER['SCRIPT_NAME']) {
                 // Clean up PATH_INFO fallbacks
                 // PATH_INFO may be formatted for ISAPI instead of CGI on IIS
                 if (0 === strncmp(Router::$current_uri, $_SERVER['SCRIPT_NAME'], strlen($_SERVER['SCRIPT_NAME']))) {
@@ -208,7 +208,7 @@ class Router_Core
         Router::$current_uri = trim(Router::$current_uri, '/');
 
         if ('' !== Router::$current_uri) {
-            if ($suffix = Kohana::config('core.url_suffix') and false !== strpos(Router::$current_uri, $suffix)) {
+            if ($suffix = Kohana::config('core.url_suffix') && false !== strpos(Router::$current_uri, $suffix)) {
                 // Remove the URL suffix
                 Router::$current_uri = preg_replace('#'.preg_quote($suffix).'$#u', '', Router::$current_uri);
 

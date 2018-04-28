@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * GD Image Driver.
  *
@@ -63,12 +63,12 @@ class Image_GD_Driver extends Image_Driver
         }
 
         // Make sure the image type is supported for import
-        if (empty($create) or ! function_exists($create)) {
+        if (empty($create) || ! function_exists($create)) {
             throw new Kohana_Exception('The specified image, :type:, is not an allowed image type.', [':type:' => $image['file']]);
         }
 
         // Make sure the image type is supported for saving
-        if (empty($save) or ! function_exists($save)) {
+        if (empty($save) || ! function_exists($save)) {
             throw new Kohana_Exception('The specified image, :type:, is not an allowed image type.', [':type:' => $dir . $file]);
         }
 
@@ -89,7 +89,7 @@ class Image_GD_Driver extends Image_Driver
             switch ($save) {
                 case 'imagejpeg':
                     // Default the quality to 95
-                    (null === $quality) and $quality = 95;
+                    (null === $quality) && $quality = 95;
                 break;
                 case 'imagegif':
                     // Remove the quality setting, GIF doesn't use it
@@ -199,26 +199,26 @@ class Image_GD_Driver extends Image_Driver
         }
 
         // Recalculate the width and height, if they are missing
-        empty($properties['width'])  and $properties['width']  = round($width * $properties['height'] / $height);
-        empty($properties['height']) and $properties['height'] = round($height * $properties['width'] / $width);
+        empty($properties['width'])  && $properties['width']  = round($width * $properties['height'] / $height);
+        empty($properties['height']) && $properties['height'] = round($height * $properties['width'] / $width);
 
         if ($properties['master'] === Image::AUTO) {
             // Change an automatic master dim to the correct type
             $properties['master'] = (($width / $properties['width']) > ($height / $properties['height'])) ? Image::WIDTH : Image::HEIGHT;
         }
 
-        if (empty($properties['height']) or $properties['master'] === Image::WIDTH) {
+        if (empty($properties['height']) || $properties['master'] === Image::WIDTH) {
             // Recalculate the height based on the width
             $properties['height'] = round($height * $properties['width'] / $width);
         }
 
-        if (empty($properties['width']) or $properties['master'] === Image::HEIGHT) {
+        if (empty($properties['width']) || $properties['master'] === Image::HEIGHT) {
             // Recalculate the width based on the height
             $properties['width'] = round($width * $properties['height'] / $height);
         }
 
         // Test if we can do a resize without resampling to speed up the final resize
-        if ($properties['width'] > $width / 2 and $properties['height'] > $height / 2) {
+        if ($properties['width'] > $width / 2 && $properties['height'] > $height / 2) {
             // Presize width and height
             $pre_width = $width;
             $pre_height = $height;
@@ -228,7 +228,7 @@ class Image_GD_Driver extends Image_Driver
             $max_reduction_height = round($properties['height'] * 1.1);
 
             // Reduce the size using an O(2n) algorithm, until it reaches the maximum reduction
-            while ($pre_width / 2 > $max_reduction_width and $pre_height / 2 > $max_reduction_height) {
+            while ($pre_width / 2 > $max_reduction_width && $pre_height / 2 > $max_reduction_height) {
                 $pre_width /= 2;
                 $pre_height /= 2;
             }

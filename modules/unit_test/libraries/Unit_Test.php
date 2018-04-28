@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * Unit_Test library.
  *
@@ -99,7 +99,7 @@ class Unit_Test_Core
                 $path = str_replace('\\', '/', $path);
 
                 // Skip files without "_Test" suffix
-                if (! $file->isFile() or substr($path, -9) !== '_Test'.EXT) {
+                if (! $file->isFile() || substr($path, -9) !== '_Test'.EXT) {
                     continue;
                 }
 
@@ -144,7 +144,7 @@ class Unit_Test_Core
                 foreach (['setup', 'teardown'] as $method_name) {
                     if ($reflector->hasMethod($method_name)) {
                         $method = new ReflectionMethod($class, $method_name);
-                        $$method_name = ($method->isPublic() and ! $method->isStatic() and 0 === $method->getNumberOfRequiredParameters());
+                        $$method_name = ($method->isPublic() && ! $method->isStatic() && 0 === $method->getNumberOfRequiredParameters());
                     }
                 }
 
@@ -161,7 +161,7 @@ class Unit_Test_Core
                 // Loop through all the class methods
                 foreach ($reflector->getMethods() as $method) {
                     // Skip invalid test methods
-                    if (! $method->isPublic() or $method->isStatic() or 0 !== $method->getNumberOfRequiredParameters()) {
+                    if (! $method->isPublic() || $method->isStatic() || 0 !== $method->getNumberOfRequiredParameters()) {
                         continue;
                     }
 
@@ -511,7 +511,7 @@ abstract class Unit_Test_Case
 
     public function assert_pattern($value, $regex, $debug = null)
     {
-        if (! is_string($value) or ! is_string($regex) or ! preg_match($regex, $value)) {
+        if (! is_string($value) || ! is_string($regex) || ! preg_match($regex, $value)) {
             throw new Kohana_Unit_Test_Exception(sprintf(Unit_Test::$lang['assert_pattern'], var_export($value, true), var_export($regex, true)), $debug);
         }
 
@@ -520,7 +520,7 @@ abstract class Unit_Test_Case
 
     public function assert_not_pattern($value, $regex, $debug = null)
     {
-        if (! is_string($value) or ! is_string($regex) or preg_match($regex, $value)) {
+        if (! is_string($value) || ! is_string($regex) || preg_match($regex, $value)) {
             throw new Kohana_Unit_Test_Exception(sprintf(Unit_Test::$lang['assert_not_pattern'], var_export($value, true), var_export($regex, true)), $debug);
         }
 

@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') || die('No direct script access.');
 /**
  * The Database Query Builder provides methods for creating database agnostic queries and
  * data manipulation.
@@ -666,7 +666,7 @@ class Database_Builder_Core
             // Process groups of conditions
             foreach ($group as $logic => $condition) {
                 if ('(' === $condition) {
-                    if (! empty($sql) and '(' !== $last_condition) {
+                    if (! empty($sql) && '(' !== $last_condition) {
                         // Include logic operator
                         $sql .= ' '.$logic.' ';
                     }
@@ -718,7 +718,7 @@ class Database_Builder_Core
                         }
                     }
 
-                    if (! empty($sql) and '(' !== $last_condition) {
+                    if (! empty($sql) && '(' !== $last_condition) {
                         // Add the logic operator
                         $sql .= ' '.$logic.' ';
                     }

@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * The Valid Helper provides functions to help validate data. They can be used as standalone static functions or
  * as rules for the Validation Library.
@@ -369,9 +369,9 @@ class valid_Core
         // Invalid by default
         $status = false;
 
-        if (is_int($number) or ctype_digit($number)) {
+        if (is_int($number) || ctype_digit($number)) {
             if (count($range) > 1) {
-                if ($number >= $range[0] and $number <= $range[1]) {
+                if ($number >= $range[0] && $number <= $range[1]) {
                     // Number is within the required range
                     $status = true;
                 }

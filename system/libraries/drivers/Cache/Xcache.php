@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * XCache-based Cache driver.
  *
@@ -55,7 +55,7 @@ class Cache_Xcache_Driver extends Cache_Driver
         }
 
         if ($single) {
-            return (false === $items or count($items) > 0) ? current($items) : null;
+            return (false === $items || count($items) > 0) ? current($items) : null;
         } else {
             return (false === $items) ? [] : $items;
         }

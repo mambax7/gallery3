@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * SQL data types. If there are missing values, please report them
  * at the [issue tracker](http://dev.kohanaphp.com/projects/kohana2/issues)

@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <ul class="g-message-block">
   <li class="g-warning">
   <?php if (block_manager::get_active('site_sidebar')): ?>

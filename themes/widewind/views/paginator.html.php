@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <?php
 // This is a generic paginator for album, photo and movie pages.  Depending on the page type,
 // there are different sets of variables available.  With this data, you can make a paginator

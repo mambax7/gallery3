@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <div <?= html::attributes($div_attrs) ?>>
   <video <?= html::attributes($video_attrs) ?>>
     <source <?= html::attributes($source_attrs) ?>>

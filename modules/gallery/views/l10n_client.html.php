@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <div id="l10n-client" class="hidden">
   <div class="labels">
     <span id="l10n-client-toggler">

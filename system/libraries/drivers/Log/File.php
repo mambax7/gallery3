@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * Log API driver.
  *
@@ -20,7 +20,7 @@ class Log_File_Driver extends Log_Driver
             // Write the SYSPATH checking header
             file_put_contents(
                 $filename,
-                '<?php defined(\'SYSPATH\') or die(\'No direct script access.\'); ?>'.PHP_EOL.PHP_EOL
+                '<?php defined(\'SYSPATH\') || die(\'No direct script access.\'); ?>'.PHP_EOL.PHP_EOL
             );
 
             // Prevent external writes

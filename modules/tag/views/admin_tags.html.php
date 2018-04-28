@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <script type="text/javascript">
   $("document").ready(function() {
     // using JS for adding link titles to avoid running t() for each tag

@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * Text helper class.
  *
@@ -53,7 +53,7 @@ class text_Core
 
         $limit = (int) $limit;
 
-        if ('' === trim($str) or mb_strlen($str) <= $limit) {
+        if ('' === trim($str) || mb_strlen($str) <= $limit) {
             return $str;
         }
 
@@ -145,7 +145,7 @@ class text_Core
         }
 
         // Make sure alnum strings contain at least one letter and one digit
-        if ('alnum' === $type and $length > 1) {
+        if ('alnum' === $type && $length > 1) {
             if (ctype_alpha($str)) {
                 // Add a random digit
                 $str[mt_rand(0, $length - 1)] = chr(mt_rand(48, 57));
@@ -215,7 +215,7 @@ class text_Core
         for ($i = 0, $max = strlen($word); $i < $max; ++$i) {
             foreach ($words as $w) {
                 // Once a difference is found, break out of the loops
-                if (! isset($w[$i]) or $w[$i] !== $word[$i]) {
+                if (! isset($w[$i]) || $w[$i] !== $word[$i]) {
                     break 2;
                 }
             }
@@ -404,7 +404,7 @@ class text_Core
         $format = (null === $format) ? '%01.2f %s' : (string) $format;
 
         // IEC prefixes (binary)
-        if (false == $si or false !== strpos($force_unit, 'i')) {
+        if (false == $si || false !== strpos($force_unit, 'i')) {
             $units = [__('B'), __('KiB'), __('MiB'), __('GiB'), __('TiB'), __('PiB')];
             $mod   = 1024;
         }
@@ -455,7 +455,7 @@ class text_Core
      */
     public static function is_ascii($str)
     {
-        return is_string($str) and ! preg_match('/[^\x00-\x7F]/S', $str);
+        return is_string($str) && ! preg_match('/[^\x00-\x7F]/S', $str);
     }
 
     /**

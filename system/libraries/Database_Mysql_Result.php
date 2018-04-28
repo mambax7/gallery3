@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') || die('No direct script access.');
 /**
  * MySQL database result.
  *
@@ -116,7 +116,7 @@ class Database_Mysql_Result_Core extends Database_Result
      */
     public function seek($offset)
     {
-        if ($this->offsetExists($offset) and mysql_data_seek($this->result, $offset)) {
+        if ($this->offsetExists($offset) && mysql_data_seek($this->result, $offset)) {
             // Set the current row to the offset
             $this->current_row = $this->internal_row = $offset;
 
@@ -131,7 +131,7 @@ class Database_Mysql_Result_Core extends Database_Result
      */
     public function current()
     {
-        if ($this->current_row !== $this->internal_row and ! $this->seek($this->current_row)) {
+        if ($this->current_row !== $this->internal_row && ! $this->seek($this->current_row)) {
             return null;
         }
 

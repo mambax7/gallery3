@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * Encrypt configuration is defined in groups which allows you to easily switch
  * between different encryption settings for different uses.

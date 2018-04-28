@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * ImageMagick Image Driver.
  *
@@ -70,7 +70,7 @@ class Image_ImageMagick_Driver extends Image_Driver
         $quality = (int) arr::remove('quality', $actions);
 
         // Use 95 for the default quality
-        empty($quality) and $quality = 95;
+        empty($quality) && $quality = 95;
 
         if (is_string($background)) {
             // Set the background color

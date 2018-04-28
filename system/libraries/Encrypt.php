@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * The Encrypt library provides two-way encryption of text and binary strings
  * using the MCrypt extension.
@@ -31,7 +31,7 @@ class Encrypt_Core
         static $instance;
 
         // Create the singleton
-        empty($instance) and $instance = new Encrypt((array) $config);
+        empty($instance) && $instance = new Encrypt((array) $config);
 
         return $instance;
     }

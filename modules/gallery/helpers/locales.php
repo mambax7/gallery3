@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') || die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -141,7 +141,7 @@ class locales_Core
         if (empty(self::$locales)) {
             self::_init_language_data();
         }
-        $locale or $locale = Gallery_I18n::instance()->locale();
+        $locale || $locale = Gallery_I18n::instance()->locale();
 
         return self::$locales[$locale];
     }

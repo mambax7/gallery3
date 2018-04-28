@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <script type="text/javascript">
   update_blocks = function() {
     $.get(<?= html::js_string(url::site('admin/dashboard/reorder')) ?>,

@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') || die('No direct script access.');
 /**
  * FORGE base input library.
  *
@@ -132,7 +132,7 @@ class Form_Input_Core
     public function label($val = null)
     {
         if (null === $val) {
-            if (isset($this->data['name']) and isset($this->data['label'])) {
+            if (isset($this->data['name']) && isset($this->data['label'])) {
                 return form::label($this->data['name'], $this->data['label']);
             }
             return false;
@@ -264,10 +264,10 @@ class Form_Input_Core
         }
 
         // Make sure validation runs
-        null === $this->is_valid and $this->validate();
+        null === $this->is_valid && $this->validate();
 
         // Return single error
-        if (! is_array($this->error_messages) and ! empty($this->errors)) {
+        if (! is_array($this->error_messages) && ! empty($this->errors)) {
             return [$this->error_messages];
         }
 
@@ -378,7 +378,7 @@ class Form_Input_Core
         $this->load_value();
 
         // No rules to validate
-        if (0 == count($this->rules) and 0 == count($this->matches) and 0 == count($this->callbacks)) {
+        if (0 == count($this->rules) && 0 == count($this->matches) && 0 == count($this->callbacks)) {
             return $this->is_valid = true;
         }
 
@@ -392,10 +392,10 @@ class Form_Input_Core
                     $rule = substr($rule, 0, $offset);
                 }
 
-                if ('valid_' === substr($rule, 0, 6) and method_exists('valid', substr($rule, 6))) {
+                if ('valid_' === substr($rule, 0, 6) && method_exists('valid', substr($rule, 6))) {
                     $func = substr($rule, 6);
 
-                    if ($this->value and ! valid::$func($this->value)) {
+                    if ($this->value && ! valid::$func($this->value)) {
                         $this->errors[$rule] = true;
                     }
                 } elseif (method_exists($this, 'rule_'.$rule)) {

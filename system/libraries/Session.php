@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * Session library.
  *
@@ -42,7 +42,7 @@ class Session_Core
         if (null == Session::$instance) {
             // Create a new instance
             new Session($session_id);
-        } elseif (null !== $session_id and $session_id != session_id()) {
+        } elseif (null !== $session_id && $session_id != session_id()) {
             throw new Kohana_Exception('A session (SID: :session:) is already open, cannot open the specified session (SID: :new_session:).', [':session:' => session_id(), ':new_session:' => $session_id]);
         }
 
@@ -81,7 +81,7 @@ class Session_Core
             // Create a new session
             $this->create(null, $session_id);
 
-            if (Session::$config['regenerate'] > 0 and 0 === ($_SESSION['total_hits'] % Session::$config['regenerate'])) {
+            if (Session::$config['regenerate'] > 0 && 0 === ($_SESSION['total_hits'] % Session::$config['regenerate'])) {
                 // Regenerate session id and update session cookie
                 $this->regenerate();
             } else {

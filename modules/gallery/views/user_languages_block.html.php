@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <?= form::dropdown('g-select-session-locale', $installed_locales, $selected) ?>
 <script type="text/javascript">
   $("select[name=g-select-session-locale]").change(function() {

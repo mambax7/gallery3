@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <div id="imagemagick" class="g-block<?= $is_active ? ' g-selected' : '' ?><?= $tk->installed ? '  g-installed-toolkit' : ' g-unavailable' ?>">
   <img class="logo" width="114" height="118" src="<?= url::file('modules/gallery/images/imagemagick.jpg'); ?>" alt="<?php t('Visit the ImageMagick project site') ?>" />
   <h3> <?= t('ImageMagick') ?> </h3>

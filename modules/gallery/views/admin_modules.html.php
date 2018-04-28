@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <div class="g-block ui-helper-clearfix">
   <script type="text/javascript">
   $("#g-module-update-form").ready(function() {

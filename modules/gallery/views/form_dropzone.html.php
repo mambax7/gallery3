@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <script type="text/javascript" src="<?= url::file('lib/dropzone.js') ?>"></script>
 <link rel="stylesheet" href="<?= url::file('lib/dropzone.css') ?>">
 <script type="text/javascript">

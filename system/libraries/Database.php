@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') || die('No direct script access.');
 /**
  * Database wrapper.
  *
@@ -200,7 +200,7 @@ abstract class Database_Core
                 }
             }
 
-            if (isset($connection['path']) and $connection['path']) {
+            if (isset($connection['path']) && $connection['path']) {
                 // Strip leading slash
                 $db['database'] = substr($connection['path'], 1);
             }
@@ -325,7 +325,7 @@ abstract class Database_Core
      */
     public function clear_cache($sql = null, $type = null)
     {
-        if ($this->cache instanceof Cache and (null == $type or $type == Database::CROSS_REQUEST)) {
+        if ($this->cache instanceof Cache && (null == $type || $type == Database::CROSS_REQUEST)) {
             // Using cross-request Cache library
             if (true === $sql) {
                 $this->cache->delete($this->query_hash($this->last_query));
@@ -334,7 +334,7 @@ abstract class Database_Core
             } else {
                 $this->cache->delete_all();
             }
-        } elseif (is_array($this->cache) and (null == $type or $type == Database::PER_REQUEST)) {
+        } elseif (is_array($this->cache) && (null == $type || $type == Database::PER_REQUEST)) {
             // Using per-request memory cache
             if (true === $sql) {
                 unset($this->cache[$this->query_hash($this->last_query)]);
@@ -457,7 +457,7 @@ abstract class Database_Core
             return (string) $column;
         }
 
-        if ($this->config['table_prefix'] and false !== strpos($column, '.')) {
+        if ($this->config['table_prefix'] && false !== strpos($column, '.')) {
             if (false !== strpos($column, '"')) {
                 // Find "table.column" and replace them with "[prefix]table.column"
                 $column = preg_replace('/"([^.]++)\.([^"]++)"/', '"'.$this->config['table_prefix'].'$1.$2"', $column);

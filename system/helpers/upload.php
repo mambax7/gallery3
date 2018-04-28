@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * Upload helper class for working with the global $_FILES
  * array and Validation library.
@@ -43,7 +43,7 @@ class upload_Core
         // Make sure the directory ends with a slash
         $directory = rtrim($directory, '/').'/';
 
-        if (! is_dir($directory) and true === Kohana::config('upload.create_directories')) {
+        if (! is_dir($directory) && true === Kohana::config('upload.create_directories')) {
             // Create the upload directory
             mkdir($directory, 0777, true);
         }
@@ -52,7 +52,7 @@ class upload_Core
             throw new Kohana_Exception('The upload destination folder, :dir:, does not appear to be writable.', [':dir:' => $directory]);
         }
 
-        if (is_uploaded_file($file['tmp_name']) and move_uploaded_file($file['tmp_name'], $filename = $directory.$filename)) {
+        if (is_uploaded_file($file['tmp_name']) && move_uploaded_file($file['tmp_name'], $filename = $directory.$filename)) {
             if (false !== $chmod) {
                 // Set permissions on filename
                 chmod($filename, $chmod);
@@ -76,11 +76,11 @@ class upload_Core
     public static function valid($file)
     {
         return (is_array($file)
-            and isset($file['error'])
-            and isset($file['name'])
-            and isset($file['type'])
-            and isset($file['tmp_name'])
-            and isset($file['size']));
+            && isset($file['error'])
+            && isset($file['name'])
+            && isset($file['type'])
+            && isset($file['tmp_name'])
+            && isset($file['size']));
     }
 
     /**
@@ -92,9 +92,9 @@ class upload_Core
     public static function required(array $file)
     {
         return (isset($file['tmp_name'])
-            and isset($file['error'])
-            and is_uploaded_file($file['tmp_name'])
-            and UPLOAD_ERR_OK === (int)$file['error']);
+            && isset($file['error'])
+            && is_uploaded_file($file['tmp_name'])
+            && UPLOAD_ERR_OK === (int)$file['error']);
     }
 
     /**
@@ -114,7 +114,7 @@ class upload_Core
         $extension = strtolower(substr(strrchr($file['name'], '.'), 1));
 
         // Make sure there is an extension and that the extension is allowed
-        return (! empty($extension) and in_array($extension, $allowed_types));
+        return (! empty($extension) && in_array($extension, $allowed_types));
     }
 
     /**

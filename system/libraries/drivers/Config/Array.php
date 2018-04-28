@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') || die('No direct script access.');
 /**
  * Kohana_Config Array driver to get and set
  * configuration options using PHP arrays.
@@ -66,7 +66,7 @@ class Config_Array_Driver extends Config_Driver
             foreach ($files as $file) {
                 require $file;
 
-                if (isset($config) and is_array($config)) {
+                if (isset($config) && is_array($config)) {
                     // Merge in configuration
                     $configuration = array_merge($configuration, $config);
                 }

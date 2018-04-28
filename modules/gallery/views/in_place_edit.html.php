@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <?= form::open($action, ['method' => 'post', 'id' => 'g-in-place-edit-form', 'class' => 'g-short-form']) ?>
   <?= access::csrf_form_field() ?>
   <ul>

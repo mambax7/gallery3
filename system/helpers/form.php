@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * Form helper class.
  *
@@ -22,9 +22,9 @@ class form_Core
     public static function open($action = null, $attr = [], $hidden = null, $protocol = null)
     {
         // Make sure that the method is always set
-        empty($attr['method']) and $attr['method'] = 'post';
+        empty($attr['method']) && $attr['method'] = 'post';
 
-        if ('post' !== $attr['method'] and 'get' !== $attr['method']) {
+        if ('post' !== $attr['method'] && 'get' !== $attr['method']) {
             // If the method is invalid, use post
             $attr['method'] = 'post';
         }
@@ -44,7 +44,7 @@ class form_Core
         $form = '<form'.form::attributes($attr).'>'."\n";
 
         // Add hidden fields immediate after opening tag
-        empty($hidden) or $form .= form::hidden($hidden);
+        empty($hidden) || $form .= form::hidden($hidden);
 
         return $form;
     }
@@ -252,7 +252,7 @@ class form_Core
 
         $data['type'] = 'checkbox';
 
-        if (true == $checked or (isset($data['checked']) and true == $data['checked'])) {
+        if (true == $checked || (isset($data['checked']) && true == $data['checked'])) {
             $data['checked'] = 'checked';
         } else {
             unset($data['checked']);
@@ -278,7 +278,7 @@ class form_Core
 
         $data['type'] = 'radio';
 
-        if (true == $checked or (isset($data['checked']) and true == $data['checked'])) {
+        if (true == $checked || (isset($data['checked']) && true == $data['checked'])) {
             $data['checked'] = 'checked';
         } else {
             unset($data['checked']);
@@ -330,7 +330,7 @@ class form_Core
             unset($data['name']);
         }
 
-        if (isset($data['value']) and empty($value)) {
+        if (isset($data['value']) && empty($value)) {
             $value = arr::remove('value', $data);
         }
 
@@ -357,7 +357,7 @@ class form_Core
             }
         }
 
-        if (null === $text and isset($data['for'])) {
+        if (null === $text && isset($data['for'])) {
             // Make the text the human-readable input name
             $text = ucwords(inflector::humanize($data['for']));
         }

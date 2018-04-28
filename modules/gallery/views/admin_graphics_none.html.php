@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 
 <div id="none" class="g-module-status g-warning g-block">
   <h3> <?= t('No active toolkit') ?> </h3>

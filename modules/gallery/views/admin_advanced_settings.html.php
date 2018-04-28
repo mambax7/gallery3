@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <div id="g-admin-advanced-settings" class="g-block">
   <h1> <?= t('Advanced settings') ?> </h1>
   <p>

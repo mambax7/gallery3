@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <div>
   <p>
     <?= t('The administration session has expired, please re-authenticate to access the administration area.') ?>

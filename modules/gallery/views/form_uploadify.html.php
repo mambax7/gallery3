@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <script type="text/javascript" src="<?= url::file('lib/swfobject.js') ?>"></script>
 <script type="text/javascript" src="<?= url::file('lib/uploadify/jquery.uploadify.min.js') ?>"></script>
 <script type="text/javascript">

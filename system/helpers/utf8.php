@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * A port of phputf8 to a unified file/class.
  *
@@ -80,7 +80,7 @@ class utf8_Core
      */
     public static function strcasecmp($str1, $str2)
     {
-        if (text::is_ascii($str1) and text::is_ascii($str2)) {
+        if (text::is_ascii($str1) && text::is_ascii($str2)) {
             return strcasecmp($str1, $str2);
         }
 
@@ -106,7 +106,7 @@ class utf8_Core
      */
     public static function str_ireplace($search, $replace, $str, & $count = null)
     {
-        if (text::is_ascii($search) and text::is_ascii($replace) and text::is_ascii($str)) {
+        if (text::is_ascii($search) && text::is_ascii($replace) && text::is_ascii($str)) {
             return str_ireplace($search, $replace, $str, $count);
         }
 
@@ -169,7 +169,7 @@ class utf8_Core
      */
     public static function stristr($str, $search)
     {
-        if (text::is_ascii($str) and text::is_ascii($search)) {
+        if (text::is_ascii($str) && text::is_ascii($search)) {
             return stristr($str, $search);
         }
 
@@ -203,15 +203,15 @@ class utf8_Core
      */
     public static function strspn($str, $mask, $offset = null, $length = null)
     {
-        if ('' == $str or '' == $mask) {
+        if ('' == $str || '' == $mask) {
             return 0;
         }
 
-        if (text::is_ascii($str) and text::is_ascii($mask)) {
+        if (text::is_ascii($str) && text::is_ascii($mask)) {
             return (null === $offset) ? strspn($str, $mask) : ((null === $length) ? strspn($str, $mask, $offset) : strspn($str, $mask, $offset, $length));
         }
 
-        if (null !== $offset or null !== $length) {
+        if (null !== $offset || null !== $length) {
             $str = mb_substr($str, $offset, $length);
         }
 
@@ -237,15 +237,15 @@ class utf8_Core
      */
     public static function strcspn($str, $mask, $offset = null, $length = null)
     {
-        if ('' == $str or '' == $mask) {
+        if ('' == $str || '' == $mask) {
             return 0;
         }
 
-        if (text::is_ascii($str) and text::is_ascii($mask)) {
+        if (text::is_ascii($str) && text::is_ascii($mask)) {
             return (null === $offset) ? strcspn($str, $mask) : ((null === $length) ? strcspn($str, $mask, $offset) : strcspn($str, $mask, $offset, $length));
         }
 
-        if (null !== $str or null !== $length) {
+        if (null !== $str || null !== $length) {
             $str = mb_substr($str, $offset, $length);
         }
 
@@ -271,13 +271,13 @@ class utf8_Core
      */
     public static function str_pad($str, $final_str_length, $pad_str = ' ', $pad_type = STR_PAD_RIGHT)
     {
-        if (text::is_ascii($str) and text::is_ascii($pad_str)) {
+        if (text::is_ascii($str) && text::is_ascii($pad_str)) {
             return str_pad($str, $final_str_length, $pad_str, $pad_type);
         }
 
         $str_length = mb_strlen($str);
 
-        if ($final_str_length <= 0 or $final_str_length <= $str_length) {
+        if ($final_str_length <= 0 || $final_str_length <= $str_length) {
             return $str;
         }
 
@@ -442,7 +442,7 @@ class utf8_Core
     {
         $ord0 = ord($chr);
 
-        if ($ord0 >= 0 and $ord0 <= 127) {
+        if ($ord0 >= 0 && $ord0 <= 127) {
             return $ord0;
         }
 
@@ -453,7 +453,7 @@ class utf8_Core
 
         $ord1 = ord($chr[1]);
 
-        if ($ord0 >= 192 and $ord0 <= 223) {
+        if ($ord0 >= 192 && $ord0 <= 223) {
             return ($ord0 - 192) * 64 + ($ord1 - 128);
         }
 
@@ -464,7 +464,7 @@ class utf8_Core
 
         $ord2 = ord($chr[2]);
 
-        if ($ord0 >= 224 and $ord0 <= 239) {
+        if ($ord0 >= 224 && $ord0 <= 239) {
             return ($ord0 - 224) * 4096 + ($ord1 - 128) * 64 + ($ord2 - 128);
         }
 
@@ -475,7 +475,7 @@ class utf8_Core
 
         $ord3 = ord($chr[3]);
 
-        if ($ord0 >= 240 and $ord0 <= 247) {
+        if ($ord0 >= 240 && $ord0 <= 247) {
             return ($ord0 - 240) * 262144 + ($ord1 - 128) * 4096 + ($ord2-128) * 64 + ($ord3 - 128);
         }
 
@@ -486,7 +486,7 @@ class utf8_Core
 
         $ord4 = ord($chr[4]);
 
-        if ($ord0 >= 248 and $ord0 <= 251) {
+        if ($ord0 >= 248 && $ord0 <= 251) {
             return ($ord0 - 248) * 16777216 + ($ord1-128) * 262144 + ($ord2 - 128) * 4096 + ($ord3 - 128) * 64 + ($ord4 - 128);
         }
 
@@ -495,11 +495,11 @@ class utf8_Core
             return false;
         }
 
-        if ($ord0 >= 252 and $ord0 <= 253) {
+        if ($ord0 >= 252 && $ord0 <= 253) {
             return ($ord0 - 252) * 1073741824 + ($ord1 - 128) * 16777216 + ($ord2 - 128) * 262144 + ($ord3 - 128) * 4096 + ($ord4 - 128) * 64 + (ord($chr[5]) - 128);
         }
 
-        if ($ord0 >= 254 and $ord0 <= 255) {
+        if ($ord0 >= 254 && $ord0 <= 255) {
             trigger_error('Invalid UTF-8 with surrogate ordinal '.$ord0, E_USER_WARNING);
             return false;
         }
@@ -595,9 +595,9 @@ class utf8_Core
                         // Check for illegal sequences and codepoints
 
                         // From Unicode 3.1, non-shortest form is illegal
-                        if (((2 == $mBytes) and ($mUcs4 < 0x0080)) or
-                            ((3 == $mBytes) and ($mUcs4 < 0x0800)) or
-                            ((4 == $mBytes) and ($mUcs4 < 0x10000)) or
+                        if (((2 == $mBytes) && ($mUcs4 < 0x0080)) or
+                            ((3 == $mBytes) && ($mUcs4 < 0x0800)) or
+                            ((4 == $mBytes) && ($mUcs4 < 0x10000)) or
                             (4 < $mBytes) or
                             // From Unicode 3.2, surrogate characters are illegal
                             (0xD800 == ($mUcs4 & 0xFFFFF800)) or
@@ -652,7 +652,7 @@ class utf8_Core
 
         foreach ($keys as $k) {
             // ASCII range (including control chars)
-            if (($arr[$k] >= 0) and ($arr[$k] <= 0x007f)) {
+            if (($arr[$k] >= 0) && ($arr[$k] <= 0x007f)) {
                 echo chr($arr[$k]);
             }
             // 2 byte sequence
@@ -665,7 +665,7 @@ class utf8_Core
                 // nop -- zap the BOM
             }
             // Test for illegal surrogates
-            elseif ($arr[$k] >= 0xD800 and $arr[$k] <= 0xDFFF) {
+            elseif ($arr[$k] >= 0xD800 && $arr[$k] <= 0xDFFF) {
                 // Found a surrogate
                 trigger_error('utf8::from_unicode: Illegal surrogate at index: '.$k.', value: '.$arr[$k], E_USER_WARNING);
                 return false;

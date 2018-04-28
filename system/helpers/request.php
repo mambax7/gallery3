@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * Request helper class.
  *
@@ -41,7 +41,7 @@ class request_Core
             // Set referrer
             $ref = $_SERVER['HTTP_REFERER'];
 
-            if (true === $remove_base and (0 === strpos($ref, url::base(false)))) {
+            if (true === $remove_base && (0 === strpos($ref, url::base(false)))) {
                 // Remove the base URL from the referrer
                 $ref = substr($ref, strlen(url::base(false)));
             }
@@ -60,7 +60,7 @@ class request_Core
     {
         if ('cli' === Kohana::$server_api) {
             return null;
-        } elseif (! empty($_SERVER['HTTPS']) and 'on' === $_SERVER['HTTPS']) {
+        } elseif (! empty($_SERVER['HTTPS']) && 'on' === $_SERVER['HTTPS']) {
             return 'https';
         } else {
             return 'http';
@@ -75,7 +75,7 @@ class request_Core
      */
     public static function is_ajax()
     {
-        return (isset($_SERVER['HTTP_X_REQUESTED_WITH']) and 'xmlhttprequest' === strtolower($_SERVER['HTTP_X_REQUESTED_WITH']));
+        return (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && 'xmlhttprequest' === strtolower($_SERVER['HTTP_X_REQUESTED_WITH']));
     }
 
     /**
@@ -125,7 +125,7 @@ class request_Core
             foreach (Kohana::config('user_agents') as $type => $data) {
                 foreach ($data as $fragment => $name) {
                     if (false !== stripos(request::$user_agent['agent'], $fragment)) {
-                        if ('browser' === $type and preg_match('|' . preg_quote($fragment) . '[^0-9.]*+([0-9.][0-9.a-z]*)|i', request::$user_agent['agent'], $match)) {
+                        if ('browser' === $type && preg_match('|' . preg_quote($fragment) . '[^0-9.]*+([0-9.][0-9.a-z]*)|i', request::$user_agent['agent'], $match)) {
                             // Set the browser version
                             request::$user_agent['version'] = $match[1];
                         }
@@ -452,7 +452,7 @@ class request_Core
                 }
 
                 // A prefix matches
-                if (false === $explicit_check and isset(request::$accept_languages[$tag[0]]['*'])) {
+                if (false === $explicit_check && isset(request::$accept_languages[$tag[0]]['*'])) {
                     return request::$accept_languages[$tag[0]]['*'];
                 }
             } else {
@@ -463,7 +463,7 @@ class request_Core
             }
         }
 
-        if (false === $explicit_check and isset(request::$accept_languages['*'])) {
+        if (false === $explicit_check && isset(request::$accept_languages['*'])) {
             return request::$accept_languages['*'];
         }
 
@@ -485,10 +485,10 @@ class request_Core
             // Explode each entry in content type and possible quality factor
             $entry = explode(';', trim($entry), 2);
 
-            $q = (isset($entry[1]) and preg_match('~\bq\s*+=\s*+([.0-9]+)~', $entry[1], $match)) ? (float) $match[1] : 1;
+            $q = (isset($entry[1]) && preg_match('~\bq\s*+=\s*+([.0-9]+)~', $entry[1], $match)) ? (float) $match[1] : 1;
 
             // Overwrite entries with a smaller q value
-            if (! isset($result[$entry[0]]) or $q > $result[$entry[0]]) {
+            if (! isset($result[$entry[0]]) || $q > $result[$entry[0]]) {
                 $result[$entry[0]] = $q;
             }
         }

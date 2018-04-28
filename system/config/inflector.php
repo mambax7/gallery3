@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * Inflector Config. Lists of words that are uncountable or irregular.
  * If you would like to add a word to these lists please open a new issue on the

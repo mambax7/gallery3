@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <div class="g-block">
   <h1> <?= t('reCAPTCHA challenge filtering') ?> </h1>
   <p>

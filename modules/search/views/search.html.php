@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <?php // @todo Set hover on AlbumGrid list items?>
 <form action="<?= url::site('/search') ?>" id="g-search-form" class="g-short-form">
   <fieldset>

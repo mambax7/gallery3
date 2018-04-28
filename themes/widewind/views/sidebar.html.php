@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <?= $theme->sidebar_top() ?>
 <div id="g-view-menu" class="g-buttonset ui-helper-clearfix">
   <?php if ('album' == $page_subtype):?>

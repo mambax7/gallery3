@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') || die('No direct script access.');
 /**
  * FORGE upload input library.
  *
@@ -30,7 +30,7 @@ class Form_Upload_Core extends Form_Input
         parent::__construct($name);
 
         if (! empty($_FILES[$name])) {
-            if (empty($_FILES[$name]['tmp_name']) or is_uploaded_file($_FILES[$name]['tmp_name'])) {
+            if (empty($_FILES[$name]['tmp_name']) || is_uploaded_file($_FILES[$name]['tmp_name'])) {
                 // Cache the upload data in this object
                 $this->upload = $_FILES[$name];
 
@@ -41,7 +41,7 @@ class Form_Upload_Core extends Form_Input
                 $this->filename = empty($filename) ? false : $filename;
             } else {
                 // Attempt to delete the invalid file
-                is_writable($_FILES[$name]['tmp_name']) and unlink($_FILES[$name]['tmp_name']);
+                is_writable($_FILES[$name]['tmp_name']) && unlink($_FILES[$name]['tmp_name']);
 
                 // Invalid file upload, possible hacking attempt
                 unset($_FILES[$name]);
@@ -58,13 +58,13 @@ class Form_Upload_Core extends Form_Input
     public function directory($dir = null)
     {
         // Use the global upload directory by default
-        empty($dir) and $dir = Kohana::config('upload.directory');
+        empty($dir) && $dir = Kohana::config('upload.directory');
 
         // Make the path asbolute and normalize it
         $directory = str_replace('\\', '/', realpath($dir)).'/';
 
         // Make sure the upload director is valid and writable
-        if ('/' === $directory or ! is_dir($directory) or ! is_writable($directory)) {
+        if ('/' === $directory or ! is_dir($directory) || ! is_writable($directory)) {
             throw new Kohana_Exception('upload.not_writable', $dir);
         }
 
@@ -74,12 +74,12 @@ class Form_Upload_Core extends Form_Input
     public function validate()
     {
         // The upload directory must always be set
-        empty($this->directory) and $this->directory();
+        empty($this->directory) && $this->directory();
 
         // By default, there is no uploaded file
         $filename = '';
 
-        if ($status = parent::validate() and UPLOAD_ERR_OK === $this->upload['error']) {
+        if ($status = parent::validate() && UPLOAD_ERR_OK === $this->upload['error']) {
             // Set the filename to the original name
             $filename = $this->upload['name'];
 
@@ -109,14 +109,14 @@ class Form_Upload_Core extends Form_Input
 
     protected function rule_required()
     {
-        if (empty($this->upload) or UPLOAD_ERR_NO_FILE === $this->upload['error']) {
+        if (empty($this->upload) || UPLOAD_ERR_NO_FILE === $this->upload['error']) {
             $this->errors['required'] = true;
         }
     }
 
     public function rule_allow()
     {
-        if (empty($this->upload['tmp_name']) or 0 == count($types = func_get_args())) {
+        if (empty($this->upload['tmp_name']) || 0 == count($types = func_get_args())) {
             return;
         }
 
@@ -136,7 +136,7 @@ class Form_Upload_Core extends Form_Input
             // Load the mime types
             $type = Kohana::config('mimes.'.$type);
 
-            if (is_array($type) and in_array($mime, $type)) {
+            if (is_array($type) && in_array($mime, $type)) {
                 // Type is valid
                 $allow = true;
                 break;
@@ -151,7 +151,7 @@ class Form_Upload_Core extends Form_Input
     public function rule_size($size)
     {
         // Skip the field if it is empty
-        if (empty($this->upload) or UPLOAD_ERR_NO_FILE === $this->upload['error']) {
+        if (empty($this->upload) || UPLOAD_ERR_NO_FILE === $this->upload['error']) {
             return;
         }
 
@@ -167,7 +167,7 @@ class Form_Upload_Core extends Form_Input
             default: break;
         }
 
-        if (empty($this->upload['size']) or $this->upload['size'] > $bytes) {
+        if (empty($this->upload['size']) || $this->upload['size'] > $bytes) {
             $this->errors['max_size'] = [$size];
         }
     }

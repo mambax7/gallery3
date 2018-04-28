@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <script type="text/javascript">
   var select_url = "<?= url::site('admin/themes/choose') ?>";
   select = function(type, id) {

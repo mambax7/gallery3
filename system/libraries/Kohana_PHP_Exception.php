@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * Kohana PHP Error Exceptions
  *
@@ -86,7 +86,7 @@ class Kohana_PHP_Exception_Core extends Kohana_Exception
      */
     public static function shutdown_handler()
     {
-        if (Kohana_PHP_Exception::$enabled and $error = error_get_last() and (error_reporting() & $error['type'])) {
+        if (Kohana_PHP_Exception::$enabled && $error = error_get_last() && (error_reporting() & $error['type'])) {
             // Fake an exception for nice debugging
             Kohana_Exception::handle(new Kohana_PHP_Exception($error['type'], $error['message'], $error['file'], $error['line']));
         }

@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * Kohana Exceptions
  *
@@ -170,7 +170,7 @@ class Kohana_Exception_Core extends Exception
             }
 
             // Clean the output buffer if one exists
-            ob_get_level() and ob_clean();
+            ob_get_level() && ob_clean();
 
             if ($template = Kohana::find_file('views', $template)) {
                 include $template;
@@ -244,7 +244,7 @@ class Kohana_Exception_Core extends Exception
         } elseif (is_float($var)) {
             return '<small>float</small> '.$var;
         } elseif (is_resource($var)) {
-            if ('stream' === ($type = get_resource_type($var)) and $meta = stream_get_meta_data($var)) {
+            if ('stream' === ($type = get_resource_type($var)) && $meta = stream_get_meta_data($var)) {
                 $meta = stream_get_meta_data($var);
 
                 if (isset($meta['uri'])) {
@@ -455,7 +455,7 @@ class Kohana_Exception_Core extends Exception
                 continue;
             }
 
-            if (isset($step['file']) and isset($step['line'])) {
+            if (isset($step['file']) && isset($step['line'])) {
                 // Include the source of this step
                 $source = Kohana_Exception::debug_source($step['file'], $step['line']);
             }

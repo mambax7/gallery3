@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <ul>
   <?php foreach ($comments as $comment): ?>
   <li class="<?= text::alternate('g-even', 'g-odd') ?>">

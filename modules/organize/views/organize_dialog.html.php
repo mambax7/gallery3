@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <link rel="stylesheet" type="text/css" href="<?= url::file('modules/organize/css/organize_dialog.css') ?>" />
 <script type="text/javascript">
   var ORGANIZE_TITLE =

@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') || die('No direct script access.');
 /**
  * FORGE (FORm GEneration) library.
  *
@@ -46,10 +46,10 @@ class Forge_Core
         $this->template['title'] = $title;
 
         // Empty attributes sets the class to "form"
-        empty($attr) and $attr = ['class' => 'form'];
+        empty($attr) && $attr = ['class' => 'form'];
 
         // String attributes is the class name
-        is_string($attr) and $attr = ['class' => $attr];
+        is_string($attr) && $attr = ['class' => $attr];
 
         // Extend the template with the attributes
         $this->attr += $attr;
@@ -95,7 +95,7 @@ class Forge_Core
                 throw new Kohana_Exception('forge.invalid_input', $input);
         }
 
-        if (! ($input instanceof Form_Input) and ! ($input instanceof Forge)) {
+        if (! ($input instanceof Form_Input) && ! ($input instanceof Forge)) {
             throw new Kohana_Exception('forge.unknown_input', get_class($input));
         }
 
@@ -229,7 +229,7 @@ class Forge_Core
                 // Compile the error messages for this input
                 $messages = '';
                 $errors = $input->error_messages();
-                if (is_array($errors) and ! empty($errors)) {
+                if (is_array($errors) && ! empty($errors)) {
                     foreach ($errors as $error) {
                         // Replace the message with the error in the html error string
                         $messages .= str_replace('{message}', $error, $this->error_format).$this->newline_char;

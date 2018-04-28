@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * Feed helper class.
  *
@@ -31,7 +31,7 @@ class feed_Core
         $ER = error_reporting(0);
 
         // Allow loading by filename or raw XML string
-        $load = (is_file($feed) or valid::url($feed)) ? 'simplexml_load_file' : 'simplexml_load_string';
+        $load = (is_file($feed) || valid::url($feed)) ? 'simplexml_load_file' : 'simplexml_load_string';
 
         // Load the feed
         $feed = $load($feed, 'SimpleXMLElement', LIBXML_NOCDATA);
@@ -51,7 +51,7 @@ class feed_Core
         $items = [];
 
         foreach ($feed as $item) {
-            if ($limit > 0 and $i++ === $limit) {
+            if ($limit > 0 && $i++ === $limit) {
                 break;
             }
 
@@ -78,10 +78,10 @@ class feed_Core
         $feed = simplexml_load_string($feed);
 
         foreach ($info as $name => $value) {
-            if (('pubDate' === $name or 'lastBuildDate' === $name) and (is_int($value) or ctype_digit($value))) {
+            if (('pubDate' === $name || 'lastBuildDate' === $name) && (is_int($value) || ctype_digit($value))) {
                 // Convert timestamps to RFC 822 formatted dates
                 $value = date(DATE_RFC822, $value);
-            } elseif (('link' === $name or 'docs' === $name) and false === strpos($value, '://')) {
+            } elseif (('link' === $name || 'docs' === $name) && false === strpos($value, '://')) {
                 // Convert URIs to URLs
                 $value = url::site($value, 'http');
             }
@@ -95,10 +95,10 @@ class feed_Core
             $row = $feed->channel->addChild('item');
 
             foreach ($item as $name => $value) {
-                if ('pubDate' === $name and (is_int($value) or ctype_digit($value))) {
+                if ('pubDate' === $name && (is_int($value) || ctype_digit($value))) {
                     // Convert timestamps to RFC 822 formatted dates
                     $value = date(DATE_RFC822, $value);
-                } elseif (('link' === $name or 'guid' === $name) and false === strpos($value, '://')) {
+                } elseif (('link' === $name || 'guid' === $name) && false === strpos($value, '://')) {
                     // Convert URIs to URLs
                     $value = url::site($value, 'http');
                 }

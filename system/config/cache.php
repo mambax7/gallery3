@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * Cache settings, defined as arrays, or "groups". If no group name is
  * used when loading the cache library, the group named "default" will be used.

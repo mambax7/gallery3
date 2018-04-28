@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * Provides a driver-based interface for finding, creating, and deleting cached
  * resources. Caches are identified by a unique string. Tagging of caches is

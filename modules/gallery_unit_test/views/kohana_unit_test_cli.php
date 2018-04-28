@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php defined('SYSPATH') || die('No direct script access.') ?>
 <?php
 
 function green_start()
@@ -35,7 +35,7 @@ foreach ($results as $class => $methods) {
     } else {
         foreach ($methods as $method => $result) {
             // Hide passed tests from report
-            if (true === $result and true === $hide_passed) {
+            if (true === $result && true === $hide_passed) {
                 continue;
             }
             if (true === $result) {

@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * Input library.
  *
@@ -96,7 +96,7 @@ class Input_Core
             if (is_array($_COOKIE)) {
                 foreach ($_COOKIE as $key => $val) {
                     // Ignore special attributes in RFC2109 compliant cookies
-                    if ('$Version' == $key or '$Path' == $key or '$Domain' == $key) {
+                    if ('$Version' == $key || '$Path' == $key || '$Domain' == $key) {
                         continue;
                     }
 
@@ -189,7 +189,7 @@ class Input_Core
         // Get the value
         $value = $array[$key];
 
-        if (false === $this->use_xss_clean and true === $xss_clean) {
+        if (false === $this->use_xss_clean && true === $xss_clean) {
             // XSS clean the value
             $value = $this->xss_clean($value);
         }
@@ -372,7 +372,7 @@ class Input_Core
 
         $cache = Kohana::config('html_purifier.cache');
 
-        if ($cache and is_string($cache)) {
+        if ($cache && is_string($cache)) {
             $config->set('Cache.SerializerPath', $cache);
         }
 
@@ -443,12 +443,12 @@ class Input_Core
      */
     public static function clean($str)
     {
-        if (is_array($str) or is_object($str)) {
+        if (is_array($str) || is_object($str)) {
             foreach ($str as $key => $val) {
                 // Recursion!
                 $str[Input::clean($key)] = Input::clean($val);
             }
-        } elseif (is_string($str) and '' !== $str) {
+        } elseif (is_string($str) && '' !== $str) {
             // Remove control characters
             $str = text::strip_ascii_ctrl($str);
 

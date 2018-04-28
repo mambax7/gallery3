@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') || die('No direct script access.');
 /**
  * Database result wrapper.
  *
@@ -91,7 +91,7 @@ abstract class Database_Result_Core implements Countable, Iterator, SeekableIter
      */
     public function offsetExists($offset)
     {
-        return ($offset >= 0 and $offset < $this->total_rows);
+        return ($offset >= 0 && $offset < $this->total_rows);
     }
 
     /**

@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * Manipulate images using standard methods such as resize, crop, rotate, etc.
  * This class must be re-initialized for every image you wish to manipulate.
@@ -69,7 +69,7 @@ class Image_Core
         static $check;
 
         // Make the check exactly once
-        (null === $check) and $check = function_exists('getimagesize');
+        (null === $check) && $check = function_exists('getimagesize');
 
         if (false === $check) {
             throw new Kohana_Exception('The Image library requires the getimagesize() PHP function, which is not available in your installation.');
@@ -90,7 +90,7 @@ class Image_Core
         error_reporting($ER);
 
         // Make sure that the image is readable and valid
-        if (! is_array($image_info) or count($image_info) < 3) {
+        if (! is_array($image_info) || count($image_info) < 3) {
             throw new Kohana_Exception('The file specified, :file:, is not readable or is not an image', [':file:' => $image]);
         }
 
@@ -200,7 +200,7 @@ class Image_Core
             throw new Kohana_Exception('The height you specified, :height:, is not valid.', [':height:' => $height]);
         }
 
-        if (empty($width) and empty($height)) {
+        if (empty($width) && empty($height)) {
             throw new Kohana_Exception('The dimensions specified for :function: are not valid.', [':function:' => __FUNCTION__]);
         }
 
@@ -252,7 +252,7 @@ class Image_Core
             throw new Kohana_Exception('The left offset you specified, :left:, is not valid.', [':left:' => $left]);
         }
 
-        if (empty($width) and empty($height)) {
+        if (empty($width) && empty($height)) {
             throw new Kohana_Exception('The dimensions specified for :function: are not valid.', [':function:' => __FUNCTION__]);
         }
 
@@ -336,7 +336,7 @@ class Image_Core
      */
     public function flip($direction)
     {
-        if ($direction !== Image::HORIZONTAL and $direction !== Image::VERTICAL) {
+        if ($direction !== Image::HORIZONTAL && $direction !== Image::VERTICAL) {
             throw new Kohana_Exception('The flip direction specified is not valid.');
         }
 
@@ -383,7 +383,7 @@ class Image_Core
     public function save($new_image = false, $chmod = 0644, $keep_actions = false, $background = null)
     {
         // If no new image is defined, use the current image
-        empty($new_image) and $new_image = $this->image['file'];
+        empty($new_image) && $new_image = $this->image['file'];
 
         // Separate the directory and filename
         $dir  = pathinfo($new_image, PATHINFO_DIRNAME);
@@ -459,7 +459,7 @@ class Image_Core
         switch ($type) {
             case 'width':
             case 'height':
-                if (is_string($value) and ! ctype_digit($value)) {
+                if (is_string($value) && ! ctype_digit($value)) {
                     // Only numbers and percent signs
                     if (! preg_match('/^[0-9]++%$/D', $value)) {
                         return false;
@@ -469,7 +469,7 @@ class Image_Core
                 }
             break;
             case 'top':
-                if (is_string($value) and ! ctype_digit($value)) {
+                if (is_string($value) && ! ctype_digit($value)) {
                     if (! in_array($value, ['top', 'bottom', 'center'])) {
                         return false;
                     }
@@ -478,7 +478,7 @@ class Image_Core
                 }
             break;
             case 'left':
-                if (is_string($value) and ! ctype_digit($value)) {
+                if (is_string($value) && ! ctype_digit($value)) {
                     if (! in_array($value, ['left', 'right', 'center'])) {
                         return false;
                     }

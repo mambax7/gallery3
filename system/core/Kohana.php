@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct access allowed.');
+<?php defined('SYSPATH') || die('No direct access allowed.');
 /**
  * Provides Kohana-specific helper functions. This is where the magic happens!
  *
@@ -265,7 +265,7 @@ abstract class Kohana_Core
                 Event::run('system.404');
             }
 
-            if ($class->isAbstract() or (IN_PRODUCTION and false == $class->getConstant('ALLOW_PRODUCTION'))) {
+            if ($class->isAbstract() || (IN_PRODUCTION and false == $class->getConstant('ALLOW_PRODUCTION'))) {
                 // Controller is not allowed to run in production
                 Event::run('system.404');
             }
@@ -289,7 +289,7 @@ abstract class Kohana_Core
                     Event::run('system.404');
                 }
 
-                if ($method->isProtected() or $method->isPrivate()) {
+                if ($method->isProtected() || $method->isPrivate()) {
                     // Do not attempt to invoke protected methods
                     throw new ReflectionException('protected controller method');
                 }
@@ -432,7 +432,7 @@ abstract class Kohana_Core
 
         if (null === $data) {
             // Delete cache
-            return (is_file($path) and unlink($path));
+            return (is_file($path) && unlink($path));
         } else {
             // Using encryption? Encrypt the data when we write it
             if (true === Kohana::$internal_cache_encrypt) {
@@ -563,9 +563,9 @@ abstract class Kohana_Core
             );
         }
 
-        if ($level = Kohana::config('core.output_compression') and 'ob_gzhandler' !== ini_get('output_handler') and 0 === (int) ini_get('zlib.output_compression')) {
+        if ($level = Kohana::config('core.output_compression') && 'ob_gzhandler' !== ini_get('output_handler') && 0 === (int) ini_get('zlib.output_compression')) {
             if ($compress = request::preferred_encoding(['gzip', 'deflate'], true)) {
-                if ($level < 1 or $level > 9) {
+                if ($level < 1 || $level > 9) {
                     // Normalize the level to be an integer between 1 and 9. This
                     // step must be done to prevent gzencode from triggering an error
                     $level = max(1, min($level, 9));
@@ -605,7 +605,7 @@ abstract class Kohana_Core
      */
     public static function auto_load($class)
     {
-        if (class_exists($class, false) or interface_exists($class, false)) {
+        if (class_exists($class, false) || interface_exists($class, false)) {
             return true;
         }
 
@@ -709,7 +709,7 @@ abstract class Kohana_Core
         // Nothing found, yet
         $found = null;
 
-        if ('config' === $directory or 'messages' === $directory or 'i18n' === $directory) {
+        if ('config' === $directory || 'messages' === $directory || 'i18n' === $directory) {
             // Search in reverse, for merging
             $paths = array_reverse($paths);
 
@@ -772,7 +772,7 @@ abstract class Kohana_Core
         } else {
             $path = rtrim($path, '/').'/';
 
-            if (is_readable($path) and $items = glob($path.'*')) {
+            if (is_readable($path) && $items = glob($path.'*')) {
                 $ext_pos = 0 - strlen($ext);
 
                 foreach ($items as $index => $item) {
@@ -789,7 +789,7 @@ abstract class Kohana_Core
                         }
                     } else {
                         // File extension must match
-                        if (0 === $ext_pos or substr($item, $ext_pos) === $ext) {
+                        if (0 === $ext_pos || substr($item, $ext_pos) === $ext) {
                             $files[] = $item;
                         }
                     }
@@ -840,7 +840,7 @@ abstract class Kohana_Core
             return $key;
         }
 
-        if (is_string($line) and func_num_args() > 1) {
+        if (is_string($line) && func_num_args() > 1) {
             $args = array_slice(func_get_args(), 1);
 
             // Add the arguments into the line
@@ -872,7 +872,7 @@ abstract class Kohana_Core
             $key = array_shift($keys);
 
             if (isset($array[$key])) {
-                if (is_array($array[$key]) and ! empty($keys)) {
+                if (is_array($array[$key]) && ! empty($keys)) {
                     // Dig down to prepare the next loop
                     $array = $array[$key];
                 } else {

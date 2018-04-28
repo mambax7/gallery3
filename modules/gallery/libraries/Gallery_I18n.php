@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') || die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -279,7 +279,7 @@ class Gallery_I18n_Core
     private function log($message, $options)
     {
         $key = self::get_message_key($message);
-        isset($this->_call_log[$key]) or $this->_call_log[$key] = [$message, $options];
+        isset($this->_call_log[$key]) || $this->_call_log[$key] = [$message, $options];
     }
 
     public function call_log()
@@ -363,7 +363,7 @@ class Gallery_I18n_Core
 
         // no break
       case 'fr':
-        if ($count >= 0 and $count < 2) {
+        if ($count >= 0 && $count < 2) {
             return 'one';
         } else {
             return 'other';

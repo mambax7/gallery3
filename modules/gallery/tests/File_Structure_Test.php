@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') or die('No direct script access.');
+<?php defined('SYSPATH') || die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -80,12 +80,12 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
         // The preamble for views is a single line that prevents direct script access
         if (0 === strpos($path, SYSPATH)) {
             // Kohana preamble
-            $expected = "<?php defined('SYSPATH') OR die('No direct access allowed.'); ?>\n";
-            $expected_2 = "<?php defined('SYSPATH') OR die('No direct access allowed.');\n";  // error.php
+            $expected = "<?php defined('SYSPATH') || die('No direct access allowed.'); ?>\n";
+            $expected_2 = "<?php defined('SYSPATH') || die('No direct access allowed.');\n";  // error.php
         } else {
             // Gallery preamble
             // @todo use the same preamble for both!
-            $expected = "<?php defined(\"SYSPATH\") or die(\"No direct script access.\") ?>\n";
+            $expected = "<?php defined(\"SYSPATH\") || die(\"No direct script access.\") ?>\n";
         }
 
         $fp = fopen($path, 'r');
@@ -109,10 +109,10 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
             $fp = fopen($path, 'r');
             $actual = [fgets($fp)];
             fclose($fp);
-            $expected = ["<?php defined('SYSPATH') OR die('No direct script access.');\n"];
-            $expected_2 = ["<?php defined('SYSPATH') OR die('No direct access allowed.');\n"];
-            $expected_3 = ["<?php defined('SYSPATH') or die('No direct access allowed.');\n"];
-            $expected_4 = ["<?php defined('SYSPATH') or die('No direct script access.');\n"];
+            $expected = ["<?php defined('SYSPATH') || die('No direct script access.');\n"];
+            $expected_2 = ["<?php defined('SYSPATH') || die('No direct access allowed.');\n"];
+            $expected_3 = ["<?php defined('SYSPATH') || die('No direct access allowed.');\n"];
+            $expected_4 = ["<?php defined('SYSPATH') || die('No direct script access.');\n"];
         } elseif (0 === strpos($path, MODPATH . 'forge')
                   ||
                   0 === strpos($path, MODPATH . 'exif/lib')
@@ -127,21 +127,21 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
                   ||
                $path == DOCROOT . 'var/database.php') {
             // 3rd party module security-only preambles, similar to Gallery's
-            $expected = ["<?php defined(\"SYSPATH\") or die(\"No direct access allowed.\");\n"];
-            $expected_2 = ["<?php defined('SYSPATH') OR die('No direct access allowed.');\n"];
-            $expected_3 = ["<?php defined(\"SYSPATH\") or die(\"No direct script access.\");\n"];
+            $expected = ["<?php defined(\"SYSPATH\") || die(\"No direct access allowed.\");\n"];
+            $expected_2 = ["<?php defined('SYSPATH') || die('No direct access allowed.');\n"];
+            $expected_3 = ["<?php defined(\"SYSPATH\") || die(\"No direct script access.\");\n"];
             $fp = fopen($path, 'r');
             $actual = [fgets($fp)];
             fclose($fp);
         } elseif (0 === strpos($path, DOCROOT . 'var/logs')) {
             // var/logs has the kohana one-liner preamble
-            $expected = ["<?php defined('SYSPATH') or die('No direct script access.'); ?>\n"];
+            $expected = ["<?php defined('SYSPATH') || die('No direct script access.'); ?>\n"];
             $fp = fopen($path, 'r');
             $actual = [fgets($fp)];
             fclose($fp);
         } elseif (0 === strpos($path, DOCROOT . 'var')) {
             // Anything else under var has the Gallery one-liner
-            $expected = ["<?php defined(\"SYSPATH\") or die(\"No direct script access.\") ?>\n"];
+            $expected = ["<?php defined(\"SYSPATH\") || die(\"No direct script access.\") ?>\n"];
             $fp = fopen($path, 'r');
             $actual = [fgets($fp)];
             fclose($fp);
@@ -149,7 +149,7 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
             // Gallery: we care about the entire copyright
             $actual = $this->_get_preamble($path);
             $expected = [
-                '<?php defined("SYSPATH") or die("No direct script access.");',
+                '<?php defined("SYSPATH") || die("No direct script access.");',
                 '/**',
                 ' * Gallery - a web based photo album viewer and editor',
                 ' * Copyright (C) 2000-2013 Bharat Mediratta',
