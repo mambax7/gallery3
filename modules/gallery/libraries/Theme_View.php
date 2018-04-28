@@ -83,7 +83,7 @@ class Theme_View_Core extends Gallery_View
         // interested in the size of the thumbnails in this album, not the thumbnail of the
         // album itself.
         if ($item && $item->is_album() && $item->children_count()) {
-            $orderBy = (is_null($dimension)) ? array()
+            $orderBy = (null === $dimension) ? array()
                                        : array('thumb_' . $dimension => 'desc');
 
             $item = $item->children(1, null, array(), $orderBy)->current();

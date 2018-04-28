@@ -42,7 +42,7 @@ class Session_Core
         if (Session::$instance == null) {
             // Create a new instance
             new Session($session_id);
-        } elseif (! is_null($session_id) and $session_id != session_id()) {
+        } elseif (null !== $session_id and $session_id != session_id()) {
             throw new Kohana_Exception('A session (SID: :session:) is already open, cannot open the specified session (SID: :new_session:).', array(':session:' => session_id(), ':new_session:' => $session_id));
         }
 
@@ -181,7 +181,7 @@ class Session_Core
         }
 
         // Reopen an existing session if supplied
-        if (! is_null($session_id)) {
+        if (null !== $session_id) {
             session_id($session_id);
         }
 

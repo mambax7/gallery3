@@ -147,7 +147,7 @@ class Gallery_View_Core extends View
      */
     public function get_combined($type, $group=null)
     {
-        if (is_null($group)) {
+        if (null === $group) {
             $groups = array_keys($this->combine_queue[$type]);
         } else {
             $groups = array($group);

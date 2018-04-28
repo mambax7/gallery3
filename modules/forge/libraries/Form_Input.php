@@ -264,7 +264,7 @@ class Form_Input_Core
         }
 
         // Make sure validation runs
-        is_null($this->is_valid) and $this->validate();
+        null === $this->is_valid and $this->validate();
 
         // Return single error
         if (! is_array($this->error_messages) and ! empty($this->errors)) {

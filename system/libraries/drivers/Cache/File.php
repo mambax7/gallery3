@@ -89,7 +89,7 @@ class Cache_File_Driver extends Cache_Driver
         }
 
 
-        if (! is_null($tags) and ! empty($tags)) {
+        if (null !== $tags and ! empty($tags)) {
             // Convert the tags into a string list
             $tags = implode('+', (array) $tags);
         }

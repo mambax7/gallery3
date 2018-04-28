@@ -448,7 +448,7 @@ class Image_Core
      */
     protected function valid_size($type, & $value)
     {
-        if (is_null($value)) {
+        if (null === $value) {
             return true;
         }
 
