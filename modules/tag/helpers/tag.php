@@ -179,6 +179,7 @@ class tag_Core
      * @param Tag_Model  $tag
      * @param Item_Model $item
      * @param array      $where an array of arrays, each compatible with ORM::where()
+     * @return
      */
     public static function get_position($tag, $item, $where=array())
     {

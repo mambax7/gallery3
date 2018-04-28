@@ -140,6 +140,7 @@ class item_Core
     /**
      * Convert a filename into something we can use as a url component.
      * @param string $filename
+     * @return string
      */
     public static function convert_filename_to_slug($filename)
     {
@@ -375,6 +376,7 @@ class item_Core
      *
      * @param Item_Model $item
      * @param array      $where an array of arrays, each compatible with ORM::where()
+     * @return int
      */
     public static function get_position($item, $where=array())
     {

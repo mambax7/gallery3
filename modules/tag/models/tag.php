@@ -150,6 +150,7 @@ class Tag_Model_Core extends ORM
      *   /gallery3/index.php/tags/35/Bob
      *
      * @param string $query the query string (eg "page=3")
+     * @return string
      */
     public function url($query=null)
     {
@@ -165,6 +166,7 @@ class Tag_Model_Core extends ORM
      *   http://example.com/gallery3/index.php/tags/35/Bob
      *
      * @param string $query the query string (eg "page=3")
+     * @return string
      */
     public function abs_url($query=null)
     {

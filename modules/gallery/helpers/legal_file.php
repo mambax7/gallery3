@@ -34,6 +34,7 @@ class legal_file_Core
      * Extensions cannot be duplicated, but MIMEs can (e.g. jpeg and jpg both map to image/jpeg).
      *
      * @param string $extension (opt.) - return MIME of extension; if not given, return complete array
+     * @return array|mixed|null
      */
     public static function get_photo_types_by_extension($extension=null)
     {
@@ -67,6 +68,7 @@ class legal_file_Core
      * Extensions cannot be duplicated, but MIMEs can (e.g. jpeg and jpg both map to image/jpeg).
      *
      * @param string $extension (opt.) - return MIME of extension; if not given, return complete array
+     * @return array|mixed|null
      */
     public static function get_movie_types_by_extension($extension=null)
     {
@@ -99,6 +101,7 @@ class legal_file_Core
      * Create a merged list of all allowed photo and movie MIME types paired with their extensions.
      *
      * @param string $extension (opt.) - return MIME of extension; if not given, return complete array
+     * @return array|null
      */
     public static function get_types_by_extension($extension=null)
     {
@@ -127,6 +130,7 @@ class legal_file_Core
      * Create a default list of allowed photo extensions and then let modules modify it.
      *
      * @param string $extension (opt.) - return true if allowed; if not given, return complete array
+     * @return array|bool
      */
     public static function get_photo_extensions($extension=null)
     {
@@ -149,6 +153,7 @@ class legal_file_Core
      * Create a default list of allowed movie extensions and then let modules modify it.
      *
      * @param string $extension (opt.) - return true if allowed; if not given, return complete array
+     * @return array|bool
      */
     public static function get_movie_extensions($extension=null)
     {
@@ -171,6 +176,7 @@ class legal_file_Core
      * Create a merged list of all allowed photo and movie extensions.
      *
      * @param string $extension (opt.) - return true if allowed; if not given, return complete array
+     * @return array|bool
      */
     public static function get_extensions($extension=null)
     {
