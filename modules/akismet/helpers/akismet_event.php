@@ -48,9 +48,9 @@ class akismet_event_Core
             return;
         }
 
-        if ($original->state != 'spam' && $new->state == 'spam') {
+        if ('spam' != $original->state && 'spam' == $new->state) {
             akismet::submit_spam($new);
-        } elseif ($original->state == 'spam' && $new->state != 'spam') {
+        } elseif ('spam' == $original->state && 'spam' != $new->state) {
             akismet::submit_ham($new);
         }
     }

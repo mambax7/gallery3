@@ -114,7 +114,7 @@ class User_Model_Core extends ORM implements User_Definition
      */
     public function save()
     {
-        if ($this->full_name === null) {
+        if (null === $this->full_name) {
             $this->full_name = '';
         }
 
@@ -153,10 +153,10 @@ class User_Model_Core extends ORM implements User_Definition
      */
     public function valid_name(Validation $v, $field)
     {
-        if (db::build()->from('users')
-        ->where('name', '=', $this->name)
-        ->merge_where($this->id ? [['id', '<>', $this->id]] : null)
-        ->count_records() == 1) {
+        if (1 == db::build()->from('users')
+                   ->where('name', '=', $this->name)
+                   ->merge_where($this->id ? [['id', '<>', $this->id]] : null)
+                   ->count_records()) {
             $v->add_error('name', 'conflict');
         }
     }

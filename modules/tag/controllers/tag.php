@@ -34,7 +34,7 @@ class Tag_Controller extends Controller
             if ($index) {
                 $page = ceil($index / $page_size);
                 $uri = "tag/$tag_id/" . urlencode($tag->name);
-                url::redirect($uri . ($page == 1 ? '' : "?page=$page"));
+                url::redirect($uri . (1 == $page ? '' : "?page=$page"));
             }
         } else {
             $page = (int) $input->get('page', '1');

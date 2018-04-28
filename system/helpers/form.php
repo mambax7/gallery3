@@ -24,15 +24,15 @@ class form_Core
         // Make sure that the method is always set
         empty($attr['method']) and $attr['method'] = 'post';
 
-        if ($attr['method'] !== 'post' and $attr['method'] !== 'get') {
+        if ('post' !== $attr['method'] and 'get' !== $attr['method']) {
             // If the method is invalid, use post
             $attr['method'] = 'post';
         }
 
-        if ($action === null) {
+        if (null === $action) {
             // Use the current URL as the default action
             $action = url::site(Router::$complete_uri, $protocol);
-        } elseif (strpos($action, '://') === false) {
+        } elseif (false === strpos($action, '://')) {
             // Make the action URI into a URL
             $action = url::site($action, $protocol);
         }
@@ -252,7 +252,7 @@ class form_Core
 
         $data['type'] = 'checkbox';
 
-        if ($checked == true or (isset($data['checked']) and $data['checked'] == true)) {
+        if (true == $checked or (isset($data['checked']) and true == $data['checked'])) {
             $data['checked'] = 'checked';
         } else {
             unset($data['checked']);
@@ -278,7 +278,7 @@ class form_Core
 
         $data['type'] = 'radio';
 
-        if ($checked == true or (isset($data['checked']) and $data['checked'] == true)) {
+        if (true == $checked or (isset($data['checked']) and true == $data['checked'])) {
             $data['checked'] = 'checked';
         } else {
             unset($data['checked']);
@@ -357,7 +357,7 @@ class form_Core
             }
         }
 
-        if ($text === null and isset($data['for'])) {
+        if (null === $text and isset($data['for'])) {
             // Make the text the human-readable input name
             $text = ucwords(inflector::humanize($data['for']));
         }

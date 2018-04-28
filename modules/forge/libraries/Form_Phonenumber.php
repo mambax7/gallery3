@@ -52,10 +52,10 @@ class Form_Phonenumber_Core extends Form_Input
             isset($data['value']) or $data['value'] = '';
             $temp = $data;
             $temp['name'] = $this->data['name'].'['.$type.']';
-            $offset = (strlen($data['value']) == 10) ? 0 : 3;
+            $offset = (10 == strlen($data['value'])) ? 0 : 3;
             switch ($type) {
                 case 'area_code':
-                    if (strlen($data['value']) == 10) {
+                    if (10 == strlen($data['value'])) {
                         $temp['value'] = substr($data['value'], 0, 3);
                     } else {
                         $temp['value'] = '';

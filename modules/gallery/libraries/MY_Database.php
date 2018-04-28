@@ -54,19 +54,19 @@ abstract class Database extends Database_Core
     public function add_table_prefixes($sql)
     {
         $prefix = $this->config['table_prefix'];
-        if (strpos($sql, 'SHOW TABLES') === 0) {
+        if (0 === strpos($sql, 'SHOW TABLES')) {
             /*
              * Don't ignore "show tables", otherwise we could have a infinite
              * @todo this may have to be changed if we support more than mysql
              */
             return $sql;
-        } elseif (strpos($sql, 'CREATE TABLE') === 0) {
+        } elseif (0 === strpos($sql, 'CREATE TABLE')) {
             // Creating a new table; add it to the table cache.
             $open_brace = strpos($sql, '{') + 1;
             $close_brace = strpos($sql, '}', $open_brace);
             $name = substr($sql, $open_brace, $close_brace - $open_brace);
             $this->_table_names["{{$name}}"] = "`{$prefix}$name`";
-        } elseif (strpos($sql, 'RENAME TABLE') === 0) {
+        } elseif (0 === strpos($sql, 'RENAME TABLE')) {
             // Renaming a table; add it to the table cache.
             // You must use the form "TO {new_table_name}" exactly for this to work.
             $open_brace = strpos($sql, 'TO {') + 4;

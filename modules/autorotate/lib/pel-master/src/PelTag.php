@@ -1685,7 +1685,7 @@ class PelTag
     public static function getTagByName($name)
     {
         $k = array_search($name, self::$exifTagsShort);
-        if ($k !== false) {
+        if (false !== $k) {
             return $k;
         }
 

@@ -26,10 +26,10 @@
  * Register autoloader for pel
  */
 spl_autoload_register(function ($class) {
-    if (substr_compare($class, 'lsolesen\\pel\\', 0, 13) === 0) {
+    if (0 === substr_compare($class, 'lsolesen\\pel\\', 0, 13)) {
         $classname = str_replace('lsolesen\\pel\\', '', $class);
         $load = realpath(__DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . $classname . '.php');
-        if ($load !== false) {
+        if (false !== $load) {
             include_once realpath($load);
         }
     }

@@ -127,7 +127,7 @@ class test_Core
 
     public static function starts_with($outer, $inner)
     {
-        return strpos($outer, $inner) === 0;
+        return 0 === strpos($outer, $inner);
     }
 
     public static function call_and_capture($callback)

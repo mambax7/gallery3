@@ -89,7 +89,7 @@ class Database_Builder_Core
     {
         $this->type = Database::SELECT;
 
-        if ($columns === null) {
+        if (null === $columns) {
             $columns = ['*'];
         } elseif (! is_array($columns)) {
             $columns = func_get_args();
@@ -241,7 +241,7 @@ class Database_Builder_Core
             $keys = [$keys => $value];
         }
 
-        if ($type !== null) {
+        if (null !== $type) {
             $type = strtoupper($type);
         }
 
@@ -509,7 +509,7 @@ class Database_Builder_Core
      */
     public function and_open($clause = 'WHERE')
     {
-        if ($clause === 'WHERE') {
+        if ('WHERE' === $clause) {
             $this->where[] = ['AND' => '('];
         } else {
             $this->having[] = ['AND' => '('];
@@ -527,7 +527,7 @@ class Database_Builder_Core
      */
     public function or_open($clause = 'WHERE')
     {
-        if ($clause === 'WHERE') {
+        if ('WHERE' === $clause) {
             $this->where[] = ['OR' => '('];
         } else {
             $this->having[] = ['OR' => '('];
@@ -545,7 +545,7 @@ class Database_Builder_Core
      */
     public function close($clause = 'WHERE')
     {
-        if ($clause === 'WHERE') {
+        if ('WHERE' === $clause) {
             $this->where[] = [')'];
         } else {
             $this->having[] = [')'];
@@ -665,14 +665,14 @@ class Database_Builder_Core
         foreach ($groups as $group) {
             // Process groups of conditions
             foreach ($group as $logic => $condition) {
-                if ($condition === '(') {
-                    if (! empty($sql) and $last_condition !== '(') {
+                if ('(' === $condition) {
+                    if (! empty($sql) and '(' !== $last_condition) {
                         // Include logic operator
                         $sql .= ' '.$logic.' ';
                     }
 
                     $sql .= '(';
-                } elseif ($condition === ')') {
+                } elseif (')' === $condition) {
                     $sql .= ')';
                 } else {
                     list($columns, $op, $value) = $condition;
@@ -696,7 +696,7 @@ class Database_Builder_Core
                                 $value->db = $this->db;
                                 $value = '('.(string) $value.')';
                             } elseif (is_array($value)) {
-                                if ($op === 'BETWEEN' or $op === 'NOT BETWEEN') {
+                                if ('BETWEEN' === $op or 'NOT BETWEEN' === $op) {
                                     // Falls between two values
                                     $value = $this->db->quote($value[0]).' AND '.$this->db->quote($value[1]);
                                 } else {
@@ -718,7 +718,7 @@ class Database_Builder_Core
                         }
                     }
 
-                    if (! empty($sql) and $last_condition !== '(') {
+                    if (! empty($sql) and '(' !== $last_condition) {
                         // Add the logic operator
                         $sql .= ' '.$logic.' ';
                     }
@@ -777,11 +777,11 @@ class Database_Builder_Core
             $this->set($set);
         }
 
-        if ($where !== null) {
+        if (null !== $where) {
             $this->where($where);
         }
 
-        if ($table !== null) {
+        if (null !== $table) {
             $this->from($table);
         }
 
@@ -805,7 +805,7 @@ class Database_Builder_Core
             $this->values(array_values($set));
         }
 
-        if ($table !== null) {
+        if (null !== $table) {
             $this->from($table);
         }
 
@@ -824,11 +824,11 @@ class Database_Builder_Core
     {
         $this->type = Database::DELETE;
 
-        if ($where !== null) {
+        if (null !== $where) {
             $this->where($where);
         }
 
-        if ($table !== null) {
+        if (null !== $table) {
             $this->from($table);
         }
 
@@ -845,14 +845,14 @@ class Database_Builder_Core
     public function count_records($table = false, $where = null)
     {
         if (count($this->from) < 1) {
-            if ($table === false) {
+            if (false === $table) {
                 throw new Database_Exception('Database count_records requires a table');
             }
 
             $this->from($table);
         }
 
-        if ($where !== null) {
+        if (null !== $where) {
             $this->where($where);
         }
 
@@ -870,7 +870,7 @@ class Database_Builder_Core
      */
     public function execute($db = null)
     {
-        if ($db !== null) {
+        if (null !== $db) {
             $this->db = $db;
         }
 
@@ -886,7 +886,7 @@ class Database_Builder_Core
             $this->_reset();
         }
 
-        if ($this->ttl !== false and $this->type === Database::SELECT) {
+        if (false !== $this->ttl and $this->type === Database::SELECT) {
             // Return result from cache (only allowed with SELECT)
             return $this->db->query_cache($query, $this->ttl);
         } else {
@@ -1011,7 +1011,7 @@ class Database_Builder_Core
         foreach ($this->join as $join) {
             list($table, $keys, $type) = $join;
 
-            if ($type !== null) {
+            if (null !== $type) {
                 // Join type
                 $sql .= ' '.$type;
             }
@@ -1072,7 +1072,7 @@ class Database_Builder_Core
 
             $column = $this->db->quote_column($column);
 
-            if ($direction !== null) {
+            if (null !== $direction) {
                 $direction = ' '.$direction;
             }
 

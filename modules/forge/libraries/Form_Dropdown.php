@@ -20,7 +20,7 @@ class Form_Dropdown_Core extends Form_Input
 
     public function __get($key)
     {
-        if ($key == 'value') {
+        if ('value' == $key) {
             return $this->selected;
         }
 
@@ -57,7 +57,7 @@ class Form_Dropdown_Core extends Form_Input
             return $this->is_valid;
         }
 
-        if ($this->input_value() == false) {
+        if (false == $this->input_value()) {
             // No data to validate
             return $this->is_valid = false;
         }

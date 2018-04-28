@@ -92,7 +92,7 @@ class Image_ImageMagick_Driver extends Image_Driver
                 $this->errors[] = $error;
             } else {
                 // Output the image directly to the browser
-                if ($render === true) {
+                if (true === $render) {
                     $contents = file_get_contents($this->tmp_image);
                     switch (substr($file, strrpos($file, '.') + 1)) {
                         case 'jpg':

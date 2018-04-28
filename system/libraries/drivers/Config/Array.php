@@ -47,7 +47,7 @@ class Config_Array_Driver extends Config_Driver
      */
     public function load($group, $required = false)
     {
-        if ($group === 'core') {
+        if ('core' === $group) {
             // Load the application configuration file
             require APPPATH.'config/config'.EXT;
 

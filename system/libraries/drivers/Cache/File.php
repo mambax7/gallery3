@@ -33,10 +33,10 @@ class Cache_File_Driver extends Cache_Driver
      */
     public function exists($keys, $tag = false)
     {
-        if ($keys === true) {
+        if (true === $keys) {
             // Find all the files
             return glob($this->config['directory'].'*~*~*');
-        } elseif ($tag === true) {
+        } elseif (true === $tag) {
             // Find all the files that have the tag name
             $paths = [];
 
@@ -52,7 +52,7 @@ class Cache_File_Driver extends Cache_Driver
                 $tags = explode('~', basename($path));
 
                 // Find valid tags
-                if (count($tags) !== 3 or empty($tags[1])) {
+                if (3 !== count($tags) or empty($tags[1])) {
                     continue;
                 }
 
@@ -83,7 +83,7 @@ class Cache_File_Driver extends Cache_Driver
 
     public function set($items, $tags = null, $lifetime = null)
     {
-        if ($lifetime !== 0) {
+        if (0 !== $lifetime) {
             // File driver expects unix timestamp
             $lifetime += time();
         }
@@ -128,7 +128,7 @@ class Cache_File_Driver extends Cache_Driver
 
                 list($key, $junk) = explode('~', basename($file), 2);
 
-                if (($data = file_get_contents($file)) !== false) {
+                if (false !== ($data = file_get_contents($file))) {
                     // Unserialize the data
                     $data = unserialize($data);
                 } else {
@@ -164,7 +164,7 @@ class Cache_File_Driver extends Cache_Driver
                 // Get the id from the filename
                 list($key, $junk) = explode('~', basename($path), 2);
 
-                if (($data = $this->get($key, true)) !== false) {
+                if (false !== ($data = $this->get($key, true))) {
                     // Add the result to the array
                     $result[$key] = $data;
                 }
@@ -228,6 +228,6 @@ class Cache_File_Driver extends Cache_Driver
         $expires = (int) substr($file, strrpos($file, '~') + 1);
 
         // Expirations of 0 are "never expire"
-        return ($expires !== 0 and $expires <= time());
+        return (0 !== $expires and $expires <= time());
     }
 } // End Cache Memcache Driver

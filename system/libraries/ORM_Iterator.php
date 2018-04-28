@@ -46,7 +46,7 @@ class ORM_Iterator_Core implements Iterator, ArrayAccess, Countable
         if ($objects) {
             // Generate an array of objects
             foreach ($this->result as $data) {
-                if ($key === null) {
+                if (null === $key) {
                     // No indexing
                     $array[] = new $class($data);
                 } else {
@@ -105,12 +105,12 @@ class ORM_Iterator_Core implements Iterator, ArrayAccess, Countable
      */
     public function select_list($key = null, $val = null)
     {
-        if ($key === null) {
+        if (null === $key) {
             // Use the default key
             $key = $this->primary_key;
         }
 
-        if ($val === null) {
+        if (null === $val) {
             // Use the default value
             $val = $this->primary_val;
         }

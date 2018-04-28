@@ -104,8 +104,8 @@ class access_Core
 
         // Use the nearest parent album (including the current item) so that we take advantage
         // of the cache when checking many items in a single album.
-        $id = ($item->type == 'album') ? $item->id : $item->parent_id;
-        $resource = $perm_name == 'view' ?
+        $id = ('album' == $item->type) ? $item->id : $item->parent_id;
+        $resource = 'view' == $perm_name ?
       $item : model_cache::get('access_cache', $id, 'item_id');
 
         foreach ($user->groups() as $group) {
@@ -126,7 +126,7 @@ class access_Core
     public static function required($perm_name, $item)
     {
         if (!access::can($perm_name, $item)) {
-            if ($perm_name == 'view') {
+            if ('view' == $perm_name) {
                 // Treat as if the item didn't exist, don't leak any information.
                 throw new Kohana_404_Exception();
             } else {
@@ -147,8 +147,8 @@ class access_Core
     {
         // Use the nearest parent album (including the current item) so that we take advantage
         // of the cache when checking many items in a single album.
-        $id = ($item->type == 'album') ? $item->id : $item->parent_id;
-        $resource = $perm_name == 'view' ?
+        $id = ('album' == $item->type) ? $item->id : $item->parent_id;
+        $resource = 'view' == $perm_name ?
       $item : model_cache::get('access_cache', $id, 'item_id');
 
         return $resource->__get("{$perm_name}_{$group->id}") === access::ALLOW;
@@ -179,7 +179,7 @@ class access_Core
      */
     public static function locked_by($group, $perm_name, $item)
     {
-        if ($perm_name != 'view') {
+        if ('view' != $perm_name) {
             return null;
         }
 
@@ -233,7 +233,7 @@ class access_Core
         $access->__set("{$perm_name}_{$group->id}", $value);
         $access->save();
 
-        if ($perm_name == 'view') {
+        if ('view' == $perm_name) {
             self::_update_access_view_cache($group, $album);
         } else {
             self::_update_access_non_view_cache($group, $perm_name, $album);
@@ -276,7 +276,7 @@ class access_Core
      */
     public static function reset($group, $perm_name, $item)
     {
-        if ($item->id == 1) {
+        if (1 == $item->id) {
             throw new Exception('@todo CANT_RESET_ROOT_PERMISSION');
         }
         self::_set($group, $perm_name, $item, self::INHERIT);
@@ -289,7 +289,7 @@ class access_Core
     {
         foreach (self::_get_all_groups() as $group) {
             foreach (ORM::factory('permission')->find_all() as $perm) {
-                if ($perm->name == 'view') {
+                if ('view' == $perm->name) {
                     self::_update_access_view_cache($group, $album);
                 } else {
                     self::_update_access_non_view_cache($group, $perm->name, $album);
@@ -310,7 +310,7 @@ class access_Core
         foreach (self::_get_all_groups() as $group) {
             foreach (ORM::factory('permission')->find_all() as $perm) {
                 $field = "{$perm->name}_{$group->id}";
-                if ($perm->name == 'view') {
+                if ('view' == $perm->name) {
                     $photo->$field = $parent->$field;
                 } else {
                     $photo_access_cache->$field = $parent_access_cache->$field;
@@ -406,13 +406,13 @@ class access_Core
         // Create a new access cache entry and copy the parents values.
         $access_cache = ORM::factory('access_cache');
         $access_cache->item_id = $item->id;
-        if ($item->id != 1) {
+        if (1 != $item->id) {
             $parent_access_cache =
         ORM::factory('access_cache')->where('item_id', '=', $item->parent()->id)->find();
             foreach (self::_get_all_groups() as $group) {
                 foreach (ORM::factory('permission')->find_all() as $perm) {
                     $field = "{$perm->name}_{$group->id}";
-                    if ($perm->name == 'view') {
+                    if ('view' == $perm->name) {
                         $item->$field = $item->parent()->$field;
                     } else {
                         $access_cache->$field = $parent_access_cache->$field;
@@ -497,7 +497,7 @@ class access_Core
     private static function _drop_columns($perm_name, $group)
     {
         $field = "{$perm_name}_{$group->id}";
-        $cache_table = $perm_name == 'view' ? 'items' : 'access_caches';
+        $cache_table = 'view' == $perm_name ? 'items' : 'access_caches';
         Database::instance()->query("ALTER TABLE {{$cache_table}} DROP `$field`");
         Database::instance()->query("ALTER TABLE {access_intents} DROP `$field`");
         model_cache::clear();
@@ -514,8 +514,8 @@ class access_Core
     private static function _add_columns($perm_name, $group)
     {
         $field = "{$perm_name}_{$group->id}";
-        $cache_table = $perm_name == 'view' ? 'items' : 'access_caches';
-        $not_null = $cache_table == 'items' ? '' : 'NOT NULL';
+        $cache_table = 'view' == $perm_name ? 'items' : 'access_caches';
+        $not_null = 'items' == $cache_table ? '' : 'NOT NULL';
         Database::instance()->query(
       "ALTER TABLE {{$cache_table}} ADD `$field` BINARY $not_null DEFAULT FALSE"
     );
@@ -697,19 +697,19 @@ class access_Core
     public static function update_htaccess_files($album, $group, $perm_name, $value)
     {
         if ($group->id != identity::everybody()->id ||
-        !($perm_name == 'view' || $perm_name == 'view_full')) {
+        !('view' == $perm_name || 'view_full' == $perm_name)) {
             return;
         }
 
         $dirs = [$album->file_path()];
-        if ($perm_name == 'view') {
+        if ('view' == $perm_name) {
             $dirs[] = dirname($album->resize_path());
             $dirs[] = dirname($album->thumb_path());
         }
 
         $base_url = url::base(true);
         $sep = '?';
-        if (strpos($base_url, '?') !== false) {
+        if (false !== strpos($base_url, '?')) {
             $sep = '&';
         }
         $base_url .= $sep . 'kohana_uri=/file_proxy';
@@ -781,7 +781,7 @@ class access_Core
             }
             list($status, $headers, $body) =
         remote::do_request(url::abs_file('var/security_test/verify'), 'GET', $headers);
-            $works = ($status == 'HTTP/1.1 200 OK') && ($body == 'success');
+            $works = ('HTTP/1.1 200 OK' == $status) && ('success' == $body);
         } catch (Exception $e) {
             @dir::unlink(VARPATH . 'security_test');
             throw $e;

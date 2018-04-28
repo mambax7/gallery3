@@ -26,10 +26,10 @@ class autorotate_installer
 
     public static function upgrade($version)
     {
-        if ($version == 1) {
+        if (1 == $version) {
             module::set_version('autorotate', $version = 2);
         }
-        if ($version == 2) {
+        if (2 == $version) {
             module::set_version('autorotate', $version = 3);
         }
     }

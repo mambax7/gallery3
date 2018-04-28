@@ -28,7 +28,7 @@
         <?php foreach ($tags as $i => $tag): ?>
           <?php $current_letter = strtoupper(mb_substr($tag->name, 0, 1)) ?>
 
-          <?php if ($i == 0): /* first letter */ ?>
+          <?php if (0 == $i): /* first letter */ ?>
           <strong><?= html::clean($current_letter) ?></strong>
           <ul>
           <?php elseif ($last_letter != $current_letter): /* new letter */ ?>

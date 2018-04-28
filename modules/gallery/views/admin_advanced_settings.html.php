@@ -25,7 +25,7 @@
           <a href="<?= url::site("admin/advanced_settings/edit/$var->module_name/" . html::clean($var->name)) ?>"
             class="g-dialog-link"
             title="<?= t('Edit %var (%module_name)', ['var' => $var->name, 'module_name' => $var->module_name])->for_html_attr() ?>">
-            <?php if (!isset($var->value) || $var->value === ''): ?>
+            <?php if (!isset($var->value) || '' === $var->value): ?>
             <i> <?= t('empty') ?> </i>
             <?php else: ?>
             <?= html::clean($var->value) ?>

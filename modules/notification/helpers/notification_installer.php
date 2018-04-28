@@ -43,7 +43,7 @@ class notification_installer
     public static function upgrade($version)
     {
         $db = Database::instance();
-        if ($version == 1) {
+        if (1 == $version) {
             $db->query('ALTER TABLE {pending_notifications} ADD COLUMN `locale` char(10) default NULL');
             module::set_version('notification', $version = 2);
         }

@@ -36,10 +36,10 @@ class utf8_Core
     public static function substr_replace($str, $replacement, $offset, $length = null)
     {
         if (text::is_ascii($str)) {
-            return ($length === null) ? substr_replace($str, $replacement, $offset) : substr_replace($str, $replacement, $offset, $length);
+            return (null === $length) ? substr_replace($str, $replacement, $offset) : substr_replace($str, $replacement, $offset, $length);
         }
 
-        $length = ($length === null) ? mb_strlen($str) : (int) $length;
+        $length = (null === $length) ? mb_strlen($str) : (int) $length;
         preg_match_all('/./us', $str, $str_array);
         preg_match_all('/./us', $replacement, $replacement_array);
 
@@ -173,7 +173,7 @@ class utf8_Core
             return stristr($str, $search);
         }
 
-        if ($search == '') {
+        if ('' == $search) {
             return $str;
         }
 
@@ -203,15 +203,15 @@ class utf8_Core
      */
     public static function strspn($str, $mask, $offset = null, $length = null)
     {
-        if ($str == '' or $mask == '') {
+        if ('' == $str or '' == $mask) {
             return 0;
         }
 
         if (text::is_ascii($str) and text::is_ascii($mask)) {
-            return ($offset === null) ? strspn($str, $mask) : (($length === null) ? strspn($str, $mask, $offset) : strspn($str, $mask, $offset, $length));
+            return (null === $offset) ? strspn($str, $mask) : ((null === $length) ? strspn($str, $mask, $offset) : strspn($str, $mask, $offset, $length));
         }
 
-        if ($offset !== null or $length !== null) {
+        if (null !== $offset or null !== $length) {
             $str = mb_substr($str, $offset, $length);
         }
 
@@ -237,15 +237,15 @@ class utf8_Core
      */
     public static function strcspn($str, $mask, $offset = null, $length = null)
     {
-        if ($str == '' or $mask == '') {
+        if ('' == $str or '' == $mask) {
             return 0;
         }
 
         if (text::is_ascii($str) and text::is_ascii($mask)) {
-            return ($offset === null) ? strcspn($str, $mask) : (($length === null) ? strcspn($str, $mask, $offset) : strcspn($str, $mask, $offset, $length));
+            return (null === $offset) ? strcspn($str, $mask) : ((null === $length) ? strcspn($str, $mask, $offset) : strcspn($str, $mask, $offset, $length));
         }
 
-        if ($str !== null or $length !== null) {
+        if (null !== $str or null !== $length) {
             $str = mb_substr($str, $offset, $length);
         }
 
@@ -284,17 +284,17 @@ class utf8_Core
         $pad_str_length = mb_strlen($pad_str);
         $pad_length = $final_str_length - $str_length;
 
-        if ($pad_type == STR_PAD_RIGHT) {
+        if (STR_PAD_RIGHT == $pad_type) {
             $repeat = ceil($pad_length / $pad_str_length);
             return mb_substr($str.str_repeat($pad_str, $repeat), 0, $final_str_length);
         }
 
-        if ($pad_type == STR_PAD_LEFT) {
+        if (STR_PAD_LEFT == $pad_type) {
             $repeat = ceil($pad_length / $pad_str_length);
             return mb_substr(str_repeat($pad_str, $repeat), 0, floor($pad_length)).$str;
         }
 
-        if ($pad_type == STR_PAD_BOTH) {
+        if (STR_PAD_BOTH == $pad_type) {
             $pad_length /= 2;
             $pad_length_left = floor($pad_length);
             $pad_length_right = ceil($pad_length);
@@ -372,7 +372,7 @@ class utf8_Core
      */
     public static function trim($str, $charlist = null)
     {
-        if ($charlist === null) {
+        if (null === $charlist) {
             return trim($str);
         }
 
@@ -391,7 +391,7 @@ class utf8_Core
      */
     public static function ltrim($str, $charlist = null)
     {
-        if ($charlist === null) {
+        if (null === $charlist) {
             return ltrim($str);
         }
 
@@ -416,7 +416,7 @@ class utf8_Core
      */
     public static function rtrim($str, $charlist = null)
     {
-        if ($charlist === null) {
+        if (null === $charlist) {
             return rtrim($str);
         }
 
@@ -533,7 +533,7 @@ class utf8_Core
         for ($i = 0; $i < $len; $i++) {
             $in = ord($str[$i]);
 
-            if ($mState == 0) {
+            if (0 == $mState) {
                 // When mState is zero we expect either a US-ASCII character or a
                 // multi-octet sequence.
                 if (0 == (0x80 & $in)) {
@@ -600,7 +600,7 @@ class utf8_Core
                             ((4 == $mBytes) and ($mUcs4 < 0x10000)) or
                             (4 < $mBytes) or
                             // From Unicode 3.2, surrogate characters are illegal
-                            (($mUcs4 & 0xFFFFF800) == 0xD800) or
+                            (0xD800 == ($mUcs4 & 0xFFFFF800)) or
                             // Codepoints outside the Unicode range are illegal
                             ($mUcs4 > 0x10FFFF)) {
                             trigger_error('utf8::to_unicode: Illegal sequence or codepoint in UTF-8 at byte '.$i, E_USER_WARNING);
@@ -661,7 +661,7 @@ class utf8_Core
                 echo chr(0x80 | ($arr[$k] & 0x003f));
             }
             // Byte order mark (skip)
-            elseif ($arr[$k] == 0xFEFF) {
+            elseif (0xFEFF == $arr[$k]) {
                 // nop -- zap the BOM
             }
             // Test for illegal surrogates

@@ -130,7 +130,7 @@ class Validation_Core extends ArrayObject
 
         $safe = [];
         foreach ($fields as $field) {
-            if ($choices === null or isset($choices[$field])) {
+            if (null === $choices or isset($choices[$field])) {
                 if (isset($this[$field])) {
                     $value = $this[$field];
 
@@ -179,10 +179,10 @@ class Validation_Core extends ArrayObject
     */
     public function label($field, $label = null)
     {
-        if ($label === null and ($field !== true or $field !== '*') and ! isset($this->labels[$field])) {
+        if (null === $label and (true !== $field or '*' !== $field) and ! isset($this->labels[$field])) {
             // Set the field label to the field name
             $this->labels[$field] = ucfirst(preg_replace('/[^\pL]+/u', ' ', $field));
-        } elseif ($label !== null) {
+        } elseif (null !== $label) {
             // Set the label for this field
             $this->labels[$field] = $label;
         }
@@ -211,7 +211,7 @@ class Validation_Core extends ArrayObject
     protected function callback($callback)
     {
         if (is_string($callback)) {
-            if (strpos($callback, '::') !== false) {
+            if (false !== strpos($callback, '::')) {
                 $callback = explode('::', $callback);
             } elseif (function_exists($callback)) {
                 // No need to check if the callback is a method
@@ -256,7 +256,7 @@ class Validation_Core extends ArrayObject
      */
     public function pre_filter($filter, $field = true)
     {
-        if ($field === true or $field === '*') {
+        if (true === $field or '*' === $field) {
             // Use wildcard
             $fields = ['*'];
         } else {
@@ -287,7 +287,7 @@ class Validation_Core extends ArrayObject
      */
     public function post_filter($filter, $field = true)
     {
-        if ($field === true) {
+        if (true === $field) {
             // Use wildcard
             $fields = ['*'];
         } else {
@@ -325,7 +325,7 @@ class Validation_Core extends ArrayObject
         // Set a default field label
         $this->label($field);
 
-        if ($field === true) {
+        if (true === $field) {
             // Use wildcard
             $field = '*';
         }
@@ -361,7 +361,7 @@ class Validation_Core extends ArrayObject
                 $rule[1] = $rule_name;
             }
 
-            if ($rule === 'is_array') {
+            if ('is_array' === $rule) {
                 // This field is expected to be an array
                 $this->array_fields[$field] = $field;
             }
@@ -394,7 +394,7 @@ class Validation_Core extends ArrayObject
         // Set a default field label
         $this->label($field);
 
-        if ($field === true) {
+        if (true === $field) {
             // Use wildcard
             $field = '*';
         }
@@ -422,7 +422,7 @@ class Validation_Core extends ArrayObject
      */
     public function validate($object = null, $field_name = null)
     {
-        if ($object === null) {
+        if (null === $object) {
             // Use the current object
             $object = $this;
         }
@@ -434,7 +434,7 @@ class Validation_Core extends ArrayObject
 
         foreach ($this->pre_filters as $field => $callbacks) {
             foreach ($callbacks as $callback) {
-                if ($field === '*') {
+                if ('*' === $field) {
                     foreach ($fields as $f) {
                         $array[$f] = is_array($array[$f]) ? array_map($callback, $array[$f]) : call_user_func($callback, $array[$f]);
                     }
@@ -452,7 +452,7 @@ class Validation_Core extends ArrayObject
                 // Function or method name of the rule
                 $rule = is_array($callback) ? $callback[1] : $callback;
 
-                if ($field === '*') {
+                if ('*' === $field) {
                     foreach ($fields as $f) {
                         // Note that continue, instead of break, is used when
                         // applying rules using a wildcard, so that all fields
@@ -468,7 +468,7 @@ class Validation_Core extends ArrayObject
                             continue;
                         }
 
-                        $result = ($args === null) ? call_user_func($callback, $array[$f]) : call_user_func($callback, $array[$f], $args);
+                        $result = (null === $args) ? call_user_func($callback, $array[$f]) : call_user_func($callback, $array[$f], $args);
 
                         if (($result == $is_false)) {
                             $this->add_error($f, $rule, $args);
@@ -489,7 +489,7 @@ class Validation_Core extends ArrayObject
                     }
 
                     // Results of our test
-                    $result = ($args === null) ? call_user_func($callback, $array[$field]) : call_user_func($callback, $array[$field], $args);
+                    $result = (null === $args) ? call_user_func($callback, $array[$field]) : call_user_func($callback, $array[$field], $args);
 
                     if (($result == $is_false)) {
                         $rule = $is_false ? '!'.$rule : $rule;
@@ -504,7 +504,7 @@ class Validation_Core extends ArrayObject
 
         foreach ($this->callbacks as $field => $callbacks) {
             foreach ($callbacks as $callback) {
-                if ($field === '*') {
+                if ('*' === $field) {
                     foreach ($fields as $f) {
                         // Note that continue, instead of break, is used when
                         // applying rules using a wildcard, so that all fields
@@ -530,7 +530,7 @@ class Validation_Core extends ArrayObject
 
         foreach ($this->post_filters as $field => $callbacks) {
             foreach ($callbacks as $callback) {
-                if ($field === '*') {
+                if ('*' === $field) {
                     foreach ($fields as $f) {
                         $array[$f] = is_array($array[$f]) ? array_map($callback, $array[$f]) : call_user_func($callback, $array[$f]);
                     }
@@ -571,7 +571,7 @@ class Validation_Core extends ArrayObject
      */
     public function errors($file = null)
     {
-        if ($file === null) {
+        if (null === $file) {
             $errors = [];
             foreach ($this->errors as $field => $error) {
                 $errors[$field] = $error[0];
@@ -632,7 +632,7 @@ class Validation_Core extends ArrayObject
         if (is_array($str)) {
             return ! empty($str);
         } else {
-            return ! ($str === '' or $str === null or $str === false);
+            return ! ('' === $str or null === $str or false === $str);
         }
     }
 
@@ -695,7 +695,7 @@ class Validation_Core extends ArrayObject
     public function depends_on($field, array $fields)
     {
         foreach ($fields as $depends_on) {
-            if (! isset($this[$depends_on]) or $this[$depends_on] == null) {
+            if (! isset($this[$depends_on]) or null == $this[$depends_on]) {
                 return false;
             }
         }

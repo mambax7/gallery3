@@ -51,8 +51,8 @@ class gallery_event_Core
       foreach (['logs', 'tmp'] as $dir) {
           $dir = VARPATH . $dir;
           if ($dh = opendir($dir)) {
-              while (($file = readdir($dh)) !== false) {
-                  if ($file[0] == '.') {
+              while (false !== ($file = readdir($dh))) {
+                  if ('.' == $file[0]) {
                       continue;
                   }
 
@@ -146,7 +146,7 @@ class gallery_event_Core
         if ($item->is_photo() || $item->is_movie()) {
             // If the parent has no cover item, make this it.
             $parent = $item->parent();
-            if (access::can('edit', $parent) && $parent->album_cover_item_id == null) {
+            if (access::can('edit', $parent) && null == $parent->album_cover_item_id) {
                 item::make_album_cover($item);
             }
         }
@@ -259,7 +259,7 @@ class gallery_event_Core
 
     public static function user_menu($menu, $theme)
     {
-        if ($theme->page_subtype != 'login') {
+        if ('login' != $theme->page_subtype) {
             $user = identity::active_user();
             if ($user->guest) {
                 $menu->append(Menu::factory('dialog')
@@ -276,7 +276,7 @@ class gallery_event_Core
                       ->url(user_profile::url($user->id))
                       ->label($user->display_name()));
 
-                if (Router::$controller == 'admin') {
+                if ('admin' == Router::$controller) {
                     $continue_url = url::abs_site('');
                 } elseif ($item = $theme->item()) {
                     if (access::user_can(identity::guest(), 'view', $theme->item)) {
@@ -299,7 +299,7 @@ class gallery_event_Core
 
     public static function site_menu($menu, $theme, $item_css_selector)
     {
-        if ($theme->page_subtype != 'login') {
+        if ('login' != $theme->page_subtype) {
             $menu->append(Menu::factory('link')
                     ->id('home')
                     ->label(t('Home'))
@@ -404,15 +404,15 @@ class gallery_event_Core
                     if (access::can('edit', $parent)) {
                         // We can't make this item the highlight if it's an album with no album cover, or if it's
                         // already the album cover.
-                        if (($item->type == 'album' && empty($item->album_cover_item_id)) ||
-                            ($item->type == 'album' && $parent->album_cover_item_id == $item->album_cover_item_id) ||
+                        if (('album' == $item->type && empty($item->album_cover_item_id)) ||
+                            ('album' == $item->type && $parent->album_cover_item_id == $item->album_cover_item_id) ||
                 $parent->album_cover_item_id == $item->id) {
                             $disabledState = 'ui-state-disabled';
                         } else {
                             $disabledState = '';
                         }
 
-                        if ($item->parent()->id != 1) {
+                        if (1 != $item->parent()->id) {
                             $options_menu
                 ->append(
                   Menu::factory('ajax_link')
@@ -568,14 +568,14 @@ class gallery_event_Core
             if (access::can('edit', $parent)) {
                 // We can't make this item the highlight if it's an album with no album cover, or if it's
                 // already the album cover.
-                if (($item->type == 'album' && empty($item->album_cover_item_id)) ||
-                    ($item->type == 'album' && $parent->album_cover_item_id == $item->album_cover_item_id) ||
+                if (('album' == $item->type && empty($item->album_cover_item_id)) ||
+                    ('album' == $item->type && $parent->album_cover_item_id == $item->album_cover_item_id) ||
             $parent->album_cover_item_id == $item->id) {
                     $disabledState = 'ui-state-disabled';
                 } else {
                     $disabledState = '';
                 }
-                if ($item->parent()->id != 1) {
+                if (1 != $item->parent()->id) {
                     $options_menu
             ->append(Menu::factory('ajax_link')
                      ->id('make_album_cover')
@@ -629,9 +629,9 @@ class gallery_event_Core
         foreach ($fields as $field => $label) {
             if (!empty($data->user->$field)) {
                 $value = $data->user->$field;
-                if ($field == 'locale') {
+                if ('locale' == $field) {
                     $value = locales::display_name($value);
-                } elseif ($field == 'url') {
+                } elseif ('url' == $field) {
                     $value = html::mark_clean(html::anchor(html::clean($data->user->$field)));
                 }
                 $v->user_profile_data[(string) $label] = $value;
@@ -647,7 +647,7 @@ class gallery_event_Core
         // address so that we at least have a valid address for the Gallery.
         if ($updated_user->admin) {
             $email = module::get_var('gallery', 'email_from', '');
-            if ($email == 'unknown@unknown.com') {
+            if ('unknown@unknown.com' == $email) {
                 module::set_var('gallery', 'email_from', $updated_user->email);
                 module::set_var('gallery', 'email_reply_to', $updated_user->email);
             }

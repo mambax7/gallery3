@@ -27,12 +27,12 @@ class Form_Checklist_Core extends Form_Input
 
     public function __get($key)
     {
-        if ($key == 'value') {
+        if ('value' == $key) {
             // Return the currently checked values
             $array = [];
             foreach ($this->data['options'] as $id => $opt) {
                 // Return the options that are checked
-                ($opt[1] === true) and $array[] = $id;
+                (true === $opt[1]) and $array[] = $id;
             }
             return $array;
         }

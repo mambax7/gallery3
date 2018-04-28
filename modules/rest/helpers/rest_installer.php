@@ -36,14 +36,14 @@ class rest_installer
     public static function upgrade($version)
     {
         $db = Database::instance();
-        if ($version == 1) {
+        if (1 == $version) {
             if (in_array('user_access_tokens', Database::instance()->list_tables())) {
                 $db->query('RENAME TABLE {user_access_tokens} TO {user_access_keys}');
             }
             module::set_version('rest', $version = 2);
         }
 
-        if ($version == 2) {
+        if (2 == $version) {
             module::set_var('rest', 'allow_guest_access', false);
             module::set_version('rest', $version = 3);
         }

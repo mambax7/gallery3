@@ -39,7 +39,7 @@ class Session_Cookie_Driver implements Session_Driver
     {
         $data = (string) cookie::get($this->cookie_name);
 
-        if ($data == '') {
+        if ('' == $data) {
             return $data;
         }
 

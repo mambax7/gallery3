@@ -57,7 +57,7 @@ class Image_GraphicsMagick_Driver extends Image_Driver
     public function process($image, $actions, $dir, $file, $render = false, $background = null)
     {
         // Need to implement $background support
-        if ($background !== null) {
+        if (null !== $background) {
             throw new Kohana_Exception('The GraphicsMagick driver does not support setting a background color');
         }
 
@@ -88,7 +88,7 @@ class Image_GraphicsMagick_Driver extends Image_Driver
                 $this->errors[] = $error;
             } else {
                 // Output the image directly to the browser
-                if ($render !== false) {
+                if (false !== $render) {
                     $contents = file_get_contents($this->tmp_image);
                     switch (substr($file, strrpos($file, '.') + 1)) {
                         case 'jpg':

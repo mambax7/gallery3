@@ -66,7 +66,7 @@ class Gallery_I18n_Core
 
     public static function instance($config=null)
     {
-        if (self::$_instance == null || isset($config)) {
+        if (null == self::$_instance || isset($config)) {
             $config = isset($config) ? $config : Kohana::config('locale');
             if (empty($config['default_locale'])) {
                 $config['default_locale'] = module::get_var('gallery', 'default_locale');
@@ -89,7 +89,7 @@ class Gallery_I18n_Core
                 // Try appending some character set names; some systems (like FreeBSD) need this.
                 // Some systems require a format with hyphen (eg. Gentoo) and others without (eg. FreeBSD).
                 $charsets = ['utf8', 'UTF-8', 'UTF8', 'ISO8859-1', 'ISO-8859-1'];
-                if (substr($locale, 0, 2) != 'en') {
+                if ('en' != substr($locale, 0, 2)) {
                     $charsets = array_merge($charsets, [
               'EUC', 'Big5', 'euc', 'ISO8859-2', 'ISO8859-5', 'ISO8859-7',
               'ISO8859-9', 'ISO-8859-2', 'ISO-8859-5', 'ISO-8859-7', 'ISO-8859-9'
@@ -101,7 +101,7 @@ class Gallery_I18n_Core
                 $locale_prefs[] = 'en_US';
                 $php_locale = setlocale(LC_ALL, $locale_prefs);
             }
-            if (is_string($php_locale) && substr($php_locale, 0, 2) == 'tr') {
+            if (is_string($php_locale) && 'tr' == substr($php_locale, 0, 2)) {
                 // Make PHP 5 work with Turkish (the localization results are mixed though).
                 // Hack for http://bugs.php.net/18556
                 setlocale(LC_CTYPE, 'C');
@@ -212,7 +212,7 @@ class Gallery_I18n_Core
         if (null === $entry) {
             return false;
         } elseif (!is_array($message)) {
-            return $entry !== '';
+            return '' !== $entry;
         } else {
             if (!is_array($entry) || empty($entry)) {
                 return false;
@@ -220,7 +220,7 @@ class Gallery_I18n_Core
             // It would be better to verify that all the locale's plural forms have a non-empty
             // translation, but this is fine for now.
             foreach ($entry as $value) {
-                if ($value === '') {
+                if ('' === $value) {
                     return false;
                 }
             }
@@ -328,11 +328,11 @@ class Gallery_I18n_Core
         return 'other';
 
       case 'ar':
-        if ($count == 0) {
+        if (0 == $count) {
             return 'zero';
-        } elseif ($count == 1) {
+        } elseif (1 == $count) {
             return 'one';
-        } elseif ($count == 2) {
+        } elseif (2 == $count) {
             return 'two';
         } elseif (is_int($count) && ($i = $count % 100) >= 3 && $i <= 10) {
             return 'few';
@@ -355,7 +355,7 @@ class Gallery_I18n_Core
       case 'nso':
       case 'ti':
       case 'wa':
-        if ($count == 0 || $count == 1) {
+        if (0 == $count || 1 == $count) {
             return 'one';
         } else {
             return 'other';
@@ -371,9 +371,9 @@ class Gallery_I18n_Core
 
         // no break
       case 'lv':
-        if ($count == 0) {
+        if (0 == $count) {
             return 'zero';
-        } elseif ($count % 10 == 1 && $count % 100 != 11) {
+        } elseif (1 == $count % 10 && 11 != $count % 100) {
             return 'one';
         } else {
             return 'other';
@@ -387,9 +387,9 @@ class Gallery_I18n_Core
       case 'smj':
       case 'smn':
       case 'sms':
-        if ($count == 1) {
+        if (1 == $count) {
             return 'one';
-        } elseif ($count == 2) {
+        } elseif (2 == $count) {
             return 'two';
         } else {
             return 'other';
@@ -398,9 +398,9 @@ class Gallery_I18n_Core
         // no break
       case 'ro':
       case 'mo':
-        if ($count == 1) {
+        if (1 == $count) {
             return 'one';
-        } elseif (is_int($count) && $count == 0 && ($i = $count % 100) >= 1 && $i <= 19) {
+        } elseif (is_int($count) && 0 == $count && ($i = $count % 100) >= 1 && $i <= 19) {
             return 'few';
         } else {
             return 'other';
@@ -408,7 +408,7 @@ class Gallery_I18n_Core
 
         // no break
       case 'lt':
-        if (is_int($count) && $count % 10 == 1 && $count % 100 != 11) {
+        if (is_int($count) && 1 == $count % 10 && 11 != $count % 100) {
             return 'one';
         } elseif (is_int($count) && ($i = $count % 10) >= 2 && $i <= 9 && ($i = $count % 100) < 11 && $i > 19) {
             return 'few';
@@ -424,11 +424,11 @@ class Gallery_I18n_Core
       case 'be':
       case 'bs':
       case 'sh':
-        if (is_int($count) && $count % 10 == 1 && $count % 100 != 11) {
+        if (is_int($count) && 1 == $count % 10 && 11 != $count % 100) {
             return 'one';
         } elseif (is_int($count) && ($i = $count % 10) >= 2 && $i <= 4 && ($i = $count % 100) < 12 && $i > 14) {
             return 'few';
-        } elseif (is_int($count) && ($count % 10 == 0 || (($i = $count % 10) >= 5 && $i <= 9) || (($i = $count % 100) >= 11 && $i <= 14))) {
+        } elseif (is_int($count) && (0 == $count % 10 || (($i = $count % 10) >= 5 && $i <= 9) || (($i = $count % 100) >= 11 && $i <= 14))) {
             return 'many';
         } else {
             return 'other';
@@ -437,7 +437,7 @@ class Gallery_I18n_Core
         // no break
       case 'cs':
       case 'sk':
-        if ($count == 1) {
+        if (1 == $count) {
             return 'one';
         } elseif (is_int($count) && $count >= 2 && $count <= 4) {
             return 'few';
@@ -447,7 +447,7 @@ class Gallery_I18n_Core
 
         // no break
       case 'pl':
-        if ($count == 1) {
+        if (1 == $count) {
             return 'one';
         } elseif (is_int($count) && ($i = $count % 10) >= 2 && $i <= 4 &&
                    ($i = $count % 100) < 12 && $i > 14 && ($i = $count % 100) < 22 && $i > 24) {
@@ -458,9 +458,9 @@ class Gallery_I18n_Core
 
         // no break
       case 'sl':
-        if ($count % 100 == 1) {
+        if (1 == $count % 100) {
             return 'one';
-        } elseif ($count % 100 == 2) {
+        } elseif (2 == $count % 100) {
             return 'two';
         } elseif (is_int($count) && ($i = $count % 100) >= 3 && $i <= 4) {
             return 'few';
@@ -470,9 +470,9 @@ class Gallery_I18n_Core
 
         // no break
       case 'mt':
-        if ($count == 1) {
+        if (1 == $count) {
             return 'one';
-        } elseif ($count == 0 || is_int($count) && ($i = $count % 100) >= 2 && $i <= 10) {
+        } elseif (0 == $count || is_int($count) && ($i = $count % 100) >= 2 && $i <= 10) {
             return 'few';
         } elseif (is_int($count) && ($i = $count % 100) >= 11 && $i <= 19) {
             return 'many';
@@ -482,7 +482,7 @@ class Gallery_I18n_Core
 
         // no break
       case 'mk':
-        if ($count % 10 == 1) {
+        if (1 == $count % 10) {
             return 'one';
         } else {
             return 'other';
@@ -490,11 +490,11 @@ class Gallery_I18n_Core
 
         // no break
       case 'cy':
-        if ($count == 1) {
+        if (1 == $count) {
             return 'one';
-        } elseif ($count == 2) {
+        } elseif (2 == $count) {
             return 'two';
-        } elseif ($count == 8 || $count == 11) {
+        } elseif (8 == $count || 11 == $count) {
             return 'many';
         } else {
             return 'other';
@@ -502,7 +502,7 @@ class Gallery_I18n_Core
 
         // no break
       default: // en, de, etc.
-        return $count == 1 ? 'one' : 'other';
+        return 1 == $count ? 'one' : 'other';
     }
     }
 }

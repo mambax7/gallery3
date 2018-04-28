@@ -25,7 +25,7 @@ class Cache_Xcache_Driver extends Cache_Driver
 
     public function set($items, $tags = null, $lifetime = null)
     {
-        if ($tags !== null) {
+        if (null !== $tags) {
             Kohana_Log::add('debug', __('Cache: XCache driver does not support tags'));
         }
 
@@ -55,9 +55,9 @@ class Cache_Xcache_Driver extends Cache_Driver
         }
 
         if ($single) {
-            return ($items === false or count($items) > 0) ? current($items) : null;
+            return (false === $items or count($items) > 0) ? current($items) : null;
         } else {
-            return ($items === false) ? [] : $items;
+            return (false === $items) ? [] : $items;
         }
     }
 
@@ -102,7 +102,7 @@ class Cache_Xcache_Driver extends Cache_Driver
         $result = true;
 
         for ($i = 0, $max = xcache_count(XC_TYPE_VAR); $i < $max; $i++) {
-            if (xcache_clear_cache(XC_TYPE_VAR, $i) !== null) {
+            if (null !== xcache_clear_cache(XC_TYPE_VAR, $i)) {
                 $result = false;
                 break;
             }

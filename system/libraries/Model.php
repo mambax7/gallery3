@@ -25,12 +25,12 @@ class Model_Core
         // Model class name
         $class = ucfirst($name).'_Model';
 
-        if ($args === null) {
+        if (null === $args) {
             // Create a new model with no arguments
             return new $class;
         }
 
-        if ($multiple !== true) {
+        if (true !== $multiple) {
             // Create a model with a single argument
             return new $class($args);
         }

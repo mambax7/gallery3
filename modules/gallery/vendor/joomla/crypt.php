@@ -37,7 +37,7 @@ class JCrypt
 		if (
 			function_exists('openssl_random_pseudo_bytes')
 			&& (version_compare(PHP_VERSION, '5.3.4') >= 0
-				|| substr(PHP_OS, 0, 3) !== 'WIN'
+				|| 'WIN' !== substr(PHP_OS, 0, 3)
 			)
 		)
 		{

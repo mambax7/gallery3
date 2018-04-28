@@ -67,8 +67,9 @@ class Combined_Controller extends Controller
 
         $cache = Cache::instance();
         $use_gzip = function_exists('gzencode') &&
-                    stripos($input->server('HTTP_ACCEPT_ENCODING'), 'gzip') !== false &&
-                    (int) ini_get('zlib.output_compression') === 0;
+                    false !== stripos($input->server('HTTP_ACCEPT_ENCODING'), 'gzip')
+                    &&
+                    0 === (int) ini_get('zlib.output_compression');
 
         if ($use_gzip && $content = $cache->get("{$key}_gz")) {
             header('Content-Encoding: gzip');
@@ -82,7 +83,7 @@ class Combined_Controller extends Controller
         }
 
         // $type is either 'javascript' or 'css'
-        if ($type == 'javascript') {
+        if ('javascript' == $type) {
             header('Content-Type: application/javascript; charset=UTF-8');
         } else {
             header('Content-Type: text/css; charset=UTF-8');

@@ -54,7 +54,7 @@
   <div>
     <ul class="g-breadcrumbs">
       <?php foreach ($album->parents() as $i => $parent): ?>
-      <li<?php if ($i == 0) {
+      <li<?php if (0 == $i) {
     print ' class="g-first"';
 } ?>> <?= html::clean($parent->title) ?> </li>
       <?php endforeach ?>

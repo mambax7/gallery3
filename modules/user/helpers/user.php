@@ -64,7 +64,7 @@ class user_Core
         $valid = $user->password;
 
         // Try phpass first, since that's what we generate.
-        if (strlen($valid) == 34) {
+        if (34 == strlen($valid)) {
             require_once(MODPATH . 'user/lib/PasswordHash.php');
             $hashGenerator = new PasswordHash(10, true);
             return $hashGenerator->CheckPassword($password, $valid);
@@ -72,14 +72,14 @@ class user_Core
 
         $salt = substr($valid, 0, 4);
         // Support both old (G1 thru 1.4.0; G2 thru alpha-4) and new password schemes:
-        $guess = (strlen($valid) == 32) ? md5($password) : ($salt . md5($salt . $password));
+        $guess = (32 == strlen($valid)) ? md5($password) : ($salt . md5($salt . $password));
         if (!strcmp($guess, $valid)) {
             return true;
         }
 
         // Passwords with <&"> created by G2 prior to 2.1 were hashed with entities
         $sanitizedPassword = html::chars($password, false);
-        $guess = (strlen($valid) == 32) ? md5($sanitizedPassword)
+        $guess = (32 == strlen($valid)) ? md5($sanitizedPassword)
           : ($salt . md5($salt . $sanitizedPassword));
         if (!strcmp($guess, $valid)) {
             return true;
@@ -179,7 +179,7 @@ class user_Core
                 return $user;
             }
         } catch (Exception $e) {
-            if (strpos($e->getMessage(), 'MISSING_MODEL') === false) {
+            if (false === strpos($e->getMessage(), 'MISSING_MODEL')) {
                 throw $e;
             }
         }

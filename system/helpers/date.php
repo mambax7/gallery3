@@ -18,7 +18,7 @@ class date_Core
      */
     public static function unix2dos($timestamp = false)
     {
-        $timestamp = ($timestamp === false) ? getdate() : getdate($timestamp);
+        $timestamp = (false === $timestamp) ? getdate() : getdate($timestamp);
 
         if ($timestamp['year'] < 1980) {
             return (1 << 21 | 1 << 16);
@@ -62,7 +62,7 @@ class date_Core
      */
     public static function offset($remote, $local = true, $when = 'now')
     {
-        if ($local === true) {
+        if (true === $local) {
             $local = date_default_timezone_get();
         }
 
@@ -131,14 +131,14 @@ class date_Core
         $hours = [];
 
         // Set the default start if none was specified.
-        if ($start === null) {
-            $start = ($long === false) ? 1 : 0;
+        if (null === $start) {
+            $start = (false === $long) ? 1 : 0;
         }
 
         $hours = [];
 
         // 24-hour time has 24 hours, instead of 12
-        $size = ($long === true) ? 23 : 12;
+        $size = (true === $long) ? 23 : 12;
 
         for ($i = $start; $i <= $size; $i += $step) {
             $hours[$i] = $i;
@@ -175,7 +175,7 @@ class date_Core
 
         switch ($ampm) {
             case 'am':
-                if ($hour == 12) {
+                if (12 == $hour) {
                     $hour = 0;
                 }
             break;
@@ -205,7 +205,7 @@ class date_Core
         $year  = (int) $year;
 
         // Use the current year by default
-        $year  = ($year == false) ? date('Y') : $year;
+        $year  = (false == $year) ? date('Y') : $year;
 
         // We use caching for months, because time functions are used
         if (empty($months[$year][$month])) {
@@ -243,8 +243,8 @@ class date_Core
     public static function years($start = false, $end = false)
     {
         // Default values
-        $start = ($start === false) ? date('Y') - 5 : (int) $start;
-        $end   = ($end   === false) ? date('Y') + 5 : (int) $end;
+        $start = (false === $start) ? date('Y') - 5 : (int) $start;
+        $end   = (false === $end) ? date('Y') + 5 : (int) $end;
 
         $years = [];
 
@@ -331,7 +331,7 @@ class date_Core
         }
 
         // If only one output format was asked, don't put it in an array
-        if (count($difference) === 1) {
+        if (1 === count($difference)) {
             return current($difference);
         }
 
@@ -357,17 +357,17 @@ class date_Core
 
             $span = [];
             foreach ($difference as $name => $amount) {
-                if ($amount === 0) {
+                if (0 === $amount) {
                     // Skip empty amounts
                     continue;
                 }
 
                 // Add the amount to the span
-                $span[] = ($name === $last ? ' and ' : ', ').$amount.' '.($amount === 1 ? inflector::singular($name) : $name);
+                $span[] = ($name === $last ? ' and ' : ', ').$amount.' '.(1 === $amount ? inflector::singular($name) : $name);
             }
 
             // If the difference is less than 60 seconds, remove the preceding and.
-            if (count($span) === 1) {
+            if (1 === count($span)) {
                 $span[0] = ltrim($span[0], 'and ');
             }
 
@@ -375,7 +375,7 @@ class date_Core
             $difference = trim(implode('', $span), ',');
         } elseif (is_int($difference)) {
             // Single-value return
-            $difference = $difference.' '.($difference === 1 ? inflector::singular($output) : $output);
+            $difference = $difference.' '.(1 === $difference ? inflector::singular($output) : $output);
         }
 
         return $difference;

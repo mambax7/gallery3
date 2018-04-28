@@ -25,7 +25,7 @@ version_compare(PHP_VERSION, '5.2.3', '<') and
 exit("Gallery requires PHP 5.2.3 or newer (you're using " . PHP_VERSION . ')');
 
 // Gallery is not supported on Windows.
-if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+if ('WIN' === strtoupper(substr(PHP_OS, 0, 3))) {
     exit("Gallery is not supported on Windows (PHP reports that you're using: " . PHP_OS . ')');
 }
 

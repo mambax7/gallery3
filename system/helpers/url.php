@@ -19,9 +19,9 @@ class url_Core
      */
     public static function current($qs = false, $suffix = false)
     {
-        $uri = ($qs === true) ? Router::$complete_uri : Router::$current_uri;
+        $uri = (true === $qs) ? Router::$complete_uri : Router::$current_uri;
 
-        return ($suffix === true) ? $uri.Kohana::config('core.url_suffix') : $uri;
+        return (true === $suffix) ? $uri . Kohana::config('core.url_suffix') : $uri;
     }
 
     /**
@@ -36,7 +36,7 @@ class url_Core
      */
     public static function base($index = false, $protocol = false)
     {
-        if ($protocol == false) {
+        if (false == $protocol) {
             // Use the default configured protocol
             $protocol = Kohana::config('core.site_protocol');
         }
@@ -44,19 +44,19 @@ class url_Core
         // Load the site domain
         $site_domain = (string) Kohana::config('core.site_domain', true);
 
-        if ($protocol == false) {
-            if ($site_domain === '' or $site_domain[0] === '/') {
+        if (false == $protocol) {
+            if ('' === $site_domain or '/' === $site_domain[0]) {
                 // Use the configured site domain
                 $base_url = $site_domain;
             } else {
                 // Guess the protocol to provide full http://domain/path URL
-                $base_url = ((empty($_SERVER['HTTPS']) or $_SERVER['HTTPS'] === 'off') ? 'http' : 'https').'://'.$site_domain;
+                $base_url = ((empty($_SERVER['HTTPS']) or 'off' === $_SERVER['HTTPS']) ? 'http' : 'https') . '://' . $site_domain;
             }
         } else {
-            if ($site_domain === '' or $site_domain[0] === '/') {
+            if ('' === $site_domain or '/' === $site_domain[0]) {
                 // Guess the server name if the domain starts with slash
                 $port = $_SERVER['SERVER_PORT'];
-                $port = ((($port == 80) && ($protocol == 'http')) || (($port == 443) && ($protocol == 'https')) || !$port) ? '' : ":$port";
+                $port = (((80 == $port) && ('http' == $protocol)) || ((443 == $port) && ('https' == $protocol)) || !$port) ? '' : ":$port";
                 $base_url = $protocol.'://'.($_SERVER['SERVER_NAME']?($_SERVER['SERVER_NAME'].$port):$_SERVER['HTTP_HOST']).$site_domain;
             } else {
                 // Use the configured site domain
@@ -64,7 +64,7 @@ class url_Core
             }
         }
 
-        if ($index === true and $index = Kohana::config('core.index_page')) {
+        if (true === $index and $index = Kohana::config('core.index_page')) {
             // Append the index page
             $base_url = $base_url.$index;
         }
@@ -111,7 +111,7 @@ class url_Core
      */
     public static function file($file, $index = false)
     {
-        if (strpos($file, '://') === false) {
+        if (false === strpos($file, '://')) {
             // Add the base URL to the filename
             $file = url::base($index).$file;
         }
@@ -148,9 +148,9 @@ class url_Core
      */
     public static function title($title, $separator = '-', $ascii_only = false)
     {
-        $separator = ($separator === '-') ? '-' : '_';
+        $separator = ('-' === $separator) ? '-' : '_';
 
-        if ($ascii_only === true) {
+        if (true === $ascii_only) {
             // Replace accented characters by their unaccented equivalents
             $title = text::transliterate_to_ascii($title);
 
@@ -195,7 +195,7 @@ class url_Core
         // Validate the method and default to 302
         $method = isset($codes[$method]) ? (string) $method : '302';
 
-        if ($method === '300') {
+        if ('300' === $method) {
             $uri = (array) $uri;
 
             $output = '<ul>';
@@ -213,12 +213,12 @@ class url_Core
         // Run the redirect event
         Event::run('system.redirect', $uri);
 
-        if (strpos($uri, '://') === false) {
+        if (false === strpos($uri, '://')) {
             // HTTP headers expect absolute URLs
             $uri = url::site($uri, request::protocol());
         }
 
-        if ($method === 'refresh') {
+        if ('refresh' === $method) {
             header('Refresh: 0; url='.$uri);
         } else {
             header('HTTP/1.1 '.$method.' '.$codes[$method]);

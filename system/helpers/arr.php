@@ -51,7 +51,7 @@ class arr_Core
     {
         $new_array = [];
         foreach ($source_array as $key => $value) {
-            $value = ($keep_keys === true) ? $value : array_values($value);
+            $value = (true === $keep_keys) ? $value : array_values($value);
             foreach ($value as $k => $v) {
                 $new_array[$k][$key] = $v;
             }

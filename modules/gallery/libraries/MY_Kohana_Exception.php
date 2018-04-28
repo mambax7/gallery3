@@ -87,10 +87,10 @@ class Kohana_Exception extends Kohana_Exception_Core
             foreach ($value as $k => $v) {
                 $actual_key = $k;
                 $key_for_display = $k;
-                if ($k[0] === "\x00") {
+                if ("\x00" === $k[0]) {
                     // Remove the access level from the variable name
                     $actual_key = substr($k, strrpos($k, "\x00") + 1);
-                    $access = $k[1] === '*' ? 'protected' : 'private';
+                    $access = '*' === $k[1] ? 'protected' : 'private';
                     $key_for_display = "$access: $actual_key";
                 }
                 if (is_object($v)) {

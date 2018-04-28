@@ -44,7 +44,7 @@ class View_Core
      */
     public function __construct($name = null, $data = null, $type = null)
     {
-        if (is_string($name) and $name !== '') {
+        if (is_string($name) and '' !== $name) {
             // Set the filename
             $this->set_filename($name, $type);
         }
@@ -76,7 +76,7 @@ class View_Core
      */
     public function set_filename($name, $type = null)
     {
-        if ($type == null) {
+        if (null == $type) {
             // Load the filename and set the content type
             $this->kohana_filename = Kohana::find_file('views', $name, true);
             $this->kohana_filetype = EXT;
@@ -90,7 +90,7 @@ class View_Core
             $this->kohana_filename = Kohana::find_file('views', $name, true, $type);
             $this->kohana_filetype = Kohana::config('mimes.'.$type);
 
-            if ($this->kohana_filetype == null) {
+            if (null == $this->kohana_filetype) {
                 // Use the specified type
                 $this->kohana_filetype = $type;
             }
@@ -233,19 +233,19 @@ class View_Core
             // Merge global and local data, local overrides global with the same name
             $data = $this->kohana_local_data;
 
-            if ($modifier !== false and is_callable($modifier, true)) {
+            if (false !== $modifier and is_callable($modifier, true)) {
                 // Pass the data through the user defined modifier
                 $data = call_user_func($modifier, $data);
             }
 
             $output = $this->load_view($this->kohana_filename, $data);
 
-            if ($renderer !== false and is_callable($renderer, true)) {
+            if (false !== $renderer and is_callable($renderer, true)) {
                 // Pass the output through the user defined renderer
                 $output = call_user_func($renderer, $output);
             }
 
-            if ($print === true) {
+            if (true === $print) {
                 // Display the output
                 echo $output;
                 return;
@@ -254,7 +254,7 @@ class View_Core
             // Set the content type and size
             header('Content-Type: '.$this->kohana_filetype[0]);
 
-            if ($print === true) {
+            if (true === $print) {
                 if ($file = fopen($this->kohana_filename, 'rb')) {
                     // Display the output
                     fpassthru($file);
@@ -279,7 +279,7 @@ class View_Core
      */
     public function load_view($kohana_view_filename, $kohana_input_data)
     {
-        if ($kohana_view_filename == '') {
+        if ('' == $kohana_view_filename) {
             return;
         }
 

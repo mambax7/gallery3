@@ -57,20 +57,20 @@ abstract class Image_Driver
         $geometry['height'] = min($geometry['height'], $height);
 
         // Set standard coordinates if given, otherwise use pixel values
-        if ($geometry['top'] === 'center') {
+        if ('center' === $geometry['top']) {
             $geometry['top'] = floor(($height / 2) - ($geometry['height'] / 2));
-        } elseif ($geometry['top'] === 'top') {
+        } elseif ('top' === $geometry['top']) {
             $geometry['top'] = 0;
-        } elseif ($geometry['top'] === 'bottom') {
+        } elseif ('bottom' === $geometry['top']) {
             $geometry['top'] = $height - $geometry['height'];
         }
 
         // Set standard coordinates if given, otherwise use pixel values
-        if ($geometry['left'] === 'center') {
+        if ('center' === $geometry['left']) {
             $geometry['left'] = floor(($width / 2) - ($geometry['width'] / 2));
-        } elseif ($geometry['left'] === 'left') {
+        } elseif ('left' === $geometry['left']) {
             $geometry['left'] = 0;
-        } elseif ($geometry['left'] === 'right') {
+        } elseif ('right' === $geometry['left']) {
             $geometry['left'] = $width - $geometry['height'];
         }
 

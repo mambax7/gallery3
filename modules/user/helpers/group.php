@@ -79,7 +79,7 @@ class group_Core
                 return $group;
             }
         } catch (Exception $e) {
-            if (strpos($e->getMessage(), 'MISSING_MODEL') === false) {
+            if (false === strpos($e->getMessage(), 'MISSING_MODEL')) {
                 throw $e;
             }
         }

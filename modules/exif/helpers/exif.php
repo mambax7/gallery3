@@ -29,7 +29,7 @@ class exif_Core
     {
         $keys = [];
         // Only try to extract EXIF from photos
-        if ($item->is_photo() && $item->mime_type == 'image/jpeg') {
+        if ($item->is_photo() && 'image/jpeg' == $item->mime_type) {
             $data = [];
             require_once(MODPATH . 'exif/lib/exif.php');
             $exif_raw = read_exif_data_raw($item->file_path(), false);
@@ -40,12 +40,12 @@ class exif_Core
                         $value = encoding::convert_to_utf8($value);
                         $keys[$field] = Input::clean($value);
 
-                        if ($field == 'DateTime') {
+                        if ('DateTime' == $field) {
                             $time = strtotime($value);
                             if ($time > 0) {
                                 $item->captured = $time;
                             }
-                        } elseif ($field == 'Caption' && !$item->description) {
+                        } elseif ('Caption' == $field && !$item->description) {
                             $item->description = $value;
                         }
                     }
@@ -61,7 +61,7 @@ class exif_Core
                         $value = encoding::convert_to_utf8($value);
                         $keys[$keyword] = Input::clean($value);
 
-                        if ($keyword == 'Caption' && !$item->description) {
+                        if ('Caption' == $keyword && !$item->description) {
                             $item->description = $value;
                         }
                     }

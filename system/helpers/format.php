@@ -21,7 +21,7 @@ class format_Core
     {
         $locale = localeconv();
 
-        if ($decimals === true) {
+        if (true === $decimals) {
             return number_format($number, $locale['frac_digits'], $locale['decimal_point'], $locale['thousands_sep']);
         }
 
@@ -69,12 +69,12 @@ class format_Core
     public static function url($str = '')
     {
         // Clear protocol-only strings like "http://"
-        if ($str === '' or substr($str, -3) === '://') {
+        if ('' === $str or '://' === substr($str, -3)) {
             return '';
         }
 
         // If no protocol given, prepend "http://" by default
-        if (strpos($str, '://') === false) {
+        if (false === strpos($str, '://')) {
             return 'http://'.$str;
         }
 
@@ -100,12 +100,12 @@ class format_Core
         $str = strtolower($str);
 
         // Prepend "#"
-        if ($str[0] !== '#') {
+        if ('#' !== $str[0]) {
             $str = '#'.$str;
         }
 
         // Expand short notation
-        if (strlen($str) === 4) {
+        if (4 === strlen($str)) {
             $str = '#'.$str[1].$str[1].$str[2].$str[2].$str[3].$str[3];
         }
 

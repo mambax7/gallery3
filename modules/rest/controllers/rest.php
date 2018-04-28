@@ -108,7 +108,7 @@ class Rest_Controller extends Controller
             }
 
             $response = call_user_func([$handler_class, $handler_method], $request);
-            if ($handler_method == 'post') {
+            if ('post' == $handler_method) {
                 // post methods must return a response containing a URI.
                 header('HTTP/1.1 201 Created');
                 header("Location: {$response['url']}");

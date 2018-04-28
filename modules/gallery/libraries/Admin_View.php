@@ -36,7 +36,7 @@ class Admin_View_Core extends Gallery_View
             $theme_name = Input::instance()->get('theme');
             if ($theme_name &&
           file_exists(THEMEPATH . $theme_name) &&
-          strpos(realpath(THEMEPATH . $theme_name), THEMEPATH) == 0) {
+                0 == strpos(realpath(THEMEPATH . $theme_name), THEMEPATH)) {
                 $this->theme_name = $theme_name;
             }
         }
@@ -122,7 +122,7 @@ class Admin_View_Core extends Gallery_View
       }
 
       foreach (module::active() as $module) {
-          if ($module->name == 'gallery') {
+          if ('gallery' == $module->name) {
               continue;
           }
           $helper_class = "{$module->name}_theme";
@@ -143,7 +143,7 @@ class Admin_View_Core extends Gallery_View
       }
 
       if (Session::instance()->get('debug')) {
-          if ($function != 'admin_head' && $function != 'body_attributes') {
+          if ('admin_head' != $function && 'body_attributes' != $function) {
               array_unshift(
             $blocks,
             "<div class=\"g-annotated-theme-block g-annotated-theme-block_$function g-clear-fix\">" .

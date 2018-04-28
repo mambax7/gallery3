@@ -77,11 +77,11 @@ abstract class Database_Core
         // Store the config locally
         $this->config = $config;
 
-        if ($this->config['cache'] !== false) {
+        if (false !== $this->config['cache']) {
             if (is_string($this->config['cache'])) {
                 // Use Cache library
                 $this->cache = new Cache($this->config['cache']);
-            } elseif ($this->config['cache'] === true) {
+            } elseif (true === $this->config['cache']) {
                 // Use array
                 $this->cache = [];
             }
@@ -174,7 +174,7 @@ abstract class Database_Core
         // Get the protocol and arguments
         list($db['type'], $connection) = explode('://', $dsn, 2);
 
-        if ($connection[0] === '/') {
+        if ('/' === $connection[0]) {
             // Strip leading slash
             $db['database'] = substr($connection, 1);
         } else {
@@ -193,7 +193,7 @@ abstract class Database_Core
             }
 
             if (isset($connection['host'])) {
-                if ($connection['host'] === 'unix(') {
+                if ('unix(' === $connection['host']) {
                     list($db['socket'], $connection['path']) = explode(')', $connection['path'], 2);
                 } else {
                     $db['host'] = $connection['host'];
@@ -251,7 +251,7 @@ abstract class Database_Core
         // Stop the benchmark
         $stop = microtime(true);
 
-        if ($this->config['benchmark'] === true) {
+        if (true === $this->config['benchmark']) {
             // Benchmark the query
             Database::$benchmarks[] = ['query' => $sql, 'time' => $stop - $start, 'rows' => count($result)];
         }
@@ -277,7 +277,7 @@ abstract class Database_Core
 
         $hash = $this->query_hash($sql);
 
-        if (($data = $this->cache->get($hash)) !== null) {
+        if (null !== ($data = $this->cache->get($hash))) {
             // Found in cache, create result
             $result = new Database_Cache_Result($data, $sql, $this->config['object']);
 
@@ -297,7 +297,7 @@ abstract class Database_Core
         // Stop the benchmark
         $stop = microtime(true);
 
-        if ($this->config['benchmark'] === true) {
+        if (true === $this->config['benchmark']) {
             // Benchmark the query
             Database::$benchmarks[] = ['query' => $sql, 'time' => $stop - $start, 'rows' => count($result)];
         }
@@ -325,18 +325,18 @@ abstract class Database_Core
      */
     public function clear_cache($sql = null, $type = null)
     {
-        if ($this->cache instanceof Cache and ($type == null or $type == Database::CROSS_REQUEST)) {
+        if ($this->cache instanceof Cache and (null == $type or $type == Database::CROSS_REQUEST)) {
             // Using cross-request Cache library
-            if ($sql === true) {
+            if (true === $sql) {
                 $this->cache->delete($this->query_hash($this->last_query));
             } elseif (is_string($sql)) {
                 $this->cache->delete($this->query_hash($sql));
             } else {
                 $this->cache->delete_all();
             }
-        } elseif (is_array($this->cache) and ($type == null or $type == Database::PER_REQUEST)) {
+        } elseif (is_array($this->cache) and (null == $type or $type == Database::PER_REQUEST)) {
             // Using per-request memory cache
-            if ($sql === true) {
+            if (true === $sql) {
                 unset($this->cache[$this->query_hash($this->last_query)]);
             } elseif (is_string($sql)) {
                 unset($this->cache[$this->query_hash($sql)]);
@@ -358,11 +358,11 @@ abstract class Database_Core
             return $value;
         }
 
-        if ($value === null) {
+        if (null === $value) {
             return 'NULL';
-        } elseif ($value === true) {
+        } elseif (true === $value) {
             return 'TRUE';
-        } elseif ($value === false) {
+        } elseif (false === $value) {
             return 'FALSE';
         } elseif (is_int($value)) {
             return (int) $value;
@@ -389,7 +389,7 @@ abstract class Database_Core
         if (is_array($table)) {
             // Using array('u' => 'user')
             list($alias, $table) = each($table);
-        } elseif (strpos(' ', $table) !== false) {
+        } elseif (false !== strpos(' ', $table)) {
             // Using format 'user u'
             list($table, $alias) = explode(' ', $table);
         }
@@ -437,7 +437,7 @@ abstract class Database_Core
      */
     public function quote_column($column, $alias = null)
     {
-        if ($column === '*') {
+        if ('*' === $column) {
             return $column;
         }
 
@@ -457,8 +457,8 @@ abstract class Database_Core
             return (string) $column;
         }
 
-        if ($this->config['table_prefix'] and strpos($column, '.') !== false) {
-            if (strpos($column, '"') !== false) {
+        if ($this->config['table_prefix'] and false !== strpos($column, '.')) {
+            if (false !== strpos($column, '"')) {
                 // Find "table.column" and replace them with "[prefix]table.column"
                 $column = preg_replace('/"([^.]++)\.([^"]++)"/', '"'.$this->config['table_prefix'].'$1.$2"', $column);
             } else {
@@ -468,10 +468,10 @@ abstract class Database_Core
         }
 
         if ($this->config['escape']) {
-            if (strpos($column, '"') === false) {
+            if (false === strpos($column, '"')) {
                 // Quote the column
                 $column = $this->quote.$column.$this->quote;
-            } elseif ($this->quote !== '"') {
+            } elseif ('"' !== $this->quote) {
                 // Replace double quotes
                 $column = str_replace('"', $this->quote, $column);
             }
@@ -510,7 +510,7 @@ abstract class Database_Core
     {
         $prefix = $this->config['table_prefix'];
 
-        if ($new_prefix !== null) {
+        if (null !== $new_prefix) {
             // Set a new prefix
             $this->config['table_prefix'] = $new_prefix;
         }
@@ -528,14 +528,14 @@ abstract class Database_Core
     {
         static $sql_types;
 
-        if ($sql_types === null) {
+        if (null === $sql_types) {
             // Load SQL data types
             $sql_types = Kohana::config('sql_types');
         }
 
         $str = trim($str);
 
-        if (($open = strpos($str, '(')) !== false) {
+        if (false !== ($open = strpos($str, '('))) {
             // Closing bracket
             $close = strpos($str, ')', $open);
 

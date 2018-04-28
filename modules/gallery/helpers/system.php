@@ -56,7 +56,7 @@ class system_Core
             // @suppress errors below to avoid open_basedir issues
             if (@file_exists($candidate)) {
                 if (!@is_executable($candidate) &&
-            (substr_compare($bin_path, $candidate, 0, strlen($bin_path)) == 0)) {
+            (0 == substr_compare($bin_path, $candidate, 0, strlen($bin_path)))) {
                     // Binary isn't executable but is in Gallery's bin directory - try fixing permissions.
                     @chmod($candidate, 0755);
                 }

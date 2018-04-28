@@ -32,7 +32,7 @@ class tag_rss_Core
 
     public static function feed($feed_id, $offset, $limit, $id)
     {
-        if ($feed_id == 'tag') {
+        if ('tag' == $feed_id) {
             $tag = ORM::factory('tag', $id);
             if (!$tag->loaded()) {
                 throw new Kohana_404_Exception();

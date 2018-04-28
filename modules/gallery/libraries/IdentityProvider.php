@@ -151,7 +151,7 @@ class IdentityProvider_Core
         }
 
         // Test the config group name
-        if (($this->config = Kohana::config('identity.' . $config)) === null) {
+        if (null === ($this->config = Kohana::config('identity.' . $config))) {
             throw new Exception("@todo NO_USER_LIBRARY_CONFIGURATION_FOR: $config");
         }
 

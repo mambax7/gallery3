@@ -32,7 +32,7 @@
 //====================================================================
 function lookup_Nikon_tag($tag, $model)
 {
-    if ($model==0) {
+    if (0 == $model) {
         switch ($tag) {
             case '0003': $tag = 'Quality';break;
             case '0004': $tag = 'ColorMode';break;
@@ -46,7 +46,7 @@ function lookup_Nikon_tag($tag, $model)
             
             default: $tag = 'unknown:' . $tag;break;
         }
-    } elseif ($model==1) {
+    } elseif (1 == $model) {
         switch ($tag) {
             case '0002': $tag = 'ISOSetting';break;
             case '0003': $tag = 'ColorMode';break;
@@ -136,17 +136,17 @@ function formatNikonData($type, $tag, $intel, $model, $data)
                     }
                     break;
                 case '0085':
-                    if ($model==1) {
+                    if (1 == $model) {
                         $data= unRational($data, $type, $intel) . ' m';
                     }	//ManualFocusDistance
                     break;
                 case '0086':
-                    if ($model==1) {
+                    if (1 == $model) {
                         $data= unRational($data, $type, $intel) . 'x';
                     }	//DigitalZoom
                     break;
                 case '000a':
-                    if ($model==0) {
+                    if (0 == $model) {
                         $data= unRational($data, $type, $intel) . 'x';
                     }	//DigitalZoom
                     break;
@@ -156,15 +156,15 @@ function formatNikonData($type, $tag, $intel, $model, $data)
             }
             break;
         case 'USHORT':
-        case $type == 'SSHORT':
-        case $type == 'ULONG':
-        case $type == 'SLONG':
-        case $type == 'FLOAT':
-        case $type == 'DOUBLE':
+        case 'SSHORT' == $type:
+        case 'ULONG' == $type:
+        case 'SLONG' == $type:
+        case 'FLOAT' == $type:
+        case 'DOUBLE' == $type:
             $data = rational($data, $type, $intel);
             switch ($tag) {
                 case '0003':
-                    if ($model==0) { //Quality
+                    if (0 == $model) { //Quality
                         switch ($data) {
                             case 1:		$data = (string) t('VGA Basic');	break;
                             case 2:		$data = (string) t('VGA Normal');	break;
@@ -177,7 +177,7 @@ function formatNikonData($type, $tag, $intel, $model, $data)
                     }
                     break;
                 case '0004':
-                    if ($model==0) { //Color
+                    if (0 == $model) { //Color
                         switch ($data) {
                             case 1:		$data = (string) t('Color');	break;
                             case 2:		$data = (string) t('Monochrome');	break;
@@ -186,7 +186,7 @@ function formatNikonData($type, $tag, $intel, $model, $data)
                     }
                     break;
                 case '0005':
-                    if ($model==0) { //Image Adjustment
+                    if (0 == $model) { //Image Adjustment
                         switch ($data) {
                             case 0:		$data = (string) t('Normal');	break;
                             case 1:		$data = (string) t('Bright+');	break;
@@ -198,7 +198,7 @@ function formatNikonData($type, $tag, $intel, $model, $data)
                     }
                     break;
                 case '0006':
-                    if ($model==0) { //CCD Sensitivity
+                    if (0 == $model) { //CCD Sensitivity
                         switch ($data) {
                             case 0:		$data = 'ISO-80';	break;
                             case 2:		$data = 'ISO-160';	break;
@@ -209,7 +209,7 @@ function formatNikonData($type, $tag, $intel, $model, $data)
                     }
                     break;
                 case '0007':
-                    if ($model==0) { //White Balance
+                    if (0 == $model) { //White Balance
                         switch ($data) {
                             case 0:		 $data = (string) t('Auto');	break;
                             case 1:		$data = (string) t('Preset');	break;
@@ -223,7 +223,7 @@ function formatNikonData($type, $tag, $intel, $model, $data)
                     }
                     break;
                 case '000b':
-                    if ($model==0) { //Converter
+                    if (0 == $model) { //Converter
                         switch ($data) {
                             case 0:	$data = (string) t('None');	break;
                             case 1:	$data = (string) t('Fisheye');	break;
@@ -236,12 +236,12 @@ function formatNikonData($type, $tag, $intel, $model, $data)
         case 'UNDEFINED':
             switch ($tag) {
                 case '0001':
-                    if ($model==1) {
+                    if (1 == $model) {
                         $data=$data/100;
                     }	break;	//Unknown (Version?)
                     break;
                 case '0088':
-                    if ($model==1) { //AF Focus Position
+                    if (1 == $model) { //AF Focus Position
                         $temp = (string) t('Center');
                         $data = bin2hex($data);
                         $data = str_replace('01', 'Top', $data);
@@ -249,7 +249,7 @@ function formatNikonData($type, $tag, $intel, $model, $data)
                         $data = str_replace('03', 'Left', $data);
                         $data = str_replace('04', 'Right', $data);
                         $data = str_replace('00', '', $data);
-                        if (strlen($data)==0) {
+                        if (0 == strlen($data)) {
                             $data = $temp;
                         }
                     }
@@ -258,12 +258,12 @@ function formatNikonData($type, $tag, $intel, $model, $data)
             break;
         default:
             $data = bin2hex($data);
-            if ($intel==1) {
+            if (1 == $intel) {
                 $data = intel2Moto($data);
             }
                 switch ($tag) {
                 case '0083':
-                    if ($model==1) { //Lens Type
+                    if (1 == $model) { //Lens Type
                         $data = hexdec(substr($data, 0, 2));
                         switch ($data) {
                             case 0: $data = (string) t('AF non D'); break;
@@ -277,15 +277,15 @@ function formatNikonData($type, $tag, $intel, $model, $data)
                     }
                     break;
                 case '0087':
-                    if ($model==1) { //Flash type
+                    if (1 == $model) { //Flash type
                         $data = hexdec(substr($data, 0, 2));
-                        if ($data == 0) {
+                        if (0 == $data) {
                             $data = (string) t('Did Not Fire');
-                        } elseif ($data == 4) {
+                        } elseif (4 == $data) {
                             $data = (string) t('Unknown');
-                        } elseif ($data == 7) {
+                        } elseif (7 == $data) {
                             $data = (string) t('External');
-                        } elseif ($data == 9) {
+                        } elseif (9 == $data) {
                             $data = (string) t('On Camera');
                         } else {
                             $data = (string) t('Unknown') . ': ' . $data;
@@ -304,7 +304,7 @@ function formatNikonData($type, $tag, $intel, $model, $data)
 //====================================================================
 function parseNikon($block, &$result)
 {
-    if ($result['Endien'] == 'Intel') {
+    if ('Intel' == $result['Endien']) {
         $intel=1;
     } else {
         $intel=0;
@@ -313,14 +313,14 @@ function parseNikon($block, &$result)
     $model = $result['IFD0']['Model'];
 
     //these 6 models start with "Nikon".  Other models dont.
-    if ($model=="E700\0" || $model=="E800\0" || $model=="E900\0" || $model=="E900S\0" || $model=="E910\0" || $model=="E950\0") {
+    if ("E700\0" == $model || "E800\0" == $model || "E900\0" == $model || "E900S\0" == $model || "E910\0" == $model || "E950\0" == $model) {
         $place=8; //current place
         $model = 0;
         
         //Get number of tags (2 bytes)
         $num = bin2hex(substr($block, $place, 2));
         $place+=2;
-        if ($intel==1) {
+        if (1 == $intel) {
             $num = intel2Moto($num);
         }
         $result['SubIFD']['MakerNote']['MakerNoteNumTags'] = hexdec($num);
@@ -330,7 +330,7 @@ function parseNikon($block, &$result)
             //2 byte tag
             $tag = bin2hex(substr($block, $place, 2));
             $place+=2;
-            if ($intel==1) {
+            if (1 == $intel) {
                 $tag = intel2Moto($tag);
             }
             $tag_name = lookup_Nikon_tag($tag, $model);
@@ -338,7 +338,7 @@ function parseNikon($block, &$result)
             //2 byte type
             $type = bin2hex(substr($block, $place, 2));
             $place+=2;
-            if ($intel==1) {
+            if (1 == $intel) {
                 $type = intel2Moto($type);
             }
             lookup_type($type, $size);
@@ -346,7 +346,7 @@ function parseNikon($block, &$result)
             //4 byte count of number of data units
             $count = bin2hex(substr($block, $place, 4));
             $place+=4;
-            if ($intel==1) {
+            if (1 == $intel) {
                 $count = intel2Moto($count);
             }
             $bytesofdata = $size*hexdec($count);
@@ -357,21 +357,21 @@ function parseNikon($block, &$result)
             
             //if tag is 0002 then its the ASCII value which we know is at 140 so calc offset
             //THIS HACK ONLY WORKS WITH EARLY NIKON MODELS
-            if ($tag == '0002') {
+            if ('0002' == $tag) {
                 $offset = hexdec($value)-140;
             }
             if ($bytesofdata<=4) {
                 $data = $value;
             } else {
                 $value = bin2hex($value);
-                if ($intel==1) {
+                if (1 == $intel) {
                     $value = intel2Moto($value);
                 }
                 $data = substr($block, hexdec($value)-$offset, $bytesofdata*2);
             }
             $formated_data = formatNikonData($type, $tag, $intel, $model, $data);
         
-            if ($result['VerboseOutput']==1) {
+            if (1 == $result['VerboseOutput']) {
                 $result['SubIFD']['MakerNote'][$tag_name]                         = $formated_data;
                 $result['SubIFD']['MakerNote'][$tag_name . '_Verbose']['RawData'] = $data;
                 $result['SubIFD']['MakerNote'][$tag_name . '_Verbose']['Type']    = $type;
@@ -396,7 +396,7 @@ function parseNikon($block, &$result)
         //Then 4 bytes of offset to IFD0 (usually 8 which includes all 8 bytes of TIFF header)
         $offset = bin2hex(substr($block, $place, 4));
         $place+=4;
-        if ($intel==1) {
+        if (1 == $intel) {
             $offset = intel2Moto($offset);
         }
         if (hexdec($offset)>8) {
@@ -406,7 +406,7 @@ function parseNikon($block, &$result)
         //Get number of tags (2 bytes)
         $num = bin2hex(substr($block, $place, 2));
         $place+=2;
-        if ($intel==1) {
+        if (1 == $intel) {
             $num = intel2Moto($num);
         }
         
@@ -415,7 +415,7 @@ function parseNikon($block, &$result)
             //2 byte tag
             $tag = bin2hex(substr($block, $place, 2));
             $place+=2;
-            if ($intel==1) {
+            if (1 == $intel) {
                 $tag = intel2Moto($tag);
             }
             $tag_name = lookup_Nikon_tag($tag, $model);
@@ -423,7 +423,7 @@ function parseNikon($block, &$result)
             //2 byte type
             $type = bin2hex(substr($block, $place, 2));
             $place+=2;
-            if ($intel==1) {
+            if (1 == $intel) {
                 $type = intel2Moto($type);
             }
             lookup_type($type, $size);
@@ -431,7 +431,7 @@ function parseNikon($block, &$result)
             //4 byte count of number of data units
             $count = bin2hex(substr($block, $place, 4));
             $place+=4;
-            if ($intel==1) {
+            if (1 == $intel) {
                 $count = intel2Moto($count);
             }
             $bytesofdata = $size*hexdec($count);
@@ -444,18 +444,18 @@ function parseNikon($block, &$result)
                 $data = $value;
             } else {
                 $value = bin2hex($value);
-                if ($intel==1) {
+                if (1 == $intel) {
                     $value = intel2Moto($value);
                 }
                 $data = substr($block, hexdec($value)+hexdec($offset)+2, $bytesofdata);
             }
             $formated_data = formatNikonData($type, $tag, $intel, $model, $data);
         
-            if ($result['VerboseOutput']==1) {
+            if (1 == $result['VerboseOutput']) {
                 $result['SubIFD']['MakerNote'][$tag_name] = $formated_data;
-                if ($type == 'URATIONAL' || $type == 'SRATIONAL' || $type == 'USHORT' || $type == 'SSHORT' || $type == 'ULONG' || $type == 'SLONG' || $type == 'FLOAT' || $type == 'DOUBLE') {
+                if ('URATIONAL' == $type || 'SRATIONAL' == $type || 'USHORT' == $type || 'SSHORT' == $type || 'ULONG' == $type || 'SLONG' == $type || 'FLOAT' == $type || 'DOUBLE' == $type) {
                     $data = bin2hex($data);
-                    if ($intel==1) {
+                    if (1 == $intel) {
                         $data = intel2Moto($data);
                     }
                 }

@@ -44,11 +44,11 @@ class Admin_Controller extends Controller
             return self::_prompt_for_reauth($controller_name, $args);
         }
 
-        if (request::method() == 'post') {
+        if ('post' == request::method()) {
             access::verify_csrf();
         }
 
-        if ($controller_name == 'index') {
+        if ('index' == $controller_name) {
             $controller_name = 'dashboard';
         }
         $controller_name = "Admin_{$controller_name}_Controller";
@@ -87,7 +87,7 @@ class Admin_Controller extends Controller
 
     private static function _prompt_for_reauth($controller_name, $args)
     {
-        if (request::method() == 'get') {
+        if ('get' == request::method()) {
             // Avoid anti-phishing protection by passing the url as session variable.
             Session::instance()->set('continue_url', url::abs_current(true));
         }

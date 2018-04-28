@@ -34,7 +34,7 @@ class Form_Group_Core extends Forge
 
     public function __get($key)
     {
-        if ($key == 'type' || $key == 'name' || $key == 'label') {
+        if ('type' == $key || 'name' == $key || 'label' == $key) {
             return $this->data[$key];
         }
         return parent::__get($key);
@@ -42,7 +42,7 @@ class Form_Group_Core extends Forge
 
     public function __set($key, $val)
     {
-        if ($key == 'method') {
+        if ('method' == $key) {
             $this->attr['method'] = $val;
         }
         $this->$key = $val;
@@ -50,19 +50,19 @@ class Form_Group_Core extends Forge
 
     public function label($val = null)
     {
-        if ($val === null) {
+        if (null === $val) {
             if ($label = $this->data['label']) {
                 return html::purify($this->data['label']);
             }
         } else {
-            $this->data['label'] = ($val === true) ? ucwords(inflector::humanize($this->data['name'])) : $val;
+            $this->data['label'] = (true === $val) ? ucwords(inflector::humanize($this->data['name'])) : $val;
             return $this;
         }
     }
 
     public function message($val = null)
     {
-        if ($val === null) {
+        if (null === $val) {
             return $this->data['message'];
         } else {
             $this->data['message'] = $val;

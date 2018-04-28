@@ -32,7 +32,7 @@ class Input_Core
      */
     public static function instance()
     {
-        if (Input::$instance === null) {
+        if (null === Input::$instance) {
             // Create a new instance
             return new Input;
         }
@@ -54,7 +54,7 @@ class Input_Core
         $_COOKIE = Input::clean($_COOKIE);
         $_SERVER = Input::clean($_SERVER);
 
-        if (Kohana::$server_api === 'cli') {
+        if ('cli' === Kohana::$server_api) {
             // Convert command line arguments
             $_SERVER['argv'] = Input::clean($_SERVER['argv']);
         }
@@ -62,7 +62,7 @@ class Input_Core
         // Use XSS clean?
         $this->use_xss_clean = (bool) Kohana::config('core.global_xss_filtering');
 
-        if (Input::$instance === null) {
+        if (null === Input::$instance) {
             // magic_quotes_runtime is enabled
             if (get_magic_quotes_runtime()) {
                 @set_magic_quotes_runtime(0);
@@ -96,7 +96,7 @@ class Input_Core
             if (is_array($_COOKIE)) {
                 foreach ($_COOKIE as $key => $val) {
                     // Ignore special attributes in RFC2109 compliant cookies
-                    if ($key == '$Version' or $key == '$Path' or $key == '$Domain') {
+                    if ('$Version' == $key or '$Path' == $key or '$Domain' == $key) {
                         continue;
                     }
 
@@ -189,7 +189,7 @@ class Input_Core
         // Get the value
         $value = $array[$key];
 
-        if ($this->use_xss_clean === false and $xss_clean === true) {
+        if (false === $this->use_xss_clean and true === $xss_clean) {
             // XSS clean the value
             $value = $this->xss_clean($value);
         }
@@ -204,7 +204,7 @@ class Input_Core
      */
     public function ip_address()
     {
-        if ($this->ip_address !== null) {
+        if (null !== $this->ip_address) {
             return $this->ip_address;
         }
 
@@ -220,7 +220,7 @@ class Input_Core
             }
         }
 
-        if ($comma = strrpos($this->ip_address, ',') !== false) {
+        if ($comma = false !== strrpos($this->ip_address, ',')) {
             $this->ip_address = substr($this->ip_address, $comma + 1);
         }
 
@@ -245,7 +245,7 @@ class Input_Core
      */
     public function xss_clean($data, $tool = null)
     {
-        if ($tool === null) {
+        if (null === $tool) {
             // Use the default tool
             $tool = Kohana::config('core.global_xss_filtering');
         }
@@ -259,7 +259,7 @@ class Input_Core
         }
 
         // Do not clean empty strings
-        if (trim($data) === '') {
+        if ('' === trim($data)) {
             return $data;
         }
 
@@ -416,16 +416,16 @@ class Input_Core
             return $new_array;
         }
 
-        if ($this->magic_quotes_gpc === true) {
+        if (true === $this->magic_quotes_gpc) {
             // Remove annoying magic quotes
             $str = stripslashes($str);
         }
 
-        if ($this->use_xss_clean === true) {
+        if (true === $this->use_xss_clean) {
             $str = $this->xss_clean($str);
         }
 
-        if (strpos($str, "\r") !== false) {
+        if (false !== strpos($str, "\r")) {
             // Standardize newlines
             $str = str_replace(["\r\n", "\r"], "\n", $str);
         }
@@ -448,7 +448,7 @@ class Input_Core
                 // Recursion!
                 $str[Input::clean($key)] = Input::clean($val);
             }
-        } elseif (is_string($str) and $str !== '') {
+        } elseif (is_string($str) and '' !== $str) {
             // Remove control characters
             $str = text::strip_ascii_ctrl($str);
 

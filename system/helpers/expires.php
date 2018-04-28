@@ -45,7 +45,7 @@ class expires_Core
     {
         if (! empty($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
             // Some versions of IE6 append "; length=####"
-            if (($strpos = strpos($_SERVER['HTTP_IF_MODIFIED_SINCE'], ';')) !== false) {
+            if (false !== ($strpos = strpos($_SERVER['HTTP_IF_MODIFIED_SINCE'], ';'))) {
                 $mod_time = substr($_SERVER['HTTP_IF_MODIFIED_SINCE'], 0, $strpos);
             } else {
                 $mod_time = $_SERVER['HTTP_IF_MODIFIED_SINCE'];
@@ -107,9 +107,9 @@ class expires_Core
     public static function headers_set()
     {
         foreach (headers_list() as $header) {
-            if (strncasecmp($header, 'Expires:', 8) === 0
-                or strncasecmp($header, 'Cache-Control:', 14) === 0
-                or strncasecmp($header, 'Last-Modified:', 14) === 0) {
+            if (0 === strncasecmp($header, 'Expires:', 8)
+                or 0 === strncasecmp($header, 'Cache-Control:', 14)
+                or 0 === strncasecmp($header, 'Last-Modified:', 14)) {
                 return true;
             }
         }

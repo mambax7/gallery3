@@ -62,7 +62,7 @@ class file_Core
 
         if (! KOHANA_IS_WIN) {
             // Attempt to locate use the file command, checking the return value
-            if ($command = trim(exec('which file', $output, $return)) and $return === 0) {
+            if ($command = trim(exec('which file', $output, $return)) and 0 === $return) {
                 return trim(exec($command.' -bi '.escapeshellarg($filename)));
             }
         }
@@ -87,7 +87,7 @@ class file_Core
     public static function split($filename, $output_dir = false, $piece_size = 10)
     {
         // Find output dir
-        $output_dir = ($output_dir == false) ? pathinfo(str_replace('\\', '/', realpath($filename)), PATHINFO_DIRNAME) : str_replace('\\', '/', realpath($output_dir));
+        $output_dir = (false == $output_dir) ? pathinfo(str_replace('\\', '/', realpath($filename)), PATHINFO_DIRNAME) : str_replace('\\', '/', realpath($output_dir));
         $output_dir = rtrim($output_dir, '/').'/';
 
         // Open files for writing
@@ -140,7 +140,7 @@ class file_Core
      */
     public static function join($filename, $output = false)
     {
-        if ($output == false) {
+        if (false == $output) {
             $output = $filename;
         }
 

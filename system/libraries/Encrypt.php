@@ -52,7 +52,7 @@ class Encrypt_Core
             $name = $config;
 
             // Test the config group name
-            if (($config = Kohana::config('encryption.'.$config)) === null) {
+            if (null === ($config = Kohana::config('encryption.' . $config))) {
                 throw new Kohana_Exception('The :name: group is not defined in your configuration.', [':name:' => $name]);
             }
         }
@@ -95,7 +95,7 @@ class Encrypt_Core
     public function encode($data)
     {
         // Set the rand type if it has not already been set
-        if (Encrypt::$rand === null) {
+        if (null === Encrypt::$rand) {
             if (KOHANA_IS_WIN) {
                 // Windows only supports the system random number generator
                 Encrypt::$rand = MCRYPT_RAND;
@@ -113,7 +113,7 @@ class Encrypt_Core
             }
         }
 
-        if (Encrypt::$rand === MCRYPT_RAND) {
+        if (MCRYPT_RAND === Encrypt::$rand) {
             // The system random number generator must always be seeded each
             // time it is used, or it will not produce true random results
             mt_srand();

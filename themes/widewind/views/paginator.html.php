@@ -28,7 +28,7 @@
 
 <ul class="g-paginator ui-helper-clearfix">
   <li class="g-first">
-  <?php if ($page_type == 'collection'): ?>
+  <?php if ('collection' == $page_type): ?>
     <?php if (isset($first_page_url)): ?>
       <a href="<?= $first_page_url ?>" class="g-button ui-icon-left ui-state-default ui-corner-all">
         <span class="ui-icon ui-icon-seek-first"></span><?= t('First') ?></a>
@@ -49,7 +49,7 @@
 
   <li class="g-info">
     <?php if ($total): ?>
-      <?php if ($page_type == 'collection'): ?>
+      <?php if ('collection' == $page_type): ?>
         <?= /* @todo This message isn't easily localizable */
             t2(
                 'Photo %from_number of %count', 'Photos %from_number - %to_number of %count',
@@ -77,7 +77,7 @@
       <span class="ui-icon ui-icon-seek-next"></span><?= t('Next') ?></a>
   <?php endif ?>
 
-  <?php if ($page_type == 'collection'): ?>
+  <?php if ('collection' == $page_type): ?>
     <?php if (isset($last_page_url)): ?>
       <a href="<?= $last_page_url ?>" class="g-button ui-icon-right ui-state-default ui-corner-all">
         <span class="ui-icon ui-icon-seek-end"></span><?= t('Last') ?></a>

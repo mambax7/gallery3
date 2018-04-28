@@ -319,10 +319,10 @@ class PelEntryShort extends PelEntryNumber
                 break;
             case PelTag::YCBCR_SUB_SAMPLING:
                 // CC (e->components, 2, v);
-                if ($this->value[0] == 2 && $this->value[1] == 1) {
+                if (2 == $this->value[0] && 1 == $this->value[1]) {
                     return 'YCbCr4:2:2';
                 }
-                if ($this->value[0] == 2 && $this->value[1] == 2) {
+                if (2 == $this->value[0] && 2 == $this->value[1]) {
                     return 'YCbCr4:2:0';
                 }
 

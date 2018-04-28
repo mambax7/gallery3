@@ -37,7 +37,7 @@ class Admin_Themes_Controller extends Admin_Controller
     {
         $themes = [];
         foreach (scandir(THEMEPATH) as $theme_name) {
-            if ($theme_name[0] == '.') {
+            if ('.' == $theme_name[0]) {
                 continue;
             }
             $theme_name = preg_replace("/[^a-zA-Z0-9\._-]/", '', $theme_name);
@@ -54,7 +54,7 @@ class Admin_Themes_Controller extends Admin_Controller
         $view->info = theme::get_info($theme_name);
         $view->theme_name = t($theme_name);
         $view->type = $type;
-        if ($type == 'admin') {
+        if ('admin' == $type) {
             $view->url = url::site("admin?theme=$theme_name");
         } else {
             $view->url = item::root()->url("theme=$theme_name");
@@ -68,13 +68,13 @@ class Admin_Themes_Controller extends Admin_Controller
 
         $info = theme::get_info($theme_name);
 
-        if ($type == 'admin' && $info->admin) {
+        if ('admin' == $type && $info->admin) {
             module::set_var('gallery', 'active_admin_theme', $theme_name);
             message::success(t(
                                  'Successfully changed your admin theme to <b>%theme_name</b>',
                                  ['theme_name' => $info->name]
       ));
-        } elseif ($type == 'site' && $info->site) {
+        } elseif ('site' == $type && $info->site) {
             module::set_var('gallery', 'active_site_theme', $theme_name);
             message::success(t(
                                  'Successfully changed your Gallery theme to <b>%theme_name</b>',

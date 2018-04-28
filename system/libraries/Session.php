@@ -39,7 +39,7 @@ class Session_Core
      */
     public static function instance($session_id = null)
     {
-        if (Session::$instance == null) {
+        if (null == Session::$instance) {
             // Create a new instance
             new Session($session_id);
         } elseif (null !== $session_id and $session_id != session_id()) {
@@ -66,7 +66,7 @@ class Session_Core
         $this->input = Input::instance();
 
         // This part only needs to be run once
-        if (Session::$instance === null) {
+        if (null === Session::$instance) {
             // Load config
             Session::$config = Kohana::config('session');
 
@@ -76,12 +76,12 @@ class Session_Core
             // Configure garbage collection
             ini_set('session.gc_probability', (int) Session::$config['gc_probability']);
             ini_set('session.gc_divisor', 100);
-            ini_set('session.gc_maxlifetime', (Session::$config['expiration'] == 0) ? 86400 : Session::$config['expiration']);
+            ini_set('session.gc_maxlifetime', (0 == Session::$config['expiration']) ? 86400 : Session::$config['expiration']);
 
             // Create a new session
             $this->create(null, $session_id);
 
-            if (Session::$config['regenerate'] > 0 and ($_SESSION['total_hits'] % Session::$config['regenerate']) === 0) {
+            if (Session::$config['regenerate'] > 0 and 0 === ($_SESSION['total_hits'] % Session::$config['regenerate'])) {
                 // Regenerate session id and update session cookie
                 $this->regenerate();
             } else {
@@ -122,7 +122,7 @@ class Session_Core
         // Destroy any current sessions
         $this->destroy();
 
-        if (Session::$config['driver'] !== 'native') {
+        if ('native' !== Session::$config['driver']) {
             // Set driver name
             $driver = 'Session_'.ucfirst(Session::$config['driver']).'_Driver';
 
@@ -175,7 +175,7 @@ class Session_Core
 
         $cookie = cookie::get(Session::$config['name']);
         
-        if ($session_id === null) {
+        if (null === $session_id) {
             // Reopen session from signed cookie value.
             $session_id = $cookie;
         }
@@ -252,7 +252,7 @@ class Session_Core
      */
     public function regenerate()
     {
-        if (Session::$config['driver'] === 'native') {
+        if ('native' === Session::$config['driver']) {
             // Generate a new session id
             // Note: also sets a new session cookie with the updated id
             session_regenerate_id(true);
@@ -280,7 +280,7 @@ class Session_Core
      */
     public function destroy()
     {
-        if (session_id() !== '') {
+        if ('' !== session_id()) {
             // Get the session name
             $name = session_name();
 
@@ -304,7 +304,7 @@ class Session_Core
     {
         static $run;
 
-        if ($run === null) {
+        if (null === $run) {
             $run = true;
 
             // Run the events that depend on the session being open
@@ -363,7 +363,7 @@ class Session_Core
         }
 
         foreach ($keys as $key => $val) {
-            if ($key == false) {
+            if (false == $key) {
                 continue;
             }
 
@@ -380,7 +380,7 @@ class Session_Core
      */
     public function keep_flash($keys = null)
     {
-        $keys = ($keys === null) ? array_keys(Session::$flash) : func_get_args();
+        $keys = (null === $keys) ? array_keys(Session::$flash) : func_get_args();
 
         foreach ($keys as $key) {
             if (isset(Session::$flash[$key])) {
@@ -399,13 +399,13 @@ class Session_Core
         static $run;
 
         // Method can only be run once
-        if ($run === true) {
+        if (true === $run) {
             return;
         }
 
         if (! empty(Session::$flash)) {
             foreach (Session::$flash as $key => $state) {
-                if ($state === 'old') {
+                if ('old' === $state) {
                     // Flash has expired
                     unset(Session::$flash[$key], $_SESSION[$key]);
                 } else {
@@ -434,7 +434,7 @@ class Session_Core
 
         $result = isset($_SESSION[$key]) ? $_SESSION[$key] : Kohana::key_string($_SESSION, $key);
 
-        return ($result === null) ? $default : $result;
+        return (null === $result) ? $default : $result;
     }
 
     /**

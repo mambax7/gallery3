@@ -21,7 +21,7 @@ class search_theme_Core
 {
     public static function header_top($theme)
     {
-        if ($theme->page_subtype() != 'login') {
+        if ('login' != $theme->page_subtype()) {
             $view = new View('search_link.html');
             return $view->render();
         } else {

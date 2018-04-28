@@ -21,7 +21,7 @@ class slideshow_event_Core
 {
     public static function pre_deactivate($data)
     {
-        if ($data->module == 'rss') {
+        if ('rss' == $data->module) {
             $data->messages['warn'][] = t('The Slideshow module requires the RSS module.');
         }
     }

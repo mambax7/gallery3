@@ -163,7 +163,7 @@ class PelEntryTime extends PelEntryAscii
         switch ($type) {
             case self::UNIX_TIMESTAMP:
                 $seconds = $this->convertJdToUnix($this->day_count);
-                if ($seconds === false) {
+                if (false === $seconds) {
                     /*
                      * We get false if the Julian Day Count is outside the range
                      * of a UNIX timestamp.
@@ -276,7 +276,7 @@ class PelEntryTime extends PelEntryAscii
     public function convertGregorianToJd($year, $month, $day)
     {
         // Special case mapping 0/0/0 -> 0
-        if ($year == 0 || $month == 0 || $day == 0) {
+        if (0 == $year || 0 == $month || 0 == $day) {
             return 0;
         }
 
@@ -295,7 +295,7 @@ class PelEntryTime extends PelEntryAscii
     public function convertJdToGregorian($jd)
     {
         // Special case mapping 0 -> 0/0/0
-        if ($jd == 0) {
+        if (0 == $jd) {
             return [
                 0,
                 0,

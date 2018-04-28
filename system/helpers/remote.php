@@ -46,7 +46,7 @@ class remote_Core
             // Get the line
             $line = trim(fgets($remote, 512));
 
-            if ($line !== '' and preg_match('#^HTTP/1\.[01] (\d{3})#', $line, $matches)) {
+            if ('' !== $line and preg_match('#^HTTP/1\.[01] (\d{3})#', $line, $matches)) {
                 // Response code found
                 $response = (int) $matches[1];
 

@@ -50,7 +50,7 @@ class Form_Input_Core
      */
     public function __call($method, $args)
     {
-        if ($method == 'rules') {
+        if ('rules' == $method) {
             if (empty($args)) {
                 return $this->rules;
             }
@@ -68,7 +68,7 @@ class Form_Input_Core
             }
 
             $this->add_rules(explode('|', $rules), $action);
-        } elseif ($method == 'name') {
+        } elseif ('name' == $method) {
             // Do nothing. The name should stay static once it is set.
         } else {
             $this->data[$method] = $args[0];
@@ -131,13 +131,13 @@ class Form_Input_Core
      */
     public function label($val = null)
     {
-        if ($val === null) {
+        if (null === $val) {
             if (isset($this->data['name']) and isset($this->data['label'])) {
                 return form::label($this->data['name'], $this->data['label']);
             }
             return false;
         } else {
-            $this->data['label'] = ($val === true) ? utf8::ucwords(inflector::humanize($this->name)) : $val;
+            $this->data['label'] = (true === $val) ? utf8::ucwords(inflector::humanize($this->name)) : $val;
             return $this;
         }
     }
@@ -151,7 +151,7 @@ class Form_Input_Core
      */
     public function message($val = null)
     {
-        if ($val === null) {
+        if (null === $val) {
             if (isset($this->data['message'])) {
                 return $this->data['message'];
             }
@@ -197,21 +197,21 @@ class Form_Input_Core
      */
     protected function add_rules(array $rules, $action)
     {
-        if ($action === '=') {
+        if ('=' === $action) {
             // Just replace the rules
             $this->rules = $rules;
             return;
         }
 
         foreach ($rules as $rule) {
-            if ($action === '-') {
-                if (($key = array_search($rule, $this->rules)) !== false) {
+            if ('-' === $action) {
+                if (false !== ($key = array_search($rule, $this->rules))) {
                     // Remove the rule
                     unset($this->rules[$key]);
                 }
             } else {
                 if (! in_array($rule, $this->rules)) {
-                    if ($action == '+') {
+                    if ('+' == $action) {
                         array_unshift($this->rules, $rule);
                     } else {
                         $this->rules[] = $rule;
@@ -294,9 +294,9 @@ class Form_Input_Core
                             // Fetch an i18n error message
                                                         $error = 'validation.'.$func;
                             break;
-                        case substr($func, 0, 6) === 'valid_':
+                        case 'valid_' === substr($func, 0, 6):
                             // Strip 'valid_' from func name
-                            $func = (substr($func, 0, 6) === 'valid_') ? substr($func, 6) : $func;
+                            $func = ('valid_' === substr($func, 0, 6)) ? substr($func, 6) : $func;
                             // no break
                         case 'alpha':
                         case 'alpha_dash':
@@ -370,7 +370,7 @@ class Form_Input_Core
         }
 
         // No data to validate
-        if ($this->input_value() == false) {
+        if (false == $this->input_value()) {
             return $this->is_valid = false;
         }
 
@@ -378,13 +378,13 @@ class Form_Input_Core
         $this->load_value();
 
         // No rules to validate
-        if (count($this->rules) == 0 and count($this->matches) == 0 and count($this->callbacks) == 0) {
+        if (0 == count($this->rules) and 0 == count($this->matches) and 0 == count($this->callbacks)) {
             return $this->is_valid = true;
         }
 
         if (! empty($this->rules)) {
             foreach ($this->rules as $rule) {
-                if (($offset = strpos($rule, '[')) !== false) {
+                if (false !== ($offset = strpos($rule, '['))) {
                     // Get the args
                     $args = preg_split('/, ?/', trim(substr($rule, $offset), '[]'));
 
@@ -392,7 +392,7 @@ class Form_Input_Core
                     $rule = substr($rule, 0, $offset);
                 }
 
-                if (substr($rule, 0, 6) === 'valid_' and method_exists('valid', substr($rule, 6))) {
+                if ('valid_' === substr($rule, 0, 6) and method_exists('valid', substr($rule, 6))) {
                     $func = substr($rule, 6);
 
                     if ($this->value and ! valid::$func($this->value)) {
@@ -463,7 +463,7 @@ class Form_Input_Core
      */
     protected function rule_required()
     {
-        if ($this->value === '' or $this->value === null) {
+        if ('' === $this->value or null === $this->value) {
             $this->errors['required'] = true;
         }
     }
@@ -474,11 +474,11 @@ class Form_Input_Core
     protected function rule_length($min, $max = null)
     {
         // Get the length, return if zero
-        if (($length = mb_strlen($this->value)) === 0) {
+        if (0 === ($length = mb_strlen($this->value))) {
             return;
         }
 
-        if ($max == null) {
+        if (null == $max) {
             if ($length != $min) {
                 $this->errors['exact_length'] = [$min];
             }

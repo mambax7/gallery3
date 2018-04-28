@@ -40,7 +40,7 @@ class feed_Core
         error_reporting($ER);
 
         // Feed could not be loaded
-        if ($feed === false) {
+        if (false === $feed) {
             return [];
         }
 
@@ -78,10 +78,10 @@ class feed_Core
         $feed = simplexml_load_string($feed);
 
         foreach ($info as $name => $value) {
-            if (($name === 'pubDate' or $name === 'lastBuildDate') and (is_int($value) or ctype_digit($value))) {
+            if (('pubDate' === $name or 'lastBuildDate' === $name) and (is_int($value) or ctype_digit($value))) {
                 // Convert timestamps to RFC 822 formatted dates
                 $value = date(DATE_RFC822, $value);
-            } elseif (($name === 'link' or $name === 'docs') and strpos($value, '://') === false) {
+            } elseif (('link' === $name or 'docs' === $name) and false === strpos($value, '://')) {
                 // Convert URIs to URLs
                 $value = url::site($value, 'http');
             }
@@ -95,10 +95,10 @@ class feed_Core
             $row = $feed->channel->addChild('item');
 
             foreach ($item as $name => $value) {
-                if ($name === 'pubDate' and (is_int($value) or ctype_digit($value))) {
+                if ('pubDate' === $name and (is_int($value) or ctype_digit($value))) {
                     // Convert timestamps to RFC 822 formatted dates
                     $value = date(DATE_RFC822, $value);
-                } elseif (($name === 'link' or $name === 'guid') and strpos($value, '://') === false) {
+                } elseif (('link' === $name or 'guid' === $name) and false === strpos($value, '://')) {
                     // Convert URIs to URLs
                     $value = url::site($value, 'http');
                 }

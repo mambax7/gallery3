@@ -92,7 +92,7 @@ class url extends url_Core
     public static function merge_querystring($url, $query_params)
     {
         $qs = implode('&', $query_params);
-        if (strpos($url, '?') === false) {
+        if (false === strpos($url, '?')) {
             return $url . "?$qs";
         } else {
             return $url . "&$qs";

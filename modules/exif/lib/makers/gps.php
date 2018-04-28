@@ -77,12 +77,12 @@ function lookup_GPS_tag($tag)
 //====================================================================
 function formatGPSData($type, $tag, $intel, $data)
 {
-    if ($type == 'ASCII') {
-        if ($tag == '0001' || $tag == '0003') { // Latitude Reference, Longitude Reference
+    if ('ASCII' == $type) {
+        if ('0001' == $tag || '0003' == $tag) { // Latitude Reference, Longitude Reference
             $data = ($data{1} == $data{2} && $data{1} == $data{3}) ? $data{0} : $data;
         }
-    } elseif ($type == 'URATIONAL' || $type == 'SRATIONAL') {
-        if ($tag == '0002' || $tag == '0004' || $tag == '0007') { //Latitude, Longitude, Time
+    } elseif ('URATIONAL' == $type || 'SRATIONAL' == $type) {
+        if ('0002' == $tag || '0004' == $tag || '0007' == $tag) { //Latitude, Longitude, Time
             $datum = [];
             for ($i=0;$i<strlen($data);$i=$i+8) {
                 array_push($datum, substr($data, $i, 8));
@@ -90,7 +90,7 @@ function formatGPSData($type, $tag, $intel, $data)
             $hour = unRational($datum[0], $type, $intel);
             $minutes = unRational($datum[1], $type, $intel);
             $seconds = unRational($datum[2], $type, $intel);
-            if ($tag == '0007') { //Time
+            if ('0007' == $tag) { //Time
                 $data = $hour . ':' . $minutes . ':' . $seconds;
             } else {
                 $data = $hour+$minutes/60+$seconds/3600;
@@ -98,32 +98,32 @@ function formatGPSData($type, $tag, $intel, $data)
         } else {
             $data = unRational($data, $type, $intel);
             
-            if ($tag == '0006') {
+            if ('0006' == $tag) {
                 $data .= 'm';
             }
         }
-    } elseif ($type == 'USHORT' || $type == 'SSHORT' || $type == 'ULONG' || $type == 'SLONG' || $type == 'FLOAT' || $type == 'DOUBLE') {
+    } elseif ('USHORT' == $type || 'SSHORT' == $type || 'ULONG' == $type || 'SLONG' == $type || 'FLOAT' == $type || 'DOUBLE' == $type) {
         $data = rational($data, $type, $intel);
-    } elseif ($type == 'UNDEFINED') {
-    } elseif ($type == 'UBYTE') {
+    } elseif ('UNDEFINED' == $type) {
+    } elseif ('UBYTE' == $type) {
         $data = bin2hex($data);
-        if ($intel==1) {
+        if (1 == $intel) {
             $num = intel2Moto($data);
         }
 
             
-        if ($tag == '0000') { // VersionID
+        if ('0000' == $tag) { // VersionID
             $data =  hexdec(substr($data, 0, 2)) . '.' . hexdec(substr($data, 2, 2)) . '.' . hexdec(substr($data, 4, 2)) . '.' . hexdec(substr($data, 6, 2));
-        } elseif ($tag == '0005') { // Altitude Reference
-            if ($data == '00000000') {
+        } elseif ('0005' == $tag) { // Altitude Reference
+            if ('00000000' == $data) {
                 $data = '+';
-            } elseif ($data == '01000000') {
+            } elseif ('01000000' == $data) {
                 $data = '-';
             }
         }
     } else {
         $data = bin2hex($data);
-        if ($intel==1) {
+        if (1 == $intel) {
             $data = intel2Moto($data);
         }
     }
@@ -140,25 +140,25 @@ function formatGPSData($type, $tag, $intel, $data)
 //====================================================================
 function parseGPS($block, &$result, $offset, $seek, $globalOffset)
 {
-    if ($result['Endien'] == 'Intel') {
+    if ('Intel' == $result['Endien']) {
         $intel=1;
     } else {
         $intel=0;
     }
         
     $v = fseek($seek, $globalOffset+$offset);  //offsets are from TIFF header which is 12 bytes from the start of the file
-    if ($v==-1) {
+    if (-1 == $v) {
         $result['Errors'] = $result['Errors']++;
     }
 
     $num = bin2hex(fread($seek, 2));
-    if ($intel==1) {
+    if (1 == $intel) {
         $num = intel2Moto($num);
     }
     $num=hexdec($num);
     $result['GPS']['NumTags'] = $num;
 
-    if ($num == 0) {
+    if (0 == $num) {
         return;
     }
 
@@ -170,7 +170,7 @@ function parseGPS($block, &$result, $offset, $seek, $globalOffset)
         //2 byte tag
         $tag = bin2hex(substr($block, $place, 2));
         $place+=2;
-        if ($intel==1) {
+        if (1 == $intel) {
             $tag = intel2Moto($tag);
         }
         $tag_name = lookup_GPS_tag($tag);
@@ -178,7 +178,7 @@ function parseGPS($block, &$result, $offset, $seek, $globalOffset)
         //2 byte datatype
         $type = bin2hex(substr($block, $place, 2));
         $place+=2;
-        if ($intel==1) {
+        if (1 == $intel) {
             $type = intel2Moto($type);
         }
         lookup_type($type, $size);
@@ -186,7 +186,7 @@ function parseGPS($block, &$result, $offset, $seek, $globalOffset)
         //4 byte number of elements
         $count = bin2hex(substr($block, $place, 4));
         $place+=4;
-        if ($intel==1) {
+        if (1 == $intel) {
             $count = intel2Moto($count);
         }
         $bytesofdata = $size*hexdec($count);
@@ -197,17 +197,17 @@ function parseGPS($block, &$result, $offset, $seek, $globalOffset)
         if ($bytesofdata<=4) {
             $data = $value;
         } else {
-            if (strpos('unknown', $tag_name) !== false || $bytesofdata > 1024) {
+            if (false !== strpos('unknown', $tag_name) || $bytesofdata > 1024) {
                 $result['Errors'] = $result['Errors']++;
                 $data = '';
                 $type = 'ASCII';
             } else {
                 $value = bin2hex($value);
-                if ($intel==1) {
+                if (1 == $intel) {
                     $value = intel2Moto($value);
                 }
                 $v = fseek($seek, $globalOffset+hexdec($value));  //offsets are from TIFF header which is 12 bytes from the start of the file
-                if ($v==0) {
+                if (0 == $v) {
                     $data = fread($seek, $bytesofdata);
                 } else {
                     $result['Errors'] = $result['Errors']++;
@@ -216,7 +216,7 @@ function parseGPS($block, &$result, $offset, $seek, $globalOffset)
                 }
             }
         }
-        if ($result['VerboseOutput']==1) {
+        if (1 == $result['VerboseOutput']) {
             $result['GPS'][$tag_name]                         = formatGPSData($type, $tag, $intel, $data);
             $result['GPS'][$tag_name . '_Verbose']['RawData'] = bin2hex($data);
             $result['GPS'][$tag_name . '_Verbose']['Type']    = $type;

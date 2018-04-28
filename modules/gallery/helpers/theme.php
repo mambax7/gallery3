@@ -50,7 +50,7 @@ class theme_Core
             $path = preg_replace('#' . preg_quote($suffix) . '$#u', '', $path);
         }
 
-        self::$is_admin = $path == '/admin' || !strncmp($path, '/admin/', 7);
+        self::$is_admin = '/admin' == $path || !strncmp($path, '/admin/', 7);
         self::$site_theme_name = module::get_var('gallery', 'active_site_theme');
 
         // If the site theme doesn't exist, fall back to wind.

@@ -77,7 +77,7 @@ class Permissions_Controller extends Controller
       }
 
             // If the active user just took away their own edit permissions, give it back.
-            if ($perm->name == 'edit') {
+            if ('edit' == $perm->name) {
                 if (!access::user_can(identity::active_user(), 'edit', $item)) {
                     access::allow($group, $perm->name, $item);
                 }

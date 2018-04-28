@@ -66,7 +66,7 @@ abstract class Kohana_Core
         static $run;
 
         // Only run this function once
-        if ($run === true) {
+        if (true === $run) {
             return;
         }
 
@@ -87,7 +87,7 @@ abstract class Kohana_Core
         // Set the default charset for mb_* functions
         mb_internal_encoding(Kohana::CHARSET);
 
-        if (Kohana_Config::instance()->loaded() === false) {
+        if (false === Kohana_Config::instance()->loaded()) {
             // Re-parse the include paths
             Kohana::include_paths(true);
         }
@@ -96,7 +96,7 @@ abstract class Kohana_Core
             // Are we using encryption for caches?
             Kohana::$internal_cache_encrypt	= Kohana::config('core.internal_cache_encrypt');
 
-            if (Kohana::$internal_cache_encrypt===true) {
+            if (true === Kohana::$internal_cache_encrypt) {
                 Kohana::$internal_cache_key = Kohana::config('core.internal_cache_key');
 
                 // Be sure the key is of acceptable length for the mcrypt algorithm used
@@ -197,7 +197,7 @@ abstract class Kohana_Core
         // Enable Kohana 404 pages
         Event::add('system.404', ['Kohana_404_Exception', 'trigger']);
 
-        if (Kohana::config('core.enable_hooks') === true) {
+        if (true === Kohana::config('core.enable_hooks')) {
             // Find all the hook files
             $hooks = Kohana::list_files('hooks', true);
 
@@ -225,7 +225,7 @@ abstract class Kohana_Core
         static $run;
 
         // Only run this function once
-        if ($run === true) {
+        if (true === $run) {
             return;
         }
 
@@ -251,7 +251,7 @@ abstract class Kohana_Core
      */
     public static function & instance()
     {
-        if (Kohana::$instance === null) {
+        if (null === Kohana::$instance) {
             Benchmark::start(SYSTEM_BENCHMARK.'_controller_setup');
 
             // Include the Controller file
@@ -265,7 +265,7 @@ abstract class Kohana_Core
                 Event::run('system.404');
             }
 
-            if ($class->isAbstract() or (IN_PRODUCTION and $class->getConstant('ALLOW_PRODUCTION') == false)) {
+            if ($class->isAbstract() or (IN_PRODUCTION and false == $class->getConstant('ALLOW_PRODUCTION'))) {
                 // Controller is not allowed to run in production
                 Event::run('system.404');
             }
@@ -284,7 +284,7 @@ abstract class Kohana_Core
                 $method = $class->getMethod(Router::$method);
 
                 // Method exists
-                if (Router::$method[0] === '_') {
+                if ('_' === Router::$method[0]) {
                     // Do not allow access to hidden methods
                     Event::run('system.404');
                 }
@@ -332,7 +332,7 @@ abstract class Kohana_Core
      */
     public static function include_paths($process = false)
     {
-        if ($process === true) {
+        if (true === $process) {
             // Add APPPATH as the first path
             Kohana::$include_paths = [APPPATH];
 
@@ -382,7 +382,7 @@ abstract class Kohana_Core
                 // Check the file modification time
                 if ((time() - filemtime($path)) < $lifetime) {
                     // Cache is valid! Now, do we need to decrypt it?
-                    if (Kohana::$internal_cache_encrypt===true) {
+                    if (true === Kohana::$internal_cache_encrypt) {
                         $data		= file_get_contents($path);
 
                         $iv_size	= mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB);
@@ -430,12 +430,12 @@ abstract class Kohana_Core
 
         $path = Kohana::$internal_cache_path.'kohana_'.$name;
 
-        if ($data === null) {
+        if (null === $data) {
             // Delete cache
             return (is_file($path) and unlink($path));
         } else {
             // Using encryption? Encrypt the data when we write it
-            if (Kohana::$internal_cache_encrypt===true) {
+            if (true === Kohana::$internal_cache_encrypt) {
                 // Encrypt and write data to cache file
                 $iv_size	= mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB);
                 $iv			= mcrypt_create_iv($iv_size, MCRYPT_RAND);
@@ -483,7 +483,7 @@ abstract class Kohana_Core
     {
         if (ob_get_level() >= Kohana::$buffer_level) {
             // Set the close function
-            $close = ($flush === true) ? 'ob_end_flush' : 'ob_end_clean';
+            $close = (true === $flush) ? 'ob_end_flush' : 'ob_end_clean';
 
             while (ob_get_level() > Kohana::$buffer_level) {
                 // Flush or clean the buffer
@@ -509,7 +509,7 @@ abstract class Kohana_Core
         static $run;
 
         // Only run this function once
-        if ($run === true) {
+        if (true === $run) {
             return;
         }
 
@@ -536,7 +536,7 @@ abstract class Kohana_Core
      */
     public static function render($output)
     {
-        if (Kohana::config('core.render_stats') === true) {
+        if (true === Kohana::config('core.render_stats')) {
             // Fetch memory usage in MB
             $memory = function_exists('memory_get_usage') ? (memory_get_usage() / 1024 / 1024) : 0;
 
@@ -563,7 +563,7 @@ abstract class Kohana_Core
             );
         }
 
-        if ($level = Kohana::config('core.output_compression') and ini_get('output_handler') !== 'ob_gzhandler' and (int) ini_get('zlib.output_compression') === 0) {
+        if ($level = Kohana::config('core.output_compression') and 'ob_gzhandler' !== ini_get('output_handler') and 0 === (int) ini_get('zlib.output_compression')) {
             if ($compress = request::preferred_encoding(['gzip', 'deflate'], true)) {
                 if ($level < 1 or $level > 9) {
                     // Normalize the level to be an integer between 1 and 9. This
@@ -571,10 +571,10 @@ abstract class Kohana_Core
                     $level = max(1, min($level, 9));
                 }
 
-                if ($compress === 'gzip') {
+                if ('gzip' === $compress) {
                     // Compress output using gzip
                     $output = gzencode($output, $level);
-                } elseif ($compress === 'deflate') {
+                } elseif ('deflate' === $compress) {
                     // Compress output using zlib (HTTP deflate)
                     $output = gzdeflate($output, $level);
                 }
@@ -587,7 +587,7 @@ abstract class Kohana_Core
                 header('Content-Encoding: '.$compress);
 
                 // Sending Content-Length in CGI can result in unexpected behavior
-                if (stripos(Kohana::$server_api, 'cgi') === false) {
+                if (false === stripos(Kohana::$server_api, 'cgi')) {
                     header('Content-Length: '.strlen($output));
                 }
             }
@@ -617,18 +617,18 @@ abstract class Kohana_Core
             $suffix = false;
         }
 
-        if ($suffix === 'Core') {
+        if ('Core' === $suffix) {
             $type = 'libraries';
             $file = substr($class, 0, -5);
-        } elseif ($suffix === 'Controller') {
+        } elseif ('Controller' === $suffix) {
             $type = 'controllers';
             // Lowercase filename
             $file = strtolower(substr($class, 0, -11));
-        } elseif ($suffix === 'Model') {
+        } elseif ('Model' === $suffix) {
             $type = 'models';
             // Lowercase filename
             $file = strtolower(substr($class, 0, -6));
-        } elseif ($suffix === 'Driver') {
+        } elseif ('Driver' === $suffix) {
             $type = 'libraries/drivers';
             $file = str_replace('_', '/', substr($class, 0, -7));
         } else {
@@ -650,7 +650,7 @@ abstract class Kohana_Core
         if ($filename = Kohana::find_file($type, Kohana::config('core.extension_prefix').$class)) {
             // Load the class extension
             require $filename;
-        } elseif ($suffix !== 'Core' and class_exists($class.'_Core', false)) {
+        } elseif ('Core' !== $suffix and class_exists($class . '_Core', false)) {
             // Class extension to be evaluated
             $extension = 'class '.$class.' extends '.$class.'_Core { }';
 
@@ -688,7 +688,7 @@ abstract class Kohana_Core
     {
         // NOTE: This test MUST be not be a strict comparison (===), or empty
         // extensions will be allowed!
-        if ($ext == '') {
+        if ('' == $ext) {
             // Use the default extension
             $ext = EXT;
         } else {
@@ -709,7 +709,7 @@ abstract class Kohana_Core
         // Nothing found, yet
         $found = null;
 
-        if ($directory === 'config' or $directory === 'messages' or $directory === 'i18n') {
+        if ('config' === $directory or 'messages' === $directory or 'i18n' === $directory) {
             // Search in reverse, for merging
             $paths = array_reverse($paths);
 
@@ -731,8 +731,8 @@ abstract class Kohana_Core
             }
         }
 
-        if ($found === null) {
-            if ($required === true) {
+        if (null === $found) {
+            if (true === $required) {
                 // If the file is required, throw an exception
                 throw new Kohana_Exception('The requested :resource:, :file:, could not be found', [':resource:' => __($directory), ':file:' =>$filename]);
             } else {
@@ -762,7 +762,7 @@ abstract class Kohana_Core
     {
         $files = [];
 
-        if ($path === false) {
+        if (false === $path) {
             $paths = array_reverse(Kohana::include_paths());
 
             foreach ($paths as $path) {
@@ -780,7 +780,7 @@ abstract class Kohana_Core
 
                     if (is_dir($item)) {
                         // Handle recursion
-                        if ($recursive === true) {
+                        if (true === $recursive) {
                             // Filename should only be the basename
                             $item = pathinfo($item, PATHINFO_BASENAME);
 
@@ -789,7 +789,7 @@ abstract class Kohana_Core
                         }
                     } else {
                         // File extension must match
-                        if ($ext_pos === 0 or substr($item, $ext_pos) === $ext) {
+                        if (0 === $ext_pos or substr($item, $ext_pos) === $ext) {
                             $files[] = $item;
                         }
                     }
@@ -833,7 +833,7 @@ abstract class Kohana_Core
         // Get the line from cache
         $line = Kohana::key_string(Kohana::$internal_cache['messages'], $key);
 
-        if ($line === null) {
+        if (null === $line) {
             Kohana_Log::add('error', 'Missing messages entry '.$key.' for message '.$group);
 
             // Return the key string as fallback
@@ -958,7 +958,7 @@ abstract class Kohana_Core
      */
     public static function debug()
     {
-        if (func_num_args() === 0) {
+        if (0 === func_num_args()) {
             return;
         }
 

@@ -59,7 +59,7 @@ class Profiler_Core
      */
     public static function show($name)
     {
-        return (Profiler::$show === true or (is_array(Profiler::$show) and in_array($name, Profiler::$show))) ? true : false;
+        return (true === Profiler::$show or (is_array(Profiler::$show) and in_array($name, Profiler::$show))) ? true : false;
     }
 
     /**
@@ -114,12 +114,12 @@ class Profiler_Core
         $view = new View('profiler/profiler', $data);
 
         // Return rendered view if $return is TRUE
-        if ($return === true) {
+        if (true === $return) {
             return $view->render();
         }
 
         // Add profiler data to the output
-        if (stripos(Kohana::$output, '</body>') !== false) {
+        if (false !== stripos(Kohana::$output, '</body>')) {
             // Closing body tag was found, insert the profiler data before it
             Kohana::$output = str_ireplace('</body>', $view->render().'</body>', Kohana::$output);
         } else {
@@ -159,7 +159,7 @@ class Profiler_Core
             $data = [__($name), $benchmark['count'], number_format($benchmark['time'], Kohana::config('profiler.time_decimals')), number_format($benchmark['memory'] / 1024 / 1024, Kohana::config('profiler.memory_decimals')) . 'MB'];
             $class = text::alternate('', 'kp-altrow');
 
-            if ($name == 'Total Execution') {
+            if ('Total Execution' == $name) {
                 // Clear the count column
                 $data[1] = '';
                 $class = 'kp-totalrow';

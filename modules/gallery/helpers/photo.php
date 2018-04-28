@@ -121,7 +121,7 @@ class photo_Core
             $metadata->mime_type = $image_info['mime'];
             $metadata->extension = image_type_to_extension($image_info[2], false);
             // We prefer jpg instead of jpeg (which is returned by image_type_to_extension).
-            if ($metadata->extension == 'jpeg') {
+            if ('jpeg' == $metadata->extension) {
                 $metadata->extension = 'jpg';
             }
         } else {

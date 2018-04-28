@@ -44,11 +44,11 @@ class tag_installer
     public static function upgrade($version)
     {
         $db = Database::instance();
-        if ($version == 1) {
+        if (1 == $version) {
             $db->query('ALTER TABLE {tags} MODIFY COLUMN `name` VARCHAR(128)');
             module::set_version('tag', $version = 2);
         }
-        if ($version == 2) {
+        if (2 == $version) {
             module::set_var('tag', 'tag_cloud_size', 30);
             module::set_version('tag', $version = 3);
         }

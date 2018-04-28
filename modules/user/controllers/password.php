@@ -25,7 +25,7 @@ class Password_Controller extends Controller
     public function reset()
     {
         $form = self::_reset_form();
-        if (request::method() == 'post') {
+        if ('post' == request::method()) {
             // @todo separate the post from get parts of this function
             access::verify_csrf();
             // Basic validation (was some user name specified?)
@@ -41,7 +41,7 @@ class Password_Controller extends Controller
 
     public function do_reset()
     {
-        if (request::method() == 'post') {
+        if ('post' == request::method()) {
             $this->_change_password();
         } else {
             $user = user::lookup_by_hash(Input::instance()->get('key'));

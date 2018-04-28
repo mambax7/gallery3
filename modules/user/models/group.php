@@ -88,10 +88,10 @@ class Group_Model_Core extends ORM implements Group_Definition
      */
     public function valid_name(Validation $v, $field)
     {
-        if (db::build()->from('groups')
-        ->where('name', '=', $this->name)
-        ->where('id', '<>', $this->id)
-        ->count_records() == 1) {
+        if (1 == db::build()->from('groups')
+                   ->where('name', '=', $this->name)
+                   ->where('id', '<>', $this->id)
+                   ->count_records()) {
             $v->add_error('name', 'conflict');
         }
     }

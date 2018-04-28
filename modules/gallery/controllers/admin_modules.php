@@ -44,7 +44,7 @@ class Admin_Modules_Controller extends Admin_Controller
                 continue;
             }
 
-            if ($desired = Input::instance()->post($module_name) == 1) {
+            if ($desired = 1 == Input::instance()->post($module_name)) {
                 $desired_list[] = $module_name;
             }
             if ($info->active && !$desired && module::is_active($module_name)) {
@@ -88,7 +88,7 @@ class Admin_Modules_Controller extends Admin_Controller
             }
 
             try {
-                $desired = Input::instance()->post($module_name) == 1;
+                $desired = 1 == Input::instance()->post($module_name);
                 if ($info->active && !$desired && module::is_active($module_name)) {
                     module::deactivate($module_name);
                     $changes->deactivate[] = $module_name;

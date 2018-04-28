@@ -39,11 +39,11 @@ class G2_Controller extends Controller
 
         // Tags did not have mappings created, so we need to catch them first. However, if a g2_itemId was
         // passed, we'll want to show lookup the mapping anyway
-        if (($path && 0 === strpos($path, 'tag/')) || $view == 'tags.VirtualAlbum') {
+        if (($path && 0 === strpos($path, 'tag/')) || 'tags.VirtualAlbum' == $view) {
             if (0 === strpos($path, 'tag/')) {
                 $tag_name = substr($path, 4);
             }
-            if ($view == 'tags.VirtualAlbum') {
+            if ('tags.VirtualAlbum' == $view) {
                 $tag_name = $input->get('g2_tagName');
             }
 
@@ -61,13 +61,13 @@ class G2_Controller extends Controller
             }
         }
 
-        if (($path && $path != 'index.php' && $path != 'main.php') || $id) {
+        if (($path && 'index.php' != $path && 'main.php' != $path) || $id) {
             if ($id) {
                 // Requests by id are either core.DownloadItem or core.ShowItem requests. Later versions of
                 // Gallery 2 don't specify g2_view if it's the default (core.ShowItem). And in some cases
                 // (bbcode, embedding) people are using the id style URLs although URL rewriting is enabled.
                 $where = [['g2_id', '=', $id]];
-                if ($view == 'core.DownloadItem') {
+                if ('core.DownloadItem' == $view) {
                     $where[] = ['resource_type', 'IN', ['file', 'resize', 'thumbnail', 'full']];
                 } elseif ($view) {
                     $where[] = ['g2_url', 'LIKE', '%' . Database::escape_for_like("g2_view=$view") . '%'];

@@ -39,7 +39,7 @@ class g2_import_installer
     public static function upgrade($version)
     {
         $db = Database::instance();
-        if ($version == 1) {
+        if (1 == $version) {
             $db->query('ALTER TABLE {g2_maps} ADD COLUMN `g2_url` VARCHAR(255)');
             $db->query('ALTER TABLE {g2_maps} ADD COLUMN `resource_type` VARCHAR(64)');
             $db->query('ALTER TABLE {g2_maps} ADD KEY `g2_url` (`g2_url`)');

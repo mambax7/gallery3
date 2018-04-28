@@ -32,12 +32,12 @@ class user_installer
 
     public static function upgrade($version)
     {
-        if ($version == 1) {
+        if (1 == $version) {
             module::set_var('user', 'mininum_password_length', 5);
             module::set_version('user', $version = 2);
         }
 
-        if ($version == 2) {
+        if (2 == $version) {
             db::build()
         ->update('users')
         ->set('email', 'unknown@unknown.com')
@@ -50,7 +50,7 @@ class user_installer
             module::set_version('user', $version = 3);
         }
 
-        if ($version == 3) {
+        if (3 == $version) {
             $password_length = module::get_var('user', 'mininum_password_length', 5);
             module::set_var('user', 'minimum_password_length', $password_length);
             module::clear_var('user', 'mininum_password_length');

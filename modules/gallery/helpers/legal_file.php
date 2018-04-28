@@ -280,7 +280,7 @@ class legal_file_Core
         }
         $parts = pathinfo($filename);
         $result = '';
-        if ($parts['dirname'] != '.') {
+        if ('.' != $parts['dirname']) {
             $result .= $parts['dirname'] . '/';
         }
         $parts['filename'] = str_replace('.', '_', $parts['filename']);
@@ -341,7 +341,7 @@ class legal_file_Core
         $filename = legal_file::smash_extensions($filename);
 
         // It's possible that the filename has no base (e.g. ".jpg") - if so, give it a generic one.
-        if (empty($filename) || (substr($filename, 0, 1) == '.')) {
+        if (empty($filename) || ('.' == substr($filename, 0, 1))) {
             $filename = $type . $filename;  // e.g. "photo.jpg" or "movie.mp4"
         }
 

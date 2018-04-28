@@ -137,7 +137,7 @@ class Organize_Controller extends Controller
         $album = $target->parent();
         access::required('edit', $album);
 
-        if ($album->sort_column != 'weight') {
+        if ('weight' != $album->sort_column) {
             // Force all the weights into the current order before changing the order to manual
             // @todo: consider making this a trigger in the Item_Model.
             item::resequence_child_weights($album);
@@ -148,7 +148,7 @@ class Organize_Controller extends Controller
 
         $source_ids = explode(',', $input->post('source_ids'));
         $base_weight = $target->weight;
-        if ($input->post('relative') == 'after') {
+        if ('after' == $input->post('relative')) {
             $base_weight++;
         }
 
@@ -225,7 +225,7 @@ class Organize_Controller extends Controller
                 'editable'   => false,
                 'expandable' => false,
                 'id'         => $child->id,
-                'leaf'       => $child->children_count([['type', '=', 'album']]) == 0,
+                'leaf'       => 0 == $child->children_count([['type', '=', 'album']]),
                 'text'       => (string)html::clean($child->title),
                 'nodeType'   => 'async'
             ];

@@ -26,7 +26,7 @@ class slideshow_installer
 
     public static function upgrade($version)
     {
-        if ($version == 1) {
+        if (1 == $version) {
             module::set_var('slideshow', 'max_scale', 0);
             module::set_version('slideshow', $version = 2);
         }

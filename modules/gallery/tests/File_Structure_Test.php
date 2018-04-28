@@ -68,7 +68,7 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
         foreach ($dir as $file) {
             if (preg_match("/\.(php|css|html|js)$/", $file)) {
                 foreach (file($file) as $line) {
-                    $this->assert_true(substr($line, -2) != "\r\n", "$file has windows style line endings");
+                    $this->assert_true("\r\n" != substr($line, -2), "$file has windows style line endings");
                 }
             }
         }
@@ -78,7 +78,7 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
     {
         $expected_2 = null;
         // The preamble for views is a single line that prevents direct script access
-        if (strpos($path, SYSPATH) === 0) {
+        if (0 === strpos($path, SYSPATH)) {
             // Kohana preamble
             $expected = "<?php defined('SYSPATH') OR die('No direct access allowed.'); ?>\n";
             $expected_2 = "<?php defined('SYSPATH') OR die('No direct access allowed.');\n";  // error.php
@@ -102,8 +102,9 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
         $expected_2 = null;
         $expected_3 = null;
         $expected_4 = null;
-        if (strpos($path, SYSPATH) === 0 ||
-            strpos($path, MODPATH . 'unit_test') === 0) {
+        if (0 === strpos($path, SYSPATH)
+            ||
+            0 === strpos($path, MODPATH . 'unit_test')) {
             // Kohana: we only care about the first line
             $fp = fopen($path, 'r');
             $actual = [fgets($fp)];
@@ -112,11 +113,16 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
             $expected_2 = ["<?php defined('SYSPATH') OR die('No direct access allowed.');\n"];
             $expected_3 = ["<?php defined('SYSPATH') or die('No direct access allowed.');\n"];
             $expected_4 = ["<?php defined('SYSPATH') or die('No direct script access.');\n"];
-        } elseif (strpos($path, MODPATH . 'forge') === 0 ||
-                  strpos($path, MODPATH . 'exif/lib') === 0 ||
-                  strpos($path, MODPATH . 'gallery/vendor/joomla') === 0 ||
-                  strpos($path, MODPATH . 'gallery_unit_test/vendor') === 0 ||
-                  strpos($path, MODPATH . 'gallery/lib/HTMLPurifier') === 0 ||
+        } elseif (0 === strpos($path, MODPATH . 'forge')
+                  ||
+                  0 === strpos($path, MODPATH . 'exif/lib')
+                  ||
+                  0 === strpos($path, MODPATH . 'gallery/vendor/joomla')
+                  ||
+                  0 === strpos($path, MODPATH . 'gallery_unit_test/vendor')
+                  ||
+                  0 === strpos($path, MODPATH . 'gallery/lib/HTMLPurifier')
+                  ||
                $path == MODPATH . 'user/lib/PasswordHash.php'
                   ||
                $path == DOCROOT . 'var/database.php') {
@@ -127,13 +133,13 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
             $fp = fopen($path, 'r');
             $actual = [fgets($fp)];
             fclose($fp);
-        } elseif (strpos($path, DOCROOT . 'var/logs') === 0) {
+        } elseif (0 === strpos($path, DOCROOT . 'var/logs')) {
             // var/logs has the kohana one-liner preamble
             $expected = ["<?php defined('SYSPATH') or die('No direct script access.'); ?>\n"];
             $fp = fopen($path, 'r');
             $actual = [fgets($fp)];
             fclose($fp);
-        } elseif (strpos($path, DOCROOT . 'var') === 0) {
+        } elseif (0 === strpos($path, DOCROOT . 'var')) {
             // Anything else under var has the Gallery one-liner
             $expected = ["<?php defined(\"SYSPATH\") or die(\"No direct script access.\") ?>\n"];
             $fp = fopen($path, 'r');
@@ -264,7 +270,7 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
       )
     );
         foreach ($dir as $file) {
-            if (basename(dirname($file)) == 'helpers') {
+            if ('helpers' == basename(dirname($file))) {
                 foreach (file($file) as $line) {
                     $this->assert_true(
             !preg_match("/\sfunction\s.*\(/", $line) ||
@@ -303,7 +309,7 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
 
             // Any values containing spaces must be quoted
             foreach ($values as $key => $value) {
-                if (strpos($value, ' ') !== false && !preg_match('/^".*"$/', $value)) {
+                if (false !== strpos($value, ' ') && !preg_match('/^".*"$/', $value)) {
                     $errors[] = "$module: value for $key must be quoted";
                 }
             }
@@ -330,9 +336,9 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
     );
         foreach ($dir as $file) {
             $scan = 0;
-            if (basename(dirname($file)) == 'tests') {
+            if ('tests' == basename(dirname($file))) {
                 foreach (file($file) as $line) {
-                    if (!substr($file, -9, 9) == '_Test.php') {
+                    if ('_Test.php' == !substr($file, -9, 9)) {
                         continue;
                     }
 
@@ -364,7 +370,7 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
         foreach ($dir as $file) {
             if (preg_match("/\.(php|css|html|js)$/", $file)) {
                 foreach (file($file) as $line_num => $line) {
-                    if ((substr($line, -2) == " \n") || (substr($line, -1) == ' ')) {
+                    if ((" \n" == substr($line, -2)) || (' ' == substr($line, -1))) {
                         $errors .= "$file at line " . ($line_num + 1) . "\n";
                     }
                 }

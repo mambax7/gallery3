@@ -47,14 +47,14 @@ class Upgrader_Controller extends Controller
         $view->upgrade_token = $upgrade_token;
         $view->available = module::available();
         $view->failed = $failed ? explode(',', $failed) : [];
-        $view->done = $available_upgrades == 0;
+        $view->done = 0 == $available_upgrades;
         $view->obsolete_modules_message = module::get_obsolete_modules_message();
         print $view;
     }
 
     public function upgrade()
     {
-        if (php_sapi_name() == 'cli') {
+        if ('cli' == php_sapi_name()) {
             // @todo this may screw up some module installers, but we don't have a better answer at
             // this time.
             $_SERVER['HTTP_HOST'] = 'example.com';
@@ -81,7 +81,7 @@ class Upgrader_Controller extends Controller
         // Then upgrade the rest
         $failed = [];
         foreach (module::available() as $id => $module) {
-            if ($id == 'gallery') {
+            if ('gallery' == $id) {
                 continue;
             }
 
@@ -101,7 +101,7 @@ class Upgrader_Controller extends Controller
         // Clear any upgrade check strings, we are probably up to date.
         site_status::clear('upgrade_checker');
 
-        if (php_sapi_name() == 'cli') {
+        if ('cli' == php_sapi_name()) {
             if ($failed) {
                 print "Upgrade completed ** WITH FAILURES **\n";
                 print "The following modules were not successfully upgraded:\n";

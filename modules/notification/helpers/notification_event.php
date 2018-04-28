@@ -64,7 +64,7 @@ class notification_event_Core
     public static function comment_created($comment)
     {
         try {
-            if ($comment->state == 'published') {
+            if ('published' == $comment->state) {
                 notification::send_comment_published($comment);
             }
         } catch (Exception $e) {
@@ -76,7 +76,7 @@ class notification_event_Core
     public static function comment_updated($original, $new)
     {
         try {
-            if ($new->state == 'published' && $original->state != 'published') {
+            if ('published' == $new->state && 'published' != $original->state) {
                 notification::send_comment_published($new);
             }
         } catch (Exception $e) {

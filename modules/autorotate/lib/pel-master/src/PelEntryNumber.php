@@ -139,7 +139,7 @@ abstract class PelEntryNumber extends PelEntry
      */
     public function getValue()
     {
-        if ($this->components == 1) {
+        if (1 == $this->components) {
             return $this->value[0];
         } else {
             return $this->value;
@@ -162,7 +162,7 @@ abstract class PelEntryNumber extends PelEntry
      */
     public function validateNumber($n)
     {
-        if ($this->dimension == 1) {
+        if (1 == $this->dimension) {
             if ($n < $this->min || $n > $this->max) {
                 Pel::maybeThrow(new PelOverflowException($n, $this->min, $this->max));
             }
@@ -224,7 +224,7 @@ abstract class PelEntryNumber extends PelEntry
     {
         $bytes = '';
         for ($i = 0; $i < $this->components; $i ++) {
-            if ($this->dimension == 1) {
+            if (1 == $this->dimension) {
                 $bytes .= $this->numberToBytes($this->value[$i], $o);
             } else {
                 for ($j = 0; $j < $this->dimension; $j ++) {
@@ -270,7 +270,7 @@ abstract class PelEntryNumber extends PelEntry
      */
     public function getText($brief = false)
     {
-        if ($this->components == 0) {
+        if (0 == $this->components) {
             return '';
         }
 

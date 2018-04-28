@@ -28,7 +28,7 @@ class Image_GD_Driver extends Image_Driver
         $info = gd_info();
 
         // Make sure that the GD2 is installed
-        if (strpos($info['GD Version'], '2.') === false) {
+        if (false === strpos($info['GD Version'], '2.')) {
             throw new Kohana_Exception('The Image library requires GD2. Please see http://php.net/gd_info for more information.');
         }
     }
@@ -89,7 +89,7 @@ class Image_GD_Driver extends Image_Driver
             switch ($save) {
                 case 'imagejpeg':
                     // Default the quality to 95
-                    ($quality === null) and $quality = 95;
+                    (null === $quality) and $quality = 95;
                 break;
                 case 'imagegif':
                     // Remove the quality setting, GIF doesn't use it
@@ -102,7 +102,7 @@ class Image_GD_Driver extends Image_Driver
                 break;
             }
 
-            if ($render === false) {
+            if (false === $render) {
                 // Set the status to the save return value, saving with the quality requested
                 $status = isset($quality) ? $save($this->tmp_image, $dir.$file, $quality) : $save($this->tmp_image, $dir.$file);
             } else {
@@ -151,7 +151,7 @@ class Image_GD_Driver extends Image_Driver
             return true;
         }
 
-        if ($status === true) {
+        if (true === $status) {
             // Swap the new image for the old one
             imagedestroy($this->tmp_image);
             $this->tmp_image = $flipped;
@@ -188,12 +188,12 @@ class Image_GD_Driver extends Image_Driver
         $width = imagesx($this->tmp_image);
         $height = imagesy($this->tmp_image);
 
-        if (substr($properties['width'], -1) === '%') {
+        if ('%' === substr($properties['width'], -1)) {
             // Recalculate the percentage to a pixel size
             $properties['width'] = round($width * (substr($properties['width'], 0, -1) / 100));
         }
 
-        if (substr($properties['height'], -1) === '%') {
+        if ('%' === substr($properties['height'], -1)) {
             // Recalculate the percentage to a pixel size
             $properties['height'] = round($height * (substr($properties['height'], 0, -1) / 100));
         }
@@ -382,7 +382,7 @@ class Image_GD_Driver extends Image_Driver
             $height = 1;
         }
 
-        if (self::$blank_png === null) {
+        if (null === self::$blank_png) {
             // Decode the blank PNG if it has not been done already
             self::$blank_png = imagecreatefromstring(base64_decode(
                 'iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29'.

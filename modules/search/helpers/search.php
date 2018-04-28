@@ -29,7 +29,7 @@ class search_Core
         $terms = explode(' ', $q, $MAX_TERMS);
         for ($i = 0; $i < min(count($terms), $MAX_TERMS - 1); $i++) {
             // Don't wildcard quoted or already wildcarded terms
-            if ((substr($terms[$i], 0, 1) != '"') && (substr($terms[$i], -1, 1) != '*')) {
+            if (('"' != substr($terms[$i], 0, 1)) && ('*' != substr($terms[$i], -1, 1))) {
                 $terms[] = rtrim($terms[$i], 's') . '*';
             }
         }

@@ -103,7 +103,7 @@ class Forge_Core
 
         if ($name = $input->name) {
             // Assign by name
-            if ($method == 'hidden') {
+            if ('hidden' == $method) {
                 $this->hidden[$name] = $input;
             } else {
                 $this->inputs[$name] = $input;
@@ -148,7 +148,7 @@ class Forge_Core
         $inputs = array_merge($this->hidden, $this->inputs);
 
         foreach ($inputs as $input) {
-            if ($input->validate() == false) {
+            if (false == $input->validate()) {
                 $status = false;
             }
         }
@@ -195,7 +195,7 @@ class Forge_Core
      */
     public function error_format($string = '')
     {
-        if (strpos((string) $string, '{message}') === false) {
+        if (false === strpos((string) $string, '{message}')) {
             throw new Kohana_Exception('validation.error_format');
         }
 

@@ -56,7 +56,7 @@ class Item_Model_Core extends ORM_MPTT
      */
     public function is_album()
     {
-        return $this->type == 'album';
+        return 'album' == $this->type;
     }
 
     /**
@@ -65,7 +65,7 @@ class Item_Model_Core extends ORM_MPTT
      */
     public function is_photo()
     {
-        return $this->type == 'photo';
+        return 'photo' == $this->type;
     }
 
     /**
@@ -74,7 +74,7 @@ class Item_Model_Core extends ORM_MPTT
      */
     public function is_movie()
     {
-        return $this->type == 'movie';
+        return 'movie' == $this->type;
     }
 
     public function delete($ignored_id=null)
@@ -84,7 +84,7 @@ class Item_Model_Core extends ORM_MPTT
             return;
         }
 
-        if ($this->id == 1) {
+        if (1 == $this->id) {
             $v = new Validation(['id']);
             $v->add_error('id', 'cant_delete_root_album');
             ORM_Validation_Exception::handle_validation($this->table_name, $v);
@@ -352,7 +352,7 @@ class Item_Model_Core extends ORM_MPTT
      */
     public function __get($column)
     {
-        if ($column == 'owner') {
+        if ('owner' == $column) {
             // This relationship depends on an outside module, which may not be present so handle
             // failures gracefully.
             try {
@@ -809,7 +809,7 @@ class Item_Model_Core extends ORM_MPTT
         $player_width = module::get_var('gallery', 'resize_size', 640);
         $width = $this->width;
         $height = $this->height;
-        if ($width == 0 || $height == 0) {
+        if (0 == $width || 0 == $height) {
             // Not set correctly, likely because FFmpeg isn't available.  Making the window 0x0 causes the
             // player to be unviewable during loading.  So, let's guess: set width to player_width and
             // guess a height (using 4:3 aspect ratio).  Once the video metadata is loaded, the player
@@ -890,7 +890,7 @@ class Item_Model_Core extends ORM_MPTT
         if (empty($order_by)) {
             $order_by = [$this->sort_column => $this->sort_order];
             // Use id as a tie breaker
-            if ($this->sort_column != 'id') {
+            if ('id' != $this->sort_column) {
                 $order_by['id'] = 'ASC';
             }
         }
@@ -913,7 +913,7 @@ class Item_Model_Core extends ORM_MPTT
         if (empty($order_by)) {
             $order_by = [$this->sort_column => $this->sort_order];
             // Use id as a tie breaker
-            if ($this->sort_column != 'id') {
+            if ('id' != $this->sort_column) {
                 $order_by['id'] = 'ASC';
             }
         }
@@ -952,7 +952,7 @@ class Item_Model_Core extends ORM_MPTT
             ];
 
             // Conditional rules
-            if ($this->id == 1) {
+            if (1 == $this->id) {
                 // We don't care about the name and slug for the root album.
                 $this->rules['name'] = [];
                 $this->rules['slug'] = [];
@@ -989,7 +989,7 @@ class Item_Model_Core extends ORM_MPTT
             $v->add_error('slug', 'conflict');
         }
 
-        if ($this->parent_id == 1 && Kohana::auto_load("{$this->slug}_Controller")) {
+        if (1 == $this->parent_id && Kohana::auto_load("{$this->slug}_Controller")) {
             $v->add_error('slug', 'reserved');
             return;
         }
@@ -1005,12 +1005,12 @@ class Item_Model_Core extends ORM_MPTT
      */
     public function valid_name(Validation $v, $field)
     {
-        if (strpos($this->name, '/') !== false) {
+        if (false !== strpos($this->name, '/')) {
             $v->add_error('name', 'no_slashes');
             return;
         }
 
-        if (strpos($this->name, "\\") !== false) {
+        if (false !== strpos($this->name, "\\")) {
             $v->add_error('name', 'no_backslashes');
             return;
         }
@@ -1077,7 +1077,7 @@ class Item_Model_Core extends ORM_MPTT
     {
         if (!is_file($this->data_file)) {
             $v->add_error('name', 'bad_data_file_path');
-        } elseif (filesize($this->data_file) == 0) {
+        } elseif (0 == filesize($this->data_file)) {
             $v->add_error('name', 'empty_data_file');
         } elseif ($this->data_file_error) {
             $v->add_error('name', 'invalid_data_file');
@@ -1089,8 +1089,8 @@ class Item_Model_Core extends ORM_MPTT
      */
     public function valid_parent(Validation $v, $field)
     {
-        if ($this->id == 1) {
-            if ($this->parent_id != 0) {
+        if (1 == $this->id) {
+            if (0 != $this->parent_id) {
                 $v->add_error('parent_id', 'invalid');
             }
         } else {
@@ -1107,7 +1107,7 @@ class Item_Model_Core extends ORM_MPTT
           ->close();
             }
 
-            if ($query->count_records() != 1) {
+            if (1 != $query->count_records()) {
                 $v->add_error('parent_id', 'invalid');
             }
         }
@@ -1118,16 +1118,16 @@ class Item_Model_Core extends ORM_MPTT
      */
     public function valid_album_cover(Validation $v, $field)
     {
-        if ($this->id == 1) {
+        if (1 == $this->id) {
             return;
         }
 
         if ($this->album_cover_item_id && ($this->is_photo() || $this->is_movie() ||
-        db::build()
-        ->from('items')
-        ->where('id', '=', $this->album_cover_item_id)
-        ->where('type', '<>', 'album')
-        ->count_records() != 1)) {
+                                           1 != db::build()
+                                                                                     ->from('items')
+                                                                                     ->where('id', '=', $this->album_cover_item_id)
+                                                                                     ->where('type', '<>', 'album')
+                                                                                     ->count_records())) {
             $v->add_error('album_cover_item_id', 'invalid_item');
         }
     }

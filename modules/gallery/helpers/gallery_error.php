@@ -21,7 +21,7 @@ class gallery_error_Core
 {
     public static function error_handler($severity, $message, $filename, $lineno)
     {
-        if (error_reporting() == 0) {
+        if (0 == error_reporting()) {
             return;
         }
 

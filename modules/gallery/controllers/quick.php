@@ -47,7 +47,7 @@ class Quick_Controller extends Controller
             $item->save();
         }
 
-        if (Input::instance()->get('page_type') == 'collection') {
+        if ('collection' == Input::instance()->get('page_type')) {
             json::reply(
                 [
             'src'    => $item->thumb_url(),
@@ -136,7 +136,7 @@ class Quick_Controller extends Controller
         message::success($msg);
 
         $from_id = Input::instance()->get('from_id');
-        if (Input::instance()->get('page_type') == 'collection'
+        if ('collection' == Input::instance()->get('page_type')
             &&
         $from_id != $id /* deleted the item we were viewing */) {
             json::reply(['result' => 'success', 'reload' => 1]);

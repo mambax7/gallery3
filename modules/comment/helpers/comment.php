@@ -69,6 +69,6 @@ class comment_Core
     public static function can_comment()
     {
         return !identity::active_user()->guest ||
-               module::get_var('comment', 'access_permissions') == 'everybody';
+               'everybody' == module::get_var('comment', 'access_permissions');
     }
 }

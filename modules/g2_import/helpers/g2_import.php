@@ -34,7 +34,7 @@ class g2_import_Core
 
     public static function is_initialized()
     {
-        return g2_import::$init == 'ok';
+        return 'ok' == g2_import::$init;
     }
 
     public static function init()
@@ -462,7 +462,7 @@ class g2_import_Core
                 $user->hashed_password = $g2_user->getHashedPassword();
             }
             $messages[] = t("Created user: '%name'.", ['name' => $user->name]);
-            if ($email == 'unknown@unknown.com') {
+            if ('unknown@unknown.com' == $email) {
                 $messages[] = t(
                     "Fixed invalid email (was '%invalid_email')",
                     ['invalid_email' => $g2_user->getEmail()]
@@ -527,7 +527,7 @@ class g2_import_Core
       );
         }
 
-        if ($g2_album->getParentId() == null) {
+        if (null == $g2_album->getParentId()) {
             $album = item::root();
         } else {
             $parent_album = ORM::factory('item', self::map($g2_album->getParentId()));
@@ -912,7 +912,8 @@ class g2_import_Core
     private static function _import_permissions($g2_album, $g3_album)
     {
         // No need to do anything if this album has the same G2 ACL as its parent.
-        if ($g2_album->getParentId() != null &&
+        if (null != $g2_album->getParentId()
+            &&
         g2(GalleryCoreApi::fetchAccessListId($g2_album->getId())) ==
         g2(GalleryCoreApi::fetchAccessListId($g2_album->getParentId()))) {
             return;
@@ -920,7 +921,7 @@ class g2_import_Core
 
         $granted_permissions = self::_map_permissions($g2_album->getId());
 
-        if ($g2_album->getParentId() == null) {
+        if (null == $g2_album->getParentId()) {
             // Compare to current permissions, and change them if necessary.
             $g3_parent_album = item::root();
         } else {
@@ -992,7 +993,7 @@ class g2_import_Core
                 continue;
             }
             $group_id = self::map($entry['groupId']);
-            if ($group_id == null) {
+            if (null == $group_id) {
                 // E.g. the G2 admin group isn't mapped.
                 continue;
             }
@@ -1169,9 +1170,10 @@ class g2_import_Core
                     continue;
                 }
 
-                if ($derivative->getDerivativeType() == DERIVATIVE_TYPE_IMAGE_THUMBNAIL &&
-            $item->thumb_dirty &&
-            ($derivative->getWidth() == $target_thumb_size ||
+                if (DERIVATIVE_TYPE_IMAGE_THUMBNAIL == $derivative->getDerivativeType()
+                    &&
+                    $item->thumb_dirty &&
+                    ($derivative->getWidth() == $target_thumb_size ||
              $derivative->getHeight() == $target_thumb_size)) {
                     if (@copy(g2($derivative->fetchPath()), $item->thumb_path())) {
                         $item->thumb_height = $derivative->getHeight();
@@ -1180,9 +1182,10 @@ class g2_import_Core
                     }
                 }
 
-                if ($derivative->getDerivativeType() == DERIVATIVE_TYPE_IMAGE_RESIZE &&
-            $item->resize_dirty &&
-            ($derivative->getWidth() == $target_resize_size ||
+                if (DERIVATIVE_TYPE_IMAGE_RESIZE == $derivative->getDerivativeType()
+                    &&
+                    $item->resize_dirty &&
+                    ($derivative->getWidth() == $target_resize_size ||
              $derivative->getHeight() == $target_resize_size)) {
                     if (@copy(g2($derivative->fetchPath()), $item->resize_path())) {
                         $item->resize_height = $derivative->getHeight();
@@ -1274,7 +1277,7 @@ class g2_import_Core
         $g2_description = $g2_item->getDescription();
         if (!$g2_summary ||
         $g2_summary == $g2_description ||
-        strstr($g2_description, $g2_summary) !== false) {
+            false !== strstr($g2_description, $g2_summary)) {
             $description = $g2_description;
         } else {
             $description = $g2_summary . ' ' . $g2_description;
@@ -1299,7 +1302,7 @@ class g2_import_Core
     ];
     private static function _transform_bbcode($text)
     {
-        if (strpos($text, '[') !== false) {
+        if (false !== strpos($text, '[')) {
             $text = preg_replace(
           array_keys(self::$bbcode_mappings),
           array_values(self::$bbcode_mappings),
@@ -1435,7 +1438,7 @@ class g2_import_Core
         $g2_map->g2_id = $g2_id;
         $g2_map->resource_type = $resource_type;
 
-        if (strpos($g2_url, self::$g2_base_url) === 0) {
+        if (0 === strpos($g2_url, self::$g2_base_url)) {
             $g2_url = substr($g2_url, strlen(self::$g2_base_url));
         }
 
@@ -1508,7 +1511,7 @@ function g2()
         Kohana_Log::add('error', 'Gallery 2 call failed with: ' . $ret->getAsText());
         throw new Exception('@todo G2_FUNCTION_FAILED');
     }
-    if (count($args) == 1) {
+    if (1 == count($args)) {
         return $args[0];
     } else {
         return $args;

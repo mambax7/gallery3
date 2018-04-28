@@ -74,7 +74,7 @@ abstract class Config_Driver
      */
     public function __construct($config)
     {
-        if (($cache_setting = $config['internal_cache']) !== false) {
+        if (false !== ($cache_setting = $config['internal_cache'])) {
             $this->cache_lifetime = $cache_setting;
             // Restore the cached configuration
             $this->config = $this->load_cache();
@@ -113,12 +113,12 @@ abstract class Config_Driver
         // Get the value of the key string
         $value = Kohana::key_string($this->config, $key);
 
-        if ($slash === true and is_string($value) and $value !== '') {
+        if (true === $slash and is_string($value) and '' !== $value) {
             // Force the value to end with "/"
             $value = rtrim($value, '/').'/';
         }
 
-        if (($required === true) and ($value === null)) {
+        if ((true === $required) and (null === $value)) {
             throw new Kohana_Config_Exception('Value not found in config driver');
         }
 
@@ -139,7 +139,7 @@ abstract class Config_Driver
         // Do this to make sure that the config array is already loaded
         $this->get($key);
 
-        if (substr($key, 0, 7) === 'routes.') {
+        if ('routes.' === substr($key, 0, 7)) {
             // Routes cannot contain sub keys due to possible dots in regex
             $keys = explode('.', $key, 2);
         } else {
@@ -159,7 +159,7 @@ abstract class Config_Driver
             }
         }
 
-        if (substr($key, 0, 12) === 'core.modules') {
+        if ('core.modules' === substr($key, 0, 12)) {
             // Reprocess the include paths
             Kohana::include_paths(true);
         }
@@ -194,7 +194,7 @@ abstract class Config_Driver
      */
     public function setting_exists($key)
     {
-        return $this->get($key) === null;
+        return null === $this->get($key);
     }
 
     /**
@@ -220,7 +220,7 @@ abstract class Config_Driver
         $cached_config = Kohana::cache($this->cache_name, $this->cache_lifetime);
 
         // If the configuration wasn't loaded from the cache
-        if ($cached_config === null) {
+        if (null === $cached_config) {
             $cached_config = [];
         }
 
@@ -237,7 +237,7 @@ abstract class Config_Driver
     public function save_cache()
     {
         // If this configuration has changed
-        if ($this->get('core.internal_cache') !== false and $this->changed) {
+        if (false !== $this->get('core.internal_cache') and $this->changed) {
             $data = $this->config;
 
             // Save the cache

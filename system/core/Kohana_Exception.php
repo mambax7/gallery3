@@ -120,7 +120,7 @@ class Kohana_Exception_Core extends Exception
             // Manually save logs after exceptions
             Kohana_Log::save();
 
-            if (Kohana::config('kohana/core.display_errors') === false) {
+            if (false === Kohana::config('kohana/core.display_errors')) {
                 // Do not show the details
                 $file = $line = null;
                 $trace = [];
@@ -183,7 +183,7 @@ class Kohana_Exception_Core extends Exception
             echo Kohana_Exception::text($e), "\n";
         }
 
-        if (Kohana::$server_api === 'cli') {
+        if ('cli' === Kohana::$server_api) {
             // Exit with an error status
             exit(1);
         }
@@ -237,14 +237,14 @@ class Kohana_Exception_Core extends Exception
      */
     private static function _dump(& $var, $length = 128, $max_level = 5, $level = 0)
     {
-        if ($var === null) {
+        if (null === $var) {
             return '<small>NULL</small>';
         } elseif (is_bool($var)) {
             return '<small>bool</small> '.($var ? 'TRUE' : 'FALSE');
         } elseif (is_float($var)) {
             return '<small>float</small> '.$var;
         } elseif (is_resource($var)) {
-            if (($type = get_resource_type($var)) === 'stream' and $meta = stream_get_meta_data($var)) {
+            if ('stream' === ($type = get_resource_type($var)) and $meta = stream_get_meta_data($var)) {
                 $meta = stream_get_meta_data($var);
 
                 if (isset($meta['uri'])) {
@@ -280,7 +280,7 @@ class Kohana_Exception_Core extends Exception
 
             static $marker;
 
-            if ($marker === null) {
+            if (null === $marker) {
                 // Make a unique marker
                 $marker = uniqid("\x00");
             }
@@ -335,9 +335,9 @@ class Kohana_Exception_Core extends Exception
 
                 $objects[$hash] = true;
                 foreach ($array as $key => & $val) {
-                    if ($key[0] === "\x00") {
+                    if ("\x00" === $key[0]) {
                         // Determine if the access is private or protected
-                        $access = '<small>'.($key[1] === '*' ? 'protected' : 'private').'</small>';
+                        $access = '<small>'.('*' === $key[1] ? 'protected' : 'private') . '</small>';
 
                         // Remove the access level from the variable name
                         $key = substr($key, strrpos($key, "\x00") + 1);
@@ -373,13 +373,13 @@ class Kohana_Exception_Core extends Exception
         // Normalize directory separator
         $file = str_replace('\\', '/', $file);
 
-        if (strpos($file, APPPATH) === 0) {
+        if (0 === strpos($file, APPPATH)) {
             $file = 'APPPATH/'.substr($file, strlen(APPPATH));
-        } elseif (strpos($file, SYSPATH) === 0) {
+        } elseif (0 === strpos($file, SYSPATH)) {
             $file = 'SYSPATH/'.substr($file, strlen(SYSPATH));
-        } elseif (strpos($file, MODPATH) === 0) {
+        } elseif (0 === strpos($file, MODPATH)) {
             $file = 'MODPATH/'.substr($file, strlen(MODPATH));
-        } elseif (strpos($file, DOCROOT) === 0) {
+        } elseif (0 === strpos($file, DOCROOT)) {
             $file = 'DOCROOT/'.substr($file, strlen(DOCROOT));
         }
 
@@ -415,7 +415,7 @@ class Kohana_Exception_Core extends Exception
         $format = '% '.strlen($range['end']).'d';
 
         $source = [];
-        while (($row = fgets($file)) !== false) {
+        while (false !== ($row = fgets($file))) {
             // Increment the line number
             if (++$line > $range['end']) {
                 break;
@@ -440,7 +440,7 @@ class Kohana_Exception_Core extends Exception
      */
     public static function trace($trace = null)
     {
-        if ($trace === null) {
+        if (null === $trace) {
             // Start a new trace
             $trace = debug_backtrace();
         }
@@ -480,7 +480,7 @@ class Kohana_Exception_Core extends Exception
                     $args = [$step['args'][0]];
                 }
             } elseif (isset($step['args'])) {
-                if ($step['function'] === '{closure}') {
+                if ('{closure}' === $step['function']) {
                     // Introspection on closures in a stack trace is impossible
                     $params = null;
                 } else {

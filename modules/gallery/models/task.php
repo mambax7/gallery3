@@ -85,7 +85,7 @@ class Task_Model_Core extends ORM
     public function get_log()
     {
         $log_data = Cache::instance()->get($this->_cache_key());
-        return  $log_data !== null ? $log_data : false;
+        return null !== $log_data ? $log_data : false;
     }
 
     /**

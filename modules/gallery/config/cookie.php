@@ -39,7 +39,7 @@ $config['expire'] = 0;
 /**
  * Set the secure bit on the cookie if we're using HTTPS.
  */
-$config['secure'] = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on';
+$config['secure'] = !empty($_SERVER['HTTPS']) && 'on' === $_SERVER['HTTPS'];
 
 /**
  * Enable this option to disable the cookie from being accessed when using a

@@ -43,7 +43,7 @@ class Cache_Database_Driver extends Cache_Driver
         }
 
         // Cache Database driver expects unix timestamp
-        if ($lifetime !== 0) {
+        if (0 !== $lifetime) {
             $lifetime += time();
         }
 
@@ -111,7 +111,7 @@ class Cache_Database_Driver extends Cache_Driver
         if (count($result) > 0) {
             $cache = $result->current();
             // Make sure the expiration is valid and that the hash matches
-            if ($cache->expiration != 0 && $cache->expiration <= time()) {
+            if (0 != $cache->expiration && $cache->expiration <= time()) {
                 // Cache is not valid, delete it now
                 $this->delete([$cache->id]);
             } else {
@@ -140,9 +140,9 @@ class Cache_Database_Driver extends Cache_Driver
     {
         $db = db::build()
       ->delete('caches');
-        if ($keys === true) {
+        if (true === $keys) {
             // Delete all caches
-        } elseif ($is_tag === true) {
+        } elseif (true === $is_tag) {
             foreach ($keys as $tag) {
                 $db->where('tags', 'LIKE', '%' . Database::escape_for_like("<$tag>") . '%');
             }

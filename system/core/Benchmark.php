@@ -21,7 +21,7 @@ final class Benchmark
      */
     public static function start($name)
     {
-        if (isset(self::$marks[$name]) and self::$marks[$name][0]['stop'] === false) {
+        if (isset(self::$marks[$name]) and false === self::$marks[$name][0]['stop']) {
             throw new Kohana_Exception('A benchmark named :name is already running.', [':name' => $name]);
         }
 
@@ -47,7 +47,7 @@ final class Benchmark
      */
     public static function stop($name)
     {
-        if (isset(self::$marks[$name]) and self::$marks[$name][0]['stop'] === false) {
+        if (isset(self::$marks[$name]) and false === self::$marks[$name][0]['stop']) {
             self::$marks[$name][0]['stop'] = microtime(true);
             self::$marks[$name][0]['memory_stop'] = self::memory_usage();
         }
@@ -62,7 +62,7 @@ final class Benchmark
      */
     public static function get($name, $decimals = 4)
     {
-        if ($name === true) {
+        if (true === $name) {
             $times = [];
             $names = array_keys(self::$marks);
 
@@ -79,7 +79,7 @@ final class Benchmark
             return false;
         }
 
-        if (self::$marks[$name][0]['stop'] === false) {
+        if (false === self::$marks[$name][0]['stop']) {
             // Stop the benchmark to prevent mis-matched results
             self::stop($name);
         }
@@ -109,7 +109,7 @@ final class Benchmark
     {
         static $func;
 
-        if ($func === null) {
+        if (null === $func) {
             // Test if memory usage can be seen
             $func = function_exists('memory_get_usage');
         }

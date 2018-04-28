@@ -8,7 +8,7 @@ if ($e instanceof ORM_Validation_Exception) {
     Kohana_Log::add('error', 'Validation errors: ' . print_r($e->validation->errors(), 1));
 }
 
-if (php_sapi_name() == 'cli') {
+if ('cli' == php_sapi_name()) {
     include Kohana::find_file('views', 'error_cli.txt');
     return;
 }
@@ -25,7 +25,7 @@ try {
 
 // Try to show a themed error page for 404 errors
 if ($e instanceof Kohana_404_Exception) {
-    if (Router::$controller == 'file_proxy') {
+    if ('file_proxy' == Router::$controller) {
         print 'File not found';
     } else {
         $view = new Theme_View('page.html', 'other', 'error');

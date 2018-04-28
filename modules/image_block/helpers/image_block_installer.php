@@ -27,7 +27,7 @@ class image_block_installer
     public static function upgrade($version)
     {
         $db = Database::instance();
-        if ($version == 1) {
+        if (1 == $version) {
             module::set_var('image_block', 'image_count', '1');
             module::set_version('image_block', $version = 2);
         }
@@ -35,8 +35,8 @@ class image_block_installer
         // Oops, there was a bug in the installer for version 2 resulting
         // in some folks not getting the image_count variable set.  Bump
         // to version 3 and fix it.
-        if ($version == 2) {
-            if (module::get_var('image_block', 'image_count', 0) === 0) {
+        if (2 == $version) {
+            if (0 === module::get_var('image_block', 'image_count', 0)) {
                 module::set_var('image_block', 'image_count', '1');
             }
             module::set_version('image_block', $version = 3);

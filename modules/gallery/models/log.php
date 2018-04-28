@@ -24,7 +24,7 @@ class Log_Model_Core extends ORM
      */
     public function __get($column)
     {
-        if ($column == 'user') {
+        if ('user' == $column) {
             // This relationship depends on an outside module, which may not be present so handle
             // failures gracefully.
             try {

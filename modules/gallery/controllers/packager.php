@@ -144,7 +144,7 @@ class Packager_Controller extends Controller
             $line = preg_replace("/,$root_updated_timestamp,/", ',UNIX_TIMESTAMP(),', $line);
 
             // Remove ENGINE= specifications execpt for search records, it always needs to be MyISAM
-            if ($table_name != 'search_records') {
+            if ('search_records' != $table_name) {
                 $line = preg_replace("/ENGINE=\S+ /", '', $line);
             }
 
@@ -179,9 +179,9 @@ class Packager_Controller extends Controller
         foreach ($objects as $name => $file) {
             $path = $file->getPath();
             $basename = $file->getBasename();
-            if ($basename == 'database.php' || $basename == '.' || $basename == '..') {
+            if ('database.php' == $basename || '.' == $basename || '..' == $basename) {
                 continue;
-            } elseif (basename($path) == 'logs' && $basename != '.htaccess') {
+            } elseif ('logs' == basename($path) && '.htaccess' != $basename) {
                 continue;
             }
 

@@ -40,7 +40,7 @@ class module_Core
         $module = module::get($module_name);
         if (!$module->loaded()) {
             $module->name = $module_name;
-            $module->active = $module_name == 'gallery';  // only gallery is active by default
+            $module->active = 'gallery' == $module_name;  // only gallery is active by default
         }
         $module->version = $version;
         $module->save();
@@ -231,7 +231,7 @@ class module_Core
     {
         $config = Kohana_Config::instance();
         $kohana_modules = $config->get('core.modules');
-        if (($key = array_search(MODPATH . $module_name, $kohana_modules)) !== false) {
+        if (false !== ($key = array_search(MODPATH . $module_name, $kohana_modules))) {
             unset($kohana_modules[$key]);
             $kohana_modules = array_values($kohana_modules); // reindex
         }
@@ -413,7 +413,7 @@ class module_Core
                 continue;
             }
 
-            if ($module->name == 'gallery') {
+            if ('gallery' == $module->name) {
                 $gallery = $module;
             } else {
                 self::$active[] = $module;
@@ -462,7 +462,7 @@ class module_Core
         }
 
         foreach (self::$active as $module) {
-            if ($module->name == 'gallery') {
+            if ('gallery' == $module->name) {
                 continue;
             }
             $class = "{$module->name}_event";

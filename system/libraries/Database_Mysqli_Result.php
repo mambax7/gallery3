@@ -19,7 +19,7 @@ class Database_Mysqli_Result_Core extends Database_Result
 
             $this->total_rows = $result->num_rows;
         } elseif (is_bool($result)) {
-            if ($result == false) {
+            if (false == $result) {
                 throw new Database_Exception(
                     '#:errno: :error [ :query ]',
                     [
@@ -82,7 +82,7 @@ class Database_Mysqli_Result_Core extends Database_Result
     public function as_object($class = null, $return = false)
     {
         // Return objects of type $class (or stdClass if none given)
-        $this->return_objects = ($class !== null) ? $class : true;
+        $this->return_objects = (null !== $class) ? $class : true;
 
         if (! $return) {
             // Return this result object

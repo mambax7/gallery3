@@ -23,8 +23,8 @@
           type="image/x-icon" />
     <link rel="apple-touch-icon-precomposed"
           href="<?= url::file(module::get_var('gallery', 'apple_touch_icon_url')) ?>" />
-    <?php if ($theme->page_type == 'collection'): ?>
-    <?php if (($thumb_proportion = $theme->thumb_proportion($theme->item())) != 1): ?>
+    <?php if ('collection' == $theme->page_type): ?>
+    <?php if (1 != ($thumb_proportion = $theme->thumb_proportion($theme->item()))): ?>
         <?php $new_width = round($thumb_proportion * 213) ?>
         <?php $new_height = round($thumb_proportion * 240) ?>
         <style type="text/css">
@@ -52,10 +52,10 @@
     <?= $theme->script('jquery.localscroll.js') ?>
 
     <?php /* These are page specific but they get combined */ ?>
-    <?php if ($theme->page_subtype == 'photo'): ?>
+    <?php if ('photo' == $theme->page_subtype): ?>
     <?= $theme->script('jquery.scrollTo.js') ?>
     <?= $theme->script('gallery.show_full_size.js') ?>
-    <?php elseif ($theme->page_subtype == 'movie'): ?>
+    <?php elseif ('movie' == $theme->page_subtype): ?>
     <?= $theme->script('flowplayer.js') ?>
     <?php endif ?>
 

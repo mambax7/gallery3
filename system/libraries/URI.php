@@ -21,7 +21,7 @@ class URI_Core extends Router
     {
         static $instance;
 
-        if ($instance == null) {
+        if (null == $instance) {
             // Initialize the URI instance
             $instance = new URI;
         }
@@ -39,7 +39,7 @@ class URI_Core extends Router
     public function segment($index = 1, $default = false)
     {
         if (is_string($index)) {
-            if (($key = array_search($index, URI::$segments)) === false) {
+            if (false === ($key = array_search($index, URI::$segments))) {
                 return $default;
             }
 
@@ -61,7 +61,7 @@ class URI_Core extends Router
     public function rsegment($index = 1, $default = false)
     {
         if (is_string($index)) {
-            if (($key = array_search($index, URI::$rsegments)) === false) {
+            if (false === ($key = array_search($index, URI::$rsegments))) {
                 return $default;
             }
 
@@ -84,7 +84,7 @@ class URI_Core extends Router
     public function argument($index = 1, $default = false)
     {
         if (is_string($index)) {
-            if (($key = array_search($index, URI::$arguments)) === false) {
+            if (false === ($key = array_search($index, URI::$arguments))) {
                 return $default;
             }
 
@@ -149,7 +149,7 @@ class URI_Core extends Router
         // Slice the array, preserving the keys
         $array = array_slice($array, $offset + 1, count($array) - 1, true);
 
-        if ($associative === false) {
+        if (false === $associative) {
             return $array;
         }
 

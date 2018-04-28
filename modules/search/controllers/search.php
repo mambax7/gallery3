@@ -38,7 +38,7 @@ class Search_Controller extends Controller
             if ($index) {
                 $page = ceil($index / $page_size);
                 url::redirect(url::abs_site('search' . '?q=' . urlencode($q) . '&album=' . urlencode($album->id) .
-                                            ($page == 1 ? '' : "&page=$page")));
+                                            (1 == $page ? '' : "&page=$page")));
             }
         }
 

@@ -67,251 +67,251 @@ function lookup_Panasonic_tag($tag)
 //====================================================================
 function formatPanasonicData($type, $tag, $intel, $data)
 {
-    if ($type == 'ASCII') {
-    } elseif ($type == 'UBYTE' || $type == 'SBYTE') {
+    if ('ASCII' == $type) {
+    } elseif ('UBYTE' == $type || 'SBYTE' == $type) {
         $data = bin2hex($data);
-        if ($intel==1) {
+        if (1 == $intel) {
             $data = intel2Moto($data);
         }
         $data=hexdec($data);
 
-        if ($tag == '000f') { //AFMode
-            if ($data == 256) {
+        if ('000f' == $tag) { //AFMode
+            if (256 == $data) {
                 $data = '9-area-focusing';
-            } elseif ($data == 16) {
+            } elseif (16 == $data) {
                 $data = '1-area-focusing';
-            } elseif ($data == 4096) {
+            } elseif (4096 == $data) {
                 $data = (string) t('3-area-focusing (High speed)');
-            } elseif ($data == 4112) {
+            } elseif (4112 == $data) {
                 $data = (string) t('1-area-focusing (High speed)');
-            } elseif ($data == 16) {
+            } elseif (16 == $data) {
                 $data = (string) t('1-area-focusing');
-            } elseif ($data == 1) {
+            } elseif (1 == $data) {
                 $data = (string) t('Spot-focusing');
             } else {
                 $data = 'Unknown (' . $data . ')';
             }
         }
-    } elseif ($type == 'URATIONAL' || $type == 'SRATIONAL') {
+    } elseif ('URATIONAL' == $type || 'SRATIONAL' == $type) {
         $data = unRational($data, $type, $intel);
-    } elseif ($type == 'USHORT' || $type == 'SSHORT' || $type == 'ULONG' || $type == 'SLONG' || $type == 'FLOAT' || $type == 'DOUBLE') {
+    } elseif ('USHORT' == $type || 'SSHORT' == $type || 'ULONG' == $type || 'SLONG' == $type || 'FLOAT' == $type || 'DOUBLE' == $type) {
         $data = rational($data, $type, $intel);
         
-        if ($tag == '0001') { //Image Quality
-            if ($data == 2) {
+        if ('0001' == $tag) { //Image Quality
+            if (2 == $data) {
                 $data = (string) t('High');
-            } elseif ($data == 3) {
+            } elseif (3 == $data) {
                 $data = (string) t('Standard');
-            } elseif ($data == 6) {
+            } elseif (6 == $data) {
                 $data = (string) t('Very High');
-            } elseif ($data == 7) {
+            } elseif (7 == $data) {
                 $data = (string) t('RAW');
             } else {
                 $data = (string) t('Unknown') . ' (' . $data . ')';
             }
         }
-        if ($tag == '0003') { //White Balance
-            if ($data == 1) {
+        if ('0003' == $tag) { //White Balance
+            if (1 == $data) {
                 $data = (string) t('Auto');
-            } elseif ($data == 2) {
+            } elseif (2 == $data) {
                 $data = (string) t('Daylight');
-            } elseif ($data == 3) {
+            } elseif (3 == $data) {
                 $data = (string) t('Cloudy');
-            } elseif ($data == 4) {
+            } elseif (4 == $data) {
                 $data = (string) t('Halogen');
-            } elseif ($data == 5) {
+            } elseif (5 == $data) {
                 $data = (string) t('Manual');
-            } elseif ($data == 8) {
+            } elseif (8 == $data) {
                 $data = (string) t('Flash');
-            } elseif ($data == 10) {
+            } elseif (10 == $data) {
                 $data = (string) t('Black and White');
-            } elseif ($data == 11) {
+            } elseif (11 == $data) {
                 $data = (string) t('Manual');
             } else {
                 $data = (string) t('Unknown') . ' (' . $data . ')';
             }
         }
-        if ($tag == '0007') { //Focus Mode
-            if ($data == 1) {
+        if ('0007' == $tag) { //Focus Mode
+            if (1 == $data) {
                 $data = (string) t('Auto');
-            } elseif ($data == 2) {
+            } elseif (2 == $data) {
                 $data = (string) t('Manual');
-            } elseif ($data == 4) {
+            } elseif (4 == $data) {
                 $data = (string) t('Auto, Focus button');
-            } elseif ($data == 5) {
+            } elseif (5 == $data) {
                 $data = (string) t('Auto, Continuous');
             } else {
                 $data = (string) t('Unknown') . ' (' . $data . ')';
             }
         }
-        if ($tag == '001a') { //Image Stabilizer
-            if ($data == 2) {
+        if ('001a' == $tag) { //Image Stabilizer
+            if (2 == $data) {
                 $data = (string) t('Mode 1');
-            } elseif ($data == 3) {
+            } elseif (3 == $data) {
                 $data = (string) t('Off');
-            } elseif ($data == 4) {
+            } elseif (4 == $data) {
                 $data = (string) t('Mode 2');
             } else {
                 $data = (string) t('Unknown') . ' (' . $data . ')';
             }
         }
-        if ($tag == '001c') { //Macro mode
-            if ($data == 1) {
+        if ('001c' == $tag) { //Macro mode
+            if (1 == $data) {
                 $data = (string) t('On');
-            } elseif ($data == 2) {
+            } elseif (2 == $data) {
                 $data = (string) t('Off');
             } else {
                 $data = (string) t('Unknown') . ' (' . $data . ')';
             }
         }
-        if ($tag == '001f') { //Shooting Mode
-            if ($data == 1) {
+        if ('001f' == $tag) { //Shooting Mode
+            if (1 == $data) {
                 $data = (string) t('Normal');
-            } elseif ($data == 2) {
+            } elseif (2 == $data) {
                 $data = (string) t('Portrait');
-            } elseif ($data == 3) {
+            } elseif (3 == $data) {
                 $data = (string) t('Scenery');
-            } elseif ($data == 4) {
+            } elseif (4 == $data) {
                 $data = (string) t('Sports');
-            } elseif ($data == 5) {
+            } elseif (5 == $data) {
                 $data = (string) t('Night Portrait');
-            } elseif ($data == 6) {
+            } elseif (6 == $data) {
                 $data = (string) t('Program');
-            } elseif ($data == 7) {
+            } elseif (7 == $data) {
                 $data = (string) t('Aperture Priority');
-            } elseif ($data == 8) {
+            } elseif (8 == $data) {
                 $data = (string) t('Shutter Priority');
-            } elseif ($data == 9) {
+            } elseif (9 == $data) {
                 $data = (string) t('Macro');
-            } elseif ($data == 11) {
+            } elseif (11 == $data) {
                 $data = (string) t('Manual');
-            } elseif ($data == 13) {
+            } elseif (13 == $data) {
                 $data = (string) t('Panning');
-            } elseif ($data == 14) {
+            } elseif (14 == $data) {
                 $data = (string) t('Simple');
-            } elseif ($data == 18) {
+            } elseif (18 == $data) {
                 $data = (string) t('Fireworks');
-            } elseif ($data == 19) {
+            } elseif (19 == $data) {
                 $data = (string) t('Party');
-            } elseif ($data == 20) {
+            } elseif (20 == $data) {
                 $data = (string) t('Snow');
-            } elseif ($data == 21) {
+            } elseif (21 == $data) {
                 $data = (string) t('Night Scenery');
-            } elseif ($data == 22) {
+            } elseif (22 == $data) {
                 $data = (string) t('Food');
-            } elseif ($data == 23) {
+            } elseif (23 == $data) {
                 $data = (string) t('Baby');
-            } elseif ($data == 27) {
+            } elseif (27 == $data) {
                 $data = (string) t('High Sensitivity');
-            } elseif ($data == 29) {
+            } elseif (29 == $data) {
                 $data = (string) t('Underwater');
-            } elseif ($data == 33) {
+            } elseif (33 == $data) {
                 $data = (string) t('Pet');
             } else {
                 $data = (string) t('Unknown') . ' (' . $data . ')';
             }
         }
-        if ($tag == '0020') { //Audio
-            if ($data == 1) {
+        if ('0020' == $tag) { //Audio
+            if (1 == $data) {
                 $data = (string) t('Yes');
-            } elseif ($data == 2) {
+            } elseif (2 == $data) {
                 $data = (string) t('No');
             } else {
                 $data = (string) t('Unknown') . ' (' . $data . ')';
             }
         }
-        if ($tag == '0023') { //White Balance Bias
+        if ('0023' == $tag) { //White Balance Bias
             $data= $data . ' EV';
         }
-        if ($tag == '0024') { //Flash Bias
+        if ('0024' == $tag) { //Flash Bias
             $data = $data;
         }
-        if ($tag == '0028') { //Colour Effect
-            if ($data == 1) {
+        if ('0028' == $tag) { //Colour Effect
+            if (1 == $data) {
                 $data = (string) t('Off');
-            } elseif ($data == 2) {
+            } elseif (2 == $data) {
                 $data = (string) t('Warm');
-            } elseif ($data == 3) {
+            } elseif (3 == $data) {
                 $data = (string) t('Cool');
-            } elseif ($data == 4) {
+            } elseif (4 == $data) {
                 $data = (string) t('Black and White');
-            } elseif ($data == 5) {
+            } elseif (5 == $data) {
                 $data = (string) t('Sepia');
             } else {
                 $data = (string) t('Unknown') . ' (' . $data . ')';
             }
         }
-        if ($tag == '002a') { //Burst Mode
-            if ($data == 0) {
+        if ('002a' == $tag) { //Burst Mode
+            if (0 == $data) {
                 $data = (string) t('Off');
-            } elseif ($data == 1) {
+            } elseif (1 == $data) {
                 $data = (string) t('Low/High Quality');
-            } elseif ($data == 2) {
+            } elseif (2 == $data) {
                 $data = (string) t('Infinite');
             } else {
                 $data = (string) t('Unknown') . ' (' . $data . ')';
             }
         }
-        if ($tag == '002c') { //Contrast
-            if ($data == 0) {
+        if ('002c' == $tag) { //Contrast
+            if (0 == $data) {
                 $data = (string) t('Standard');
-            } elseif ($data == 1) {
+            } elseif (1 == $data) {
                 $data = (string) t('Low');
-            } elseif ($data == 2) {
+            } elseif (2 == $data) {
                 $data = (string) t('High');
             } else {
                 $data = (string) t('Unknown') . ' (' . $data . ')';
             }
         }
-        if ($tag == '002d') { //Noise Reduction
-            if ($data == 0) {
+        if ('002d' == $tag) { //Noise Reduction
+            if (0 == $data) {
                 $data = (string) t('Standard');
-            } elseif ($data == 1) {
+            } elseif (1 == $data) {
                 $data = (string) t('Low');
-            } elseif ($data == 2) {
+            } elseif (2 == $data) {
                 $data = (string) t('High');
             } else {
                 $data = (string) t('Unknown') . ' (' . $data . ')';
             }
         }
-        if ($tag == '002e') { //Self Timer
-            if ($data == 1) {
+        if ('002e' == $tag) { //Self Timer
+            if (1 == $data) {
                 $data = (string) t('Off');
-            } elseif ($data == 2) {
+            } elseif (2 == $data) {
                 $data = (string) t('10s');
-            } elseif ($data == 3) {
+            } elseif (3 == $data) {
                 $data = (string) t('2s');
             } else {
                 $data = (string) t('Unknown') . ' (' . $data . ')';
             }
         }
-        if ($tag == '0030') { //Rotation
-            if ($data == 1) {
+        if ('0030' == $tag) { //Rotation
+            if (1 == $data) {
                 $data = (string) t('Horizontal (normal)');
-            } elseif ($data == 6) {
+            } elseif (6 == $data) {
                 $data = (string) t('Rotate 90 CW');
-            } elseif ($data == 8) {
+            } elseif (8 == $data) {
                 $data = (string) t('Rotate 270 CW');
             } else {
                 $data = (string) t('Unknown') . ' (' . $data . ')';
             }
         }
-        if ($tag == '0032') { //Color Mode
-            if ($data == 0) {
+        if ('0032' == $tag) { //Color Mode
+            if (0 == $data) {
                 $data = (string) t('Normal');
-            } elseif ($data == 1) {
+            } elseif (1 == $data) {
                 $data = (string) t('Natural');
             } else {
                 $data = (string) t('Unknown') . ' (' . $data . ')';
             }
         }
-        if ($tag == '0036') { //Travel Day
+        if ('0036' == $tag) { //Travel Day
             $data=$data;
         }
-    } elseif ($type == 'UNDEFINED') {
+    } elseif ('UNDEFINED' == $type) {
     } else {
         $data = bin2hex($data);
-        if ($intel==1) {
+        if (1 == $intel) {
             $data = intel2Moto($data);
         }
     }
@@ -339,7 +339,7 @@ function parsePanasonic($block, &$result)
     
     $num = bin2hex(substr($block, $place, 4));
     $place+=4;
-    if ($intel==1) {
+    if (1 == $intel) {
         $num = intel2Moto($num);
     }
     $result['SubIFD']['MakerNote']['Offset'] = hexdec($num);
@@ -347,7 +347,7 @@ function parsePanasonic($block, &$result)
     //Get number of tags (2 bytes)
     $num = bin2hex(substr($block, $place, 2));
     $place+=2;
-    if ($intel==1) {
+    if (1 == $intel) {
         $num = intel2Moto($num);
     }
     $result['SubIFD']['MakerNote']['MakerNoteNumTags'] = hexdec($num);
@@ -358,7 +358,7 @@ function parsePanasonic($block, &$result)
         //2 byte tag
         $tag = bin2hex(substr($block, $place, 2));
         $place+=2;
-        if ($intel==1) {
+        if (1 == $intel) {
             $tag = intel2Moto($tag);
         }
         $tag_name = lookup_Panasonic_tag($tag);
@@ -366,7 +366,7 @@ function parsePanasonic($block, &$result)
         //2 byte type
         $type = bin2hex(substr($block, $place, 2));
         $place+=2;
-        if ($intel==1) {
+        if (1 == $intel) {
             $type = intel2Moto($type);
         }
         lookup_type($type, $size);
@@ -374,7 +374,7 @@ function parsePanasonic($block, &$result)
         //4 byte count of number of data units
         $count = bin2hex(substr($block, $place, 4));
         $place+=4;
-        if ($intel==1) {
+        if (1 == $intel) {
             $count = intel2Moto($count);
         }
         $bytesofdata = $size*hexdec($count);
@@ -388,18 +388,18 @@ function parsePanasonic($block, &$result)
             $data = $value;
         } else {
             $value = bin2hex($value);
-            if ($intel==1) {
+            if (1 == $intel) {
                 $value = intel2Moto($value);
             }
             $data = substr($block, hexdec($value)-$offset, $bytesofdata*2);
         }
         $formated_data = formatPanasonicData($type, $tag, $intel, $data);
         
-        if ($result['VerboseOutput']==1) {
+        if (1 == $result['VerboseOutput']) {
             $result['SubIFD']['MakerNote'][$tag_name] = $formated_data;
-            if ($type == 'URATIONAL' || $type == 'SRATIONAL' || $type == 'USHORT' || $type == 'SSHORT' || $type == 'ULONG' || $type == 'SLONG' || $type == 'FLOAT' || $type == 'DOUBLE') {
+            if ('URATIONAL' == $type || 'SRATIONAL' == $type || 'USHORT' == $type || 'SSHORT' == $type || 'ULONG' == $type || 'SLONG' == $type || 'FLOAT' == $type || 'DOUBLE' == $type) {
                 $data = bin2hex($data);
-                if ($intel==1) {
+                if (1 == $intel) {
                     $data = intel2Moto($data);
                 }
             }

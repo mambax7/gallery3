@@ -33,7 +33,7 @@ abstract class Template_Controller extends Controller
         // Load the template
         $this->template = new View($this->template);
 
-        if ($this->auto_render == true) {
+        if (true == $this->auto_render) {
             // Render the template immediately after the controller method
             Event::add('system.post_controller', [$this, '_render']);
         }
@@ -44,7 +44,7 @@ abstract class Template_Controller extends Controller
      */
     public function _render()
     {
-        if ($this->auto_render == true) {
+        if (true == $this->auto_render) {
             // Render the template when the class is destroyed
             $this->template->render(true);
         }

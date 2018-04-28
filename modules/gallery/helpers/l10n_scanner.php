@@ -64,9 +64,9 @@ class l10n_scanner_Core
         $token_number = 0;
         // Filter out HTML / whitespace, and build a lookup for global function calls.
         foreach ($raw_tokens as $token) {
-            if ((!is_array($token)) || (($token[0] != T_WHITESPACE) && ($token[0] != T_INLINE_HTML))) {
+            if ((!is_array($token)) || ((T_WHITESPACE != $token[0]) && (T_INLINE_HTML != $token[0]))) {
                 if (is_array($token)) {
-                    if ($token[0] == T_STRING && in_array($token[1], ['t', 't2'])) {
+                    if (T_STRING == $token[0] && in_array($token[1], ['t', 't2'])) {
                         $func_token_list[$token[1]][] = $token_number;
                     }
                 }
@@ -116,13 +116,13 @@ class l10n_scanner_Core
             $first_param = $tokens[$index++];
             $next_token = $tokens[$index];
 
-            if ($parens == '(') {
+            if ('(' == $parens) {
                 if (in_array($next_token, [')', ','])
-            && (is_array($first_param) && ($first_param[0] == T_CONSTANT_ENCAPSED_STRING))) {
+            && (is_array($first_param) && (T_CONSTANT_ENCAPSED_STRING == $first_param[0]))) {
                     $message = self::_escape_quoted_string($first_param[1]);
                     l10n_scanner::process_message($message, $cache);
                 } else {
-                    if (is_array($first_param) && ($first_param[0] == T_CONSTANT_ENCAPSED_STRING)) {
+                    if (is_array($first_param) && (T_CONSTANT_ENCAPSED_STRING == $first_param[0])) {
                         // Malformed string literals; escalate this
                         $errors[$first_param[2]] =
               var_export([$function_name, $parens, $first_param, $next_token], 1);
@@ -146,15 +146,15 @@ class l10n_scanner_Core
             $second_param = $tokens[$index++];
             $next_token = $tokens[$index];
 
-            if ($parens == '(') {
-                if ($first_separator == ',' && $next_token == ','
-            && is_array($first_param) && $first_param[0] == T_CONSTANT_ENCAPSED_STRING
-            && is_array($second_param) && $second_param[0] == T_CONSTANT_ENCAPSED_STRING) {
+            if ('(' == $parens) {
+                if (',' == $first_separator && ',' == $next_token
+                    && is_array($first_param) && T_CONSTANT_ENCAPSED_STRING == $first_param[0]
+                    && is_array($second_param) && T_CONSTANT_ENCAPSED_STRING == $second_param[0]) {
                     $singular = self::_escape_quoted_string($first_param[1]);
                     $plural = self::_escape_quoted_string($second_param[1]);
                     l10n_scanner::process_message(['one' => $singular, 'other' => $plural], $cache);
                 } else {
-                    if (is_array($first_param) && $first_param[0] == T_CONSTANT_ENCAPSED_STRING) {
+                    if (is_array($first_param) && T_CONSTANT_ENCAPSED_STRING == $first_param[0]) {
                         $errors[$first_param[2]] = var_export(
                             [
                                 $function_name, $parens, $first_param,
@@ -182,7 +182,7 @@ class l10n_scanner_Core
     {
         $quo = substr($str, 0, 1);
         $str = substr($str, 1, -1);
-        if ($quo == '"') {
+        if ('"' == $quo) {
             $str = stripcslashes($str);
         } else {
             $str = strtr($str, ["\\'" => "'", "\\\\" => "\\"]);

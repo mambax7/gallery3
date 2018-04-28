@@ -11,7 +11,7 @@
   <ul class="g-breadcrumbs">
     <?php $i = 0 ?>
     <?php foreach ($item->parents() as $parent): ?>
-    <li<?php if ($i == 0) {
+    <li<?php if (0 == $i) {
     print ' class="g-first"';
 } ?>> <?= html::purify($parent->title) ?> </li>
     <?php $i++ ?>

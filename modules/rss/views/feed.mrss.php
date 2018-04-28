@@ -31,7 +31,7 @@
         <![CDATA[
           <span><?= html::purify($item->description) ?></span>
           <p>
-          <?php if ($item->type == 'photo'): ?>
+          <?php if ('photo' == $item->type): ?>
             <img alt="" src="<?= $item->resize_url(true) ?>"
                  title="<?= html::purify($item->title)->for_html_attr() ?>"
                  height="<?= $item->resize_height ?>" width="<?= $item->resize_width ?>" /><br />
@@ -50,10 +50,10 @@
                        width="<?= $item->thumb_width ?>"
                        />
     <?php $view_full = access::can('view_full', $item); ?>
-    <?php if ($item->type == 'photo' && $view_full): ?>
+    <?php if ('photo' == $item->type && $view_full): ?>
       <media:group>
     <?php endif ?>
-      <?php if ($item->type == 'photo'): ?>
+      <?php if ('photo' == $item->type): ?>
         <media:content url="<?= $item->resize_url(true) ?>"
                        fileSize="<?= @filesize($item->resize_path()) ?>"
                        type="<?= $item->mime_type ?>"
@@ -70,7 +70,7 @@
                        isDefault="true"
                        />
       <?php endif ?>
-    <?php if ($item->type == 'photo' && $view_full): ?>
+    <?php if ('photo' == $item->type && $view_full): ?>
       </media:group>
     <?php endif ?>
     </item>

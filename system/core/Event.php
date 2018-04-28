@@ -56,7 +56,7 @@ abstract class Event_Core
      */
     public static function add_before($name, $existing, $callback)
     {
-        if (empty(Event::$events[$name]) or ($key = array_search($existing, Event::$events[$name])) === false) {
+        if (empty(Event::$events[$name]) or false === ($key = array_search($existing, Event::$events[$name]))) {
             // Just add the event if there are no events
             return Event::add($name, $callback);
         } else {
@@ -75,7 +75,7 @@ abstract class Event_Core
      */
     public static function add_after($name, $existing, $callback)
     {
-        if (empty(Event::$events[$name]) or ($key = array_search($existing, Event::$events[$name])) === false) {
+        if (empty(Event::$events[$name]) or false === ($key = array_search($existing, Event::$events[$name]))) {
             // Just add the event if there are no events
             return Event::add($name, $callback);
         } else {
@@ -121,7 +121,7 @@ abstract class Event_Core
      */
     public static function replace($name, $existing, $callback)
     {
-        if (empty(Event::$events[$name]) or ($key = array_search($existing, Event::$events[$name], true)) === false) {
+        if (empty(Event::$events[$name]) or false === ($key = array_search($existing, Event::$events[$name], true))) {
             return false;
         }
 
@@ -159,7 +159,7 @@ abstract class Event_Core
      */
     public static function clear($name, $callback = false)
     {
-        if ($callback === false) {
+        if (false === $callback) {
             Event::$events[$name] = [];
         } elseif (isset(Event::$events[$name])) {
             // Loop through each of the event callbacks and compare it to the

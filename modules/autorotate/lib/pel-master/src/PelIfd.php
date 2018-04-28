@@ -344,7 +344,7 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
                         if ($format != PelFormat::ASCII) {
                             throw new PelUnexpectedFormatException($this->type, $tag, $format, PelFormat::ASCII);
                         }
-                        if ($components != 20) {
+                        if (20 != $components) {
                             throw new PelWrongComponentCountException($this->type, $tag, $components, 20);
                         }
                         // TODO: handle timezones.
@@ -399,7 +399,7 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
                              * that characters in the Latin-1 character set are stored in
                              * a single byte followed by a NULL byte.
                              */
-                            if ($b != 0) {
+                            if (0 != $b) {
                                 $v .= chr($b);
                             }
                         }
@@ -544,7 +544,7 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
     {
         $size = $d->getSize();
         /* Now move backwards until we find the EOI JPEG marker. */
-        while ($d->getByte($size - 2) != 0xFF || $d->getByte($size - 1) != PelJpegMarker::EOI) {
+        while (0xFF != $d->getByte($size - 2) || $d->getByte($size - 1) != PelJpegMarker::EOI) {
             $size --;
         }
 
@@ -985,7 +985,7 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
      */
     public function getThumbnailData()
     {
-        if ($this->thumb_data !== null) {
+        if (null !== $this->thumb_data) {
             return $this->thumb_data->getBytes();
         } else {
             return '';
@@ -1022,7 +1022,7 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
      */
     public function isLastIfd()
     {
-        return $this->next === null;
+        return null === $this->next;
     }
 
     /**
@@ -1095,7 +1095,7 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
         Pel::debug('Bytes from IDF will start at offset %d within Exif data', $offset);
 
         $n = count($this->entries) + count($this->sub);
-        if ($this->thumb_data !== null) {
+        if (null !== $this->thumb_data) {
             /*
              * We need two extra entries for the thumbnail offset and
              * length.
@@ -1140,7 +1140,7 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
             }
         }
 
-        if ($this->thumb_data !== null) {
+        if (null !== $this->thumb_data) {
             Pel::debug('Appending %d bytes of thumbnail data at %d', $this->thumb_data->getSize(), $end);
             // TODO: make PelEntry a class that can be constructed with
             // arguments corresponding to the newt four lines.
@@ -1223,7 +1223,7 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
         foreach ($this->sub as $type => $ifd) {
             $str .= $ifd->__toString();
         }
-        if ($this->next !== null) {
+        if (null !== $this->next) {
             $str .= $this->next->__toString();
         }
         return $str;

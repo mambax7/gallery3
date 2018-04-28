@@ -21,9 +21,9 @@ class text_Core
     public static function limit_words($str, $limit = 100, $end_char = null)
     {
         $limit = (int) $limit;
-        $end_char = ($end_char === null) ? '…' : $end_char;
+        $end_char = (null === $end_char) ? '…' : $end_char;
 
-        if (trim($str) === '') {
+        if ('' === trim($str)) {
             return $str;
         }
 
@@ -49,11 +49,11 @@ class text_Core
      */
     public static function limit_chars($str, $limit = 100, $end_char = null, $preserve_words = false)
     {
-        $end_char = ($end_char === null) ? '…' : $end_char;
+        $end_char = (null === $end_char) ? '…' : $end_char;
 
         $limit = (int) $limit;
 
-        if (trim($str) === '' or mb_strlen($str) <= $limit) {
+        if ('' === trim($str) or mb_strlen($str) <= $limit) {
             return $str;
         }
 
@@ -61,7 +61,7 @@ class text_Core
             return $end_char;
         }
 
-        if ($preserve_words == false) {
+        if (false == $preserve_words) {
             return rtrim(mb_substr($str, 0, $limit)).$end_char;
         }
 
@@ -80,7 +80,7 @@ class text_Core
     {
         static $i;
 
-        if (func_num_args() === 0) {
+        if (0 === func_num_args()) {
             $i = 0;
             return '';
         }
@@ -133,7 +133,7 @@ class text_Core
         }
 
         // Split the pool into an array of characters
-        $pool = ($utf8 === true) ? utf8::str_split($pool, 1) : str_split($pool, 1);
+        $pool = (true === $utf8) ? utf8::str_split($pool, 1) : str_split($pool, 1);
 
         // Largest pool key
         $max = count($pool) - 1;
@@ -145,7 +145,7 @@ class text_Core
         }
 
         // Make sure alnum strings contain at least one letter and one digit
-        if ($type === 'alnum' and $length > 1) {
+        if ('alnum' === $type and $length > 1) {
             if (ctype_alpha($str)) {
                 // Add a random digit
                 $str[mt_rand(0, $length - 1)] = chr(mt_rand(48, 57));
@@ -186,14 +186,14 @@ class text_Core
 
         $regex = '('.implode('|', $badwords).')';
 
-        if ($replace_partial_words === false) {
+        if (false === $replace_partial_words) {
             // Just using \b isn't sufficient when we need to replace a badword that already contains word boundaries itself
             $regex = '(?<=\b|\s|^)'.$regex.'(?=\b|\s|$)';
         }
 
         $regex = '!'.$regex.'!ui';
 
-        if (mb_strlen($replacement) == 1) {
+        if (1 == mb_strlen($replacement)) {
             $regex .= 'e';
             return preg_replace($regex, 'str_repeat($replacement, mb_strlen(\'$1\'))', $str);
         }
@@ -346,7 +346,7 @@ class text_Core
     public static function auto_p($str, $br = true)
     {
         // Trim whitespace
-        if (($str = trim($str)) === '') {
+        if ('' === ($str = trim($str))) {
             return '';
         }
 
@@ -358,7 +358,7 @@ class text_Core
         $str = preg_replace('~[ \t]+$~m', '', $str);
 
         // The following regexes only need to be executed if the string contains html
-        if ($html_found = (strpos($str, '<') !== false)) {
+        if ($html_found = (false !== strpos($str, '<'))) {
             // Elements that should not be surrounded by p tags
             $no_p = '(?:p|div|h[1-6r]|ul|ol|li|blockquote|d[dlt]|pre|t[dhr]|t(?:able|body|foot|head)|c(?:aption|olgroup)|form|s(?:elect|tyle)|a(?:ddress|rea)|ma(?:p|th))';
 
@@ -372,14 +372,14 @@ class text_Core
         $str = preg_replace('~\n{2,}~', "</p>\n\n<p>", $str);
 
         // The following regexes only need to be executed if the string contains html
-        if ($html_found !== false) {
+        if (false !== $html_found) {
             // Remove p tags around $no_p elements
             $str = preg_replace('~<p>(?=</?'.$no_p.'[^>]*+>)~i', '', $str);
             $str = preg_replace('~(</?'.$no_p.'[^>]*+>)</p>~i', '$1', $str);
         }
 
         // Convert single linebreaks to <br />
-        if ($br === true) {
+        if (true === $br) {
             $str = preg_replace('~(?<!\n)\n(?!\n)~', "<br />\n", $str);
         }
 
@@ -401,10 +401,10 @@ class text_Core
     public static function bytes($bytes, $force_unit = null, $format = null, $si = true)
     {
         // Format string
-        $format = ($format === null) ? '%01.2f %s' : (string) $format;
+        $format = (null === $format) ? '%01.2f %s' : (string) $format;
 
         // IEC prefixes (binary)
-        if ($si == false or strpos($force_unit, 'i') !== false) {
+        if (false == $si or false !== strpos($force_unit, 'i')) {
             $units = [__('B'), __('KiB'), __('MiB'), __('GiB'), __('TiB'), __('PiB')];
             $mod   = 1024;
         }
@@ -415,7 +415,7 @@ class text_Core
         }
 
         // Determine unit to use
-        if (($power = array_search((string) $force_unit, $units)) === false) {
+        if (false === ($power = array_search((string) $force_unit, $units))) {
             $power = ($bytes > 0) ? floor(log($bytes, $mod)) : 0;
         }
 
@@ -434,7 +434,7 @@ class text_Core
         $str = rtrim($str);
         $space = strrpos($str, ' ');
 
-        if ($space !== false) {
+        if (false !== $space) {
             $str = substr($str, 0, $space).'&nbsp;'.substr($str, $space + 1);
         }
 
@@ -509,7 +509,7 @@ class text_Core
         static $UTF8_UPPER_ACCENTS = null;
 
         if ($case <= 0) {
-            if ($UTF8_LOWER_ACCENTS === null) {
+            if (null === $UTF8_LOWER_ACCENTS) {
                 $UTF8_LOWER_ACCENTS = [
                     'à' => 'a',  'ô' => 'o',  'ď' => 'd',  'ḟ' => 'f',  'ë' => 'e',  'š' => 's',  'ơ' => 'o',
                     'ß' => 'ss', 'ă' => 'a',  'ř' => 'r',  'ț' => 't',  'ň' => 'n',  'ā' => 'a',  'ķ' => 'k',
@@ -537,7 +537,7 @@ class text_Core
         }
 
         if ($case >= 0) {
-            if ($UTF8_UPPER_ACCENTS === null) {
+            if (null === $UTF8_UPPER_ACCENTS) {
                 $UTF8_UPPER_ACCENTS = [
                     'À' => 'A',  'Ô' => 'O',  'Ď' => 'D',  'Ḟ' => 'F',  'Ë' => 'E',  'Š' => 'S',  'Ơ' => 'O',
                     'Ă' => 'A',  'Ř' => 'R',  'Ț' => 'T',  'Ň' => 'N',  'Ā' => 'A',  'Ķ' => 'K',  'Ĕ' => 'E',

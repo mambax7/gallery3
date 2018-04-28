@@ -40,7 +40,7 @@ class download_Core
      */
     public static function send($filename, $data = null)
     {
-        if ($data === null) {
+        if (null === $data) {
             $filepath = realpath($filename);
 
             $filename = basename($filepath);
@@ -66,7 +66,7 @@ class download_Core
         header('Content-Transfer-Encoding: binary');
 
         // Send data
-        if ($data === null) {
+        if (null === $data) {
             $handle = fopen($filepath, 'rb');
 
             fpassthru($handle);
@@ -100,7 +100,7 @@ class download_Core
         // Prevent caching
         header('Expires: Thu, 01 Jan 1970 00:00:00 GMT');
 
-        if (request::user_agent('browser') === 'Internet Explorer' and request::user_agent('version') <= '6.0') {
+        if ('Internet Explorer' === request::user_agent('browser') and request::user_agent('version') <= '6.0') {
             // HTTP 1.0
             header('Pragma:');
 

@@ -52,12 +52,12 @@ class Cache_Memcache_Driver extends Cache_Driver
 
     public function set($items, $tags = null, $lifetime = null)
     {
-        if ($lifetime !== 0) {
+        if (0 !== $lifetime) {
             // Memcache driver expects unix timestamp
             $lifetime += time();
         }
 
-        if ($tags !== null) {
+        if (null !== $tags) {
             throw new Cache_Exception('Memcache driver does not support tags');
         }
 
@@ -79,13 +79,13 @@ class Cache_Memcache_Driver extends Cache_Driver
         $items = $this->backend->get($keys);
 
         if ($single) {
-            if ($items === false) {
+            if (false === $items) {
                 return null;
             }
 
             return (count($items) > 0) ? current($items) : null;
         } else {
-            return ($items === false) ? [] : $items;
+            return (false === $items) ? [] : $items;
         }
     }
 

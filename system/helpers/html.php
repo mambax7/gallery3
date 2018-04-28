@@ -38,15 +38,15 @@ class html_Core
      */
     public static function anchor($uri, $title = null, $attributes = null, $protocol = null, $escape_title = false)
     {
-        if ($uri === '') {
+        if ('' === $uri) {
             $site_url = url::base(false);
-        } elseif (strpos($uri, '#') === 0) {
+        } elseif (0 === strpos($uri, '#')) {
             // This is an id target link, not a URL
             $site_url = $uri;
-        } elseif (strpos($uri, '://') === false) {
+        } elseif (false === strpos($uri, '://')) {
             $site_url = url::site($uri, $protocol);
         } else {
-            if (html::$windowed_urls === true and empty($attributes['target'])) {
+            if (true === html::$windowed_urls and empty($attributes['target'])) {
                 $attributes['target'] = '_blank';
             }
 
@@ -59,7 +59,7 @@ class html_Core
         // Attributes empty? Use an empty string
         .(is_array($attributes) ? html::attributes($attributes) : '').'>'
         // Title empty? Use the parsed URL
-        .($escape_title ? htmlspecialchars((($title === null) ? $site_url : $title), ENT_QUOTES, Kohana::CHARSET, false) : (($title === null) ? $site_url : $title)).'</a>';
+        .($escape_title ? htmlspecialchars(((null === $title) ? $site_url : $title), ENT_QUOTES, Kohana::CHARSET, false) : ((null === $title) ? $site_url : $title)) . '</a>';
     }
 
     /**
@@ -79,7 +79,7 @@ class html_Core
         // Attributes empty? Use an empty string
         .(is_array($attributes) ? html::attributes($attributes) : '').'>'
         // Title empty? Use the filename part of the URI
-        .(($title === null) ? end(explode('/', $file)) : $title) .'</a>';
+        .((null === $title) ? end(explode('/', $file)) : $title) . '</a>';
     }
 
     /**
@@ -92,7 +92,7 @@ class html_Core
     {
         $safe = '';
         foreach (str_split($email) as $letter) {
-            switch (($letter === '@') ? rand(1, 2) : rand(1, 3)) {
+            switch (('@' === $letter) ? rand(1, 2) : rand(1, 3)) {
                 // HTML entity code
                 case 1: $safe .= '&#'.ord($letter).';'; break;
                 // Hex character code
@@ -120,7 +120,7 @@ class html_Core
         }
 
         // Remove the subject or other parameters that do not need to be encoded
-        if (strpos($email, '?') !== false) {
+        if (false !== strpos($email, '?')) {
             // Extract the parameters from the email address
             list($email, $params) = explode('?', $email, 2);
 
@@ -230,7 +230,7 @@ class html_Core
                 $compiled .= html::link($_href, $_rel, $_type, $_media, $index);
             }
         } else {
-            if (strpos($href, '://') === false) {
+            if (false === strpos($href, '://')) {
                 // Make the URL absolute
                 $href = url::base($index).$href;
             }
@@ -268,7 +268,7 @@ class html_Core
                 $compiled .= html::script($name, $index);
             }
         } else {
-            if (strpos($script, '://') === false) {
+            if (false === strpos($script, '://')) {
                 // Add the suffix only when it's not already present
                 $script = url::base((bool) $index).$script;
             }
@@ -299,7 +299,7 @@ class html_Core
             $attributes['alt'] = $alt;
         }
 
-        if (strpos($attributes['src'], '://') === false) {
+        if (false === strpos($attributes['src'], '://')) {
             // Make the src attribute into an absolute URL
             $attributes['src'] = url::base($index).$attributes['src'];
         }

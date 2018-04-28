@@ -25,17 +25,17 @@ class upload_Core
         // Load file data from FILES if not passed as array
         $file = is_array($file) ? $file : $_FILES[$file];
 
-        if ($filename === null) {
+        if (null === $filename) {
             // Use the default filename, with a timestamp pre-pended
             $filename = time().$file['name'];
         }
 
-        if (Kohana::config('upload.remove_spaces') === true) {
+        if (true === Kohana::config('upload.remove_spaces')) {
             // Remove spaces from the filename
             $filename = preg_replace('/\s+/', '_', $filename);
         }
 
-        if ($directory === null) {
+        if (null === $directory) {
             // Use the pre-configured upload directory
             $directory = Kohana::config('upload.directory', true);
         }
@@ -43,7 +43,7 @@ class upload_Core
         // Make sure the directory ends with a slash
         $directory = rtrim($directory, '/').'/';
 
-        if (! is_dir($directory) and Kohana::config('upload.create_directories') === true) {
+        if (! is_dir($directory) and true === Kohana::config('upload.create_directories')) {
             // Create the upload directory
             mkdir($directory, 0777, true);
         }
@@ -53,7 +53,7 @@ class upload_Core
         }
 
         if (is_uploaded_file($file['tmp_name']) and move_uploaded_file($file['tmp_name'], $filename = $directory.$filename)) {
-            if ($chmod !== false) {
+            if (false !== $chmod) {
                 // Set permissions on filename
                 chmod($filename, $chmod);
             }
@@ -94,7 +94,7 @@ class upload_Core
         return (isset($file['tmp_name'])
             and isset($file['error'])
             and is_uploaded_file($file['tmp_name'])
-            and (int) $file['error'] === UPLOAD_ERR_OK);
+            and UPLOAD_ERR_OK === (int)$file['error']);
     }
 
     /**
@@ -106,7 +106,7 @@ class upload_Core
      */
     public static function type(array $file, array $allowed_types)
     {
-        if ((int) $file['error'] !== UPLOAD_ERR_OK) {
+        if (UPLOAD_ERR_OK !== (int)$file['error']) {
             return true;
         }
 
@@ -129,7 +129,7 @@ class upload_Core
      */
     public static function size(array $file, array $size)
     {
-        if ((int) $file['error'] !== UPLOAD_ERR_OK) {
+        if (UPLOAD_ERR_OK !== (int)$file['error']) {
             return true;
         }
 

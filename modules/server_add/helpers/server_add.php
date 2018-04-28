@@ -21,7 +21,7 @@ class server_add_Core
 {
     public static function check_config($paths=null)
     {
-        if ($paths === null) {
+        if (null === $paths) {
             $paths = unserialize(module::get_var('server_add', 'authorized_paths'));
         }
         if (empty($paths)) {
@@ -44,7 +44,7 @@ class server_add_Core
 
         $authorized_paths = unserialize(module::get_var('server_add', 'authorized_paths'));
         foreach (array_keys($authorized_paths) as $valid_path) {
-            if (strpos($path, $valid_path) === 0) {
+            if (0 === strpos($path, $valid_path)) {
                 return true;
             }
         }

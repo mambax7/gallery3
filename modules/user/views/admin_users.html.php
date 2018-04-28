@@ -85,7 +85,7 @@
               <?= html::clean($user->email) ?>
             </td>
             <td>
-              <?= ($user->last_login == 0) ? '' : gallery::date($user->last_login) ?>
+              <?= (0 == $user->last_login) ? '' : gallery::date($user->last_login) ?>
             </td>
             <td>
               <?= db::build()->from('items')->where('owner_id', '=', $user->id)->count_records() ?>

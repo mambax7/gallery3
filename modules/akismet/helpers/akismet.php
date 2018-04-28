@@ -46,9 +46,9 @@ class akismet_Core
         $request = self::_build_request('comment-check', $comment);
         $response = self::_http_post($request);
         $answer = $response->body[0];
-        if ($answer == 'true') {
+        if ('true' == $answer) {
             return 'spam';
-        } elseif ($answer == 'false') {
+        } elseif ('false' == $answer) {
             return 'ham';
         } else {
             return 'unknown';

@@ -75,7 +75,7 @@ class Form_Dateselect_Core extends Form_Input
             // Set the selected option
             $selected = $time[$type];
 
-            if ($type == 'am_pm') {
+            if ('am_pm' == $type) {
                 // Options are static
                 $options = ['AM' => 'AM', 'PM' => 'PM'];
             } else {

@@ -156,7 +156,7 @@ class remote extends remote_Core
     private static function _parse_url_for_fsockopen($url)
     {
         $url_components = parse_url($url);
-        if (strtolower($url_components['scheme']) == 'https') {
+        if ('https' == strtolower($url_components['scheme'])) {
             $url_components['fsockhost'] = 'ssl://' . $url_components['host'];
             $default_port = 443;
         } else {

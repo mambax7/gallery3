@@ -94,7 +94,7 @@ class g2_import_task_Core
                 // Start the loop from the beginning again.  This way if we get to a mode that requires no
                 // actions (eg, if the G2 comments module isn't installed) we won't try to do any comments
                 // queries.. in the next iteration we'll just skip over that mode.
-                if ($modes[$mode] != 'done') {
+                if ('done' != $modes[$mode]) {
                     continue;
                 }
             }

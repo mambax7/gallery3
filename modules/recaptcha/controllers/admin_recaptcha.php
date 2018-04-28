@@ -22,7 +22,7 @@ class Admin_Recaptcha_Controller extends Admin_Controller
     public function index()
     {
         $form = recaptcha::get_configure_form();
-        if (request::method() == 'post') {
+        if ('post' == request::method()) {
             // @todo move the "save" part of this into a separate controller function
             access::verify_csrf();
             $old_public_key = module::get_var('recaptcha', 'public_key');

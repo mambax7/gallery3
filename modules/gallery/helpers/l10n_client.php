@@ -37,7 +37,7 @@ class l10n_client_Core
 
     public static function api_key($api_key=null)
     {
-        if ($api_key !== null) {
+        if (null !== $api_key) {
             module::set_var('gallery', 'l10n_client_key', $api_key);
         }
         return module::get_var('gallery', 'l10n_client_key', '');
@@ -45,14 +45,14 @@ class l10n_client_Core
 
     public static function server_uid($api_key=null)
     {
-        $api_key = $api_key == null ? l10n_client::api_key() : $api_key;
+        $api_key = null == $api_key ? l10n_client::api_key() : $api_key;
         $parts = explode(':', $api_key);
         return empty($parts) ? 0 : $parts[0];
     }
 
     private static function _sign($payload, $api_key=null)
     {
-        $api_key = $api_key == null ? l10n_client::api_key() : $api_key;
+        $api_key = null == $api_key ? l10n_client::api_key() : $api_key;
         return md5($api_key . $payload . l10n_client::client_token());
     }
 

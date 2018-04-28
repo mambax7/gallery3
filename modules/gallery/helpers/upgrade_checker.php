@@ -44,7 +44,7 @@ class upgrade_checker_Core
      */
     public static function should_auto_check()
     {
-        if (upgrade_checker::auto_check_enabled() && random::int(1, 100) == 1) {
+        if (upgrade_checker::auto_check_enabled() && 1 == random::int(1, 100)) {
             $version_info = upgrade_checker::version_info();
             return (!$version_info ||
               (time() - $version_info->timestamp) > upgrade_checker::AUTO_CHECK_INTERVAL);
@@ -60,7 +60,7 @@ class upgrade_checker_Core
         $result = new stdClass();
         try {
             list($status, $headers, $body) = remote::do_request(upgrade_checker::CHECK_URL);
-            if ($status == 'HTTP/1.1 200 OK') {
+            if ('HTTP/1.1 200 OK' == $status) {
                 $result->status = 'success';
                 foreach (explode("\n", $body) as $line) {
                     if ($line) {
@@ -99,7 +99,7 @@ class upgrade_checker_Core
     {
         $version_info = upgrade_checker::version_info();
         if ($version_info) {
-            if (gallery::RELEASE_CHANNEL == 'release') {
+            if ('release' == gallery::RELEASE_CHANNEL) {
                 if (version_compare($version_info->data['release_version'], gallery::VERSION, '>')) {
                     return t(
                         'A newer version of Gallery is available! <a href="%upgrade-url">Upgrade now</a> to version %version',

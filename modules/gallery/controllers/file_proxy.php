@@ -50,7 +50,7 @@ class File_Proxy_Controller extends Controller
 
         // Make sure that the request is for a file inside var
         $offset = strpos(rawurldecode($request_uri), $var_uri);
-        if ($offset !== 0) {
+        if (0 !== $offset) {
             $e = new Kohana_404_Exception();
             $e->test_fail_code = 1;
             throw $e;
@@ -62,7 +62,7 @@ class File_Proxy_Controller extends Controller
         // type: albums
         // path: foo/bar.jpg
         list($type, $path) = explode('/', $file_uri, 2);
-        if ($type != 'resizes' && $type != 'albums' && $type != 'thumbs') {
+        if ('resizes' != $type && 'albums' != $type && 'thumbs' != $type) {
             $e = new Kohana_404_Exception();
             $e->test_fail_code = 2;
             throw $e;
@@ -85,14 +85,14 @@ class File_Proxy_Controller extends Controller
         }
 
         // Make sure we have view_full access to the original
-        if ($type == 'albums' && !access::can('view_full', $item)) {
+        if ('albums' == $type && !access::can('view_full', $item)) {
             $e = new Kohana_404_Exception();
             $e->test_fail_code = 5;
             throw $e;
         }
 
         // Don't try to load a directory
-        if ($type == 'albums' && $item->is_album()) {
+        if ('albums' == $type && $item->is_album()) {
             $e = new Kohana_404_Exception();
             $e->test_fail_code = 6;
             throw $e;
@@ -101,9 +101,9 @@ class File_Proxy_Controller extends Controller
         // Note: this code is roughly duplicated in data_rest, so if you modify this, please look to
         // see if you should make the same change there as well.
 
-        if ($type == 'albums') {
+        if ('albums' == $type) {
             $file = $item->file_path();
-        } elseif ($type == 'resizes') {
+        } elseif ('resizes' == $type) {
             $file = $item->resize_path();
         } else {
             $file = $item->thumb_path();
@@ -134,7 +134,7 @@ class File_Proxy_Controller extends Controller
         expires::set(2592000, $item->updated);  // 30 days
 
         // Dump out the image.  If the item is a movie or album, then its thumbnail will be a JPG.
-        if (($item->is_movie() || $item->is_album()) && $type == 'thumbs') {
+        if (($item->is_movie() || $item->is_album()) && 'thumbs' == $type) {
             header('Content-Type: image/jpeg');
         } else {
             header("Content-Type: $item->mime_type");

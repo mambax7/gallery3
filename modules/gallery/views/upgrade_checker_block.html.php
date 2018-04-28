@@ -4,7 +4,7 @@
 </p>
 
 <p>
-  <?php if (gallery::RELEASE_CHANNEL == 'release'): ?>
+  <?php if ('release' == gallery::RELEASE_CHANNEL): ?>
   <?= t('You are using the official Gallery %version release, code named <i>%code_name</i>.', ['version' => gallery::VERSION, 'code_name' => gallery::CODE_NAME]) ?>
   <?php elseif (isset($build_number)): ?>
   <?= t('You are using an experimental snapshot of Gallery %version (build %build_number on branch %branch).', ['version' => gallery::VERSION, 'branch' => gallery::RELEASE_BRANCH, 'build_number' => $build_number]) ?>

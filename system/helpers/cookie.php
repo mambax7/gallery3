@@ -35,12 +35,12 @@ class cookie_Core
         $config = Kohana::config('cookie');
 
         foreach (['value', 'expire', 'domain', 'path', 'secure', 'httponly'] as $item) {
-            if ($$item === null and isset($config[$item])) {
+            if (null === $$item and isset($config[$item])) {
                 $$item = $config[$item];
             }
         }
 
-        if ($expire !== 0) {
+        if (0 !== $expire) {
             // The expiration is expected to be a UNIX timestamp
             $expire += time();
         }
@@ -61,7 +61,7 @@ class cookie_Core
     public static function get($name = null, $default = null, $xss_clean = false)
     {
         // Return an array of all the cookies if we don't have a name
-        if ($name === null) {
+        if (null === $name) {
             $cookies = [];
 
             foreach ($_COOKIE as $key => $value) {
@@ -80,12 +80,12 @@ class cookie_Core
         // Find the position of the split between salt and contents
         $split = strlen(cookie::salt($name, null));
 
-        if (isset($cookie[$split]) and $cookie[$split] === '~') {
+        if (isset($cookie[$split]) and '~' === $cookie[$split]) {
             // Separate the salt and the value
             list($hash, $value) = explode('~', $cookie, 2);
 
             if (cookie::salt($name, $value) === $hash) {
-                if ($xss_clean === true and Kohana::config('core.global_xss_filtering') === false) {
+                if (true === $xss_clean and false === Kohana::config('core.global_xss_filtering')) {
                     return Input::instance()->xss_clean($value);
                 }
                 // Cookie signature is valid

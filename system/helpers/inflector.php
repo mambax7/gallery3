@@ -25,7 +25,7 @@ class inflector_Core
      */
     public static function uncountable($str)
     {
-        if (inflector::$uncountable === null) {
+        if (null === inflector::$uncountable) {
             // Cache uncountables
             inflector::$uncountable = Kohana::config('inflector.uncountable');
 
@@ -76,7 +76,7 @@ class inflector_Core
         }
 
         // Do nothing with a single count
-        if ($count === 0 or $count > 1) {
+        if (0 === $count or $count > 1) {
             return $str;
         }
 
@@ -103,7 +103,7 @@ class inflector_Core
             $str = substr($str, 0, -2);
         } elseif (preg_match('/[^aeiou]ies$/', $str)) {
             $str = substr($str, 0, -3).'y';
-        } elseif (substr($str, -1) === 's' and substr($str, -2) !== 'ss') {
+        } elseif ('s' === substr($str, -1) and 'ss' !== substr($str, -2)) {
             $str = substr($str, 0, -1);
         }
 
@@ -152,7 +152,7 @@ class inflector_Core
         }
 
         // Do nothing with singular
-        if ($count === 1) {
+        if (1 === $count) {
             return $str;
         }
 
@@ -197,7 +197,7 @@ class inflector_Core
     {
         $length = strlen($string);
 
-        if (substr($string, $length - 1, $length) == 's') {
+        if ('s' == substr($string, $length - 1, $length)) {
             return $string.'\'';
         }
 

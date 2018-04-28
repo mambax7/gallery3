@@ -21,7 +21,7 @@ class Database_Mysqli_Core extends Database_Mysql
         extract($this->config['connection']);
 
         // Persistent connections are supported as of PHP 5.3
-        if (RUNS_MYSQLND and $this->config['persistent'] === true) {
+        if (RUNS_MYSQLND and true === $this->config['persistent']) {
             $host = 'p:'.$host;
         }
 

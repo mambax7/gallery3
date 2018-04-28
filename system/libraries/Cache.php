@@ -47,7 +47,7 @@ class Cache_Core
             $name = $config;
 
             // Test the config group name
-            if (($config = Kohana::config('cache.'.$config)) === null) {
+            if (null === ($config = Kohana::config('cache.' . $config))) {
                 throw new Cache_Exception('The :group: group is not defined in your configuration.', [':group:' => $name]);
             }
         }
@@ -93,7 +93,7 @@ class Cache_Core
      */
     public function set($key, $value = null, $tags = null, $lifetime = null)
     {
-        if ($lifetime === null) {
+        if (null === $lifetime) {
             $lifetime = $this->config['lifetime'];
         }
 
@@ -101,10 +101,10 @@ class Cache_Core
             $key = [$key => $value];
         }
 
-        if ($this->config['prefix'] !== null) {
+        if (null !== $this->config['prefix']) {
             $key = $this->add_prefix($key);
 
-            if ($tags !== null) {
+            if (null !== $tags) {
                 $tags = $this->add_prefix($tags, false);
             }
         }
@@ -124,7 +124,7 @@ class Cache_Core
             $single = true;
         }
 
-        if ($this->config['prefix'] !== null) {
+        if (null !== $this->config['prefix']) {
             $keys = $this->add_prefix($keys, false);
 
             if (! $single) {
@@ -144,7 +144,7 @@ class Cache_Core
             $tags = [$tags];
         }
 
-        if ($this->config['prefix'] !== null) {
+        if (null !== $this->config['prefix']) {
             $tags = $this->add_prefix($tags, false);
             return $this->strip_prefix($this->driver->get_tag($tags));
         } else {
@@ -161,7 +161,7 @@ class Cache_Core
             $keys = [$keys];
         }
 
-        if ($this->config['prefix'] !== null) {
+        if (null !== $this->config['prefix']) {
             $keys = $this->add_prefix($keys, false);
         }
 
@@ -177,7 +177,7 @@ class Cache_Core
             $tags = [$tags];
         }
 
-        if ($this->config['prefix'] !== null) {
+        if (null !== $this->config['prefix']) {
             $tags = $this->add_prefix($tags, false);
         }
 

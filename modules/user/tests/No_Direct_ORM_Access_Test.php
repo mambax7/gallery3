@@ -84,6 +84,6 @@ class UserModuleFilterIterator extends FilterIterator
     public function accept()
     {
         $path_name = $this->getInnerIterator()->getPathName();
-        return strpos($path_name, '/modules/user') === false;
+        return false === strpos($path_name, '/modules/user');
     }
 }

@@ -57,17 +57,17 @@ class comment_installer
     public static function upgrade($version)
     {
         $db = Database::instance();
-        if ($version == 1) {
+        if (1 == $version) {
             $db->query("ALTER TABLE {comments} CHANGE `state` `state` varchar(15) default 'unpublished'");
             module::set_version('comment', $version = 2);
         }
 
-        if ($version == 2) {
+        if (2 == $version) {
             module::set_var('comment', 'access_permissions', 'everybody');
             module::set_version('comment', $version = 3);
         }
 
-        if ($version == 3) {
+        if (3 == $version) {
             // 40 bytes for server_remote_addr is enough to swallow the longest
             // representation of an IPv6 addy.
             //
@@ -80,14 +80,14 @@ class comment_installer
             module::set_version('comment', $version = 4);
         }
 
-        if ($version == 4) {
+        if (4 == $version) {
             module::set_var('comment', 'rss_visible', 'all');
             module::set_version('comment', $version = 5);
         }
 
         // In version 5 we accidentally set the installer variable to rss_available when it should
         // have been rss_visible.  Migrate it over now, if necessary.
-        if ($version == 5) {
+        if (5 == $version) {
             if (!module::get_var('comment', 'rss_visible')) {
                 module::set_var('comment', 'rss_visible', module::get_var('comment', 'rss_available'));
             }
@@ -97,14 +97,14 @@ class comment_installer
 
         // In version 6 we accidentally left the install value of "rss_visible" to "both" when it
         // should have been "all"
-        if ($version == 6) {
-            if (module::get_var('comment', 'rss_visible') == 'both') {
+        if (6 == $version) {
+            if ('both' == module::get_var('comment', 'rss_visible')) {
                 module::set_var('comment', 'rss_visible', 'all');
             }
             module::set_version('comment', $version = 7);
         }
 
-        if ($version == 7) {
+        if (7 == $version) {
             module::set_var('comment', 'initial_state', 'published');
             module::set_version('comment', $version = 8);
         }

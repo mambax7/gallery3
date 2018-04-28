@@ -82,7 +82,7 @@ class recaptcha_Core
             ]
     );
 
-        if ($response[1] == "false\ninvalid-site-private-key") {
+        if ("false\ninvalid-site-private-key" == $response[1]) {
             // This is the only thing I can figure out how to verify.
             // See http://recaptcha.net/apidocs/captcha for possible return values
             $private_key_input->add_error('invalid', 1);
@@ -115,7 +115,7 @@ class recaptcha_Core
     );
 
         $answers = explode("\n", $response [1]);
-        if (trim($answers [0]) == 'true') {
+        if ('true' == trim($answers [0])) {
             return null;
         } else {
             return $answers[1];

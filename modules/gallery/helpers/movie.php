@@ -104,7 +104,7 @@ class movie_Core
         exec($cmd, $exec_output, $exec_return);
 
         clearstatcache();  // use $filename parameter when PHP_version is 5.3+
-        if (filesize($output_file) == 0 || $exec_return) {
+        if (0 == filesize($output_file) || $exec_return) {
             // Maybe the movie needs the "-threads 1" argument added
             // (see http://sourceforge.net/apps/trac/gallery/ticket/1924)
             $cmd = escapeshellcmd($ffmpeg) . " -threads 1 $input_args -i " . escapeshellarg($input_file) .
@@ -114,7 +114,7 @@ class movie_Core
             exec($cmd, $exec_output, $exec_return);
 
             clearstatcache();
-            if (filesize($output_file) == 0 || $exec_return) {
+            if (0 == filesize($output_file) || $exec_return) {
                 throw new Exception('@todo FFMPEG_FAILED');
             }
         }

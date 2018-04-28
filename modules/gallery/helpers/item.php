@@ -93,7 +93,7 @@ class item_Core
         // Walk up the parent hierarchy and set album covers if necessary
         $grand_parent = $parent->parent();
         if ($grand_parent && access::can('edit', $grand_parent) &&
-        $grand_parent->album_cover_item_id == null) {
+            null == $grand_parent->album_cover_item_id) {
             item::make_album_cover($parent);
         }
 
@@ -234,17 +234,17 @@ class item_Core
         $path = trim($path, '/');
 
         // The root path name is NULL not "", hence this workaround.
-        if ($path == '') {
+        if ('' == $path) {
             return item::root();
         }
 
         $search_full_name = true;
         $album_thumb = false;
-        if (($var_subdir == 'thumbs') && preg_match("|^(.*)/\.album\.jpg$|", $path, $matches)) {
+        if (('thumbs' == $var_subdir) && preg_match("|^(.*)/\.album\.jpg$|", $path, $matches)) {
             // It's an album thumb - remove "/.album.jpg" from the path.
             $path = $matches[1];
             $album_thumb = true;
-        } elseif (($var_subdir != 'albums') && preg_match("/^(.*)\.jpg$/", $path, $matches)) {
+        } elseif (('albums' != $var_subdir) && preg_match("/^(.*)\.jpg$/", $path, $matches)) {
             // Item itself could be non-jpg (e.g. movies) - remove .jpg from path, don't search full name.
             $path = $matches[1];
             $search_full_name = false;
@@ -262,7 +262,7 @@ class item_Core
         ->find();
             // See if the item was found and if it should have been found.
             if ($item->loaded() &&
-          (($var_subdir == 'albums') || $item->is_photo() || $album_thumb)) {
+          (('albums' == $var_subdir) || $item->is_photo() || $album_thumb)) {
                 return $item;
             }
         } else {
@@ -273,7 +273,7 @@ class item_Core
         ->find();
             // See if the item was found and should be a jpg.
             if ($item->loaded() &&
-          (($item->is_movie() && ($var_subdir == 'thumbs')) ||
+          (($item->is_movie() && ('thumbs' == $var_subdir)) ||
            ($item->is_photo() && (preg_match("/^(.*)\.jpg$/", $item->name))))) {
                 return $item;
             }
@@ -289,7 +289,7 @@ class item_Core
                ->find_all() as $item) {
                 // See if the item was found and if it should have been found.
                 if ((urldecode($item->relative_path()) == $path) &&
-            (($var_subdir == 'albums') || $item->is_photo() || $album_thumb)) {
+            (('albums' == $var_subdir) || $item->is_photo() || $album_thumb)) {
                     return $item;
                 }
             }
@@ -301,7 +301,7 @@ class item_Core
                 // Compare relative_path without extension (regexp same as legal_file::change_extension),
                 // see if it should be a jpg.
                 if ((preg_replace("/\.[^\.\/]*?$/", '', urldecode($item->relative_path())) == $path) &&
-                    (($item->is_movie() && ($var_subdir == 'thumbs')) ||
+                    (($item->is_movie() && ('thumbs' == $var_subdir)) ||
                      ($item->is_photo() && (preg_match("/^(.*)\.jpg$/", $item->name))))) {
                     return $item;
                 }
@@ -437,7 +437,7 @@ class item_Core
             // avoid loading the whole ORM for each row.
             $order_by = [$album->sort_column => $album->sort_order];
             // Use id as a tie breaker
-            if ($album->sort_column != 'id') {
+            if ('id' != $album->sort_column) {
                 $order_by['id'] = 'ASC';
             }
 

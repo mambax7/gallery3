@@ -26,7 +26,7 @@ class Xss_Security_Test extends Gallery_Unit_Test_Case
             // List of all tokens without whitespace, simplifying parsing.
             $tokens = [];
             foreach (token_get_all(file_get_contents($view)) as $token) {
-                if (!is_array($token) || ($token[0] != T_WHITESPACE)) {
+                if (!is_array($token) || (T_WHITESPACE != $token[0])) {
                     $tokens[] = $token;
                 }
             }
@@ -44,7 +44,7 @@ class Xss_Security_Test extends Gallery_Unit_Test_Case
                 $token = $tokens[$token_number];
 
                 // Are we in a <script> ... </script> block?
-                if (is_array($token) && $token[0] == T_INLINE_HTML) {
+                if (is_array($token) && T_INLINE_HTML == $token[0]) {
                     $inline_html = $token[1];
                     // T_INLINE_HTML blocks can be split. Need to handle the case
                     // where one token has "<scr" and the next has "ipt"
@@ -94,13 +94,13 @@ class Xss_Security_Test extends Gallery_Unit_Test_Case
 
                 $pos = false;
                 if (($in_attribute || $in_attribute_js_context) &&
-            ($pos = strpos($inline_html, $delimiter)) !== false) {
+                    false !== ($pos = strpos($inline_html, $delimiter))) {
                     $in_attribute_js_context = false;
                     $in_attribute = false;
                     $href_attribute_start = false;
                 }
                 if (!$in_attribute_js_context || !$in_attribute) {
-                    $pos = ($pos === false) ? 0 : $pos;
+                    $pos = (false === $pos) ? 0 : $pos;
                     if (preg_match('{\bhref\s*=\s*(")javascript:[^"]*$}i', $inline_html, $matches, 0, $pos) ||
               preg_match("{\bhref\s*=\s*(')javascript:[^']*$}i", $inline_html, $matches, 0, $pos) ||
               preg_match("{\bon[a-z]+\s*=\s*(')[^']*$}i", $inline_html, $matches, 0, $pos) ||
@@ -114,7 +114,7 @@ class Xss_Security_Test extends Gallery_Unit_Test_Case
                         $in_attribute = true;
                         $delimiter = $matches[2];
                         $inline_html = '';
-                        $href_attribute_start = strtolower($matches[1]) == 'href' && empty($matches[3]);
+                        $href_attribute_start = 'href' == strtolower($matches[1]) && empty($matches[3]);
                     }
                 }
 
@@ -124,7 +124,7 @@ class Xss_Security_Test extends Gallery_Unit_Test_Case
                     if ($frame) {
                         $frame->expr_append($token);
                     }
-                } elseif ($token[0] == T_OPEN_TAG_WITH_ECHO) {
+                } elseif (T_OPEN_TAG_WITH_ECHO == $token[0]) {
                     // No need for a stack here - assume < ? = cannot be nested.
                     $frame = self::_create_frame(
               $token,
@@ -135,13 +135,13 @@ class Xss_Security_Test extends Gallery_Unit_Test_Case
               $preceded_by_quote
           );
                     $href_attribute_start = false;
-                } elseif ($frame && $token[0] == T_CLOSE_TAG) {
+                } elseif ($frame && T_CLOSE_TAG == $token[0]) {
                     // Store the < ? = ... ? > block that just ended here.
                     $found[$view][] = $frame;
                     $frame = null;
-                } elseif ($frame && $token[0] == T_VARIABLE) {
+                } elseif ($frame && T_VARIABLE == $token[0]) {
                     $frame->expr_append($token[1]);
-                    if ($token[1] == '$theme') {
+                    if ('$theme' == $token[1]) {
                         if (self::_token_matches([T_OBJECT_OPERATOR, '->'], $tokens, $token_number + 1) &&
                             self::_token_matches([T_STRING], $tokens, $token_number + 2) &&
                             in_array(
@@ -209,7 +209,7 @@ class Xss_Security_Test extends Gallery_Unit_Test_Case
                             $frame->is_safe_html(true);
                         }
                     }
-                } elseif ($frame && $token[0] == T_STRING) {
+                } elseif ($frame && T_STRING == $token[0]) {
                     $frame->expr_append($token[1]);
                     // t() and t2() are special in that they're guaranteed to return a SafeString().
                     if (in_array($token[1], ['t', 't2'])) {
@@ -220,7 +220,7 @@ class Xss_Security_Test extends Gallery_Unit_Test_Case
                             $token_number++;
                             $token = $tokens[$token_number];
                         }
-                    } elseif ($token[1] == 'SafeString') {
+                    } elseif ('SafeString' == $token[1]) {
                         // Looking for SafeString::of(...
                         if (self::_token_matches([T_DOUBLE_COLON, '::'], $tokens, $token_number + 1) &&
                             self::_token_matches([T_STRING], $tokens, $token_number + 2) &&
@@ -236,7 +236,7 @@ class Xss_Security_Test extends Gallery_Unit_Test_Case
                             $token_number += 3;
                             $token = $tokens[$token_number];
                         }
-                    } elseif ($token[1] == 'json_encode') {
+                    } elseif ('json_encode' == $token[1]) {
                         if (self::_token_matches('(', $tokens, $token_number + 1)) {
                             $frame->is_safe_js(true);
                             $frame->expr_append('(');
@@ -244,7 +244,7 @@ class Xss_Security_Test extends Gallery_Unit_Test_Case
                             $token_number++;
                             $token = $tokens[$token_number];
                         }
-                    } elseif ($token[1] == 'url') {
+                    } elseif ('url' == $token[1]) {
                         // url methods return safe HTML
                         if (self::_token_matches([T_DOUBLE_COLON, '::'], $tokens, $token_number + 1) &&
                             self::_token_matches([T_STRING], $tokens, $token_number + 2) &&
@@ -272,7 +272,7 @@ class Xss_Security_Test extends Gallery_Unit_Test_Case
                             $token_number += 3;
                             $token = $tokens[$token_number];
                         }
-                    } elseif ($token[1] == 'html') {
+                    } elseif ('html' == $token[1]) {
                         if (self::_token_matches([T_DOUBLE_COLON, '::'], $tokens, $token_number + 1) &&
                             self::_token_matches([T_STRING], $tokens, $token_number + 2) &&
                             in_array(
@@ -298,7 +298,7 @@ class Xss_Security_Test extends Gallery_Unit_Test_Case
                             }
                         }
                     }
-                } elseif ($frame && $token[0] == T_OBJECT_OPERATOR) {
+                } elseif ($frame && T_OBJECT_OPERATOR == $token[0]) {
                     $frame->expr_append($token[1]);
 
                     if (self::_token_matches([T_STRING], $tokens, $token_number + 1) &&
@@ -512,7 +512,7 @@ class Xss_Security_Test_Frame
 
     public function is_safe_html($new_val=null)
     {
-        if ($new_val !== null) {
+        if (null !== $new_val) {
             $this->_is_safe_html = (bool) $new_val;
         }
         return $this->_is_safe_html;
@@ -520,7 +520,7 @@ class Xss_Security_Test_Frame
 
     public function is_safe_href_attr($new_val=null)
     {
-        if ($new_val !== null) {
+        if (null !== $new_val) {
             $this->_is_safe_href_attr  = (bool) $new_val;
         }
         return $this->_is_safe_href_attr;
@@ -528,7 +528,7 @@ class Xss_Security_Test_Frame
 
     public function is_safe_attr($new_val=null)
     {
-        if ($new_val !== null) {
+        if (null !== $new_val) {
             $this->_is_safe_attr  = (bool) $new_val;
         }
         return $this->_is_safe_attr;
@@ -536,7 +536,7 @@ class Xss_Security_Test_Frame
 
     public function is_safe_js($new_val=null)
     {
-        if ($new_val !== null) {
+        if (null !== $new_val) {
             $this->_is_safe_js = (bool) $new_val;
         }
         return $this->_is_safe_js;

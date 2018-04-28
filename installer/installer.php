@@ -47,7 +47,7 @@ class installer
         extract($config);
         include(DOCROOT . 'installer/database_config.php');
         $output = ob_get_clean();
-        return file_put_contents($db_config_file, $output) !== false;
+        return false !== file_put_contents($db_config_file, $output);
     }
 
     public static function unpack_var()
@@ -136,7 +136,7 @@ class installer
     public static function mysql_version($config)
     {
         $result = mysql_query('SHOW VARIABLES WHERE variable_name = "version"');
-        $row = $config['type'] == 'mysqli' ? mysqli_fetch_object($result) : mysql_fetch_object($result);
+        $row = 'mysqli' == $config['type'] ? mysqli_fetch_object($result) : mysql_fetch_object($result);
         return $row->Value;
     }
 
@@ -144,11 +144,11 @@ class installer
     {
         $query = "SHOW TABLES LIKE '{$config['prefix']}items'";
         $results = mysql_query($query);
-        if ($results === false) {
+        if (false === $results) {
             $msg = mysql_error();
             return $msg;
         }
-        return mysql_num_rows($results) === 0;
+        return 0 === mysql_num_rows($results);
     }
 
     public static function create_admin($config)
@@ -287,11 +287,11 @@ class installer
     {
         $value = ini_get($varname);
 
-        if (!strcasecmp('on', $value) || $value == 1 || $value === true) {
+        if (!strcasecmp('on', $value) || 1 == $value || true === $value) {
             return true;
         }
 
-        if (!strcasecmp('off', $value) || $value == 0 || $value === false) {
+        if (!strcasecmp('off', $value) || 0 == $value || false === $value) {
             return false;
         }
 

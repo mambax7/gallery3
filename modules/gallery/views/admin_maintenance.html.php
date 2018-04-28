@@ -85,8 +85,8 @@
           </th>
         </tr>
         <?php foreach ($running_tasks as $task): ?>
-        <tr class="<?= text::alternate('g-odd', 'g-even') ?> <?= $task->state == 'stalled' ? 'g-warning' : '' ?>">
-          <td class="<?= $task->state == 'stalled' ? 'g-warning' : '' ?>">
+        <tr class="<?= text::alternate('g-odd', 'g-even') ?> <?= 'stalled' == $task->state ? 'g-warning' : '' ?>">
+          <td class="<?= 'stalled' == $task->state ? 'g-warning' : '' ?>">
             <?= gallery::date_time($task->updated) ?>
           </td>
           <td>
@@ -94,11 +94,11 @@
           </td>
           <td>
             <?php if ($task->done): ?>
-            <?php if ($task->state == 'cancelled'): ?>
+            <?php if ('cancelled' == $task->state): ?>
             <?= t('Cancelled') ?>
             <?php endif ?>
             <?= t('Close') ?>
-            <?php elseif ($task->state == 'stalled'): ?>
+            <?php elseif ('stalled' == $task->state): ?>
             <?= t('Stalled') ?>
             <?php else: ?>
             <?= t('%percent_complete% Complete', ['percent_complete' => $task->percent_complete]) ?>
@@ -111,7 +111,7 @@
             <?= html::clean($task->owner()->name) ?>
           </td>
           <td>
-            <?php if ($task->state == 'stalled'): ?>
+            <?php if ('stalled' == $task->state): ?>
             <a class="g-dialog-link g-button ui-icon-left ui-state-default ui-corner-all"
                href="<?= url::site("admin/maintenance/resume/$task->id?csrf=$csrf") ?>">
               <?= t('resume') ?>
@@ -161,19 +161,19 @@
           </th>
         </tr>
         <?php foreach ($finished_tasks as $task): ?>
-        <tr class="<?= text::alternate('g-odd', 'g-even') ?> <?= $task->state == 'success' ? 'g-success' : 'g-error' ?>">
-          <td class="<?= $task->state == 'success' ? 'g-success' : 'g-error' ?>">
+        <tr class="<?= text::alternate('g-odd', 'g-even') ?> <?= 'success' == $task->state ? 'g-success' : 'g-error' ?>">
+          <td class="<?= 'success' == $task->state ? 'g-success' : 'g-error' ?>">
             <?= gallery::date_time($task->updated) ?>
           </td>
           <td>
             <?= $task->name ?>
           </td>
           <td>
-            <?php if ($task->state == 'success'): ?>
+            <?php if ('success' == $task->state): ?>
             <?= t('Success') ?>
-            <?php elseif ($task->state == 'error'): ?>
+            <?php elseif ('error' == $task->state): ?>
             <?= t('Failed') ?>
-            <?php elseif ($task->state == 'cancelled'): ?>
+            <?php elseif ('cancelled' == $task->state): ?>
             <?= t('Cancelled') ?>
             <?php endif ?>
           </td>

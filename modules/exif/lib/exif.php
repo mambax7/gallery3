@@ -355,7 +355,7 @@ function lookup_type(&$type, &$size)
 function unRational($data, $type, $intel)
 {
     $data = bin2hex($data);
-    if ($intel == 1) {
+    if (1 == $intel) {
         $data = intel2Moto($data);
         $top = hexdec(substr($data, 8, 8));   // intel stores them bottom-top
             $bottom = hexdec(substr($data, 0, 8));  // intel stores them bottom-top
@@ -364,12 +364,12 @@ function unRational($data, $type, $intel)
             $bottom = hexdec(substr($data, 8, 8));      // motorola stores them top-bottom
     }
         
-    if ($type == 'SRATIONAL' && $top > 2147483647) {
+    if ('SRATIONAL' == $type && $top > 2147483647) {
         $top = $top - 4294967296;
     }    // this makes the number signed instead of unsigned
-    if ($bottom != 0) {
+    if (0 != $bottom) {
         $data=$top/$bottom;
-    } elseif ($top == 0) {
+    } elseif (0 == $top) {
         $data = 0;
     } else {
         $data = $top.'/'.$bottom;
@@ -382,18 +382,18 @@ function unRational($data, $type, $intel)
 //================================================================================================
 function rational($data, $type, $intel)
 {
-    if (($type == 'USHORT' || $type == 'SSHORT')) {
+    if (('USHORT' == $type || 'SSHORT' == $type)) {
         $data = substr($data, 0, 2);
     }
     $data = bin2hex($data);
-    if ($intel == 1) {
+    if (1 == $intel) {
         $data = intel2Moto($data);
     }
     $data = hexdec($data);
-    if ($type == 'SSHORT' && $data > 32767) {
+    if ('SSHORT' == $type && $data > 32767) {
         $data = $data - 65536;
     }  // this makes the number signed instead of unsigned
-    if ($type == 'SLONG' && $data > 2147483647) {
+    if ('SLONG' == $type && $data > 2147483647) {
         $data = $data - 4294967296;
     }  // this makes the number signed instead of unsigned
     return $data;
@@ -406,10 +406,10 @@ function formatData($type, $tag, $intel, $data)
 {
     switch ($type) {
         case 'ASCII':
-            if (($pos = strpos($data, chr(0))) !== false) {	// Search for a null byte and stop there.
+            if (false !== ($pos = strpos($data, chr(0)))) {	// Search for a null byte and stop there.
                 $data = substr($data, 0, $pos);
             }
-            if ($tag == '010f') {
+            if ('010f' == $tag) {
                 $data = ucwords(strtolower(trim($data)));
             }	// Format certain kinds of strings nicely (Camera make etc.)
             break;
@@ -447,7 +447,7 @@ function formatData($type, $tag, $intel, $data)
                     // So final formula is : exposure = exp(-ln(2).shutter)
                     // The formula can be developed : exposure = 1/(exp(ln(2).shutter))
                     $datum = exp(unRational($data, $type, $intel) * log(2));
-                    if ($datum != 0) {
+                    if (0 != $datum) {
                         $datum = 1/$datum;
                     }
                     $data = formatExposure($datum);
@@ -574,7 +574,7 @@ function formatData($type, $tag, $intel, $data)
                     }
                     break;
                 case 'a001':	// ColorSpace
-                    if ($data == 1) {
+                    if (1 == $data) {
                         $data = (string) t('sRGB');
                     } else {
                         $data = (string) t('Uncalibrated');
@@ -673,7 +673,7 @@ function formatData($type, $tag, $intel, $data)
             break;
         default:
             $data = bin2hex($data);
-            if ($intel == 1) {
+            if (1 == $intel) {
                 $data = intel2Moto($data);
             }
             break;
@@ -683,7 +683,7 @@ function formatData($type, $tag, $intel, $data)
 
 function formatExposure($data)
 {
-    if (strpos($data, '/')===false) {
+    if (false === strpos($data, '/')) {
         if ($data > 1) {
             return round($data, 2).' '.(string) t('sec');
         } else {
@@ -709,26 +709,26 @@ function read_entry(&$result, $in, $seek, $intel, $ifd_name, $globalOffset)
     
     // 2 byte tag
     $tag = bin2hex(fread($in, 2));
-    if ($intel == 1) {
+    if (1 == $intel) {
         $tag = intel2Moto($tag);
     }
     $tag_name = lookup_tag($tag);
     
     // 2 byte datatype
     $type = bin2hex(fread($in, 2));
-    if ($intel == 1) {
+    if (1 == $intel) {
         $type = intel2Moto($type);
     }
     lookup_type($type, $size);
     
-    if (strpos($tag_name, 'unknown:') !== false && strpos($type, 'error:') !== false) { // we have an error
+    if (false !== strpos($tag_name, 'unknown:') && false !== strpos($type, 'error:')) { // we have an error
         $result['Errors'] = $result['Errors']+1;
         return;
     }
     
     // 4 byte number of elements
     $count = bin2hex(fread($in, 4));
-    if ($intel == 1) {
+    if (1 == $intel) {
         $count = intel2Moto($count);
     }
     $bytesofdata = $size*hexdec($count);
@@ -740,23 +740,23 @@ function read_entry(&$result, $in, $seek, $intel, $ifd_name, $globalOffset)
         $data = $value;
     } elseif ($bytesofdata < 100000) {        // otherwise its a pointer to the value, so lets go get it
         $value = bin2hex($value);
-        if ($intel == 1) {
+        if (1 == $intel) {
             $value = intel2Moto($value);
         }
         $v = fseek($seek, $globalOffset+hexdec($value));  // offsets are from TIFF header which is 12 bytes from the start of the file
-        if ($v == 0) {
+        if (0 == $v) {
             $data = fread($seek, $bytesofdata);
-        } elseif ($v == -1) {
+        } elseif (-1 == $v) {
             $result['Errors'] = $result['Errors']+1;
         }
     } else { // bytesofdata was too big, so the exif had an error
         $result['Errors'] = $result['Errors']+1;
         return;
     }
-    if ($tag_name == 'MakerNote') { // if its a maker tag, we need to parse this specially
+    if ('MakerNote' == $tag_name) { // if its a maker tag, we need to parse this specially
         $make = $result['IFD0']['Make'];
         
-        if ($result['VerboseOutput'] == 1) {
+        if (1 == $result['VerboseOutput']) {
             $result[$ifd_name]['MakerNote']['RawData'] = $data;
         }
         if (preg_match('/NIKON/i', $make)) {
@@ -786,7 +786,7 @@ function read_entry(&$result, $in, $seek, $intel, $ifd_name, $globalOffset)
         } else {
             $result[$ifd_name]['KnownMaker'] = 0;
         }
-    } elseif ($tag_name == 'GPSInfoOffset') {
+    } elseif ('GPSInfoOffset' == $tag_name) {
         require_once(__DIR__ . '/makers/gps.php');
         $formated_data = formatData($type, $tag, $intel, $data);
         $result[$ifd_name]['GPSInfo'] = $formated_data;
@@ -797,10 +797,10 @@ function read_entry(&$result, $in, $seek, $intel, $ifd_name, $globalOffset)
         
         $result[$ifd_name][$tag_name] = $formated_data;
         
-        if ($result['VerboseOutput'] == 1) {
-            if ($type == 'URATIONAL' || $type == 'SRATIONAL' || $type == 'USHORT' || $type == 'SSHORT' || $type == 'ULONG' || $type == 'SLONG' || $type == 'FLOAT' || $type == 'DOUBLE') {
+        if (1 == $result['VerboseOutput']) {
+            if ('URATIONAL' == $type || 'SRATIONAL' == $type || 'USHORT' == $type || 'SSHORT' == $type || 'ULONG' == $type || 'SLONG' == $type || 'FLOAT' == $type || 'DOUBLE' == $type) {
                 $data = bin2hex($data);
-                if ($intel == 1) {
+                if (1 == $intel) {
                     $data = intel2Moto($data);
                 }
             }
@@ -826,7 +826,7 @@ function read_entry(&$result, $in, $seek, $intel, $ifd_name, $globalOffset)
 //================================================================================================
 function read_exif_data_raw($path, $verbose)
 {
-    if ($path == '' || $path == 'none') {
+    if ('' == $path || 'none' == $path) {
         return;
     }
     
@@ -852,7 +852,7 @@ function read_exif_data_raw($path, $verbose)
     
     // First 2 bytes of JPEG are 0xFFD8
     $data = bin2hex(fread($in, 2));
-    if ($data == 'ffd8') {
+    if ('ffd8' == $data) {
         $result['ValidJpeg'] = 1;
     } else {
         $result['ValidJpeg'] = 0;
@@ -865,15 +865,15 @@ function read_exif_data_raw($path, $verbose)
     $result['ValidAPP2Data'] = 0;
     $result['ValidCOMData'] = 0;
     
-    if ($result['ValidJpeg'] == 1) {
+    if (1 == $result['ValidJpeg']) {
         // Next 2 bytes are MARKER tag (0xFFE#)
         $data = bin2hex(fread($in, 2));
         $size = bin2hex(fread($in, 2));
 
         // LOOP THROUGH MARKERS TILL YOU GET TO FFE1  (exif marker)
         $abortCount = 0;
-        while (!feof($in) && $data!='ffe1' && $data!='ffc0' && $data!='ffd9' && ++$abortCount < 200) {
-            if ($data == 'ffe0') { // JFIF Marker
+        while (!feof($in) && 'ffe1' != $data && 'ffc0' != $data && 'ffd9' != $data && ++$abortCount < 200) {
+            if ('ffe0' == $data) { // JFIF Marker
                 $result['ValidJFIFData'] = 1;
                 $result['JFIF']['Size'] = hexdec($size);
             
@@ -887,7 +887,7 @@ function read_exif_data_raw($path, $verbose)
                 $result['JFIF']['ExtensionCode'] =  bin2hex(substr($data, 6, 1));
             
                 $globalOffset+=hexdec($size)+2;
-            } elseif ($data == 'ffed') {  // IPTC Marker
+            } elseif ('ffed' == $data) {  // IPTC Marker
                 $result['ValidIPTCData'] = 1;
                 $result['IPTC']['Size'] = hexdec($size);
             
@@ -896,7 +896,7 @@ function read_exif_data_raw($path, $verbose)
                     $result['IPTC']['Data'] = $data ;
                 }
                 $globalOffset+=hexdec($size)+2;
-            } elseif ($data == 'ffe2') {  // EXIF extension Marker
+            } elseif ('ffe2' == $data) {  // EXIF extension Marker
                 $result['ValidAPP2Data'] = 1;
                 $result['APP2']['Size'] = hexdec($size);
             
@@ -905,7 +905,7 @@ function read_exif_data_raw($path, $verbose)
                     $result['APP2']['Data'] = $data ;
                 }
                 $globalOffset+=hexdec($size)+2;
-            } elseif ($data == 'fffe') {  // COM extension Marker
+            } elseif ('fffe' == $data) {  // COM extension Marker
                 $result['ValidCOMData'] = 1;
                 $result['COM']['Size'] = hexdec($size);
             
@@ -914,7 +914,7 @@ function read_exif_data_raw($path, $verbose)
                     $result['COM']['Data'] = $data ;
                 }
                 $globalOffset+=hexdec($size)+2;
-            } elseif ($data == 'ffe1') {
+            } elseif ('ffe1' == $data) {
                 $result['ValidEXIFData'] = 1;
             }
     
@@ -923,7 +923,7 @@ function read_exif_data_raw($path, $verbose)
         }
         // END MARKER LOOP
     
-        if ($data == 'ffe1') {
+        if ('ffe1' == $data) {
             $result['ValidEXIFData'] = 1;
         } else {
             fclose($in);
@@ -940,10 +940,10 @@ function read_exif_data_raw($path, $verbose)
     
     // Then theres a TIFF header with 2 bytes of endieness (II or MM)
     $header = fread($in, 2);
-    if ($header==='II') {
+    if ('II' === $header) {
         $intel=1;
         $result['Endien'] = 'Intel';
-    } elseif ($header==='MM') {
+    } elseif ('MM' === $header) {
         $intel=0;
         $result['Endien'] = 'Motorola';
     } else {
@@ -956,7 +956,7 @@ function read_exif_data_raw($path, $verbose)
     
     // Then 4 bytes of offset to IFD0 (usually 8 which includes all 8 bytes of TIFF header)
     $offset = bin2hex(fread($in, 4));
-    if ($intel == 1) {
+    if (1 == $intel) {
         $offset = intel2Moto($offset);
     }
     
@@ -973,7 +973,7 @@ function read_exif_data_raw($path, $verbose)
     } // fixed this bug in 1.3
     
     // add 12 to the offset to account for TIFF header
-    if ($result['ValidJpeg'] == 1) {
+    if (1 == $result['ValidJpeg']) {
         $globalOffset+=12;
     }
     
@@ -981,7 +981,7 @@ function read_exif_data_raw($path, $verbose)
     //===========================================================
     // Start of IFD0
     $num = bin2hex(fread($in, 2));
-    if ($intel == 1) {
+    if (1 == $intel) {
         $num = intel2Moto($num);
     }
     $num = hexdec($num);
@@ -998,13 +998,13 @@ function read_exif_data_raw($path, $verbose)
     
     // store offset to IFD1
     $offset = bin2hex(fread($in, 4));
-    if ($intel == 1) {
+    if (1 == $intel) {
         $offset = intel2Moto($offset);
     }
     $result['IFD1Offset'] = hexdec($offset);
     
     // Check for SubIFD
-    if (!isset($result['IFD0']['ExifOffset']) || $result['IFD0']['ExifOffset'] == 0) {
+    if (!isset($result['IFD0']['ExifOffset']) || 0 == $result['IFD0']['ExifOffset']) {
         fclose($in);
         fclose($seek);
         return $result;
@@ -1013,7 +1013,7 @@ function read_exif_data_raw($path, $verbose)
     // seek to SubIFD (Value of ExifOffset tag) above.
     $ExitOffset = $result['IFD0']['ExifOffset'];
     $v = fseek($in, $globalOffset+$ExitOffset);
-    if ($v == -1) {
+    if (-1 == $v) {
         $result['Errors'] = $result['Errors']+1;
         $result['Error'][$result['Errors']] = (string) t('Could not Find SubIFD');
     }
@@ -1021,7 +1021,7 @@ function read_exif_data_raw($path, $verbose)
     //===========================================================
     // Start of SubIFD
     $num = bin2hex(fread($in, 2));
-    if ($intel == 1) {
+    if (1 == $intel) {
         $num = intel2Moto($num);
     }
     $num = hexdec($num);
@@ -1045,14 +1045,14 @@ function read_exif_data_raw($path, $verbose)
     }
     
     // Check for IFD1
-    if (!isset($result['IFD1Offset']) || $result['IFD1Offset'] == 0) {
+    if (!isset($result['IFD1Offset']) || 0 == $result['IFD1Offset']) {
         fclose($in);
         fclose($seek);
         return $result;
     }
     // seek to IFD1
     $v = fseek($in, $globalOffset+$result['IFD1Offset']);
-    if ($v == -1) {
+    if (-1 == $v) {
         $result['Errors'] = $result['Errors']+1;
         $result['Error'][$result['Errors']] = (string) t('Could not Find IFD1');
     }
@@ -1060,7 +1060,7 @@ function read_exif_data_raw($path, $verbose)
     //===========================================================
     // Start of IFD1
     $num = bin2hex(fread($in, 2));
-    if ($intel == 1) {
+    if (1 == $intel) {
         $num = intel2Moto($num);
     }
     $num = hexdec($num);
@@ -1075,11 +1075,11 @@ function read_exif_data_raw($path, $verbose)
         $result['Error'][$result['Errors']] = (string) t('Illegal size for IFD1');
     }
     // If verbose output is on, include the thumbnail raw data...
-    if ($result['VerboseOutput'] == 1 && $result['IFD1']['JpegIFOffset']>0 && $result['IFD1']['JpegIFByteCount']>0) {
+    if (1 == $result['VerboseOutput'] && $result['IFD1']['JpegIFOffset'] > 0 && $result['IFD1']['JpegIFByteCount'] > 0) {
         $v = fseek($seek, $globalOffset+$result['IFD1']['JpegIFOffset']);
-        if ($v == 0) {
+        if (0 == $v) {
             $data = fread($seek, $result['IFD1']['JpegIFByteCount']);
-        } elseif ($v == -1) {
+        } elseif (-1 == $v) {
             $result['Errors'] = $result['Errors']+1;
         }
         $result['IFD1']['ThumbnailData'] = $data;
@@ -1087,14 +1087,14 @@ function read_exif_data_raw($path, $verbose)
     
     
     // Check for Interoperability IFD
-    if (!isset($result['SubIFD']['ExifInteroperabilityOffset']) || $result['SubIFD']['ExifInteroperabilityOffset'] == 0) {
+    if (!isset($result['SubIFD']['ExifInteroperabilityOffset']) || 0 == $result['SubIFD']['ExifInteroperabilityOffset']) {
         fclose($in);
         fclose($seek);
         return $result;
     }
     // Seek to InteroperabilityIFD
     $v = fseek($in, $globalOffset+$result['SubIFD']['ExifInteroperabilityOffset']);
-    if ($v == -1) {
+    if (-1 == $v) {
         $result['Errors'] = $result['Errors']+1;
         $result['Error'][$result['Errors']] = (string) t('Could not Find InteroperabilityIFD');
     }
@@ -1102,7 +1102,7 @@ function read_exif_data_raw($path, $verbose)
     //===========================================================
     // Start of InteroperabilityIFD
     $num = bin2hex(fread($in, 2));
-    if ($intel == 1) {
+    if (1 == $intel) {
         $num = intel2Moto($num);
     }
     $num = hexdec($num);
@@ -1126,7 +1126,7 @@ function read_exif_data_raw($path, $verbose)
 //================================================================================================
 function ConvertToFraction($v, &$n, &$d)
 {
-    if ($v == 0) {
+    if (0 == $v) {
         $n = 0;
         $d = 1;
         return;
@@ -1177,7 +1177,7 @@ function get35mmEquivFocalLength(&$result)
         $fl = 0;
     }
 
-    if (($width != 0) && !empty($units) && !empty($xres) && !empty($fl) && !empty($width)) {
+    if ((0 != $width) && !empty($units) && !empty($xres) && !empty($fl) && !empty($width)) {
         $ccdwidth = ($width * $unitfactor) / $xres;
         $equivfl = $fl / $ccdwidth*36+0.5;
         return $equivfl;

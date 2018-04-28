@@ -64,7 +64,7 @@ class Form_Upload_Core extends Form_Input
         $directory = str_replace('\\', '/', realpath($dir)).'/';
 
         // Make sure the upload director is valid and writable
-        if ($directory === '/' or ! is_dir($directory) or ! is_writable($directory)) {
+        if ('/' === $directory or ! is_dir($directory) or ! is_writable($directory)) {
             throw new Kohana_Exception('upload.not_writable', $dir);
         }
 
@@ -79,7 +79,7 @@ class Form_Upload_Core extends Form_Input
         // By default, there is no uploaded file
         $filename = '';
 
-        if ($status = parent::validate() and $this->upload['error'] === UPLOAD_ERR_OK) {
+        if ($status = parent::validate() and UPLOAD_ERR_OK === $this->upload['error']) {
             // Set the filename to the original name
             $filename = $this->upload['name'];
 
@@ -89,7 +89,7 @@ class Form_Upload_Core extends Form_Input
             }
 
             if (file_exists($filepath = $this->directory.$filename)) {
-                if ($this->filename !== true or ! is_writable($filepath)) {
+                if (true !== $this->filename or ! is_writable($filepath)) {
                     // Prefix the file so that the filename is unique
                     $filepath = $this->directory.'uploadfile-'.uniqid(time()).'-'.$this->upload['name'];
                 }
@@ -109,18 +109,18 @@ class Form_Upload_Core extends Form_Input
 
     protected function rule_required()
     {
-        if (empty($this->upload) or $this->upload['error'] === UPLOAD_ERR_NO_FILE) {
+        if (empty($this->upload) or UPLOAD_ERR_NO_FILE === $this->upload['error']) {
             $this->errors['required'] = true;
         }
     }
 
     public function rule_allow()
     {
-        if (empty($this->upload['tmp_name']) or count($types = func_get_args()) == 0) {
+        if (empty($this->upload['tmp_name']) or 0 == count($types = func_get_args())) {
             return;
         }
 
-        if (($mime = file::mime($this->upload['tmp_name'])) === false) {
+        if (false === ($mime = file::mime($this->upload['tmp_name']))) {
             // Trust the browser
             $mime = $this->upload['type'];
         }
@@ -143,7 +143,7 @@ class Form_Upload_Core extends Form_Input
             }
         }
 
-        if ($allow === false) {
+        if (false === $allow) {
             $this->errors['invalid_type'] = true;
         }
     }
@@ -151,7 +151,7 @@ class Form_Upload_Core extends Form_Input
     public function rule_size($size)
     {
         // Skip the field if it is empty
-        if (empty($this->upload) or $this->upload['error'] === UPLOAD_ERR_NO_FILE) {
+        if (empty($this->upload) or UPLOAD_ERR_NO_FILE === $this->upload['error']) {
             return;
         }
 

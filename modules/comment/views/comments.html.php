@@ -58,7 +58,7 @@
       <div>
         <?= nl2br(html::purify($comment->text)) ?>
       </div>
-      <?php if ($comment->state == 'unpublished'): ?>
+      <?php if ('unpublished' == $comment->state): ?>
       <b> <?= t('Your comment is held for moderation. The site moderator will review and publish it.') ?> </b>
       <?php endif ?>
     </li>

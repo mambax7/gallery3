@@ -77,7 +77,7 @@ class Session_Database_Driver implements Session_Driver
             ->limit(1)
             ->execute($this->db);
 
-        if ($query->count() === 0) {
+        if (0 === $query->count()) {
             // No current session
             $this->session_id = null;
 
@@ -90,7 +90,7 @@ class Session_Database_Driver implements Session_Driver
         // Load the data
         $data = $query->current()->data;
 
-        return ($this->encrypt === null) ? base64_decode($data) : $this->encrypt->decode($data);
+        return (null === $this->encrypt) ? base64_decode($data) : $this->encrypt->decode($data);
     }
 
     public function write($id, $data)
@@ -102,10 +102,10 @@ class Session_Database_Driver implements Session_Driver
         $data = [
             'session_id' => $id,
             'last_activity' => time(),
-            'data' => ($this->encrypt === null) ? base64_encode($data) : $this->encrypt->encode($data)
+            'data' => (null === $this->encrypt) ? base64_encode($data) : $this->encrypt->encode($data)
         ];
 
-        if ($this->session_id === null) {
+        if (null === $this->session_id) {
             // Insert a new session
             $query = db::insert($this->table, $data)
                 ->execute($this->db);

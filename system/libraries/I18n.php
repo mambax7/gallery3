@@ -92,7 +92,7 @@ function __($string, $args = null)
         $string = I18n::get_text($string);
     }
 
-    if ($args === null) {
+    if (null === $args) {
         return $string;
     }
 

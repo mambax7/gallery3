@@ -22,7 +22,7 @@ class Kohana_404_Exception_Core extends Kohana_Exception
      */
     public function __construct($page = null)
     {
-        if ($page === null) {
+        if (null === $page) {
             // Use the complete URI
             $page = Router::$complete_uri;
         }

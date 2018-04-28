@@ -35,10 +35,10 @@ foreach ($results as $class => $methods) {
     } else {
         foreach ($methods as $method => $result) {
             // Hide passed tests from report
-            if ($result === true and $hide_passed === true) {
+            if (true === $result and true === $hide_passed) {
                 continue;
             }
-            if ($result === true) {
+            if (true === $result) {
                 printf(
             "| %s%-85.85s%s | %sPASS%s     |\n",
                green_start(),
@@ -59,7 +59,7 @@ foreach ($results as $class => $methods) {
                 echo '  ', $result->getMessage(), "\n";
                 echo '  ', $result->getFile();
                 echo ' ', '(line ' . $result->getLine(), ")\n";
-                if ($result->getDebug() !== null) {
+                if (null !== $result->getDebug()) {
                     echo '  ', '(', gettype($result->getDebug()), ') ',
             var_export($result->getDebug(), true), "\n";
                 }

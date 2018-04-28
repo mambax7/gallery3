@@ -65,7 +65,7 @@ class Database_Query_Core
             $sql = strtr($sql, $params);
         }
 
-        if ($this->ttl !== false) {
+        if (false !== $this->ttl) {
             // Load the result from the cache
             return $db->query_cache($sql, $this->ttl);
         } else {

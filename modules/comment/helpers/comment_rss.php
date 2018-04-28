@@ -27,7 +27,7 @@ class comment_rss_Core
             return false;
         }
 
-        return ($visible == 'all' || $visible == $feed_id);
+        return ('all' == $visible || $visible == $feed_id);
     }
 
     public static function available_feeds($item, $tag)
@@ -56,7 +56,7 @@ class comment_rss_Core
       ->where('comments.state', '=', 'published')
       ->order_by('comments.created', 'DESC');
 
-        if ($feed_id == 'item') {
+        if ('item' == $feed_id) {
             $item = ORM::factory('item', $id);
             $comments
         ->where('items.left_ptr', '>=', $item->left_ptr)

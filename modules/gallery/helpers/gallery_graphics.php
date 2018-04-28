@@ -39,7 +39,7 @@ class gallery_graphics_Core
             @rename($temp_file, $output_file);
         } else {
             // No events made an image - proceed with standard process.
-            if (@filesize($input_file) == 0) {
+            if (0 == @filesize($input_file)) {
                 throw new Exception('@todo EMPTY_INPUT_FILE');
             }
 
@@ -78,7 +78,7 @@ class gallery_graphics_Core
             @rename($temp_file, $output_file);
         } else {
             // No events made an image - proceed with standard process.
-            if (@filesize($input_file) == 0) {
+            if (0 == @filesize($input_file)) {
                 throw new Exception('@todo EMPTY_INPUT_FILE');
             }
 

@@ -22,7 +22,7 @@ abstract class Controller_Core
      */
     public function __construct()
     {
-        if (Kohana::$instance == null) {
+        if (null == Kohana::$instance) {
             // Set the instance to the first controller loaded
             Kohana::$instance = $this;
         }

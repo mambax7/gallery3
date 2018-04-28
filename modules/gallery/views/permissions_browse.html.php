@@ -44,7 +44,7 @@
   <ul class="g-breadcrumbs">
     <?php $i = 0 ?>
     <?php foreach ($parents as $parent): ?>
-    <li id="item-<?= $parent->id ?>"<?php if ($i == 0) {
+    <li id="item-<?= $parent->id ?>"<?php if (0 == $i) {
     print ' class="g-first"';
 } ?>>
       <?php if (access::can('edit', $parent)): ?>

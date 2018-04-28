@@ -22,7 +22,7 @@ class Database_Mysql_Core extends Database
             return;
         }
 
-        if (Database_Mysql::$set_names === null) {
+        if (null === Database_Mysql::$set_names) {
             // Determine if we can use mysql_set_charset(), which is only
             // available on PHP 5.2.3+ when compiled against MySQL 5.0+
             Database_Mysql::$set_names = ! function_exists('mysql_set_charset');
@@ -35,7 +35,7 @@ class Database_Mysql_Core extends Database
 
         try {
             // Connect to the database
-            $this->connection = ($this->config['persistent'] === true)
+            $this->connection = (true === $this->config['persistent'])
                 ? mysql_pconnect($host.$port, $user, $pass, $params)
                 : mysql_connect($host.$port, $user, $pass, true, $params);
         } catch (Kohana_PHP_Exception $e) {
@@ -91,7 +91,7 @@ class Database_Mysql_Core extends Database
         // Make sure the database is connected
         $this->connection or $this->connect();
 
-        if (Database_Mysql::$set_names === true) {
+        if (true === Database_Mysql::$set_names) {
             // PHP is compiled against MySQL 4.x
             $status = (bool) mysql_query('SET NAMES '.$this->quote($charset), $this->connection);
         } else {
@@ -99,7 +99,7 @@ class Database_Mysql_Core extends Database
             $status = mysql_set_charset($charset, $this->connection);
         }
 
-        if ($status === false) {
+        if (false === $status) {
             // Unable to set charset
             throw new Database_Exception(
                 '#:errno: :error',
@@ -129,7 +129,7 @@ class Database_Mysql_Core extends Database
         // Make sure the database is connected
         $this->connection or $this->connect();
 
-        if (($value = mysql_real_escape_string($value, $this->connection)) === false) {
+        if (false === ($value = mysql_real_escape_string($value, $this->connection))) {
             throw new Database_Exception(
                 '#:errno: :error',
                 [
@@ -189,10 +189,10 @@ class Database_Mysql_Core extends Database
             $column = $this->sql_type($row['Type']);
 
             $column['default'] = $row['Default'];
-            $column['nullable'] = $row['Null'] === 'YES';
-            $column['sequenced'] = $row['Extra'] === 'auto_increment';
+            $column['nullable'] = 'YES' === $row['Null'];
+            $column['sequenced'] = 'auto_increment' === $row['Extra'];
 
-            if (isset($column['length']) and $column['type'] === 'float') {
+            if (isset($column['length']) and 'float' === $column['type']) {
                 list($column['precision'], $column['scale']) = explode(',', $column['length']);
             }
 

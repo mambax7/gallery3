@@ -23,8 +23,8 @@
           type="image/x-icon" />
     <link rel="apple-touch-icon-precomposed"
           href="<?= url::file(module::get_var('gallery', 'apple_touch_icon_url')) ?>" />
-    <?php if ($theme->page_type == 'collection'): ?>
-      <?php if (($thumb_proportion = $theme->thumb_proportion($theme->item(), 100, 'width')) != 1): ?>
+    <?php if ('collection' == $theme->page_type): ?>
+      <?php if (1 != ($thumb_proportion = $theme->thumb_proportion($theme->item(), 100, 'width'))): ?>
         <?php $new_width = round($thumb_proportion * 213) ?>
         <?php $new_height = round($thumb_proportion * 240) ?>
         <style type="text/css">

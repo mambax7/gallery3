@@ -20,7 +20,7 @@
   <div id="l10n-client-string-select">
     <ul class="string-list">
       <?php foreach ($string_list as $string): ?>
-      <li class="<?= $string['translation'] === '' ? 'untranslated' : 'translated' ?>">
+      <li class="<?= '' === $string['translation'] ? 'untranslated' : 'translated' ?>">
         <?php if (is_array($string['source'])): ?>
        [one] - <?= $string['source']['one'] ?><br/>
        [other] - <?= $string['source']['other'] ?>

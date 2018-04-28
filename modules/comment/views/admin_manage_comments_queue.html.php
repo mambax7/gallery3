@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct script access.') ?>
 <div class="g-block-content">
-  <?php if ($state == 'spam'): ?>
+  <?php if ('spam' == $state): ?>
   <div>
     <?php $spam_caught = module::get_var('comment', 'spam_caught') ?>
     <?php if ($spam_caught > 0): ?>
@@ -31,7 +31,7 @@
   </div>
   <?php endif ?>
 
-  <?php if ($state == 'deleted'): ?>
+  <?php if ('deleted' == $state): ?>
   <div>
     <p>
       <?= t('These are messages that have been recently deleted.  They will be permanently erased automatically after 7 days.') ?>
@@ -92,7 +92,7 @@
       </td>
       <td>
         <ul class="g-buttonset-vertical">
-        <?php if ($comment->state != 'unpublished' && $comment->state != 'deleted'): ?>
+        <?php if ('unpublished' != $comment->state && 'deleted' != $comment->state): ?>
           <li>
             <a href="javascript:set_state('unpublished',<?=$comment->id?>)"
                 class="g-button ui-state-default ui-icon-left">
@@ -101,12 +101,12 @@
             </a>
           </li>
         <?php endif ?>
-        <?php if ($comment->state != 'published'): ?>
+        <?php if ('published' != $comment->state): ?>
           <li>
             <a href="javascript:set_state('published',<?=$comment->id?>)"
                 class="g-button ui-state-default ui-icon-left">
               <span class="ui-icon ui-icon-check"></span>
-              <?php if ($state == 'deleted'): ?>
+              <?php if ('deleted' == $state): ?>
               <?= t('Undelete') ?>
               <?php else: ?>
               <?= t('Approve') ?>
@@ -114,7 +114,7 @@
             </a>
           </li>
         <?php endif ?>
-        <?php if ($comment->state != 'spam'): ?>
+        <?php if ('spam' != $comment->state): ?>
           <li>
             <a href="javascript:set_state('spam',<?=$comment->id?>)"
                 class="g-button ui-state-default ui-icon-left">
@@ -139,7 +139,7 @@
             </a>
           </li>
           -->
-        <?php if ($comment->state != 'deleted'): ?>
+        <?php if ('deleted' != $comment->state): ?>
           <li>
             <a href="javascript:set_state('deleted',<?=$comment->id?>)"
                 class="g-button ui-state-default ui-icon-left">

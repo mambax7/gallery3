@@ -87,7 +87,7 @@ class gallery_task_Core
         ->execute();
             $total_count = $task->get('total_count', $result->count());
             $mode = $task->get('mode', 'init');
-            if ($mode == 'init') {
+            if ('init' == $mode) {
                 $task->set('total_count', $total_count);
                 $task->set('mode', 'process');
                 batch::start();
@@ -129,7 +129,7 @@ class gallery_task_Core
                     }
                 }
 
-                if (++$i == 2) {
+                if (2 == ++$i) {
                     break;
                 }
             }
@@ -148,7 +148,7 @@ class gallery_task_Core
 
             $task->set('completed', $completed);
             $task->set('ignored', $ignored);
-            if ($task->percent_complete == 100) {
+            if (100 == $task->percent_complete) {
                 $task->done = true;
                 $task->state = 'success';
                 batch::stop();
@@ -302,8 +302,8 @@ class gallery_task_Core
         foreach (['logs', 'tmp'] as $dir) {
             $dir = VARPATH . $dir;
             if ($dh = opendir($dir)) {
-                while (($file = readdir($dh)) !== false) {
-                    if ($file[0] == '.') {
+                while (false !== ($file = readdir($dh))) {
+                    if ('.' == $file[0]) {
                         continue;
                     }
 
@@ -326,7 +326,7 @@ class gallery_task_Core
             serialize($files),
             ['file_cleanup']
         );
-        if (count($files) == 0) {
+        if (0 == count($files)) {
             break;
         }
 
@@ -452,7 +452,7 @@ class gallery_task_Core
                    ->where('parent_id', '=', $id)
                    ->order_by('left_ptr', 'DESC') // DESC since array_pop effectively reverses them
                    ->execute() as $child) {
-              $stack[] = ($child->type == 'album') ? "{$child->id}L{$level}" : "{$child->id}B{$level}";
+              $stack[] = ('album' == $child->type) ? "{$child->id}L{$level}" : "{$child->id}B{$level}";
           }
           $completed++;
           break;

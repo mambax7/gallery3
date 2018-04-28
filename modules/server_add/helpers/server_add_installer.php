@@ -38,7 +38,7 @@ class server_add_installer
     public static function upgrade($version)
     {
         $db = Database::instance();
-        if ($version == 1) {
+        if (1 == $version) {
             $db->query('CREATE TABLE {server_add_files} (
                     `id` int(9) NOT NULL auto_increment,
                     `task_id` int(9) NOT NULL,
@@ -48,13 +48,13 @@ class server_add_installer
             module::set_version('server_add', $version = 2);
         }
 
-        if ($version == 2) {
+        if (2 == $version) {
             $db->query('ALTER TABLE {server_add_files} ADD COLUMN `item_id` int(9)');
             $db->query('ALTER TABLE {server_add_files} ADD COLUMN `parent_id` int(9)');
             module::set_version('server_add', $version = 3);
         }
 
-        if ($version == 3) {
+        if (3 == $version) {
             $db->query('DROP TABLE {server_add_files}');
             $db->query('CREATE TABLE {server_add_entries} (
                     `id` int(9) NOT NULL auto_increment,

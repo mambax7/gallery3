@@ -111,13 +111,13 @@ class Comment_Model_Core extends ORM
                 $this->server_remote_port = substr($input->server('REMOTE_PORT'), 0, 16);
             }
 
-            $visible_change = $this->state == 'published';
+            $visible_change = 'published' == $this->state;
             parent::save();
             module::event('comment_created', $this);
         } else {
             // Updated comment
             $original = ORM::factory('comment', $this->id);
-            $visible_change = $original->state == 'published' || $this->state == 'published';
+            $visible_change = 'published' == $original->state || 'published' == $this->state;
             parent::save();
             module::event('comment_updated', $original, $this);
         }
@@ -173,10 +173,10 @@ class Comment_Model_Core extends ORM
      */
     public function valid_item(Validation $v, $field)
     {
-        if (db::build()
-        ->from('items')
-        ->where('id', '=', $this->item_id)
-        ->count_records() != 1) {
+        if (1 != db::build()
+                   ->from('items')
+                   ->where('id', '=', $this->item_id)
+                   ->count_records()) {
             $v->add_error('item_id', 'invalid');
         }
     }

@@ -47,12 +47,12 @@ class Gallery_View_Core extends View
         $v->next_page_url = null;
         $v->last_page_url = null;
 
-        if ($this->page_type == 'collection') {
+        if ('collection' == $this->page_type) {
             $v->page = $this->page;
             $v->max_pages = $this->max_pages;
             $v->total = $this->children_count;
 
-            if ($this->page != 1) {
+            if (1 != $this->page) {
                 $v->first_page_url = url::site(url::merge(['page' => 1]));
                 $v->previous_page_url = url::site(url::merge(['page' => $this->page - 1]));
             }
@@ -64,7 +64,7 @@ class Gallery_View_Core extends View
 
             $v->first_visible_position = ($this->page - 1) * $this->page_size + 1;
             $v->last_visible_position = min($this->page * $this->page_size, $v->total);
-        } elseif ($this->page_type == 'item') {
+        } elseif ('item' == $this->page_type) {
             $v->position = $this->position;
             $v->total = $this->sibling_count;
             if ($this->previous_item) {
@@ -167,12 +167,12 @@ class Gallery_View_Core extends View
                 // 7 == size, 9 == mtime, see http://php.net/stat
                 $key[] = "$path $stats[7] $stats[9]";
             }
-            $key = md5(implode(' ', $key)) . (($type == 'css') ? '.css' : '.js');
+            $key = md5(implode(' ', $key)) . (('css' == $type) ? '.css' : '.js');
 
             if (gallery::allow_css_and_js_combining()) {
                 // Combine enabled - if we're at the start of the buffer, add a comment.
                 if (!$buf) {
-                    $type_text = ($type == 'css') ? 'CSS' : 'JS';
+                    $type_text = ('css' == $type) ? 'CSS' : 'JS';
                     $buf .= "<!-- LOOKING FOR YOUR $type_text? It's all been combined into the link(s) below -->\n";
                 }
 
@@ -187,7 +187,7 @@ class Gallery_View_Core extends View
 
                     $contents = '';
                     foreach (array_keys($this->combine_queue[$type][$group]) as $path) {
-                        if ($type == 'css') {
+                        if ('css' == $type) {
                             $contents .= "/* $path */\n" . $this->process_css($path) . "\n";
                         } else {
                             $contents .= "/* $path */\n" . file_get_contents($path) . "\n";
@@ -202,7 +202,7 @@ class Gallery_View_Core extends View
                     $cache->set($key, $combine_data->contents, [$type], 30 * 84600);
 
                     $use_gzip = function_exists('gzencode') &&
-                                (int) ini_get('zlib.output_compression') === 0;
+                                0 === (int) ini_get('zlib.output_compression');
                     if ($use_gzip) {
                         $cache->set(
                             "{$key}_gz",
@@ -213,16 +213,16 @@ class Gallery_View_Core extends View
                     }
                 }
 
-                if ($type == 'css') {
+                if ('css' == $type) {
                     $buf .= html::stylesheet("combined/css/$key", 'screen,print,projection', true);
                 } else {
                     $buf .= html::script("combined/javascript/$key", true);
                 }
             } else {
                 // Don't combine - just return the CSS and JS links (with the key as a cache buster).
-        $key_base = substr($key, 0, (($type == 'css') ? -4 : -3));  // key without extension
+        $key_base = substr($key, 0, (('css' == $type) ? -4 : -3));  // key without extension
         foreach (array_keys($this->combine_queue[$type][$group]) as $path) {
-            if ($type == 'css') {
+            if ('css' == $type) {
                 $buf .= html::stylesheet("$path?m=$key_base", 'screen,print,projection', false);
             } else {
                 $buf .= html::script("$path?m=$key_base", false);

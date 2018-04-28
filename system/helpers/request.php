@@ -41,7 +41,7 @@ class request_Core
             // Set referrer
             $ref = $_SERVER['HTTP_REFERER'];
 
-            if ($remove_base === true and (strpos($ref, url::base(false)) === 0)) {
+            if (true === $remove_base and (0 === strpos($ref, url::base(false)))) {
                 // Remove the base URL from the referrer
                 $ref = substr($ref, strlen(url::base(false)));
             }
@@ -58,9 +58,9 @@ class request_Core
      */
     public static function protocol()
     {
-        if (Kohana::$server_api === 'cli') {
+        if ('cli' === Kohana::$server_api) {
             return null;
-        } elseif (! empty($_SERVER['HTTPS']) and $_SERVER['HTTPS'] === 'on') {
+        } elseif (! empty($_SERVER['HTTPS']) and 'on' === $_SERVER['HTTPS']) {
             return 'https';
         } else {
             return 'http';
@@ -75,7 +75,7 @@ class request_Core
      */
     public static function is_ajax()
     {
-        return (isset($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest');
+        return (isset($_SERVER['HTTP_X_REQUESTED_WITH']) and 'xmlhttprequest' === strtolower($_SERVER['HTTP_X_REQUESTED_WITH']));
     }
 
     /**
@@ -105,8 +105,8 @@ class request_Core
     public static function user_agent($key = 'agent')
     {
         // Retrieve raw user agent without parsing
-        if ($key === 'agent') {
-            if (request::$user_agent === null) {
+        if ('agent' === $key) {
+            if (null === request::$user_agent) {
                 return request::$user_agent = isset($_SERVER['HTTP_USER_AGENT']) ? trim($_SERVER['HTTP_USER_AGENT']) : '';
             }
 
@@ -124,8 +124,8 @@ class request_Core
             // Parse the user agent and extract basic information
             foreach (Kohana::config('user_agents') as $type => $data) {
                 foreach ($data as $fragment => $name) {
-                    if (stripos(request::$user_agent['agent'], $fragment) !== false) {
-                        if ($type === 'browser' and preg_match('|'.preg_quote($fragment).'[^0-9.]*+([0-9.][0-9.a-z]*)|i', request::$user_agent['agent'], $match)) {
+                    if (false !== stripos(request::$user_agent['agent'], $fragment)) {
+                        if ('browser' === $type and preg_match('|' . preg_quote($fragment) . '[^0-9.]*+([0-9.][0-9.a-z]*)|i', request::$user_agent['agent'], $match)) {
                             // Set the browser version
                             request::$user_agent['version'] = $match[1];
                         }
@@ -152,7 +152,7 @@ class request_Core
     {
         request::parse_accept_content_header();
 
-        if ($type === null) {
+        if (null === $type) {
             return request::$accept_types;
         }
 
@@ -169,7 +169,7 @@ class request_Core
     {
         request::parse_accept_charset_header();
 
-        if ($charset === null) {
+        if (null === $charset) {
             return request::$accept_charsets;
         }
 
@@ -187,7 +187,7 @@ class request_Core
     {
         request::parse_accept_encoding_header();
 
-        if ($encoding === null) {
+        if (null === $encoding) {
             return request::$accept_encodings;
         }
 
@@ -205,7 +205,7 @@ class request_Core
     {
         request::parse_accept_language_header();
 
-        if ($tag === null) {
+        if (null === $tag) {
             return request::$accept_languages;
         }
 
@@ -333,7 +333,7 @@ class request_Core
         $type = strtolower($type);
 
         // General content type (e.g. "jpg")
-        if (strpos($type, '/') === false) {
+        if (false === strpos($type, '/')) {
             // Don't accept anything by default
             $q = 0;
 
@@ -354,7 +354,7 @@ class request_Core
             return request::$accept_types[$type[0]][$type[1]];
         }
 
-        if ($explicit_check === false) {
+        if (false === $explicit_check) {
             // Wildcard match
             if (isset(request::$accept_types[$type[0]]['*'])) {
                 return request::$accept_types[$type[0]]['*'];
@@ -392,7 +392,7 @@ class request_Core
             return request::$accept_charsets['*'];
         }
 
-        if ($charset === 'iso-8859-1') {
+        if ('iso-8859-1' === $charset) {
             return 1;
         }
 
@@ -418,12 +418,12 @@ class request_Core
             return request::$accept_encodings[$encoding];
         }
 
-        if ($explicit_check === false) {
+        if (false === $explicit_check) {
             if (isset(request::$accept_encodings['*'])) {
                 return request::$accept_encodings['*'];
             }
 
-            if ($encoding === 'identity') {
+            if ('identity' === $encoding) {
                 return 1;
             }
         }
@@ -452,7 +452,7 @@ class request_Core
                 }
 
                 // A prefix matches
-                if ($explicit_check === false and isset(request::$accept_languages[$tag[0]]['*'])) {
+                if (false === $explicit_check and isset(request::$accept_languages[$tag[0]]['*'])) {
                     return request::$accept_languages[$tag[0]]['*'];
                 }
             } else {
@@ -463,7 +463,7 @@ class request_Core
             }
         }
 
-        if ($explicit_check === false and isset(request::$accept_languages['*'])) {
+        if (false === $explicit_check and isset(request::$accept_languages['*'])) {
             return request::$accept_languages['*'];
         }
 
@@ -502,7 +502,7 @@ class request_Core
     protected static function parse_accept_charset_header()
     {
         // Run this function just once
-        if (request::$accept_charsets !== null) {
+        if (null !== request::$accept_charsets) {
             return;
         }
 
@@ -521,7 +521,7 @@ class request_Core
     protected static function parse_accept_content_header()
     {
         // Run this function just once
-        if (request::$accept_types !== null) {
+        if (null !== request::$accept_types) {
             return;
         }
 
@@ -552,7 +552,7 @@ class request_Core
     protected static function parse_accept_encoding_header()
     {
         // Run this function just once
-        if (request::$accept_encodings !== null) {
+        if (null !== request::$accept_encodings) {
             return;
         }
 
@@ -560,7 +560,7 @@ class request_Core
         if (! isset($_SERVER['HTTP_ACCEPT_ENCODING'])) {
             // Accept everything
             request::$accept_encodings['*'] = 1;
-        } elseif ($_SERVER['HTTP_ACCEPT_ENCODING'] === '') {
+        } elseif ('' === $_SERVER['HTTP_ACCEPT_ENCODING']) {
             // Accept only identity
             request::$accept_encodings['identity'] = 1;
         } else {
@@ -574,7 +574,7 @@ class request_Core
     protected static function parse_accept_language_header()
     {
         // Run this function just once
-        if (request::$accept_languages !== null) {
+        if (null !== request::$accept_languages) {
             return;
         }
 

@@ -36,13 +36,13 @@ class data_rest_Core
         // Note: this code is roughly duplicated in file_proxy, so if you modify this, please look to
         // see if you should make the same change there as well.
 
-        if ($p->size == 'full') {
+        if ('full' == $p->size) {
             if ($item->is_album()) {
                 throw new Kohana_404_Exception();
             }
             access::required('view_full', $item);
             $file = $item->file_path();
-        } elseif ($p->size == 'resize') {
+        } elseif ('resize' == $p->size) {
             access::required('view', $item);
             $file = $item->resize_path();
         } else {
@@ -68,7 +68,7 @@ class data_rest_Core
         Session::instance()->abort_save();
 
         // Dump out the image.  If the item is a movie or album, then its thumbnail will be a JPG.
-        if (($item->is_movie() || $item->is_album()) && $p->size == 'thumb') {
+        if (($item->is_movie() || $item->is_album()) && 'thumb' == $p->size) {
             header('Content-Type: image/jpeg');
         } else {
             header("Content-Type: $item->mime_type");
@@ -79,7 +79,7 @@ class data_rest_Core
         } else {
             Kohana::close_buffers(false);
 
-            if (isset($p->encoding) && $p->encoding == 'base64') {
+            if (isset($p->encoding) && 'base64' == $p->encoding) {
                 print base64_encode(file_get_contents($file));
             } else {
                 readfile($file);
@@ -102,9 +102,9 @@ class data_rest_Core
 
     public static function url($item, $size)
     {
-        if ($size == 'full') {
+        if ('full' == $size) {
             $file = $item->file_path();
-        } elseif ($size == 'resize') {
+        } elseif ('resize' == $size) {
             $file = $item->resize_path();
         } else {
             $file = $item->thumb_path();

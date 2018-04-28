@@ -63,7 +63,7 @@ class items_rest_Core
                 throw new Kohana_404_Exception();
             }
             $items[] = items_rest::_format_restful_item($item, $types);
-            while (($item = $item->parent()) != null) {
+            while (null != ($item = $item->parent())) {
                 array_unshift($items, items_rest::_format_restful_item($item, $types));
             };
         }
@@ -87,7 +87,7 @@ class items_rest_Core
             'entity'        => $item->as_restful_array(),
             'relationships' => rest::relationships('item', $item)
         ];
-        if ($item->type == 'album') {
+        if ('album' == $item->type) {
             $members = [];
             foreach ($item->viewable()->children() as $child) {
                 if (empty($types) || in_array($child->type, $types)) {

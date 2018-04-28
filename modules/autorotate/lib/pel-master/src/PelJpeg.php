@@ -114,7 +114,7 @@ class PelJpeg
      */
     public function __construct($data = false)
     {
-        if ($data === false) {
+        if (false === $data) {
             return;
         }
 
@@ -124,7 +124,7 @@ class PelJpeg
         } elseif ($data instanceof PelDataWindow) {
             Pel::debug('Initializing PelJpeg object from PelDataWindow.');
             $this->load($data);
-        } elseif (is_resource($data) && get_resource_type($data) == 'gd') {
+        } elseif (is_resource($data) && 'gd' == get_resource_type($data)) {
             Pel::debug('Initializing PelJpeg object from image resource.');
             $this->load(new PelDataWindow($data));
         } else {
@@ -143,7 +143,7 @@ class PelJpeg
     protected static function getJpgSectionStart($d)
     {
         for ($i = 0; $i < 7; $i ++) {
-            if ($d->getByte($i) != 0xFF) {
+            if (0xFF != $d->getByte($i)) {
                 break;
             }
         }
@@ -246,7 +246,7 @@ class PelJpeg
                          */
 
                         $length = $d->getSize();
-                        while ($d->getByte($length - 2) != 0xFF || $d->getByte($length - 1) != PelJpegMarker::EOI) {
+                        while (0xFF != $d->getByte($length - 2) || $d->getByte($length - 1) != PelJpegMarker::EOI) {
                             $length --;
                         }
 

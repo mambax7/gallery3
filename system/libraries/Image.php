@@ -69,9 +69,9 @@ class Image_Core
         static $check;
 
         // Make the check exactly once
-        ($check === null) and $check = function_exists('getimagesize');
+        (null === $check) and $check = function_exists('getimagesize');
 
-        if ($check === false) {
+        if (false === $check) {
             throw new Kohana_Exception('The Image library requires the getimagesize() PHP function, which is not available in your installation.');
         }
 
@@ -204,7 +204,7 @@ class Image_Core
             throw new Kohana_Exception('The dimensions specified for :function: are not valid.', [':function:' => __FUNCTION__]);
         }
 
-        if ($master === null) {
+        if (null === $master) {
             // Maintain the aspect ratio by default
             $master = Image::AUTO;
         } elseif (! $this->valid_size('master', $master)) {
@@ -397,13 +397,13 @@ class Image_Core
         }
 
         if ($status = $this->driver->process($this->image, $this->actions, $dir, $file, false, $background)) {
-            if ($chmod !== false) {
+            if (false !== $chmod) {
                 // Set permissions
                 chmod($new_image, $chmod);
             }
         }
 
-        if ($keep_actions !== true) {
+        if (true !== $keep_actions) {
             // Reset actions. Subsequent save() or render() will not apply previous actions.
             $this->actions = [];
         }
@@ -431,7 +431,7 @@ class Image_Core
         // Process the image with the driver
         $status = $this->driver->process($this->image, $this->actions, $dir, $file, true, $background);
 
-        if ($keep_actions !== true) {
+        if (true !== $keep_actions) {
             // Reset actions. Subsequent save() or render() will not apply previous actions.
             $this->actions = [];
         }

@@ -350,9 +350,9 @@ class Pel
      */
     private static function dgettextWrapper($domain, $str)
     {
-        if (self::$hasdgetext === null) {
+        if (null === self::$hasdgetext) {
             self::$hasdgetext = function_exists('dgettext');
-            if (self::$hasdgetext === true) {
+            if (true === self::$hasdgetext) {
                 bindtextdomain('pel', __DIR__ . '/locale');
             }
         }

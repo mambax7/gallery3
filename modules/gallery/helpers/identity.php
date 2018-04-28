@@ -72,7 +72,7 @@ class identity_Core
             // upconvert into a user.
             // @todo set the user name into the session instead of 2 and then use it to get the
             //       user object
-            if ($user === 2) {
+            if (2 === $user) {
                 $session->delete('user');  // delete it so that identity code isn't confused by the integer
                 auth::login(IdentityProvider::instance()->admin_user());
             }

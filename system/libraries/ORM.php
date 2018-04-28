@@ -141,7 +141,7 @@ class ORM_Core
             // Table name is the same as the object name
             $this->table_name = $this->object_name;
 
-            if ($this->table_names_plural === true) {
+            if (true === $this->table_names_plural) {
                 // Make the table name plural
                 $this->table_name = inflector::plural($this->table_name);
             }
@@ -181,7 +181,7 @@ class ORM_Core
         // Initialize database
         $this->__initialize();
 
-        if ($this->reload_on_wakeup === true) {
+        if (true === $this->reload_on_wakeup) {
             // Reload the object
             $this->reload();
         }
@@ -209,7 +209,7 @@ class ORM_Core
             // Number of arguments passed
             $num_args = count($args);
 
-            if ($method === 'select' and $num_args > 3) {
+            if ('select' === $method and $num_args > 3) {
                 // Call select() manually to avoid call_user_func_array
                 $this->db_builder->select($args);
             } else {
@@ -274,7 +274,7 @@ class ORM_Core
             return $this->object[$column];
         } elseif (isset($this->related[$column])) {
             return $this->related[$column];
-        } elseif ($column === 'primary_key_value') {
+        } elseif ('primary_key_value' === $column) {
             if (! $this->loaded() and ! $this->empty_primary_key() and $this->unique_key($this->object[$this->primary_key]) !== $this->primary_key) {
                 // Load if object hasn't been loaded and the key given isn't the primary_key
                 // that we need (i.e. passing an email address to ORM::factory rather than the id)
@@ -579,7 +579,7 @@ class ORM_Core
      */
     public function find($id = null, $ignore_changed = false)
     {
-        if ($id !== null) {
+        if (null !== $id) {
             if (is_array($id)) {
                 // Search for all clauses
                 $this->db_builder->where([$id]);
@@ -602,12 +602,12 @@ class ORM_Core
      */
     public function find_all($limit = null, $offset = null)
     {
-        if ($limit !== null and ! isset($this->db_applied['limit'])) {
+        if (null !== $limit and ! isset($this->db_applied['limit'])) {
             // Set limit
             $this->limit($limit);
         }
 
-        if ($offset !== null and ! isset($this->db_applied['offset'])) {
+        if (null !== $offset and ! isset($this->db_applied['offset'])) {
             // Set offset
             $this->offset($offset);
         }
@@ -625,11 +625,11 @@ class ORM_Core
      */
     public function select_list($key = null, $val = null)
     {
-        if ($key === null) {
+        if (null === $key) {
             $key = $this->primary_key;
         }
 
-        if ($val === null) {
+        if (null === $val) {
             $val = $this->primary_val;
         }
 
@@ -648,7 +648,7 @@ class ORM_Core
      */
     public function validate(Validation $array = null)
     {
-        if ($array === null) {
+        if (null === $array) {
             $array = new Validation($this->object);
         }
 
@@ -672,7 +672,7 @@ class ORM_Core
             }
         }
         // Validate the array
-        if (($this->_valid = $array->validate()) === false) {
+        if (false === ($this->_valid = $array->validate())) {
             ORM_Validation_Exception::handle_validation($this->table_name, $array);
         }
 
@@ -711,7 +711,7 @@ class ORM_Core
                     $column = $this->updated_column['column'];
                     $format = $this->updated_column['format'];
 
-                    $data[$column] = $this->object[$column] = ($format === true) ? time() : date($format);
+                    $data[$column] = $this->object[$column] = (true === $format) ? time() : date($format);
                 }
 
                 $query = db::update($this->table_name)
@@ -727,7 +727,7 @@ class ORM_Core
                     $column = $this->created_column['column'];
                     $format = $this->created_column['format'];
 
-                    $data[$column] = $this->object[$column] = ($format === true) ? time() : date($format);
+                    $data[$column] = $this->object[$column] = (true === $format) ? time() : date($format);
                 }
 
                 $result = db::insert($this->table_name)
@@ -746,13 +746,13 @@ class ORM_Core
                 }
             }
 
-            if ($this->saved() === true) {
+            if (true === $this->saved()) {
                 // All changes have been saved
                 $this->changed = [];
             }
         }
 
-        if ($this->saved() === true and ! empty($this->changed_relations)) {
+        if (true === $this->saved() and ! empty($this->changed_relations)) {
             foreach ($this->changed_relations as $column => $values) {
                 // All values that were added
                 $added = array_diff($values, $this->object_relations[$column]);
@@ -771,7 +771,7 @@ class ORM_Core
                 // Load the model
                 $model = ORM::factory(inflector::singular($column));
 
-                if (($join_table = array_search($column, $this->has_and_belongs_to_many)) === false) {
+                if (false === ($join_table = array_search($column, $this->has_and_belongs_to_many))) {
                     continue;
                 }
 
@@ -806,7 +806,7 @@ class ORM_Core
             }
         }
 
-        if ($this->saved() === true) {
+        if (true === $this->saved()) {
             // Always force revalidation after saving
             $this->_valid = false;
 
@@ -827,7 +827,7 @@ class ORM_Core
      */
     public function delete($id = null)
     {
-        if ($id === null) {
+        if (null === $id) {
             // Use the the primary key value
             $id = $this->primary_key_value;
         }
@@ -858,7 +858,7 @@ class ORM_Core
             db::delete($this->table_name)
                 ->where($this->primary_key, 'IN', $ids)
                 ->execute($this->db);
-        } elseif ($ids === null) {
+        } elseif (null === $ids) {
             // Delete all records
             db::delete($this->table_name)
                 ->execute($this->db);
@@ -915,7 +915,7 @@ class ORM_Core
      */
     public function reload_columns($force = false)
     {
-        if ($force === true or empty($this->table_columns)) {
+        if (true === $force or empty($this->table_columns)) {
             if (isset(ORM::$column_cache[$this->object_name])) {
                 // Use cached column information
                 $this->table_columns = ORM::$column_cache[$this->object_name];
@@ -938,9 +938,9 @@ class ORM_Core
     public function has(ORM $model, $any = false)
     {
         // Determine plural or singular relation name
-        $related = ($model->table_names_plural === true) ? $model->object_plural : $model->object_name;
+        $related = (true === $model->table_names_plural) ? $model->object_plural : $model->object_name;
 
-        if (($join_table = array_search($related, $this->has_and_belongs_to_many)) === false) {
+        if (false === ($join_table = array_search($related, $this->has_and_belongs_to_many))) {
             return false;
         }
 
@@ -1011,7 +1011,7 @@ class ORM_Core
         // Get the faked column name
         $column = $model->object_plural;
 
-        if (($key = array_search($model->primary_key_value, $this->changed_relations[$column])) === false) {
+        if (false === ($key = array_search($model->primary_key_value, $this->changed_relations[$column]))) {
             return false;
         }
 
@@ -1087,7 +1087,7 @@ class ORM_Core
      */
     public function foreign_key($table = null, $prefix_table = null)
     {
-        if ($table === true) {
+        if (true === $table) {
             if (is_string($prefix_table)) {
                 // Use prefix table name and this table's PK
                 return $prefix_table.'.'.$this->primary_key;
@@ -1110,12 +1110,12 @@ class ORM_Core
                 // Use this table
                 $table = $this->table_name;
 
-                if (strpos($table, '.') !== false) {
+                if (false !== strpos($table, '.')) {
                     // Hack around support for PostgreSQL schemas
                     list($schema, $table) = explode('.', $table, 2);
                 }
 
-                if ($this->table_names_plural === true) {
+                if (true === $this->table_names_plural) {
                     // Make the key name singular
                     $table = inflector::singular($table);
                 }
@@ -1184,7 +1184,7 @@ class ORM_Core
         $related = [];
 
         foreach ($values as $column => $value) {
-            if (strpos($column, ':') === false) {
+            if (false === strpos($column, ':')) {
                 if (! isset($this->changed[$column])) {
                     if (isset($this->table_columns[$column])) {
                         //Update the column, respects __get()
@@ -1225,14 +1225,14 @@ class ORM_Core
             }
 
             // Set the loaded and saved object status based on the primary key
-            $this->_loaded = $this->_saved = ($values[$this->primary_key] !== null);
+            $this->_loaded = $this->_saved = (null !== $values[$this->primary_key]);
         }
 
         // Related objects
         $related = [];
 
         foreach ($values as $column => $value) {
-            if (strpos($column, ':') === false) {
+            if (false === strpos($column, ':')) {
                 if (! $ignore_changed or ! isset($this->changed[$column])) {
                     $this->object[$column] = $value;
                 }
@@ -1267,7 +1267,7 @@ class ORM_Core
     {
         $this->db_builder->from($this->table_name);
 
-        if ($array === false) {
+        if (false === $array) {
             // Only fetch 1 record
             $this->db_builder->limit(1);
         }
@@ -1293,7 +1293,7 @@ class ORM_Core
         if (! isset($this->db_applied['order_by']) and ! empty($this->sorting)) {
             $sorting = [];
             foreach ($this->sorting as $column => $direction) {
-                if (strpos($column, '.') === false) {
+                if (false === strpos($column, '.')) {
                     // Keeps sorting working properly when using JOINs on
                     // tables with columns of the same name
                     $column = $this->table_name.'.'.$column;
@@ -1310,12 +1310,12 @@ class ORM_Core
         $result = $this->db_builder->execute($this->db);
         $this->db_applied = [];
 
-        if ($array === true) {
+        if (true === $array) {
             // Return an iterated result
             return new ORM_Iterator($this, $result);
         }
 
-        if ($result->count() === 1) {
+        if (1 === $result->count()) {
             // Load object values
             $this->_load_values($result->as_array()->current(), $ignore_changed);
         } else {
@@ -1356,6 +1356,6 @@ class ORM_Core
      */
     protected function empty_primary_key()
     {
-        return (empty($this->object[$this->primary_key]) and $this->object[$this->primary_key] !== '0');
+        return (empty($this->object[$this->primary_key]) and '0' !== $this->object[$this->primary_key]);
     }
 } // End ORM

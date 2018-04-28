@@ -56,45 +56,45 @@ function lookup_Olympus_tag($tag)
 //====================================================================
 function formatOlympusData($type, $tag, $intel, $data)
 {
-    if ($type == 'ASCII') {
-    } elseif ($type == 'URATIONAL' || $type == 'SRATIONAL') {
+    if ('ASCII' == $type) {
+    } elseif ('URATIONAL' == $type || 'SRATIONAL' == $type) {
         $data = unRational($data, $type, $intel);
-        if ($intel==1) {
+        if (1 == $intel) {
             $data = intel2Moto($data);
         }
     
-        if ($tag == '0204') { //DigitalZoom
+        if ('0204' == $tag) { //DigitalZoom
             $data= $data . 'x';
         }
-        if ($tag == '0205') { //Unknown2
+        if ('0205' == $tag) { //Unknown2
         }
-    } elseif ($type == 'USHORT' || $type == 'SSHORT' || $type == 'ULONG' || $type == 'SLONG' || $type == 'FLOAT' || $type == 'DOUBLE') {
+    } elseif ('USHORT' == $type || 'SSHORT' == $type || 'ULONG' == $type || 'SLONG' == $type || 'FLOAT' == $type || 'DOUBLE' == $type) {
         $data = rational($data, $type, $intel);
         
-        if ($tag == '0201') { //JPEGQuality
-            if ($data == 1) {
+        if ('0201' == $tag) { //JPEGQuality
+            if (1 == $data) {
                 $data = 'SQ';
-            } elseif ($data == 2) {
+            } elseif (2 == $data) {
                 $data = 'HQ';
-            } elseif ($data == 3) {
+            } elseif (3 == $data) {
                 $data = 'SHQ';
             } else {
                 $data = (string) t('Unknown') . ': ' . $data;
             }
         }
-        if ($tag == '0202') { //Macro
-            if ($data == 0) {
+        if ('0202' == $tag) { //Macro
+            if (0 == $data) {
                 $data = 'Normal';
-            } elseif ($data == 1) {
+            } elseif (1 == $data) {
                 $data = 'Macro';
             } else {
                 $data = (string) t('Unknown') . ': ' . $data;
             }
         }
-    } elseif ($type == 'UNDEFINED') {
+    } elseif ('UNDEFINED' == $type) {
     } else {
         $data = bin2hex($data);
-        if ($intel==1) {
+        if (1 == $intel) {
             $data = intel2Moto($data);
         }
     }
@@ -110,7 +110,7 @@ function formatOlympusData($type, $tag, $intel, $data)
 //==============================================================================
 function parseOlympus($block, &$result, $seek, $globalOffset)
 {
-    if ($result['Endien'] == 'Intel') {
+    if ('Intel' == $result['Endien']) {
         $intel = 1;
     } else {
         $intel = 0;
@@ -122,10 +122,10 @@ function parseOlympus($block, &$result, $seek, $globalOffset)
     // number of bytes that count the IFD fields differ in each case.
     // Fixed by Zenphoto 2/24/08
     $new = false;
-    if (substr($block, 0, 8) == "OLYMPUS\x00") {
+    if ("OLYMPUS\x00" == substr($block, 0, 8)) {
         $new = true;
-    } elseif (substr($block, 0, 7) == "OLYMP\x00\x01"
-        || substr($block, 0, 7) == "OLYMP\x00\x02") {
+    } elseif ("OLYMP\x00\x01" == substr($block, 0, 7)
+              || "OLYMP\x00\x02" == substr($block, 0, 7)) {
         $new = false;
     } else {
         // Header does not match known Olympus headers.
@@ -142,7 +142,7 @@ function parseOlympus($block, &$result, $seek, $globalOffset)
     // New makernote repeats 1-byte value twice, so increment $place by 2 in either case.
     $num = bin2hex(substr($block, $place, $countfieldbits));
     $place += 2;
-    if ($intel == 1) {
+    if (1 == $intel) {
         $num = intel2Moto($num);
     }
     $ntags = hexdec($num);
@@ -153,7 +153,7 @@ function parseOlympus($block, &$result, $seek, $globalOffset)
         //2 byte tag
         $tag = bin2hex(substr($block, $place, 2));
         $place += 2;
-        if ($intel == 1) {
+        if (1 == $intel) {
             $tag = intel2Moto($tag);
         }
         $tag_name = lookup_Olympus_tag($tag);
@@ -161,7 +161,7 @@ function parseOlympus($block, &$result, $seek, $globalOffset)
         //2 byte type
         $type = bin2hex(substr($block, $place, 2));
         $place += 2;
-        if ($intel == 1) {
+        if (1 == $intel) {
             $type = intel2Moto($type);
         }
         lookup_type($type, $size);
@@ -169,7 +169,7 @@ function parseOlympus($block, &$result, $seek, $globalOffset)
         //4 byte count of number of data units
         $count = bin2hex(substr($block, $place, 4));
         $place+=4;
-        if ($intel == 1) {
+        if (1 == $intel) {
             $count = intel2Moto($count);
         }
         $bytesofdata = $size * hexdec($count);
@@ -183,11 +183,11 @@ function parseOlympus($block, &$result, $seek, $globalOffset)
             $data = $value;
         } else {
             $value = bin2hex($value);
-            if ($intel==1) {
+            if (1 == $intel) {
                 $value = intel2Moto($value);
             }
             $v = fseek($seek, $globalOffset+hexdec($value));  //offsets are from TIFF header which is 12 bytes from the start of the file
-            if (isset($GLOBALS['exiferFileSize']) && $v == 0 && $bytesofdata < $GLOBALS['exiferFileSize']) {
+            if (isset($GLOBALS['exiferFileSize']) && 0 == $v && $bytesofdata < $GLOBALS['exiferFileSize']) {
                 $data = fread($seek, $bytesofdata);
             } else {
                 $result['Errors'] = $result['Errors']++;
@@ -196,11 +196,11 @@ function parseOlympus($block, &$result, $seek, $globalOffset)
         }
         $formated_data = formatOlympusData($type, $tag, $intel, $data);
         
-        if ($result['VerboseOutput']==1) {
+        if (1 == $result['VerboseOutput']) {
             $result['SubIFD']['MakerNote'][$tag_name] = $formated_data;
-            if ($type == 'URATIONAL' || $type == 'SRATIONAL' || $type == 'USHORT' || $type == 'SSHORT' || $type == 'ULONG' || $type == 'SLONG' || $type == 'FLOAT' || $type == 'DOUBLE') {
+            if ('URATIONAL' == $type || 'SRATIONAL' == $type || 'USHORT' == $type || 'SSHORT' == $type || 'ULONG' == $type || 'SLONG' == $type || 'FLOAT' == $type || 'DOUBLE' == $type) {
                 $data = bin2hex($data);
-                if ($intel==1) {
+                if (1 == $intel) {
                     $data = intel2Moto($data);
                 }
             }

@@ -97,7 +97,7 @@ class PelDataWindow
     {
         if (is_string($data)) {
             $this->data = $data;
-        } elseif (is_resource($data) && get_resource_type($data) == 'gd') {
+        } elseif (is_resource($data) && 'gd' == get_resource_type($data)) {
             /*
              * The ImageJpeg() function insists on printing the bytes
              * instead of returning them in a more civil way as a string, so

@@ -98,7 +98,7 @@ class Pagination_Core
             }
 
             // All pagination config groups inherit default config group
-            if ($config['group'] !== 'default') {
+            if ('default' !== $config['group']) {
                 // Load and validate default config group
                 if (! is_array($default_config = Kohana::config('pagination.default'))) {
                     throw new Kohana_Exception('pagination.undefined_group: default');
@@ -123,7 +123,7 @@ class Pagination_Core
         $this->directory = trim($this->directory, '/').'/';
 
         // Build generic URL with page in query string
-        if ($this->query_string !== '') {
+        if ('' !== $this->query_string) {
             // Extract current page
             $this->current_page = isset($_GET[$this->query_string]) ? (int) $_GET[$this->query_string] : 1;
 
@@ -131,7 +131,7 @@ class Pagination_Core
             $_GET[$this->query_string] = '{page}';
 
             // Create full URL
-            $base_url = ($this->base_url === '') ? Router::$current_uri : $this->base_url;
+            $base_url = ('' === $this->base_url) ? Router::$current_uri : $this->base_url;
             $this->url = url::site($base_url).'?'.str_replace('%7Bpage%7D', '{page}', http_build_query($_GET));
 
             // Reset page number
@@ -141,11 +141,11 @@ class Pagination_Core
         // Build generic URL with page as URI segment
         else {
             // Use current URI if no base_url set
-            $this->url = ($this->base_url === '') ? Router::$segments : explode('/', trim($this->base_url, '/'));
+            $this->url = ('' === $this->base_url) ? Router::$segments : explode('/', trim($this->base_url, '/'));
 
             // Convert uri 'label' to corresponding integer if needed
             if (is_string($this->uri_segment)) {
-                if (($key = array_search($this->uri_segment, $this->url)) === false) {
+                if (false === ($key = array_search($this->uri_segment, $this->url))) {
                     // If uri 'label' is not found, auto add it to base_url
                     $this->url[] = $this->uri_segment;
                     $this->uri_segment = count($this->url) + 1;
@@ -174,7 +174,7 @@ class Pagination_Core
 
         // If there is no first/last/previous/next page, relative to the
         // current page, value is set to FALSE. Valid page number otherwise.
-        $this->first_page         = ($this->current_page === 1) ? false : 1;
+        $this->first_page         = (1 === $this->current_page) ? false : 1;
         $this->last_page          = ($this->current_page >= $this->total_pages) ? false : $this->total_pages;
         $this->previous_page      = ($this->current_page > 1) ? $this->current_page - 1 : false;
         $this->next_page          = ($this->current_page < $this->total_pages) ? $this->current_page + 1 : false;
@@ -193,11 +193,11 @@ class Pagination_Core
     public function render($style = null)
     {
         // Hide single page pagination
-        if ($this->auto_hide === true and $this->total_pages <= 1) {
+        if (true === $this->auto_hide and $this->total_pages <= 1) {
             return '';
         }
 
-        if ($style === null) {
+        if (null === $style) {
             // Use default style
             $style = $this->style;
         }

@@ -43,12 +43,12 @@ class Session_Cache_Driver implements Session_Driver
             $name = $config;
 
             // Test the config group name
-            if (($config = Kohana::config('cache.'.$config)) === null) {
+            if (null === ($config = Kohana::config('cache.' . $config))) {
                 throw new Kohana_Exception('The :group: group is not defined in your configuration.', [':group:' => $name]);
             }
         }
 
-        $config['lifetime'] = (Kohana::config('session.expiration') == 0) ? 86400 : Kohana::config('session.expiration');
+        $config['lifetime'] = (0 == Kohana::config('session.expiration')) ? 86400 : Kohana::config('session.expiration');
         $this->cache = new Cache($config);
 
         return is_object($this->cache);

@@ -50,37 +50,37 @@ function lookup_Sanyo_tag($tag)
 //====================================================================
 function formatSanyoData($type, $tag, $intel, $data)
 {
-    if ($type == 'ASCII') {
-    } elseif ($type == 'URATIONAL' || $type == 'SRATIONAL') {
+    if ('ASCII' == $type) {
+    } elseif ('URATIONAL' == $type || 'SRATIONAL' == $type) {
         $data = unRational($data, $type, $intel);
-    } elseif ($type == 'USHORT' || $type == 'SSHORT' || $type == 'ULONG' || $type == 'SLONG' || $type == 'FLOAT' || $type == 'DOUBLE') {
+    } elseif ('USHORT' == $type || 'SSHORT' == $type || 'ULONG' == $type || 'SLONG' == $type || 'FLOAT' == $type || 'DOUBLE' == $type) {
         $data = rational($data, $type, $intel);
         
-        if ($tag == '0200') { //SpecialMode
-            if ($data == 0) {
+        if ('0200' == $tag) { //SpecialMode
+            if (0 == $data) {
                 $data = (string) t('Normal');
             } else {
                 $data = (string) t('Unknown') . ': ' . $data;
             }
         }
-        if ($tag == '0201') { //Quality
-            if ($data == 2) {
+        if ('0201' == $tag) { //Quality
+            if (2 == $data) {
                 $data = (string) t('High');
             } else {
                 $data = (string) t('Unknown') . ': ' . $data;
             }
         }
-        if ($tag == '0202') { //Macro
-            if ($data == 0) {
+        if ('0202' == $tag) { //Macro
+            if (0 == $data) {
                 $data = (string) t('Normal');
             } else {
                 $data = (string) t('Unknown') . ': ' . $data;
             }
         }
-    } elseif ($type == 'UNDEFINED') {
+    } elseif ('UNDEFINED' == $type) {
     } else {
         $data = bin2hex($data);
-        if ($intel==1) {
+        if (1 == $intel) {
             $data = intel2Moto($data);
         }
     }
@@ -95,7 +95,7 @@ function formatSanyoData($type, $tag, $intel, $data)
 //====================================================================
 function parseSanyo($block, &$result, $seek, $globalOffset)
 {
-    if ($result['Endien'] == 'Intel') {
+    if ('Intel' == $result['Endien']) {
         $intel=1;
     } else {
         $intel=0;
@@ -109,7 +109,7 @@ function parseSanyo($block, &$result, $seek, $globalOffset)
     //Get number of tags (2 bytes)
     $num = bin2hex(substr($block, $place, 2));
     $place+=2;
-    if ($intel==1) {
+    if (1 == $intel) {
         $num = intel2Moto($num);
     }
     $result['SubIFD']['MakerNote']['MakerNoteNumTags'] = hexdec($num);
@@ -120,7 +120,7 @@ function parseSanyo($block, &$result, $seek, $globalOffset)
             //2 byte tag
         $tag = bin2hex(substr($block, $place, 2));
         $place+=2;
-        if ($intel==1) {
+        if (1 == $intel) {
             $tag = intel2Moto($tag);
         }
         $tag_name = lookup_Sanyo_tag($tag);
@@ -128,7 +128,7 @@ function parseSanyo($block, &$result, $seek, $globalOffset)
         //2 byte type
         $type = bin2hex(substr($block, $place, 2));
         $place+=2;
-        if ($intel==1) {
+        if (1 == $intel) {
             $type = intel2Moto($type);
         }
         lookup_type($type, $size);
@@ -136,7 +136,7 @@ function parseSanyo($block, &$result, $seek, $globalOffset)
         //4 byte count of number of data units
         $count = bin2hex(substr($block, $place, 4));
         $place+=4;
-        if ($intel==1) {
+        if (1 == $intel) {
             $count = intel2Moto($count);
         }
         $bytesofdata = $size*hexdec($count);
@@ -150,23 +150,23 @@ function parseSanyo($block, &$result, $seek, $globalOffset)
             $data = $value;
         } else {
             $value = bin2hex($value);
-            if ($intel==1) {
+            if (1 == $intel) {
                 $value = intel2Moto($value);
             }
             $v = fseek($seek, $globalOffset+hexdec($value));  //offsets are from TIFF header which is 12 bytes from the start of the file
-            if ($v==0) {
+            if (0 == $v) {
                 $data = fread($seek, $bytesofdata);
-            } elseif ($v==-1) {
+            } elseif (-1 == $v) {
                 $result['Errors'] = $result['Errors']++;
             }
         }
         $formated_data = formatSanyoData($type, $tag, $intel, $data);
         
-        if ($result['VerboseOutput']==1) {
+        if (1 == $result['VerboseOutput']) {
             $result['SubIFD']['MakerNote'][$tag_name] = $formated_data;
-            if ($type == 'URATIONAL' || $type == 'SRATIONAL' || $type == 'USHORT' || $type == 'SSHORT' || $type == 'ULONG' || $type == 'SLONG' || $type == 'FLOAT' || $type == 'DOUBLE') {
+            if ('URATIONAL' == $type || 'SRATIONAL' == $type || 'USHORT' == $type || 'SSHORT' == $type || 'ULONG' == $type || 'SLONG' == $type || 'FLOAT' == $type || 'DOUBLE' == $type) {
                 $data = bin2hex($data);
-                if ($intel==1) {
+                if (1 == $intel) {
                     $data = intel2Moto($data);
                 }
             }

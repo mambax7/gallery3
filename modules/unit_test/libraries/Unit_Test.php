@@ -107,7 +107,7 @@ class Unit_Test_Core
                 $class = substr($path, strrpos($path, '/') + 1, -(strlen(EXT)));
 
                 // Skip hidden files
-                if ($class[0] === '.') {
+                if ('.' === $class[0]) {
                     continue;
                 }
 
@@ -133,7 +133,7 @@ class Unit_Test_Core
                 }
 
                 // Skip disabled Tests
-                if ($reflector->getConstant('DISABLED') === true) {
+                if (true === $reflector->getConstant('DISABLED')) {
                     continue;
                 }
 
@@ -144,7 +144,7 @@ class Unit_Test_Core
                 foreach (['setup', 'teardown'] as $method_name) {
                     if ($reflector->hasMethod($method_name)) {
                         $method = new ReflectionMethod($class, $method_name);
-                        $$method_name = ($method->isPublic() and ! $method->isStatic() and $method->getNumberOfRequiredParameters() === 0);
+                        $$method_name = ($method->isPublic() and ! $method->isStatic() and 0 === $method->getNumberOfRequiredParameters());
                     }
                 }
 
@@ -161,7 +161,7 @@ class Unit_Test_Core
                 // Loop through all the class methods
                 foreach ($reflector->getMethods() as $method) {
                     // Skip invalid test methods
-                    if (! $method->isPublic() or $method->isStatic() or $method->getNumberOfRequiredParameters() !== 0) {
+                    if (! $method->isPublic() or $method->isStatic() or 0 !== $method->getNumberOfRequiredParameters()) {
                         continue;
                     }
 
@@ -170,7 +170,7 @@ class Unit_Test_Core
                     }
 
                     // Test methods should be suffixed with "_test"
-                    if (substr($method_name = $method->getName(), -5) !== '_test') {
+                    if ('_test' !== substr($method_name = $method->getName(), -5)) {
                         continue;
                     }
 
@@ -179,7 +179,7 @@ class Unit_Test_Core
 
                     try {
                         // Run setup method
-                        if ($setup === true) {
+                        if (true === $setup) {
                             $object->setup();
                         }
 
@@ -194,7 +194,7 @@ class Unit_Test_Core
                         }
 
                         // Run teardown method
-                        if ($teardown === true) {
+                        if (true === $teardown) {
                             $object->teardown();
                         }
 
@@ -228,7 +228,7 @@ class Unit_Test_Core
                     unset($object);
                 }
 
-                if ($filter && $this->stats[$class]['total'] == 0) {
+                if ($filter && 0 == $this->stats[$class]['total']) {
                     unset($this->results[$class]);
                     unset($this->stats[$class]);
                 }
@@ -250,7 +250,7 @@ class Unit_Test_Core
         }
 
         // Hide passed tests from the report?
-        $hide_passed = (bool) (($hide_passed !== null) ? $hide_passed : Kohana::config('unit_test.hide_passed', false, false));
+        $hide_passed = (bool) ((null !== $hide_passed) ? $hide_passed : Kohana::config('unit_test.hide_passed', false, false));
         
         
         if (PHP_SAPI == 'cli') {
@@ -295,7 +295,7 @@ abstract class Unit_Test_Case
 {
     public function assert_true($value, $debug = null)
     {
-        if ($value != true) {
+        if (true != $value) {
             throw new Kohana_Unit_Test_Exception(sprintf(Unit_Test::$lang['assert_true'], gettype($value), var_export($value, true)), $debug);
         }
 
@@ -304,7 +304,7 @@ abstract class Unit_Test_Case
 
     public function assert_true_strict($value, $debug = null)
     {
-        if ($value !== true) {
+        if (true !== $value) {
             throw new Kohana_Unit_Test_Exception(sprintf(Unit_Test::$lang['assert_true_strict'], gettype($value), var_export($value, true)), $debug);
         }
 
@@ -313,7 +313,7 @@ abstract class Unit_Test_Case
 
     public function assert_false($value, $debug = null)
     {
-        if ($value != false) {
+        if (false != $value) {
             throw new Kohana_Unit_Test_Exception(sprintf(Unit_Test::$lang['assert_false'], gettype($value), var_export($value, true)), $debug);
         }
 
@@ -322,7 +322,7 @@ abstract class Unit_Test_Case
 
     public function assert_false_strict($value, $debug = null)
     {
-        if ($value !== false) {
+        if (false !== $value) {
             throw new Kohana_Unit_Test_Exception(sprintf(Unit_Test::$lang['assert_false_strict'], gettype($value), var_export($value, true)), $debug);
         }
 
@@ -475,7 +475,7 @@ abstract class Unit_Test_Case
 
     public function assert_null($value, $debug = null)
     {
-        if ($value !== null) {
+        if (null !== $value) {
             throw new Kohana_Unit_Test_Exception(sprintf(Unit_Test::$lang['assert_null'], gettype($value), var_export($value, true)), $debug);
         }
 
@@ -484,7 +484,7 @@ abstract class Unit_Test_Case
 
     public function assert_not_null($value, $debug = null)
     {
-        if ($value === null) {
+        if (null === $value) {
             throw new Kohana_Unit_Test_Exception(sprintf(Unit_Test::$lang['assert_not_null'], gettype($value), var_export($value, true)), $debug);
         }
 

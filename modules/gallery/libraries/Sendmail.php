@@ -57,7 +57,7 @@ class Sendmail_Core
       $this->to = is_array($value[0]) ? $value[0] : [$value[0]];
       break;
     case  'header':
-      if (count($value) != 2) {
+      if (2 != count($value)) {
           Kohana_Log::add('error', wordwrap("Invalid header parameters\n" . Kohana::debug($value)));
           throw new Exception('@todo INVALID_HEADER_PARAMETERS');
       }

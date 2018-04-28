@@ -22,7 +22,7 @@ class Form_Checkbox_Core extends Form_Input
 
     public function __get($key)
     {
-        if ($key == 'value') {
+        if ('value' == $key) {
             // Return the value if the checkbox is checked
             return $this->data['checked'] ? $this->data['value'] : null;
         }
@@ -32,11 +32,11 @@ class Form_Checkbox_Core extends Form_Input
 
     public function label($val = null)
     {
-        if ($val === null) {
+        if (null === $val) {
             // Do not display labels for checkboxes, labels wrap checkboxes
             return '';
         } else {
-            $this->data['label'] = ($val === true) ? utf8::ucwords(inflector::humanize($this->name)) : $val;
+            $this->data['label'] = (true === $val) ? utf8::ucwords(inflector::humanize($this->name)) : $val;
             return $this;
         }
     }

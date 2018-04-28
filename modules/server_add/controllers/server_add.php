@@ -231,7 +231,7 @@ class Server_Add_Controller extends Admin_Controller
         ->order_by('id', 'ASC')
         ->limit(10)
         ->find_all();
-      if ($entries->count() == 0) {
+      if (0 == $entries->count()) {
           // Out of entries, we're done.
           $task->set('mode', 'done');
       }

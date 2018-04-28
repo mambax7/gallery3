@@ -76,7 +76,7 @@ class exif_task_Core
 
             list($remaining, $total, $percent) = exif::stats();
             $task->set('completed', $completed);
-            if ($remaining == 0 || !($remaining + $completed)) {
+            if (0 == $remaining || !($remaining + $completed)) {
                 $task->done = true;
                 $task->state = 'success';
                 site_status::clear('exif_index_out_of_date');

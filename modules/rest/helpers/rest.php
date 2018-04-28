@@ -40,7 +40,7 @@ class rest_Core
         );
       }
 
-      if (preg_match('/^[$A-Za-z_][0-9A-Za-z_]*$/', $callback) == 1) {
+      if (1 == preg_match('/^[$A-Za-z_][0-9A-Za-z_]*$/', $callback)) {
           header('Content-type: application/javascript; charset=UTF-8');
           print "$callback(" . json_encode($data) . ')';
       } else {
@@ -150,7 +150,7 @@ class rest_Core
         $path = parse_url($relative_url, PHP_URL_PATH);
         $components = explode('/', $path, 3);
 
-        if (count($components) != 3) {
+        if (3 != count($components)) {
             throw new Kohana_404_Exception($url);
         }
 
@@ -179,8 +179,8 @@ class rest_Core
         }
 
         $url = call_user_func_array([$class, 'url'], $args);
-        if (Input::instance()->get('output') == 'html') {
-            if (strpos($url, '?') === false) {
+        if ('html' == Input::instance()->get('output')) {
+            if (false === strpos($url, '?')) {
                 $url .= '?output=html';
             } else {
                 $url .= '&output=html';

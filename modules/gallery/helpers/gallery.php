@@ -34,12 +34,12 @@ class gallery_Core
             !identity::active_user()->admin) {
             try {
                 $class = new ReflectionClass(ucfirst(Router::$controller).'_Controller');
-                $allowed = $class->getConstant('ALLOW_MAINTENANCE_MODE') === true;
+                $allowed = true === $class->getConstant('ALLOW_MAINTENANCE_MODE');
             } catch (ReflectionClass $e) {
                 $allowed = false;
             }
             if (!$allowed) {
-                if (Router::$controller == 'admin') {
+                if ('admin' == Router::$controller) {
                     // At this point we're in the admin theme and it doesn't have a themed login page, so
                     // we can't just swap in the login controller and have it work.  So redirect back to the
                     // root item where we'll run this code again with the site theme.
@@ -62,15 +62,15 @@ class gallery_Core
     {
         if (identity::active_user()->guest &&
         !access::user_can(identity::guest(), 'view', item::root()) &&
-            php_sapi_name() != 'cli') {
+            'cli' != php_sapi_name()) {
             try {
                 $class = new ReflectionClass(ucfirst(Router::$controller).'_Controller');
-                $allowed = $class->getConstant('ALLOW_PRIVATE_GALLERY') === true;
+                $allowed = true === $class->getConstant('ALLOW_PRIVATE_GALLERY');
             } catch (ReflectionClass $e) {
                 $allowed = false;
             }
             if (!$allowed) {
-                if (Router::$controller == 'admin') {
+                if ('admin' == Router::$controller) {
                     // At this point we're in the admin theme and it doesn't have a themed login page, so
                     // we can't just swap in the login controller and have it work.  So redirect back to the
                     // root item where we'll run this code again with the site theme.
@@ -203,7 +203,7 @@ class gallery_Core
      */
     public static function version_string()
     {
-        if (gallery::RELEASE_CHANNEL == 'git') {
+        if ('git' == gallery::RELEASE_CHANNEL) {
             $build_number = gallery::build_number();
             return sprintf(
                 '%s (branch %s, %s)',

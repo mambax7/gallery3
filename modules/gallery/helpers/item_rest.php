@@ -58,7 +58,7 @@ class item_rest_Core
             throw new Rest_Exception('Bad Request', 400);
         }
 
-        if ($p->scope == 'direct') {
+        if ('direct' == $p->scope) {
             $orm->where('parent_id', '=', $item->id);
         } else {
             $orm->where('left_ptr', '>', $item->left_ptr);
@@ -76,7 +76,7 @@ class item_rest_Core
         // Apply the item's sort order, using id as the tie breaker.
         // See Item_Model::children()
         $order_by = [$item->sort_column => $item->sort_order];
-        if ($item->sort_column != 'id') {
+        if ('id' != $item->sort_column) {
             $order_by['id'] = 'ASC';
         }
         $orm->order_by($order_by);
@@ -156,7 +156,7 @@ class item_rest_Core
 
         $item->save();
 
-        if (isset($request->params->members) && $item->sort_column == 'weight') {
+        if (isset($request->params->members) && 'weight' == $item->sort_column) {
             $weight = 0;
             foreach ($request->params->members as $url) {
                 $child = rest::resolve($url);

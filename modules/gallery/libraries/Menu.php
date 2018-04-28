@@ -189,7 +189,7 @@ class Menu_Core extends Menu_Element
     {
         parent::__construct($type);
         $this->elements = [];
-        $this->is_root = $type == 'root';
+        $this->is_root = 'root' == $type;
     }
 
     /**

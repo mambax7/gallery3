@@ -45,7 +45,7 @@ class Database_Cache_Result_Core extends Database_Result
 
     public function as_object($class = null, $return = false)
     {
-        if ($class !== null) {
+        if (null !== $class) {
             throw new Database_Exception('Database cache results do not support object casting');
         }
 

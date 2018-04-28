@@ -56,19 +56,19 @@ function formatCanonData($type, $tag, $intel, $data, $exif, &$result)
     $place = 0;
     
     
-    if ($type == 'ASCII') {
+    if ('ASCII' == $type) {
         $result = $data = str_replace("\0", '', $data);
-    } elseif ($type == 'URATIONAL' || $type == 'SRATIONAL') {
+    } elseif ('URATIONAL' == $type || 'SRATIONAL' == $type) {
         $data = unRational($data, $type, $intel);
     
-        if ($tag == '0204') { //DigitalZoom
+        if ('0204' == $tag) { //DigitalZoom
             $data= $data . 'x';
         }
-    } elseif ($type == 'USHORT' || $type == 'SSHORT' || $type == 'ULONG' || $type == 'SLONG' || $type == 'FLOAT' || $type == 'DOUBLE') {
+    } elseif ('USHORT' == $type || 'SSHORT' == $type || 'ULONG' == $type || 'SLONG' == $type || 'FLOAT' == $type || 'DOUBLE' == $type) {
         $data = rational($data, $type, $intel);
         $result['RAWDATA'] = $data;
     
-        if ($tag == '0001') { //first chunk
+        if ('0001' == $tag) { //first chunk
             $result['Bytes']=hexdec(intel2Moto(substr($data, $place, 4)));
             $place+=4;//0
             if ($result['Bytes'] != strlen($data) / 2) {
@@ -269,19 +269,19 @@ function formatCanonData($type, $tag, $intel, $data, $exif, &$result)
             $result['FlashDetails']=str_pad(base_convert(intel2Moto(substr($data, $place, 4)), 16, 2), 16, '0', STR_PAD_LEFT);
             $place+=4;//29
             $flashDetails = [];
-            if (substr($result['FlashDetails'], 1, 1) == 1) {
+            if (1 == substr($result['FlashDetails'], 1, 1)) {
                 $flashDetails[] = (string) t('External E-TTL');
             }
-            if (substr($result['FlashDetails'], 2, 1) == 1) {
+            if (1 == substr($result['FlashDetails'], 2, 1)) {
                 $flashDetails[] = (string) t('Internal Flash');
             }
-            if (substr($result['FlashDetails'], 4, 1) == 1) {
+            if (1 == substr($result['FlashDetails'], 4, 1)) {
                 $flashDetails[] = (string) t('FP sync used');
             }
-            if (substr($result['FlashDetails'], 8, 1) == 1) {
+            if (1 == substr($result['FlashDetails'], 8, 1)) {
                 $flashDetails[] = (string) t('2nd(rear)-curtain sync used');
             }
-            if (substr($result['FlashDetails'], 12, 1) == 1) {
+            if (1 == substr($result['FlashDetails'], 12, 1)) {
                 $flashDetails[] = (string) t('1st curtain sync');
             }
             $result['FlashDetails']=implode(',', $flashDetails);
@@ -291,14 +291,14 @@ function formatCanonData($type, $tag, $intel, $data, $exif, &$result)
             $place+=4;//31
             $anotherFocusMode=hexdec(intel2Moto(substr($data, $place, 4)));
             $place+=4;//32
-            if (strpos(strtoupper($exif['IFD0']['Model']), 'G1') !== false) {
+            if (false !== strpos(strtoupper($exif['IFD0']['Model']), 'G1')) {
                 switch ($anotherFocusMode) {
                     case 0: $result['FocusMode'] = (string) t('Single'); break;
                     case 1: $result['FocusMode'] = (string) t('Continuous'); break;
                     default: $result['FocusMode'] = (string) t('Unknown');
                 }
             }
-        } elseif ($tag == '0004') { //second chunk
+        } elseif ('0004' == $tag) { //second chunk
             $result['Bytes']=hexdec(intel2Moto(substr($data, $place, 4)));
             $place+=4;//0
             if ($result['Bytes'] != strlen($data) / 2) {
@@ -396,23 +396,23 @@ function formatCanonData($type, $tag, $intel, $data, $exif, &$result)
             $result['SubjectDistance']=hexdec(intel2Moto(substr($data, $place, 4)));
             $place+=4;//19
                 $result['SubjectDistance'] .= '/100 m';
-        } elseif ($tag == '0008') { //image number
-            if ($intel==1) {
+        } elseif ('0008' == $tag) { //image number
+            if (1 == $intel) {
                 $data = intel2Moto($data);
             }
             $data=hexdec($data);
             $result = round($data/10000) . '-' . $data % 10000;
-        } elseif ($tag == '000c') { //camera serial number
-            if ($intel==1) {
+        } elseif ('000c' == $tag) { //camera serial number
+            if (1 == $intel) {
                 $data = intel2Moto($data);
             }
             $data=hexdec($data);
             $result = '#' . bin2hex(substr($data, 0, 16)) . substr($data, 16, 16);
         }
-    } elseif ($type == 'UNDEFINED') {
+    } elseif ('UNDEFINED' == $type) {
     } else {
         $data = bin2hex($data);
-        if ($intel==1) {
+        if (1 == $intel) {
             $data = intel2Moto($data);
         }
     }
@@ -432,7 +432,7 @@ function parseCanon($block, &$result, $seek, $globalOffset)
 {
     $place = 0; //current place
         
-    if ($result['Endien'] == 'Intel') {
+    if ('Intel' == $result['Endien']) {
         $intel=1;
     } else {
         $intel=0;
@@ -443,7 +443,7 @@ function parseCanon($block, &$result, $seek, $globalOffset)
     //Get number of tags (2 bytes)
     $num = bin2hex(substr($block, $place, 2));
     $place+=2;
-    if ($intel==1) {
+    if (1 == $intel) {
         $num = intel2Moto($num);
     }
     $result['SubIFD']['MakerNote']['MakerNoteNumTags'] = hexdec($num);
@@ -454,7 +454,7 @@ function parseCanon($block, &$result, $seek, $globalOffset)
             //2 byte tag
         $tag = bin2hex(substr($block, $place, 2));
         $place+=2;
-        if ($intel==1) {
+        if (1 == $intel) {
             $tag = intel2Moto($tag);
         }
         $tag_name = lookup_Canon_tag($tag);
@@ -462,7 +462,7 @@ function parseCanon($block, &$result, $seek, $globalOffset)
         //2 byte type
         $type = bin2hex(substr($block, $place, 2));
         $place+=2;
-        if ($intel==1) {
+        if (1 == $intel) {
             $type = intel2Moto($type);
         }
         lookup_type($type, $size);
@@ -470,7 +470,7 @@ function parseCanon($block, &$result, $seek, $globalOffset)
         //4 byte count of number of data units
         $count = bin2hex(substr($block, $place, 4));
         $place+=4;
-        if ($intel==1) {
+        if (1 == $intel) {
             $count = intel2Moto($count);
         }
         $bytesofdata = $size*hexdec($count);
@@ -485,7 +485,7 @@ function parseCanon($block, &$result, $seek, $globalOffset)
             $data = $value;
         } else {
             $value = bin2hex($value);
-            if ($intel==1) {
+            if (1 == $intel) {
                 $value = intel2Moto($value);
             }
             $v = fseek($seek, $globalOffset+hexdec($value));  //offsets are from TIFF header which is 12 bytes from the start of the file
@@ -494,9 +494,9 @@ function parseCanon($block, &$result, $seek, $globalOffset)
             } else {
                 $exiferFileSize = 0;
             }
-            if ($v==0 && $bytesofdata < $exiferFileSize) {
+            if (0 == $v && $bytesofdata < $exiferFileSize) {
                 $data = fread($seek, $bytesofdata);
-            } elseif ($v==-1) {
+            } elseif (-1 == $v) {
                 $result['Errors'] = $result['Errors']++;
                 $data = '';
             } else {
@@ -506,11 +506,11 @@ function parseCanon($block, &$result, $seek, $globalOffset)
         $result['SubIFD']['MakerNote'][$tag_name] = []; // insure the index exists
         $formated_data = formatCanonData($type, $tag, $intel, $data, $result, $result['SubIFD']['MakerNote'][$tag_name]);
         
-        if ($result['VerboseOutput']==1) {
+        if (1 == $result['VerboseOutput']) {
             //$result['SubIFD']['MakerNote'][$tag_name] = $formated_data;
-            if ($type == 'URATIONAL' || $type == 'SRATIONAL' || $type == 'USHORT' || $type == 'SSHORT' || $type == 'ULONG' || $type == 'SLONG' || $type == 'FLOAT' || $type == 'DOUBLE') {
+            if ('URATIONAL' == $type || 'SRATIONAL' == $type || 'USHORT' == $type || 'SSHORT' == $type || 'ULONG' == $type || 'SLONG' == $type || 'FLOAT' == $type || 'DOUBLE' == $type) {
                 $data = bin2hex($data);
-                if ($intel==1) {
+                if (1 == $intel) {
                     $data = intel2Moto($data);
                 }
             }
