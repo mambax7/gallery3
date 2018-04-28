@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,7 +21,7 @@ class Form_Uploadify_buttons_Core extends Form_Input
 {
     public function render()
     {
-        $v = new View("form_uploadify_buttons.html");
+        $v = new View('form_uploadify_buttons.html');
         return $v;
     }
 }

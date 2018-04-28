@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -22,12 +22,12 @@ class comment_rest_Core
     public static function get($request)
     {
         $comment = rest::resolve($request->url);
-        access::required("view", $comment->item());
+        access::required('view', $comment->item());
 
         return array(
-      "url" => $request->url,
-      "entity" => $comment->as_restful_array(),
-      "relationships" => rest::relationships("comment", $comment));
+            'url'           => $request->url,
+            'entity'        => $comment->as_restful_array(),
+            'relationships' => rest::relationships('comment', $comment));
     }
 
     public static function put($request)
@@ -38,7 +38,7 @@ class comment_rest_Core
         }
 
         $comment = rest::resolve($request->url);
-        $comment = ORM::factory("comment");
+        $comment = ORM::factory('comment');
         $comment->text = $request->params->text;
         $comment->save();
     }
@@ -50,7 +50,7 @@ class comment_rest_Core
         }
 
         $comment = rest::resolve($request->url);
-        access::required("edit", $comment->item());
+        access::required('edit', $comment->item());
 
         $comment->delete();
     }
@@ -58,17 +58,17 @@ class comment_rest_Core
     public static function relationships($resource_type, $resource)
     {
         switch ($resource_type) {
-    case "item":
+    case 'item':
       return array(
-        "comments" => array(
-          "url" => rest::url("item_comments", $resource)));
+          'comments' => array(
+              'url' => rest::url('item_comments', $resource)));
     }
     }
 
     public static function resolve($id)
     {
-        $comment = ORM::factory("comment", $id);
-        if (!access::can("view", $comment->item())) {
+        $comment = ORM::factory('comment', $id);
+        if (!access::can('view', $comment->item())) {
             throw new Kohana_404_Exception();
         }
         return $comment;

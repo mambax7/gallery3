@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -46,8 +46,8 @@ function t($message, $options=array())
 function t2($singular, $plural, $count, $options=array())
 {
     return Gallery_I18n::instance()->translate(
-      array("one" => $singular, "other" => $plural),
-                                             array_merge($options, array("count" => $count))
+      array('one' => $singular, 'other' => $plural),
+                                             array_merge($options, array('count' => $count))
   );
 }
 
@@ -111,11 +111,11 @@ class Gallery_I18n_Core
 
     public function is_rtl($locale=null)
     {
-        $is_rtl = !empty($this->_config["force_rtl"]);
+        $is_rtl = !empty($this->_config['force_rtl']);
         if (empty($is_rtl)) {
             $locale or $locale = $this->locale();
-            list($language, $territory) = explode('_', $locale . "_");
-            $is_rtl = in_array($language, array("he", "fa", "ar"));
+            list($language, $territory) = explode('_', $locale . '_');
+            $is_rtl = in_array($language, array('he', 'fa', 'ar'));
         }
         return $is_rtl;
     }
@@ -175,29 +175,29 @@ class Gallery_I18n_Core
 
     private static function load_translations($locale)
     {
-        $cache_key = "translation|" . $locale;
+        $cache_key = 'translation|' . $locale;
         $cache = Cache::instance();
         $translations = $cache->get($cache_key);
         if (!isset($translations) || !is_array($translations)) {
             $translations = array();
             foreach (db::build()
-               ->select("key", "translation")
-               ->from("incoming_translations")
-               ->where("locale", "=", $locale)
+               ->select('key', 'translation')
+               ->from('incoming_translations')
+               ->where('locale', '=', $locale)
                ->execute() as $row) {
                 $translations[$row->key] = unserialize($row->translation);
             }
 
             // Override incoming with outgoing...
             foreach (db::build()
-               ->select("key", "translation")
-               ->from("outgoing_translations")
-               ->where("locale", "=", $locale)
+               ->select('key', 'translation')
+               ->from('outgoing_translations')
+               ->where('locale', '=', $locale)
                ->execute() as $row) {
                 $translations[$row->key] = unserialize($row->translation);
             }
 
-            $cache->set($cache_key, $translations, array("translation"), 0);
+            $cache->set($cache_key, $translations, array('translation'), 0);
         }
         return $translations;
     }
@@ -290,9 +290,9 @@ class Gallery_I18n_Core
     {
         $cache = Cache::instance();
         if ($locale) {
-            $cache->delete("translation|" . $locale);
+            $cache->delete('translation|' . $locale);
         } else {
-            $cache->delete_tag("translation");
+            $cache->delete_tag('translation');
         }
     }
 

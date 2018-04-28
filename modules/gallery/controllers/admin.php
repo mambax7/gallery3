@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -25,8 +25,8 @@ class Admin_Controller extends Controller
     {
         if (!identity::active_user()->admin) {
             if (identity::active_user()->guest) {
-                Session::instance()->set("continue_url", url::abs_current(true));
-                url::redirect("login");
+                Session::instance()->set('continue_url', url::abs_current(true));
+                url::redirect('login');
             } else {
                 access::forbidden();
             }
@@ -37,25 +37,25 @@ class Admin_Controller extends Controller
 
     public function __call($controller_name, $args)
     {
-        if (Input::instance()->get("reauth_check")) {
+        if (Input::instance()->get('reauth_check')) {
             return self::_reauth_check();
         }
         if (auth::must_reauth_for_admin_area()) {
             return self::_prompt_for_reauth($controller_name, $args);
         }
 
-        if (request::method() == "post") {
+        if (request::method() == 'post') {
             access::verify_csrf();
         }
 
-        if ($controller_name == "index") {
-            $controller_name = "dashboard";
+        if ($controller_name == 'index') {
+            $controller_name = 'dashboard';
         }
         $controller_name = "Admin_{$controller_name}_Controller";
         if ($args) {
             $method = array_shift($args);
         } else {
-            $method = "index";
+            $method = 'index';
         }
 
         if (!class_exists($controller_name) || !method_exists($controller_name, $method)) {
@@ -68,18 +68,18 @@ class Admin_Controller extends Controller
     private static function _reauth_check()
     {
         $session = Session::instance();
-        $last_active_auth = $session->get("active_auth_timestamp", 0);
-        $last_admin_area_activity = $session->get("admin_area_activity_timestamp", 0);
-        $admin_area_timeout = module::get_var("gallery", "admin_area_timeout");
+        $last_active_auth = $session->get('active_auth_timestamp', 0);
+        $last_admin_area_activity = $session->get('admin_area_activity_timestamp', 0);
+        $admin_area_timeout = module::get_var('gallery', 'admin_area_timeout');
 
         $time_remaining = max($last_active_auth, $last_admin_area_activity) +
       $admin_area_timeout - time();
 
         $result = new stdClass();
-        $result->result = "success";
+        $result->result = 'success';
         if ($time_remaining < 30) {
-            message::success(t("Automatically logged out of the admin area for your security"));
-            $result->location = url::abs_site("");
+            message::success(t('Automatically logged out of the admin area for your security'));
+            $result->location = url::abs_site('');
         }
 
         json::reply($result);
@@ -87,12 +87,12 @@ class Admin_Controller extends Controller
 
     private static function _prompt_for_reauth($controller_name, $args)
     {
-        if (request::method() == "get") {
+        if (request::method() == 'get') {
             // Avoid anti-phishing protection by passing the url as session variable.
-            Session::instance()->set("continue_url", url::abs_current(true));
+            Session::instance()->set('continue_url', url::abs_current(true));
         }
         // Save the is_ajax value as we lose it, if set, when we redirect
-        Session::instance()->set("is_ajax_request", request::is_ajax());
-        url::redirect("reauthenticate");
+        Session::instance()->set('is_ajax_request', request::is_ajax());
+        url::redirect('reauthenticate');
     }
 }

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -25,7 +25,7 @@ class Welcome_Message_Controller extends Controller
             url::redirect(item::root()->abs_url());
         }
 
-        $v = new View("welcome_message.html");
+        $v = new View('welcome_message.html');
         $v->user = identity::active_user();
         print $v;
     }

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
+<?php defined('SYSPATH') or die('No direct script access.') ?>
 <script type="text/javascript">
   $(document).ready(function() {
     $("#g-profile-return").click(function(event) {
@@ -10,31 +10,31 @@
 <div id="g-user-profile">
   <div class="ui-helper-clearfix">
     <a id="g-profile-return" class="g-button g-right ui-state-default ui-corner-all" href="#">
-      <?= t("Return") ?>
+      <?= t('Return') ?>
     </a>
     <?php if ($editable): ?>
     <a class="g-button g-right ui-state-default ui-corner-all g-dialog-link" href="<?= url::site("users/form_change_email/{$user->id}") ?>">
-      <?= t("Change email") ?>
+      <?= t('Change email') ?>
     </a>
     <a class="g-button g-right ui-state-default ui-corner-all g-dialog-link" href="<?= url::site("users/form_change_password/{$user->id}") ?>">
-      <?= t("Change password") ?>
+      <?= t('Change password') ?>
     </a>
     <a class="g-button g-right ui-state-default ui-corner-all g-dialog-link" href="<?= url::site("form/edit/users/{$user->id}") ?>">
-      <?= t("Edit") ?>
+      <?= t('Edit') ?>
     </a>
     <?php endif ?>
     <?php if ($contactable): ?>
     <a class="g-button g-right ui-state-default ui-corner-all g-dialog-link"
        href="<?= url::site("user_profile/contact/{$user->id}") ?>">
-      <?= t("Contact") ?>
+      <?= t('Contact') ?>
     </a>
     <?php endif ?>
   </div>
   <h1>
-    <img src="<?= $user->avatar_url(40, $theme->url("images/avatar.jpg", true)) ?>"
+    <img src="<?= $user->avatar_url(40, $theme->url('images/avatar.jpg', true)) ?>"
        alt="<?= html::clean_attribute($user->display_name()) ?>"
        class="g-avatar g-left" width="40" height="40" />
-    <?= t("User profile: %name", array("name" => $user->display_name())) ?>
+    <?= t('User profile: %name', array('name' => $user->display_name())) ?>
   </h1>
   <?php foreach ($info_parts as $info): ?>
   <div class="g-block">

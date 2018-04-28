@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -48,10 +48,10 @@ class comment_installer
                PRIMARY KEY (`id`))
                DEFAULT CHARSET=utf8;");
 
-        module::set_var("comment", "spam_caught", 0);
-        module::set_var("comment", "access_permissions", "everybody");
-        module::set_var("comment", "rss_visible", "all");
-        module::set_var("comment", "initial_state", "published");
+        module::set_var('comment', 'spam_caught', 0);
+        module::set_var('comment', 'access_permissions', 'everybody');
+        module::set_var('comment', 'rss_visible', 'all');
+        module::set_var('comment', 'initial_state', 'published');
     }
 
     public static function upgrade($version)
@@ -59,12 +59,12 @@ class comment_installer
         $db = Database::instance();
         if ($version == 1) {
             $db->query("ALTER TABLE {comments} CHANGE `state` `state` varchar(15) default 'unpublished'");
-            module::set_version("comment", $version = 2);
+            module::set_version('comment', $version = 2);
         }
 
         if ($version == 2) {
-            module::set_var("comment", "access_permissions", "everybody");
-            module::set_version("comment", $version = 3);
+            module::set_var('comment', 'access_permissions', 'everybody');
+            module::set_version('comment', $version = 3);
         }
 
         if ($version == 3) {
@@ -73,42 +73,40 @@ class comment_installer
             //
             // 255 bytes for server_remote_host is enough to swallow the longest
             // legit DNS entry, with a few bytes to spare.
-            $db->query(
-        "ALTER TABLE {comments} CHANGE `server_remote_addr` `server_remote_addr` varchar(40)"
+            $db->query('ALTER TABLE {comments} CHANGE `server_remote_addr` `server_remote_addr` varchar(40)'
       );
-            $db->query(
-        "ALTER TABLE {comments} CHANGE `server_remote_host` `server_remote_host` varchar(255)"
+            $db->query('ALTER TABLE {comments} CHANGE `server_remote_host` `server_remote_host` varchar(255)'
       );
-            module::set_version("comment", $version = 4);
+            module::set_version('comment', $version = 4);
         }
 
         if ($version == 4) {
-            module::set_var("comment", "rss_visible", "all");
-            module::set_version("comment", $version = 5);
+            module::set_var('comment', 'rss_visible', 'all');
+            module::set_version('comment', $version = 5);
         }
 
         // In version 5 we accidentally set the installer variable to rss_available when it should
         // have been rss_visible.  Migrate it over now, if necessary.
         if ($version == 5) {
-            if (!module::get_var("comment", "rss_visible")) {
-                module::set_var("comment", "rss_visible", module::get_var("comment", "rss_available"));
+            if (!module::get_var('comment', 'rss_visible')) {
+                module::set_var('comment', 'rss_visible', module::get_var('comment', 'rss_available'));
             }
-            module::clear_var("comment", "rss_available");
-            module::set_version("comment", $version = 6);
+            module::clear_var('comment', 'rss_available');
+            module::set_version('comment', $version = 6);
         }
 
         // In version 6 we accidentally left the install value of "rss_visible" to "both" when it
         // should have been "all"
         if ($version == 6) {
-            if (module::get_var("comment", "rss_visible") == "both") {
-                module::set_var("comment", "rss_visible", "all");
+            if (module::get_var('comment', 'rss_visible') == 'both') {
+                module::set_var('comment', 'rss_visible', 'all');
             }
-            module::set_version("comment", $version = 7);
+            module::set_version('comment', $version = 7);
         }
 
         if ($version == 7) {
-            module::set_var("comment", "initial_state", "published");
-            module::set_version("comment", $version = 8);
+            module::set_var('comment', 'initial_state', 'published');
+            module::set_version('comment', $version = 8);
         }
     }
 
@@ -120,11 +118,11 @@ class comment_installer
         // inefficient for large uninstalls, and we could make it better by doing things like passing
         // a SQL fragment through so that the listeners could use subselects.  But by using a single,
         // simple event API we lighten the load on module developers.
-        foreach (ORM::factory("item")
-             ->join("comments", "items.id", "comments.item_id")
+        foreach (ORM::factory('item')
+             ->join('comments', 'items.id', 'comments.item_id')
              ->find_all() as $item) {
-            module::event("item_related_update", $item);
+            module::event('item_related_update', $item);
         }
-        $db->query("DROP TABLE IF EXISTS {comments};");
+        $db->query('DROP TABLE IF EXISTS {comments};');
     }
 }

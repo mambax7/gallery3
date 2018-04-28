@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -19,41 +19,41 @@
  */
 class rest_Core
 {
-    const API_VERSION = "3.0";
+    const API_VERSION = '3.0';
 
     public static function reply($data=array())
     {
         Session::instance()->abort_save();
 
-        header("X-Gallery-API-Version: " . rest::API_VERSION);
-        switch (Input::instance()->get("output", "json")) {
-    case "json":
+        header('X-Gallery-API-Version: ' . rest::API_VERSION);
+        switch (Input::instance()->get('output', 'json')) {
+    case 'json':
       json::reply($data);
       break;
 
-    case "jsonp":
-      if (!($callback = Input::instance()->get("callback", ""))) {
+    case 'jsonp':
+      if (!($callback = Input::instance()->get('callback', ''))) {
           throw new Rest_Exception(
-          "Bad Request",
-            400,
-            array("errors" => array("callback" => "missing"))
+              'Bad Request',
+              400,
+              array('errors' => array('callback' => 'missing'))
         );
       }
 
       if (preg_match('/^[$A-Za-z_][0-9A-Za-z_]*$/', $callback) == 1) {
-          header("Content-type: application/javascript; charset=UTF-8");
-          print "$callback(" . json_encode($data) . ")";
+          header('Content-type: application/javascript; charset=UTF-8');
+          print "$callback(" . json_encode($data) . ')';
       } else {
           throw new Rest_Exception(
-          "Bad Request",
-            400,
-            array("errors" => array("callback" => "invalid"))
+              'Bad Request',
+              400,
+              array('errors' => array('callback' => 'invalid'))
         );
       }
       break;
 
-    case "html":
-      header("Content-type: text/html; charset=UTF-8");
+    case 'html':
+      header('Content-type: text/html; charset=UTF-8');
       if ($data) {
           $html = preg_replace(
           "#([\w]+?://[\w]+[^ \'\"\n\r\t<]*)#ise",
@@ -61,7 +61,7 @@ class rest_Core
           var_export($data, 1)
         );
       } else {
-          $html = t("Empty response");
+          $html = t('Empty response');
       }
       print "<pre>$html</pre>";
       if (gallery::show_profiler()) {
@@ -72,32 +72,32 @@ class rest_Core
       break;
 
     default:
-      throw new Rest_Exception("Bad Request", 400);
+      throw new Rest_Exception('Bad Request', 400);
     }
     }
 
     public static function set_active_user($access_key)
     {
         if (empty($access_key)) {
-            if (module::get_var("rest", "allow_guest_access")) {
+            if (module::get_var('rest', 'allow_guest_access')) {
                 identity::set_active_user(identity::guest());
                 return;
             } else {
-                throw new Rest_Exception("Forbidden", 403);
+                throw new Rest_Exception('Forbidden', 403);
             }
         }
 
-        $key = ORM::factory("user_access_key")
-      ->where("access_key", "=", $access_key)
+        $key = ORM::factory('user_access_key')
+      ->where('access_key', '=', $access_key)
       ->find();
 
         if (!$key->loaded()) {
-            throw new Rest_Exception("Forbidden", 403);
+            throw new Rest_Exception('Forbidden', 403);
         }
 
         $user = identity::lookup_user($key->user_id);
         if (empty($user)) {
-            throw new Rest_Exception("Forbidden", 403);
+            throw new Rest_Exception('Forbidden', 403);
         }
 
         identity::set_active_user($user);
@@ -105,8 +105,8 @@ class rest_Core
 
     public static function reset_access_key()
     {
-        $key = ORM::factory("user_access_key")
-      ->where("user_id", "=", identity::active_user()->id)
+        $key = ORM::factory('user_access_key')
+      ->where('user_id', '=', identity::active_user()->id)
       ->find();
         if ($key->loaded()) {
             $key->delete();
@@ -116,8 +116,8 @@ class rest_Core
 
     public static function access_key()
     {
-        $key = ORM::factory("user_access_key")
-      ->where("user_id", "=", identity::active_user()->id)
+        $key = ORM::factory('user_access_key')
+      ->where('user_id', '=', identity::active_user()->id)
       ->find();
 
         if (!$key->loaded()) {
@@ -142,24 +142,24 @@ class rest_Core
     public static function resolve($url)
     {
         if ($suffix = Kohana::config('core.url_suffix')) {
-            $relative_url = substr($url, strlen(url::abs_site("rest")) - strlen($suffix));
+            $relative_url = substr($url, strlen(url::abs_site('rest')) - strlen($suffix));
         } else {
-            $relative_url = substr($url, strlen(url::abs_site("rest")));
+            $relative_url = substr($url, strlen(url::abs_site('rest')));
         }
 
         $path = parse_url($relative_url, PHP_URL_PATH);
-        $components = explode("/", $path, 3);
+        $components = explode('/', $path, 3);
 
         if (count($components) != 3) {
             throw new Kohana_404_Exception($url);
         }
 
         $class = "$components[1]_rest";
-        if (!class_exists($class) || !method_exists($class, "resolve")) {
+        if (!class_exists($class) || !method_exists($class, 'resolve')) {
             throw new Kohana_404_Exception($url);
         }
 
-        return call_user_func(array($class, "resolve"), !empty($components[2]) ? $components[2] : null);
+        return call_user_func(array($class, 'resolve'), !empty($components[2]) ? $components[2] : null);
     }
 
     /**
@@ -174,16 +174,16 @@ class rest_Core
         $resource_type = array_shift($args);
 
         $class = "{$resource_type}_rest";
-        if (!class_exists($class) || !method_exists($class, "url")) {
-            throw new Rest_Exception("Bad Request", 400);
+        if (!class_exists($class) || !method_exists($class, 'url')) {
+            throw new Rest_Exception('Bad Request', 400);
         }
 
-        $url = call_user_func_array(array($class, "url"), $args);
-        if (Input::instance()->get("output") == "html") {
-            if (strpos($url, "?") === false) {
-                $url .= "?output=html";
+        $url = call_user_func_array(array($class, 'url'), $args);
+        if (Input::instance()->get('output') == 'html') {
+            if (strpos($url, '?') === false) {
+                $url .= '?output=html';
             } else {
-                $url .= "&output=html";
+                $url .= '&output=html';
             }
         }
         return $url;
@@ -194,9 +194,9 @@ class rest_Core
         $results = array();
         foreach (module::active() as $module) {
             foreach (glob(MODPATH . "{$module->name}/helpers/*_rest.php") as $filename) {
-                $class = str_replace(".php", "", basename($filename));
-                if (class_exists($class) && method_exists($class, "relationships")) {
-                    if ($tmp = call_user_func(array($class, "relationships"), $resource_type, $resource)) {
+                $class = str_replace('.php', '', basename($filename));
+                if (class_exists($class) && method_exists($class, 'relationships')) {
+                    if ($tmp = call_user_func(array($class, 'relationships'), $resource_type, $resource)) {
                         $results = array_merge($results, $tmp);
                     }
                 }

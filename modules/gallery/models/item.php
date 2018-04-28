@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -19,7 +19,7 @@
  */
 class Item_Model_Core extends ORM_MPTT
 {
-    protected $children = "items";
+    protected $children = 'items';
     protected $sorting = array();
     public $data_file = null;
     private $data_file_error = null;
@@ -34,8 +34,8 @@ class Item_Model_Core extends ORM_MPTT
             $this->rand_key = random::percent();
             $this->thumb_dirty = 1;
             $this->resize_dirty = 1;
-            $this->sort_column = "created";
-            $this->sort_order = "ASC";
+            $this->sort_column = 'created';
+            $this->sort_order = 'ASC';
             $this->owner_id = identity::active_user()->id;
         }
     }
@@ -85,13 +85,13 @@ class Item_Model_Core extends ORM_MPTT
         }
 
         if ($this->id == 1) {
-            $v = new Validation(array("id"));
-            $v->add_error("id", "cant_delete_root_album");
+            $v = new Validation(array('id'));
+            $v->add_error('id', 'cant_delete_root_album');
             ORM_Validation_Exception::handle_validation($this->table_name, $v);
         }
 
         $old = clone $this;
-        module::event("item_before_delete", $this);
+        module::event('item_before_delete', $this);
 
         $parent = $this->parent();
         if ($parent->album_cover_item_id == $this->id) {
@@ -107,9 +107,11 @@ class Item_Model_Core extends ORM_MPTT
             // Take some precautions against accidentally deleting way too much
             $delete_resize_path = dirname($resize_path);
             $delete_thumb_path = dirname($thumb_path);
-            if ($delete_resize_path == VARPATH . "resizes" ||
-          $delete_thumb_path == VARPATH . "thumbs" ||
-          $path == VARPATH . "albums") {
+            if ($delete_resize_path == VARPATH . 'resizes'
+                ||
+          $delete_thumb_path == VARPATH . 'thumbs'
+                ||
+          $path == VARPATH . 'albums') {
                 throw new Exception(
           "@todo DELETING_TOO_MUCH ($delete_resize_path, $delete_thumb_path, $path)"
         );
@@ -123,7 +125,7 @@ class Item_Model_Core extends ORM_MPTT
             @unlink($thumb_path);
         }
 
-        module::event("item_deleted", $old);
+        module::event('item_deleted', $old);
     }
 
     /**
@@ -181,7 +183,7 @@ class Item_Model_Core extends ORM_MPTT
      */
     public function file_path()
     {
-        return VARPATH . "albums/" . urldecode($this->relative_path());
+        return VARPATH . 'albums/' . urldecode($this->relative_path());
     }
 
     /**
@@ -196,7 +198,7 @@ class Item_Model_Core extends ORM_MPTT
      */
     public function file_url($full_uri=false)
     {
-        $relative_path = "var/albums/" . $this->relative_path();
+        $relative_path = 'var/albums/' . $this->relative_path();
         $cache_buster = $this->_cache_buster($this->file_path());
         return ($full_uri ? url::abs_file($relative_path) : url::file($relative_path))
       . $cache_buster;
@@ -210,14 +212,14 @@ class Item_Model_Core extends ORM_MPTT
      */
     public function thumb_path()
     {
-        $base = VARPATH . "thumbs/" . urldecode($this->relative_path());
+        $base = VARPATH . 'thumbs/' . urldecode($this->relative_path());
         if ($this->is_photo()) {
             return $base;
         } elseif ($this->is_album()) {
-            return $base . "/.album.jpg";
+            return $base . '/.album.jpg';
         } elseif ($this->is_movie()) {
             // Replace the extension with jpg
-            return legal_file::change_extension($base, "jpg");
+            return legal_file::change_extension($base, 'jpg');
         }
     }
 
@@ -242,15 +244,15 @@ class Item_Model_Core extends ORM_MPTT
     public function thumb_url($full_uri=false)
     {
         $cache_buster = $this->_cache_buster($this->thumb_path());
-        $relative_path = "var/thumbs/" . $this->relative_path();
+        $relative_path = 'var/thumbs/' . $this->relative_path();
         $base = ($full_uri ? url::abs_file($relative_path) : url::file($relative_path));
         if ($this->is_photo()) {
             return $base . $cache_buster;
         } elseif ($this->is_album()) {
-            return $base . "/.album.jpg" . $cache_buster;
+            return $base . '/.album.jpg' . $cache_buster;
         } elseif ($this->is_movie()) {
             // Replace the extension with jpg
-            $base = legal_file::change_extension($base, "jpg");
+            $base = legal_file::change_extension($base, 'jpg');
             return $base . $cache_buster;
         }
     }
@@ -264,8 +266,8 @@ class Item_Model_Core extends ORM_MPTT
      */
     public function resize_path()
     {
-        return VARPATH . "resizes/" . urldecode($this->relative_path()) .
-      ($this->is_album() ? "/.album.jpg" : "");
+        return VARPATH . 'resizes/' . urldecode($this->relative_path()) .
+               ($this->is_album() ? '/.album.jpg' : '');
     }
 
     /**
@@ -281,10 +283,10 @@ class Item_Model_Core extends ORM_MPTT
      */
     public function resize_url($full_uri=false)
     {
-        $relative_path = "var/resizes/" . $this->relative_path();
+        $relative_path = 'var/resizes/' . $this->relative_path();
         $cache_buster = $this->_cache_buster($this->resize_path());
         return ($full_uri ? url::abs_file($relative_path) : url::file($relative_path)) .
-      ($this->is_album() ? "/.album.jpg" : "") . $cache_buster;
+      ($this->is_album() ? '/.album.jpg' : '') . $cache_buster;
     }
 
     /**
@@ -295,19 +297,19 @@ class Item_Model_Core extends ORM_MPTT
         $names = array();
         $slugs = array();
         foreach (db::build()
-             ->select(array("name", "slug"))
-             ->from("items")
-             ->where("left_ptr", "<=", $this->left_ptr)
-             ->where("right_ptr", ">=", $this->right_ptr)
-             ->where("id", "<>", 1)
-             ->order_by("left_ptr", "ASC")
+             ->select(array('name', 'slug'))
+             ->from('items')
+             ->where('left_ptr', '<=', $this->left_ptr)
+             ->where('right_ptr', '>=', $this->right_ptr)
+             ->where('id', '<>', 1)
+             ->order_by('left_ptr', 'ASC')
              ->execute() as $row) {
             // Don't encode the names segment
             $names[] = rawurlencode($row->name);
             $slugs[] = rawurlencode($row->slug);
         }
-        $this->relative_path_cache = implode($names, "/");
-        $this->relative_url_cache = implode($slugs, "/");
+        $this->relative_path_cache = implode($names, '/');
+        $this->relative_url_cache = implode($slugs, '/');
         return $this;
     }
 
@@ -350,7 +352,7 @@ class Item_Model_Core extends ORM_MPTT
      */
     public function __get($column)
     {
-        if ($column == "owner") {
+        if ($column == 'owner') {
             // This relationship depends on an outside module, which may not be present so handle
             // failures gracefully.
             try {
@@ -372,9 +374,17 @@ class Item_Model_Core extends ORM_MPTT
     public function save()
     {
         $significant_changes = $this->changed;
-        foreach (array("view_count", "relative_url_cache", "relative_path_cache",
-                   "resize_width", "resize_height", "resize_dirty",
-                   "thumb_width", "thumb_height", "thumb_dirty") as $key) {
+        foreach (array(
+                     'view_count',
+                     'relative_url_cache',
+                     'relative_path_cache',
+                     'resize_width',
+                     'resize_height',
+                     'resize_dirty',
+                     'thumb_width',
+                     'thumb_height',
+                     'thumb_dirty'
+                 ) as $key) {
             unset($significant_changes[$key]);
         }
 
@@ -382,7 +392,7 @@ class Item_Model_Core extends ORM_MPTT
             $this->updated = time();
             if (!$this->loaded()) {
                 // Create a new item.
-                module::event("item_before_create", $this);
+                module::event('item_before_create', $this);
 
                 // Set a weight if it's missing.  We don't do this in the constructor because it's not a
                 // simple assignment.
@@ -428,14 +438,14 @@ class Item_Model_Core extends ORM_MPTT
 
                 // Take any actions that we can only do once all our paths are set correctly after saving.
                 switch ($this->type) {
-        case "album":
+        case 'album':
           mkdir($this->file_path());
           mkdir(dirname($this->thumb_path()));
           mkdir(dirname($this->resize_path()));
           break;
 
-        case "photo":
-        case "movie":
+        case 'photo':
+        case 'movie':
           copy($this->data_file, $this->file_path());
           break;
         }
@@ -444,14 +454,14 @@ class Item_Model_Core extends ORM_MPTT
                 // tail recursive.  Null out the data file variable first, otherwise the next save will
                 // trigger an item_updated_data_file event.
                 $this->data_file = null;
-                module::event("item_created", $this);
+                module::event('item_created', $this);
             } else {
                 // Update an existing item
-                module::event("item_before_update", $this);
+                module::event('item_before_update', $this);
 
                 // If any significant fields have changed, load up a copy of the original item and
                 // keep it around.
-                $original = ORM::factory("item", $this->id);
+                $original = ORM::factory('item', $this->id);
 
                 // If we have a new data file, process its info.  This will get its metadata and
                 // preserve the extension of the data file. Many helpers, (e.g. ImageMagick), assume
@@ -461,7 +471,7 @@ class Item_Model_Core extends ORM_MPTT
                 // because the name is typically a temporary randomly-generated name.
                 if (isset($this->data_file)) {
                     $this->_process_data_file_info();
-                } elseif (!$this->is_album() && array_key_exists("name", $this->changed)) {
+                } elseif (!$this->is_album() && array_key_exists('name', $this->changed)) {
                     // There's no new data file, but the name changed.  If it's a photo or movie,
                     // make sure the new name still agrees with the file type.
                     $this->name = legal_file::sanitize_filename(
@@ -472,20 +482,20 @@ class Item_Model_Core extends ORM_MPTT
                 }
 
                 // If an album's name changed, sanitize it.
-                if ($this->is_album() && array_key_exists("name", $this->changed)) {
+                if ($this->is_album() && array_key_exists('name', $this->changed)) {
                     $this->name = legal_file::sanitize_dirname($this->name);
                 }
 
                 // If an album's cover has changed (or been removed), delete any existing album cover,
                 // reset the thumb metadata, and mark the thumb as dirty.
-                if (array_key_exists("album_cover_item_id", $this->changed) && $this->is_album()) {
+                if (array_key_exists('album_cover_item_id', $this->changed) && $this->is_album()) {
                     @unlink($original->thumb_path());
                     $this->thumb_dirty = 1;
                     $this->thumb_height = 0;
                     $this->thumb_width = 0;
                 }
 
-                if (array_intersect($this->changed, array("parent_id", "name", "slug"))) {
+                if (array_intersect($this->changed, array('parent_id', 'name', 'slug'))) {
                     $original->_build_relative_caches();
                     $this->relative_path_cache = null;
                     $this->relative_url_cache = null;
@@ -534,11 +544,11 @@ class Item_Model_Core extends ORM_MPTT
              $original->slug != $this->slug ||
              $original->parent_id != $this->parent_id)) {
                     db::build()
-            ->update("items")
-            ->set("relative_url_cache", null)
-            ->set("relative_path_cache", null)
-            ->where("left_ptr", ">", $this->left_ptr)
-            ->where("right_ptr", "<", $this->right_ptr)
+            ->update('items')
+            ->set('relative_url_cache', null)
+            ->set('relative_path_cache', null)
+            ->where('left_ptr', '>', $this->left_ptr)
+            ->where('right_ptr', '<', $this->right_ptr)
             ->execute();
                 }
 
@@ -551,10 +561,10 @@ class Item_Model_Core extends ORM_MPTT
 
                 if ($original->parent_id != $this->parent_id) {
                     // This will result in 2 events since we'll still fire the item_updated event below
-                    module::event("item_moved", $this, $original->parent());
+                    module::event('item_moved', $this, $original->parent());
                 }
 
-                module::event("item_updated", $original, $this);
+                module::event('item_updated', $original, $this);
 
                 if ($this->data_file) {
                     // Null out the data file variable here, otherwise this event will trigger another
@@ -563,7 +573,7 @@ class Item_Model_Core extends ORM_MPTT
                     if ($original->file_path() != $this->file_path()) {
                         @unlink($original->file_path());
                     }
-                    module::event("item_updated_data_file", $this);
+                    module::event('item_updated_data_file', $this);
                 }
             }
         } elseif (!empty($this->changed)) {
@@ -584,18 +594,18 @@ class Item_Model_Core extends ORM_MPTT
     private function _check_and_fix_conflicts()
     {
         $suffix_num = 1;
-        $suffix = "";
+        $suffix = '';
         if ($this->is_album()) {
             while (db::build()
-             ->from("items")
-             ->where("parent_id", "=", $this->parent_id)
-             ->where("id", $this->id ? "<>" : "IS NOT", $this->id)
+             ->from('items')
+             ->where('parent_id', '=', $this->parent_id)
+             ->where('id', $this->id ? '<>' : 'IS NOT', $this->id)
              ->and_open()
-             ->where("name", "=", "{$this->name}{$suffix}")
-             ->or_where("slug", "=", "{$this->slug}{$suffix}")
+             ->where('name', '=', "{$this->name}{$suffix}")
+             ->or_where('slug', '=', "{$this->slug}{$suffix}")
              ->close()
              ->count_records()) {
-                $suffix = "-" . (($suffix_num <= 99) ? sprintf("%02d", $suffix_num++) : random::int());
+                $suffix = '-' . (($suffix_num <= 99) ? sprintf('%02d', $suffix_num++) : random::int());
             }
             if ($suffix) {
                 $this->name = "{$this->name}{$suffix}";
@@ -611,20 +621,20 @@ class Item_Model_Core extends ORM_MPTT
                 $extension = $matches[2]; // includes a leading dot
             } else {
                 $base_name = $this->name;
-                $extension = "";
+                $extension = '';
             }
             $base_name_escaped = Database::escape_for_like($base_name);
             // Note: below query uses LIKE with wildcard % at end, which is still sargable (i.e. quick)
             while (db::build()
-             ->from("items")
-             ->where("parent_id", "=", $this->parent_id)
-             ->where("id", $this->id ? "<>" : "IS NOT", $this->id)
+             ->from('items')
+             ->where('parent_id', '=', $this->parent_id)
+             ->where('id', $this->id ? '<>' : 'IS NOT', $this->id)
              ->and_open()
-             ->where("name", "LIKE", "{$base_name_escaped}{$suffix}.%")
-             ->or_where("slug", "=", "{$this->slug}{$suffix}")
+             ->where('name', 'LIKE', "{$base_name_escaped}{$suffix}.%")
+             ->or_where('slug', '=', "{$this->slug}{$suffix}")
              ->close()
              ->count_records()) {
-                $suffix = "-" . (($suffix_num <= 99) ? sprintf("%02d", $suffix_num++) : random::int());
+                $suffix = '-' . (($suffix_num <= 99) ? sprintf('%02d', $suffix_num++) : random::int());
             }
             if ($suffix) {
                 $this->name = "{$base_name}{$suffix}{$extension}";
@@ -685,7 +695,7 @@ class Item_Model_Core extends ORM_MPTT
         }
 
         try {
-            return model_cache::get("item", $this->album_cover_item_id);
+            return model_cache::get('item', $this->album_cover_item_id);
         } catch (Exception $e) {
             // It's possible (unlikely) that the item was deleted, if so keep going.
             return null;
@@ -716,20 +726,20 @@ class Item_Model_Core extends ORM_MPTT
         list($height, $width) = $this->scale_dimensions($max);
         if ($center_vertically && $max) {
             // The constant is divide by 2 to calculate the file and 10 to convert to em
-            $margin_top = (int)(($max - $height) / 20);
-            $extra_attrs["style"] = "margin-top: {$margin_top}em";
-            $extra_attrs["title"] = $this->title;
+            $margin_top           = (int)(($max - $height) / 20);
+            $extra_attrs['style'] = "margin-top: {$margin_top}em";
+            $extra_attrs['title'] = $this->title;
         }
         $attrs = array_merge(
         $extra_attrs,
             array(
-              "src" => $this->thumb_url(),
-              "alt" => $this->title,
-              "width" => $width,
-              "height" => $height)
+                'src'    => $this->thumb_url(),
+                'alt'    => $this->title,
+                'width'  => $width,
+                'height' => $height)
             );
         // html::image forces an absolute url which we don't want
-        return "<img" . html::attributes($attrs) . "/>";
+        return '<img' . html::attributes($attrs) . '/>';
     }
 
     /**
@@ -775,13 +785,14 @@ class Item_Model_Core extends ORM_MPTT
     {
         $attrs = array_merge(
         $extra_attrs,
-            array("src" => $this->resize_url(),
-                  "alt" => $this->title,
-                  "width" => $this->resize_width,
-                  "height" => $this->resize_height)
+            array(
+                'src'    => $this->resize_url(),
+                'alt'    => $this->title,
+                'width'  => $this->resize_width,
+                'height' => $this->resize_height)
             );
         // html::image forces an absolute url which we don't want
-        return "<img" . html::attributes($attrs) . "/>";
+        return '<img' . html::attributes($attrs) . '/>';
     }
 
     /**
@@ -793,7 +804,7 @@ class Item_Model_Core extends ORM_MPTT
      */
     public function movie_img($extra_attrs)
     {
-        $player_width = module::get_var("gallery", "resize_size", 640);
+        $player_width = module::get_var('gallery', 'resize_size', 640);
         $width = $this->width;
         $height = $this->height;
         if ($width == 0 || $height == 0) {
@@ -805,9 +816,9 @@ class Item_Model_Core extends ORM_MPTT
             $height = ceil($width * 3/4);
         }
         $div_attrs = array_merge(
-        array("id" => "g-item-id-{$this->id}"),
+        array('id' => "g-item-id-{$this->id}"),
         $extra_attrs,
-                             array("class" => "g-movie", "style" => "width: {$player_width}px;")
+                             array('class' => 'g-movie', 'style' => "width: {$player_width}px;")
     );
 
         // Run movie_img events, which can either:
@@ -826,7 +837,7 @@ class Item_Model_Core extends ORM_MPTT
     $movie_img->video_attrs = array();    // add'l <video> attrs
     $movie_img->player_options = array(); // add'l MediaElementPlayer options (will be json encoded)
     $movie_img->view = array();
-        module::event("movie_img", $movie_img, $this);
+        module::event('movie_img', $movie_img, $this);
 
         if (count($movie_img->view) > 0) {
             // View generated - use it
@@ -836,22 +847,25 @@ class Item_Model_Core extends ORM_MPTT
             // Note that the extension list below doesn't use the legal_file helper but rather
             // is hard-coded based on player specifications.
             $extension = strtolower(pathinfo($movie_img->filename, PATHINFO_EXTENSION));
-            if (in_array($extension, array("webm", "ogv", "mp4", "flv", "m4v", "mov", "f4v", "wmv"))) {
+            if (in_array($extension, array('webm', 'ogv', 'mp4', 'flv', 'm4v', 'mov', 'f4v', 'wmv'))) {
                 // Filetype supported by MediaElementPlayer - use it (default)
-                $view = new View("movieplayer.html");
+                $view = new View('movieplayer.html');
                 $view->width = $movie_img->width;
                 $view->height = $movie_img->height;
                 $view->div_attrs = $movie_img->div_attrs;
-                $view->video_attrs = array_merge(array("controls" => "controls", "autoplay" => "autoplay",
-                                         "style" => "max-width: 100%"), $movie_img->video_attrs);
-                $view->source_attrs = array("type" => legal_file::get_movie_types_by_extension($extension),
-                                    "src" => $movie_img->url);
+                $view->video_attrs = array_merge(array(
+                                                     'controls' => 'controls', 'autoplay' => 'autoplay',
+                                                     'style'    => 'max-width: 100%'
+                                                 ), $movie_img->video_attrs);
+                $view->source_attrs = array(
+                    'type' => legal_file::get_movie_types_by_extension($extension),
+                    'src'  => $movie_img->url);
                 $view->player_options = $movie_img->player_options;
             } else {
                 // Filetype not supported by MediaElementPlayer - display download link
-        $div_attrs["class"] .= " g-movie-download-link"; // add class
-        $div_attrs["download"] = $movie_img->filename;   // force download (HTML5 only)
-        $view = html::anchor($movie_img->url, t("Click here to download item."), $div_attrs);
+                $div_attrs['class']    .= ' g-movie-download-link'; // add class
+                $div_attrs['download'] = $movie_img->filename;   // force download (HTML5 only)
+        $view                          = html::anchor($movie_img->url, t('Click here to download item.'), $div_attrs);
             }
         }
         return $view;
@@ -873,8 +887,8 @@ class Item_Model_Core extends ORM_MPTT
         if (empty($order_by)) {
             $order_by = array($this->sort_column => $this->sort_order);
             // Use id as a tie breaker
-            if ($this->sort_column != "id") {
-                $order_by["id"] = "ASC";
+            if ($this->sort_column != 'id') {
+                $order_by['id'] = 'ASC';
             }
         }
         return parent::children($limit, $offset, $where, $order_by);
@@ -896,8 +910,8 @@ class Item_Model_Core extends ORM_MPTT
         if (empty($order_by)) {
             $order_by = array($this->sort_column => $this->sort_order);
             // Use id as a tie breaker
-            if ($this->sort_column != "id") {
-                $order_by["id"] = "ASC";
+            if ($this->sort_column != 'id') {
+                $order_by['id'] = 'ASC';
             }
         }
         return parent::descendants($limit, $offset, $where, $order_by);
@@ -910,33 +924,36 @@ class Item_Model_Core extends ORM_MPTT
     {
         if (!$array) {
             $this->rules = array(
-        "album_cover_item_id" => array("callbacks" => array(array($this, "valid_album_cover"))),
-        "description"         => array("rules"     => array("length[0,65535]")),
-        "mime_type"           => array("callbacks" => array(array($this, "valid_field"))),
-        "name"                => array("rules"     => array("length[0,255]", "required"),
-                                       "callbacks" => array(array($this, "valid_name"))),
-        "parent_id"           => array("callbacks" => array(array($this, "valid_parent"))),
-        "rand_key"            => array("rule"      => array("decimal")),
-        "slug"                => array("rules"     => array("length[0,255]", "required"),
-                                       "callbacks" => array(array($this, "valid_slug"))),
-        "sort_column"         => array("callbacks" => array(array($this, "valid_field"))),
-        "sort_order"          => array("callbacks" => array(array($this, "valid_field"))),
-        "title"               => array("rules"     => array("length[0,255]", "required")),
-        "type"                => array("callbacks" => array(array($this, "read_only"),
-                                                            array($this, "valid_field"))),
+                'album_cover_item_id' => array('callbacks' => array(array($this, 'valid_album_cover'))),
+                'description'         => array('rules' => array('length[0,65535]')),
+                'mime_type'           => array('callbacks' => array(array($this, 'valid_field'))),
+                'name'                => array(
+                    'rules'     => array('length[0,255]', 'required'),
+                    'callbacks' => array(array($this, 'valid_name'))),
+                'parent_id'           => array('callbacks' => array(array($this, 'valid_parent'))),
+                'rand_key'            => array('rule' => array('decimal')),
+                'slug'                => array(
+                    'rules'     => array('length[0,255]', 'required'),
+                    'callbacks' => array(array($this, 'valid_slug'))),
+                'sort_column'         => array('callbacks' => array(array($this, 'valid_field'))),
+                'sort_order'          => array('callbacks' => array(array($this, 'valid_field'))),
+                'title'               => array('rules' => array('length[0,255]', 'required')),
+                'type'                => array(
+                    'callbacks' => array(array($this, 'read_only'),
+                                         array($this, 'valid_field'))),
       );
 
             // Conditional rules
             if ($this->id == 1) {
                 // We don't care about the name and slug for the root album.
-                $this->rules["name"] = array();
-                $this->rules["slug"] = array();
+                $this->rules['name'] = array();
+                $this->rules['slug'] = array();
             }
 
             // Movies and photos must have data files.  Verify the data file on new items, or if it has
             // been replaced.
             if (($this->is_photo() || $this->is_movie()) && $this->data_file) {
-                $this->rules["name"]["callbacks"][] = array($this, "valid_data_file");
+                $this->rules['name']['callbacks'][] = array($this, 'valid_data_file');
             }
         }
 
@@ -951,21 +968,21 @@ class Item_Model_Core extends ORM_MPTT
      */
     public function valid_slug(Validation $v, $field)
     {
-        if (preg_match("/[^A-Za-z0-9-_]/", $this->slug)) {
-            $v->add_error("slug", "not_url_safe");
+        if (preg_match('/[^A-Za-z0-9-_]/', $this->slug)) {
+            $v->add_error('slug', 'not_url_safe');
         }
 
         if (db::build()
-        ->from("items")
-        ->where("parent_id", "=", $this->parent_id)
-        ->where("id", "<>", $this->id)
-        ->where("slug", "=", $this->slug)
+        ->from('items')
+        ->where('parent_id', '=', $this->parent_id)
+        ->where('id', '<>', $this->id)
+        ->where('slug', '=', $this->slug)
         ->count_records()) {
-            $v->add_error("slug", "conflict");
+            $v->add_error('slug', 'conflict');
         }
 
         if ($this->parent_id == 1 && Kohana::auto_load("{$this->slug}_Controller")) {
-            $v->add_error("slug", "reserved");
+            $v->add_error('slug', 'reserved');
             return;
         }
     }
@@ -980,50 +997,50 @@ class Item_Model_Core extends ORM_MPTT
      */
     public function valid_name(Validation $v, $field)
     {
-        if (strpos($this->name, "/") !== false) {
-            $v->add_error("name", "no_slashes");
+        if (strpos($this->name, '/') !== false) {
+            $v->add_error('name', 'no_slashes');
             return;
         }
 
         if (strpos($this->name, "\\") !== false) {
-            $v->add_error("name", "no_backslashes");
+            $v->add_error('name', 'no_backslashes');
             return;
         }
 
-        if (rtrim($this->name, ".") !== $this->name) {
-            $v->add_error("name", "no_trailing_period");
+        if (rtrim($this->name, '.') !== $this->name) {
+            $v->add_error('name', 'no_trailing_period');
             return;
         }
 
         if ($this->is_movie() || $this->is_photo()) {
-            if (substr_count($this->name, ".") > 1) {
+            if (substr_count($this->name, '.') > 1) {
                 // Do not accept files with double extensions, as they can
                 // cause problems on some versions of Apache.
-                $v->add_error("name", "illegal_data_file_extension");
+                $v->add_error('name', 'illegal_data_file_extension');
             }
 
             $ext = pathinfo($this->name, PATHINFO_EXTENSION);
 
             if (!$this->loaded() && !$ext) {
                 // New items must have an extension
-                $v->add_error("name", "illegal_data_file_extension");
+                $v->add_error('name', 'illegal_data_file_extension');
                 return;
             }
 
             if ($this->is_photo() && !legal_file::get_photo_extensions($ext) ||
           $this->is_movie() && !legal_file::get_movie_extensions($ext)) {
-                $v->add_error("name", "illegal_data_file_extension");
+                $v->add_error('name', 'illegal_data_file_extension');
             }
         }
 
         if ($this->is_album()) {
             if (db::build()
-          ->from("items")
-          ->where("parent_id", "=", $this->parent_id)
-          ->where("name", "=", $this->name)
-          ->merge_where($this->id ? array(array("id", "<>", $this->id)) : null)
+          ->from('items')
+          ->where('parent_id', '=', $this->parent_id)
+          ->where('name', '=', $this->name)
+          ->merge_where($this->id ? array(array('id', '<>', $this->id)) : null)
           ->count_records()) {
-                $v->add_error("name", "conflict");
+                $v->add_error('name', 'conflict');
                 return;
             }
         } else {
@@ -1034,12 +1051,12 @@ class Item_Model_Core extends ORM_MPTT
             }
             $base_name_escaped = Database::escape_for_like($base_name);
             if (db::build()
-          ->from("items")
-          ->where("parent_id", "=", $this->parent_id)
-          ->where("name", "LIKE", "{$base_name_escaped}.%")
-          ->merge_where($this->id ? array(array("id", "<>", $this->id)) : null)
+          ->from('items')
+          ->where('parent_id', '=', $this->parent_id)
+          ->where('name', 'LIKE', "{$base_name_escaped}.%")
+          ->merge_where($this->id ? array(array('id', '<>', $this->id)) : null)
           ->count_records()) {
-                $v->add_error("name", "conflict");
+                $v->add_error('name', 'conflict');
                 return;
             }
         }
@@ -1051,11 +1068,11 @@ class Item_Model_Core extends ORM_MPTT
     public function valid_data_file(Validation $v, $field)
     {
         if (!is_file($this->data_file)) {
-            $v->add_error("name", "bad_data_file_path");
+            $v->add_error('name', 'bad_data_file_path');
         } elseif (filesize($this->data_file) == 0) {
-            $v->add_error("name", "empty_data_file");
+            $v->add_error('name', 'empty_data_file');
         } elseif ($this->data_file_error) {
-            $v->add_error("name", "invalid_data_file");
+            $v->add_error('name', 'invalid_data_file');
         }
     }
 
@@ -1066,24 +1083,24 @@ class Item_Model_Core extends ORM_MPTT
     {
         if ($this->id == 1) {
             if ($this->parent_id != 0) {
-                $v->add_error("parent_id", "invalid");
+                $v->add_error('parent_id', 'invalid');
             }
         } else {
             $query = db::build()
-        ->from("items")
-        ->where("id", "=", $this->parent_id)
-        ->where("type", "=", "album");
+        ->from('items')
+        ->where('id', '=', $this->parent_id)
+        ->where('type', '=', 'album');
 
             // If this is an existing item, make sure the new parent is not part of our hierarchy
             if ($this->loaded()) {
                 $query->and_open()
-          ->where("left_ptr", "<", $this->left_ptr)
-          ->or_where("right_ptr", ">", $this->right_ptr)
+          ->where('left_ptr', '<', $this->left_ptr)
+          ->or_where('right_ptr', '>', $this->right_ptr)
           ->close();
             }
 
             if ($query->count_records() != 1) {
-                $v->add_error("parent_id", "invalid");
+                $v->add_error('parent_id', 'invalid');
             }
         }
     }
@@ -1099,11 +1116,11 @@ class Item_Model_Core extends ORM_MPTT
 
         if ($this->album_cover_item_id && ($this->is_photo() || $this->is_movie() ||
         db::build()
-        ->from("items")
-        ->where("id", "=", $this->album_cover_item_id)
-        ->where("type", "<>", "album")
+        ->from('items')
+        ->where('id', '=', $this->album_cover_item_id)
+        ->where('type', '<>', 'album')
         ->count_records() != 1)) {
-            $v->add_error("album_cover_item_id", "invalid_item");
+            $v->add_error('album_cover_item_id', 'invalid_item');
         }
     }
 
@@ -1113,7 +1130,7 @@ class Item_Model_Core extends ORM_MPTT
     public function valid_field(Validation $v, $field)
     {
         switch ($field) {
-    case "mime_type":
+    case 'mime_type':
       if ($this->is_movie()) {
           $legal_values = legal_file::get_movie_types();
       } elseif ($this->is_photo()) {
@@ -1121,27 +1138,27 @@ class Item_Model_Core extends ORM_MPTT
       }
       break;
 
-    case "sort_column":
+    case 'sort_column':
       if (!array_key_exists($this->sort_column, $this->object)) {
-          $v->add_error($field, "invalid");
+          $v->add_error($field, 'invalid');
       }
       break;
 
-    case "sort_order":
-      $legal_values = array("ASC", "DESC", "asc", "desc");
+    case 'sort_order':
+      $legal_values = array('ASC', 'DESC', 'asc', 'desc');
       break;
 
-    case "type":
-      $legal_values = array("album", "photo", "movie");
+    case 'type':
+      $legal_values = array('album', 'photo', 'movie');
       break;
 
     default:
-      $v->add_error($field, "unvalidated_field");
+      $v->add_error($field, 'unvalidated_field');
       break;
     }
 
         if (isset($legal_values) && !in_array($this->$field, $legal_values)) {
-            $v->add_error($field, "invalid");
+            $v->add_error($field, 'invalid');
         }
     }
 
@@ -1151,7 +1168,7 @@ class Item_Model_Core extends ORM_MPTT
     public function read_only(Validation $v, $field)
     {
         if ($this->loaded() && isset($this->changed[$field])) {
-            $v->add_error($field, "read_only");
+            $v->add_error($field, 'read_only');
         }
     }
 
@@ -1176,79 +1193,86 @@ class Item_Model_Core extends ORM_MPTT
         }
 
         // Convert item ids to rest URLs for consistency
-        if (empty($fields) || isset($fields["parent"])) {
+        if (empty($fields) || isset($fields['parent'])) {
             if ($tmp = $this->parent()) {
-                $data["parent"] = rest::url("item", $tmp);
+                $data['parent'] = rest::url('item', $tmp);
             }
-            unset($data["parent_id"]);
+            unset($data['parent_id']);
         }
 
-        if (empty($fields) || isset($fields["album_cover"])) {
+        if (empty($fields) || isset($fields['album_cover'])) {
             if ($tmp = $this->album_cover()) {
-                $data["album_cover"] = rest::url("item", $tmp);
+                $data['album_cover'] = rest::url('item', $tmp);
             }
-            unset($data["album_cover_item_id"]);
+            unset($data['album_cover_item_id']);
         }
 
-        if (empty($fields) || isset($fields["web_url"])) {
-            $data["web_url"] = $this->abs_url();
+        if (empty($fields) || isset($fields['web_url'])) {
+            $data['web_url'] = $this->abs_url();
         }
 
         if (!$this->is_album()) {
-            if (access::can("view_full", $this)) {
-                if (empty($fields) || isset($fields["file_url"])) {
-                    $data["file_url"] = rest::url("data", $this, "full");
+            if (access::can('view_full', $this)) {
+                if (empty($fields) || isset($fields['file_url'])) {
+                    $data['file_url'] = rest::url('data', $this, 'full');
                 }
-                if (empty($fields) || isset($fields["file_size"])) {
-                    $data["file_size"] = filesize($this->file_path());
+                if (empty($fields) || isset($fields['file_size'])) {
+                    $data['file_size'] = filesize($this->file_path());
                 }
-                if (access::user_can(identity::guest(), "view_full", $this)) {
-                    if (empty($fields) || isset($fields["file_url_public"])) {
-                        $data["file_url_public"] = $this->file_url(true);
+                if (access::user_can(identity::guest(), 'view_full', $this)) {
+                    if (empty($fields) || isset($fields['file_url_public'])) {
+                        $data['file_url_public'] = $this->file_url(true);
                     }
                 }
             }
         }
 
         if ($this->is_photo()) {
-            if (empty($fields) || isset($fields["resize_url"])) {
-                $data["resize_url"] = rest::url("data", $this, "resize");
+            if (empty($fields) || isset($fields['resize_url'])) {
+                $data['resize_url'] = rest::url('data', $this, 'resize');
             }
-            if (empty($fields) || isset($fields["resize_size"])) {
-                $data["resize_size"] = filesize($this->resize_path());
+            if (empty($fields) || isset($fields['resize_size'])) {
+                $data['resize_size'] = filesize($this->resize_path());
             }
-            if (access::user_can(identity::guest(), "view", $this)) {
-                if (empty($fields) || isset($fields["resize_url_public"])) {
-                    $data["resize_url_public"] = $this->resize_url(true);
+            if (access::user_can(identity::guest(), 'view', $this)) {
+                if (empty($fields) || isset($fields['resize_url_public'])) {
+                    $data['resize_url_public'] = $this->resize_url(true);
                 }
             }
         }
 
         if ($this->has_thumb()) {
-            if (empty($fields) || isset($fields["thumb_url"])) {
-                $data["thumb_url"] = rest::url("data", $this, "thumb");
+            if (empty($fields) || isset($fields['thumb_url'])) {
+                $data['thumb_url'] = rest::url('data', $this, 'thumb');
             }
-            if (empty($fields) || isset($fields["thumb_size"])) {
-                $data["thumb_size"] = filesize($this->thumb_path());
+            if (empty($fields) || isset($fields['thumb_size'])) {
+                $data['thumb_size'] = filesize($this->thumb_path());
             }
-            if (access::user_can(identity::guest(), "view", $this)) {
-                if (empty($fields) || isset($fields["thumb_url_public"])) {
-                    $data["thumb_url_public"] = $this->thumb_url(true);
+            if (access::user_can(identity::guest(), 'view', $this)) {
+                if (empty($fields) || isset($fields['thumb_url_public'])) {
+                    $data['thumb_url_public'] = $this->thumb_url(true);
                 }
             }
         }
 
-        if (empty($fields) || isset($fields["can_edit"])) {
-            $data["can_edit"] = access::can("edit", $this);
+        if (empty($fields) || isset($fields['can_edit'])) {
+            $data['can_edit'] = access::can('edit', $this);
         }
 
-        if (empty($fields) || isset($fields["can_add"])) {
-            $data["can_add"] = access::can("add", $this);
+        if (empty($fields) || isset($fields['can_add'])) {
+            $data['can_add'] = access::can('add', $this);
         }
 
         // Elide some internal-only data that is going to cause confusion in the client.
-        foreach (array("relative_path_cache", "relative_url_cache", "left_ptr", "right_ptr",
-                   "thumb_dirty", "resize_dirty", "weight") as $key) {
+        foreach (array(
+                     'relative_path_cache',
+                     'relative_url_cache',
+                     'left_ptr',
+                     'right_ptr',
+                     'thumb_dirty',
+                     'resize_dirty',
+                     'weight'
+                 ) as $key) {
             unset($data[$key]);
         }
         return $data;
@@ -1267,6 +1291,6 @@ class Item_Model_Core extends ORM_MPTT
 
     private function _cache_buster($path)
     {
-        return "?m=" . (string)(file_exists($path) ? filemtime($path) : 0);
+        return '?m=' . (string)(file_exists($path) ? filemtime($path) : 0);
     }
 }

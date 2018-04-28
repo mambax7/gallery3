@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -22,7 +22,6 @@ class slideshow_theme_Core
     public static function page_bottom($theme)
     {
         $proto = request::protocol();
-        return "<script src=\"$proto://e.cooliris.com/slideshow/v/37732/go.js\" " .
-      "type=\"text/javascript\"></script>";
+        return "<script src=\"$proto://e.cooliris.com/slideshow/v/37732/go.js\" " . 'type="text/javascript"></script>';
     }
 }

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -24,8 +24,8 @@ class Login_Controller extends Controller
 
     public function ajax()
     {
-        $view = new View("login_ajax.html");
-        $view->form = auth::get_login_form("login/auth_ajax");
+        $view = new View('login_ajax.html');
+        $view->form = auth::get_login_form('login/auth_ajax');
         print $view;
     }
 
@@ -33,22 +33,22 @@ class Login_Controller extends Controller
     {
         access::verify_csrf();
 
-        list($valid, $form) = $this->_auth("login/auth_ajax");
+        list($valid, $form) = $this->_auth('login/auth_ajax');
         if ($valid) {
-            json::reply(array("result" => "success"));
+            json::reply(array('result' => 'success'));
         } else {
-            $view = new View("login_ajax.html");
+            $view = new View('login_ajax.html');
             $view->form = $form;
-            json::reply(array("result" => "error", "html" => (string)$view));
+            json::reply(array('result' => 'error', 'html' => (string)$view));
         }
     }
 
     public function html()
     {
-        $view = new Theme_View("page.html", "other", "login");
-        $view->page_title = t("Log in to Gallery");
-        $view->content = new View("login_ajax.html");
-        $view->content->form = auth::get_login_form("login/auth_html");
+        $view = new Theme_View('page.html', 'other', 'login');
+        $view->page_title = t('Log in to Gallery');
+        $view->content = new View('login_ajax.html');
+        $view->content->form = auth::get_login_form('login/auth_html');
         print $view;
     }
 
@@ -56,14 +56,14 @@ class Login_Controller extends Controller
     {
         access::verify_csrf();
 
-        list($valid, $form) = $this->_auth("login/auth_html");
+        list($valid, $form) = $this->_auth('login/auth_html');
         if ($valid) {
             $continue_url = $form->continue_url->value;
             url::redirect($continue_url ? $continue_url : item::root()->abs_url());
         } else {
-            $view = new Theme_View("page.html", "other", "login");
-            $view->page_title = t("Log in to Gallery");
-            $view->content = new View("login_ajax.html");
+            $view = new Theme_View('page.html', 'other', 'login');
+            $view->page_title = t('Log in to Gallery');
+            $view->content = new View('login_ajax.html');
             $view->content->form = $form;
             print $view;
         }
@@ -74,12 +74,12 @@ class Login_Controller extends Controller
         $form = auth::get_login_form($url);
         $valid = $form->validate();
         if ($valid) {
-            $user = identity::lookup_user_by_name($form->login->inputs["name"]->value);
+            $user = identity::lookup_user_by_name($form->login->inputs['name']->value);
             if (empty($user) || !identity::is_correct_password($user, $form->login->password->value)) {
-                $form->login->inputs["name"]->add_error("invalid_login", 1);
-                $name = $form->login->inputs["name"]->value;
-                log::warning("user", t("Failed login for %name", array("name" => $name)));
-                module::event("user_auth_failed", $name);
+                $form->login->inputs['name']->add_error('invalid_login', 1);
+                $name = $form->login->inputs['name']->value;
+                log::warning('user', t('Failed login for %name', array('name' => $name)));
+                module::event('user_auth_failed', $name);
                 $valid = false;
             }
         }

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 //================================================================================================
 //================================================================================================
 /*
@@ -32,25 +32,25 @@
 function lookup_Fujifilm_tag($tag)
 {
     switch ($tag) {
-        case "0000": $tag = "Version";break;
-        case "1000": $tag = "Quality";break;
-        case "1001": $tag = "Sharpness";break;
-        case "1002": $tag = "WhiteBalance";break;
-        case "1003": $tag = "Color";break;
-        case "1004": $tag = "Tone";break;
-        case "1010": $tag = "FlashMode";break;
-        case "1011": $tag = "FlashStrength";break;
-        case "1020": $tag = "Macro";break;
-        case "1021": $tag = "FocusMode";break;
-        case "1030": $tag = "SlowSync";break;
-        case "1031": $tag = "PictureMode";break;
-        case "1100": $tag = "ContinuousTakingBracket";break;
-        case "1200": $tag = "Unknown";break;
-        case "1300": $tag = "BlurWarning";break;
-        case "1301": $tag = "FocusWarning";break;
-        case "1302": $tag = "AEWarning";break;
+        case '0000': $tag = 'Version';break;
+        case '1000': $tag = 'Quality';break;
+        case '1001': $tag = 'Sharpness';break;
+        case '1002': $tag = 'WhiteBalance';break;
+        case '1003': $tag = 'Color';break;
+        case '1004': $tag = 'Tone';break;
+        case '1010': $tag = 'FlashMode';break;
+        case '1011': $tag = 'FlashStrength';break;
+        case '1020': $tag = 'Macro';break;
+        case '1021': $tag = 'FocusMode';break;
+        case '1030': $tag = 'SlowSync';break;
+        case '1031': $tag = 'PictureMode';break;
+        case '1100': $tag = 'ContinuousTakingBracket';break;
+        case '1200': $tag = 'Unknown';break;
+        case '1300': $tag = 'BlurWarning';break;
+        case '1301': $tag = 'FocusWarning';break;
+        case '1302': $tag = 'AEWarning';break;
         
-        default: $tag = "unknown:".$tag;break;
+        default: $tag = 'unknown:' . $tag;break;
     }
     
     return $tag;
@@ -61,174 +61,174 @@ function lookup_Fujifilm_tag($tag)
 //====================================================================
 function formatFujifilmData($type, $tag, $intel, $data)
 {
-    if ($type=="ASCII") {
-    } elseif ($type=="URATIONAL" || $type=="SRATIONAL") {
+    if ($type == 'ASCII') {
+    } elseif ($type == 'URATIONAL' || $type == 'SRATIONAL') {
         $data = unRational($data, $type, $intel);
     
-        if ($tag=="1011") { //FlashStrength
-            $data=$data." EV";
+        if ($tag == '1011') { //FlashStrength
+            $data= $data . ' EV';
         }
-    } elseif ($type=="USHORT" || $type=="SSHORT" || $type=="ULONG" || $type=="SLONG" || $type=="FLOAT" || $type=="DOUBLE") {
+    } elseif ($type == 'USHORT' || $type == 'SSHORT' || $type == 'ULONG' || $type == 'SLONG' || $type == 'FLOAT' || $type == 'DOUBLE') {
         $data =rational($data, $type, $intel);
         
-        if ($tag=="1001") { //Sharpness
+        if ($tag == '1001') { //Sharpness
             if ($data == 1) {
-                $data = (string) t("Soft");
+                $data = (string) t('Soft');
             } elseif ($data == 2) {
-                $data = (string) t("Soft");
+                $data = (string) t('Soft');
             } elseif ($data == 3) {
-                $data = (string) t("Normal");
+                $data = (string) t('Normal');
             } elseif ($data == 4) {
-                $data = (string) t("Hard");
+                $data = (string) t('Hard');
             } elseif ($data == 5) {
-                $data = (string) t("Hard");
+                $data = (string) t('Hard');
             } else {
-                $data = (string) t("Unknown").": ".$data;
+                $data = (string) t('Unknown') . ': ' . $data;
             }
         }
-        if ($tag=="1002") { //WhiteBalance
+        if ($tag == '1002') { //WhiteBalance
             if ($data == 0) {
-                $data = (string) t("Auto");
+                $data = (string) t('Auto');
             } elseif ($data == 256) {
-                $data = (string) t("Daylight");
+                $data = (string) t('Daylight');
             } elseif ($data == 512) {
-                $data = (string) t("Cloudy");
+                $data = (string) t('Cloudy');
             } elseif ($data == 768) {
-                $data = (string) t("DaylightColor-fluorescence");
+                $data = (string) t('DaylightColor-fluorescence');
             } elseif ($data == 769) {
-                $data = (string) t("DaywhiteColor-fluorescence");
+                $data = (string) t('DaywhiteColor-fluorescence');
             } elseif ($data == 770) {
-                $data = (string) t("White-fluorescence");
+                $data = (string) t('White-fluorescence');
             } elseif ($data == 1024) {
-                $data = (string) t("Incandescence");
+                $data = (string) t('Incandescence');
             } elseif ($data == 3840) {
-                $data = (string) t("Custom");
+                $data = (string) t('Custom');
             } else {
-                $data = (string) t("Unknown").": ".$data;
+                $data = (string) t('Unknown') . ': ' . $data;
             }
         }
-        if ($tag=="1003") { //Color
+        if ($tag == '1003') { //Color
             if ($data == 0) {
-                $data = (string) t("Chroma Saturation Normal(STD)");
+                $data = (string) t('Chroma Saturation Normal(STD)');
             } elseif ($data == 256) {
-                $data = (string) t("Chroma Saturation High");
+                $data = (string) t('Chroma Saturation High');
             } elseif ($data == 512) {
-                $data = (string) t("Chroma Saturation Low(ORG)");
+                $data = (string) t('Chroma Saturation Low(ORG)');
             } else {
-                $data = (string) t("Unknown: ").$data;
+                $data = (string) t('Unknown: ') . $data;
             }
         }
-        if ($tag=="1004") { //Tone
+        if ($tag == '1004') { //Tone
             if ($data == 0) {
-                $data = (string) t("Contrast Normal(STD)");
+                $data = (string) t('Contrast Normal(STD)');
             } elseif ($data == 256) {
-                $data = (string) t("Contrast High(HARD)");
+                $data = (string) t('Contrast High(HARD)');
             } elseif ($data == 512) {
-                $data = (string) t("Contrast Low(ORG)");
+                $data = (string) t('Contrast Low(ORG)');
             } else {
-                $data = (string) t("Unknown: ").$data;
+                $data = (string) t('Unknown: ') . $data;
             }
         }
-        if ($tag=="1010") { //FlashMode
+        if ($tag == '1010') { //FlashMode
             if ($data == 0) {
-                $data = (string) t("Auto");
+                $data = (string) t('Auto');
             } elseif ($data == 1) {
-                $data = (string) t("On");
+                $data = (string) t('On');
             } elseif ($data == 2) {
-                $data = (string) t("Off");
+                $data = (string) t('Off');
             } elseif ($data == 3) {
-                $data = (string) t("Red-Eye Reduction");
+                $data = (string) t('Red-Eye Reduction');
             } else {
-                $data = (string) t("Unknown: ").$data;
+                $data = (string) t('Unknown: ') . $data;
             }
         }
-        if ($tag=="1020") { //Macro
+        if ($tag == '1020') { //Macro
             if ($data == 0) {
-                $data = (string) t("Off");
+                $data = (string) t('Off');
             } elseif ($data == 1) {
-                $data = (string) t("On");
+                $data = (string) t('On');
             } else {
-                $data = (string) t("Unknown: ").$data;
+                $data = (string) t('Unknown: ') . $data;
             }
         }
-        if ($tag=="1021") { //FocusMode
+        if ($tag == '1021') { //FocusMode
             if ($data == 0) {
-                $data = (string) t("Auto");
+                $data = (string) t('Auto');
             } elseif ($data == 1) {
-                $data = (string) t("Manual");
+                $data = (string) t('Manual');
             } else {
-                $data = (string) t("Unknown: ").$data;
+                $data = (string) t('Unknown: ') . $data;
             }
         }
-        if ($tag=="1030") { //SlowSync
+        if ($tag == '1030') { //SlowSync
             if ($data == 0) {
-                $data = (string) t("Off");
+                $data = (string) t('Off');
             } elseif ($data == 1) {
-                $data = (string) t("On");
+                $data = (string) t('On');
             } else {
-                $data = (string) t("Unknown: ").$data;
+                $data = (string) t('Unknown: ') . $data;
             }
         }
-        if ($tag=="1031") { //PictureMode
+        if ($tag == '1031') { //PictureMode
             if ($data == 0) {
-                $data = (string) t("Auto");
+                $data = (string) t('Auto');
             } elseif ($data == 1) {
-                $data = (string) t("Portrait");
+                $data = (string) t('Portrait');
             } elseif ($data == 2) {
-                $data = (string) t("Landscape");
+                $data = (string) t('Landscape');
             } elseif ($data == 4) {
-                $data = (string) t("Sports");
+                $data = (string) t('Sports');
             } elseif ($data == 5) {
-                $data = (string) t("Night");
+                $data = (string) t('Night');
             } elseif ($data == 6) {
-                $data = (string) t("Program AE");
+                $data = (string) t('Program AE');
             } elseif ($data == 256) {
-                $data = (string) t("Aperture Priority AE");
+                $data = (string) t('Aperture Priority AE');
             } elseif ($data == 512) {
-                $data = (string) t("Shutter Priority");
+                $data = (string) t('Shutter Priority');
             } elseif ($data == 768) {
-                $data = (string) t("Manual Exposure");
+                $data = (string) t('Manual Exposure');
             } else {
-                $data = (string) t("Unknown: ").$data;
+                $data = (string) t('Unknown: ') . $data;
             }
         }
-        if ($tag=="1100") { //ContinuousTakingBracket
+        if ($tag == '1100') { //ContinuousTakingBracket
             if ($data == 0) {
-                $data = (string) t("Off");
+                $data = (string) t('Off');
             } elseif ($data == 1) {
-                $data = (string) t("On");
+                $data = (string) t('On');
             } else {
-                $data = (string) t("Unknown: ").$data;
+                $data = (string) t('Unknown: ') . $data;
             }
         }
-        if ($tag=="1300") { //BlurWarning
+        if ($tag == '1300') { //BlurWarning
             if ($data == 0) {
-                $data = (string) t("No Warning");
+                $data = (string) t('No Warning');
             } elseif ($data == 1) {
-                $data = (string) t("Warning");
+                $data = (string) t('Warning');
             } else {
-                $data = (string) t("Unknown: ").$data;
+                $data = (string) t('Unknown: ') . $data;
             }
         }
-        if ($tag=="1301") { //FocusWarning
+        if ($tag == '1301') { //FocusWarning
             if ($data == 0) {
-                $data = (string) t("Auto Focus Good");
+                $data = (string) t('Auto Focus Good');
             } elseif ($data == 1) {
-                $data = (string) t("Out of Focus");
+                $data = (string) t('Out of Focus');
             } else {
-                $data = (string) t("Unknown: ").$data;
+                $data = (string) t('Unknown: ') . $data;
             }
         }
-        if ($tag=="1302") { //AEWarning
+        if ($tag == '1302') { //AEWarning
             if ($data == 0) {
-                $data = (string) t("AE Good");
+                $data = (string) t('AE Good');
             } elseif ($data == 1) {
-                $data = (string) t("Over Exposure");
+                $data = (string) t('Over Exposure');
             } else {
-                $data = (string) t("Unknown: ").$data;
+                $data = (string) t('Unknown: ') . $data;
             }
         }
-    } elseif ($type=="UNDEFINED") {
+    } elseif ($type == 'UNDEFINED') {
     } else {
         $data = bin2hex($data);
         if ($intel==1) {
@@ -317,15 +317,15 @@ function parseFujifilm($block, &$result)
         
         if ($result['VerboseOutput']==1) {
             $result['SubIFD']['MakerNote'][$tag_name] = $formated_data;
-            if ($type=="URATIONAL" || $type=="SRATIONAL" || $type=="USHORT" || $type=="SSHORT" || $type=="ULONG" || $type=="SLONG" || $type=="FLOAT" || $type=="DOUBLE") {
+            if ($type == 'URATIONAL' || $type == 'SRATIONAL' || $type == 'USHORT' || $type == 'SSHORT' || $type == 'ULONG' || $type == 'SLONG' || $type == 'FLOAT' || $type == 'DOUBLE') {
                 $data = bin2hex($data);
                 if ($intel==1) {
                     $data = intel2Moto($data);
                 }
             }
-            $result['SubIFD']['MakerNote'][$tag_name."_Verbose"]['RawData'] = $data;
-            $result['SubIFD']['MakerNote'][$tag_name."_Verbose"]['Type'] = $type;
-            $result['SubIFD']['MakerNote'][$tag_name."_Verbose"]['Bytes'] = $bytesofdata;
+            $result['SubIFD']['MakerNote'][$tag_name . '_Verbose']['RawData'] = $data;
+            $result['SubIFD']['MakerNote'][$tag_name . '_Verbose']['Type']    = $type;
+            $result['SubIFD']['MakerNote'][$tag_name . '_Verbose']['Bytes']   = $bytesofdata;
         } else {
             $result['SubIFD']['MakerNote'][$tag_name] = $formated_data;
         }

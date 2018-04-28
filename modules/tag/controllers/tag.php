@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -22,22 +22,22 @@ class Tag_Controller extends Controller
     public function __call($function, $args)
     {
         $tag_id = $function;
-        $tag = ORM::factory("tag")->where("id", "=", $tag_id)->find();
-        $page_size = module::get_var("gallery", "page_size", 9);
+        $tag = ORM::factory('tag')->where('id', '=', $tag_id)->find();
+        $page_size = module::get_var('gallery', 'page_size', 9);
 
         $input = Input::instance();
-        $show = $input->get("show");
+        $show = $input->get('show');
 
         if ($show) {
-            $child = ORM::factory("item", $show);
+            $child = ORM::factory('item', $show);
             $index = tag::get_position($tag, $child);
             if ($index) {
                 $page = ceil($index / $page_size);
                 $uri = "tag/$tag_id/" . urlencode($tag->name);
-                url::redirect($uri . ($page == 1 ? "" : "?page=$page"));
+                url::redirect($uri . ($page == 1 ? '' : "?page=$page"));
             }
         } else {
-            $page = (int) $input->get("page", "1");
+            $page = (int) $input->get('page', '1');
         }
 
         $children_count = $tag->items_count();
@@ -46,38 +46,39 @@ class Tag_Controller extends Controller
 
         // Make sure that the page references a valid offset
         if ($page < 1) {
-            url::redirect(url::merge(array("page" => 1)));
+            url::redirect(url::merge(array('page' => 1)));
         } elseif ($page > $max_pages) {
-            url::redirect(url::merge(array("page" => $max_pages)));
+            url::redirect(url::merge(array('page' => $max_pages)));
         }
 
         $root = item::root();
-        $template = new Theme_View("page.html", "collection", "tag");
+        $template = new Theme_View('page.html', 'collection', 'tag');
         $template->set_global(
-      array("page" => $page,
-            "max_pages" => $max_pages,
-            "page_size" => $page_size,
-            "tag" => $tag,
-            "children" => $tag->items($page_size, $offset),
-            "breadcrumbs" => array(
+      array(
+          'page'           => $page,
+          'max_pages'      => $max_pages,
+          'page_size'      => $page_size,
+          'tag'            => $tag,
+          'children'       => $tag->items($page_size, $offset),
+          'breadcrumbs'    => array(
               Breadcrumb::instance($root->title, $root->url())->set_first(),
               Breadcrumb::instance(
-                  t("Tag: %tag_name", array("tag_name" => $tag->name)),
+                  t('Tag: %tag_name', array('tag_name' => $tag->name)),
                                    $tag->url()
               )->set_last()),
-            "children_count" => $children_count)
+          'children_count' => $children_count)
     );
-        $template->content = new View("dynamic.html");
-        $template->content->title = t("Tag: %tag_name", array("tag_name" => $tag->name));
+        $template->content = new View('dynamic.html');
+        $template->content->title = t('Tag: %tag_name', array('tag_name' => $tag->name));
         print $template;
 
-        item::set_display_context_callback("Tag_Controller::get_display_context", $tag->id);
+        item::set_display_context_callback('Tag_Controller::get_display_context', $tag->id);
     }
 
     public static function get_display_context($item, $tag_id)
     {
-        $tag = ORM::factory("tag", $tag_id);
-        $where = array(array("type", "!=", "album"));
+        $tag = ORM::factory('tag', $tag_id);
+        $where = array(array('type', '!=', 'album'));
 
         $position = tag::get_position($tag, $item, $where);
         if ($position > 1) {
@@ -88,15 +89,16 @@ class Tag_Controller extends Controller
         }
 
         $root = item::root();
-        return array("position" => $position,
-                 "previous_item" => $previous_item,
-                 "next_item" => $next_item,
-                 "sibling_count" => $tag->items_count($where),
-                 "siblings_callback" => array(array($tag, "items"), array()),
-                 "breadcrumbs" => array(
+        return array(
+            'position'          => $position,
+            'previous_item'     => $previous_item,
+            'next_item'         => $next_item,
+            'sibling_count'     => $tag->items_count($where),
+            'siblings_callback' => array(array($tag, 'items'), array()),
+            'breadcrumbs'       => array(
                    Breadcrumb::instance($root->title, $root->url())->set_first(),
                    Breadcrumb::instance(
-                       t("Tag: %tag_name", array("tag_name" => $tag->name)),
+                       t('Tag: %tag_name', array('tag_name' => $tag->name)),
                                         $tag->url("show={$item->id}")
                    ),
                    Breadcrumb::instance($item->title, $item->url())->set_last()));

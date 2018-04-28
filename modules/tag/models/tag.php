@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -19,7 +19,7 @@
  */
 class Tag_Model_Core extends ORM
 {
-    protected $has_and_belongs_to_many = array("items");
+    protected $has_and_belongs_to_many = array('items');
 
     public function __construct($id=null)
     {
@@ -42,14 +42,14 @@ class Tag_Model_Core extends ORM
     {
         if (is_scalar($where)) {
             // backwards compatibility
-            $where = array(array("items.type", "=", $where));
+            $where = array(array('items.type', '=', $where));
         }
-        return ORM::factory("item")
+        return ORM::factory('item')
       ->viewable()
-      ->join("items_tags", "items.id", "items_tags.item_id")
-      ->where("items_tags.tag_id", "=", $this->id)
+      ->join('items_tags', 'items.id', 'items_tags.item_id')
+      ->where('items_tags.tag_id', '=', $this->id)
       ->merge_where($where)
-      ->order_by("items.id")
+      ->order_by('items.id')
       ->find_all($limit, $offset);
     }
 
@@ -62,12 +62,12 @@ class Tag_Model_Core extends ORM
     {
         if (is_scalar($where)) {
             // backwards compatibility
-            $where = array(array("items.type", "=", $where));
+            $where = array(array('items.type', '=', $where));
         }
-        return $model = ORM::factory("item")
+        return $model = ORM::factory('item')
       ->viewable()
-      ->join("items_tags", "items.id", "items_tags.item_id")
-      ->where("items_tags.tag_id", "=", $this->id)
+      ->join('items_tags', 'items.id', 'items_tags.item_id')
+      ->where('items_tags.tag_id', '=', $this->id)
       ->merge_where($where)
       ->count_all();
     }
@@ -79,15 +79,15 @@ class Tag_Model_Core extends ORM
     public function save()
     {
         // Check to see if another tag exists with the same name
-        $duplicate_tag = ORM::factory("tag")
-      ->where("name", "=", $this->name)
-      ->where("id", "!=", $this->id)
+        $duplicate_tag = ORM::factory('tag')
+      ->where('name', '=', $this->name)
+      ->where('id', '!=', $this->id)
       ->find();
         if ($duplicate_tag->loaded()) {
             // If so, tag its items with this tag so as to merge it
-            $duplicate_tag_items = ORM::factory("item")
-        ->join("items_tags", "items.id", "items_tags.item_id")
-        ->where("items_tags.tag_id", "=", $duplicate_tag->id)
+            $duplicate_tag_items = ORM::factory('item')
+        ->join('items_tags', 'items.id', 'items_tags.item_id')
+        ->where('items_tags.tag_id', '=', $duplicate_tag->id)
         ->find_all();
             foreach ($duplicate_tag_items as $item) {
                 $this->add($item);
@@ -97,20 +97,20 @@ class Tag_Model_Core extends ORM
             $duplicate_tag->delete();
         }
 
-        if (isset($this->object_relations["items"])) {
-            $added = array_diff($this->changed_relations["items"], $this->object_relations["items"]);
-            $removed = array_diff($this->object_relations["items"], $this->changed_relations["items"]);
-            if (isset($this->changed_relations["items"])) {
+        if (isset($this->object_relations['items'])) {
+            $added = array_diff($this->changed_relations['items'], $this->object_relations['items']);
+            $removed = array_diff($this->object_relations['items'], $this->changed_relations['items']);
+            if (isset($this->changed_relations['items'])) {
                 $changed = array_merge($added, $removed);
             }
-            $this->count = count($this->object_relations["items"]) + count($added) - count($removed);
+            $this->count = count($this->object_relations['items']) + count($added) - count($removed);
         }
 
         $result = parent::save();
 
         if (!empty($changed)) {
-            foreach (ORM::factory("item")->where("id", "IN", $changed)->find_all() as $item) {
-                module::event("item_related_update", $item);
+            foreach (ORM::factory('item')->where('id', 'IN', $changed)->find_all() as $item) {
+                module::event('item_related_update', $item);
             }
         }
 
@@ -125,21 +125,21 @@ class Tag_Model_Core extends ORM
     {
         $related_item_ids = array();
         foreach (db::build()
-             ->select("item_id")
-             ->from("items_tags")
-             ->where("tag_id", "=", $this->id)
+             ->select('item_id')
+             ->from('items_tags')
+             ->where('tag_id', '=', $this->id)
              ->execute() as $row) {
             $related_item_ids[$row->item_id] = 1;
         }
 
-        db::build()->delete("items_tags")->where("tag_id", "=", $this->id)->execute();
+        db::build()->delete('items_tags')->where('tag_id', '=', $this->id)->execute();
         $result = parent::delete();
 
         if ($related_item_ids) {
-            foreach (ORM::factory("item")
-               ->where("id", "IN", array_keys($related_item_ids))
+            foreach (ORM::factory('item')
+               ->where('id', 'IN', array_keys($related_item_ids))
                ->find_all() as $item) {
-                module::event("item_related_update", $item);
+                module::event('item_related_update', $item);
             }
         }
         return $result;

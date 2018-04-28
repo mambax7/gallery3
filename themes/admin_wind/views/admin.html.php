@@ -1,54 +1,54 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
+<?php defined('SYSPATH') or die('No direct script access.') ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" <?= $theme->html_attributes() ?> xml:lang="en" lang="en">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <?php $theme->start_combining("script,css") ?>
+    <?php $theme->start_combining('script,css') ?>
     <title>
       <?php if ($page_title): ?>
-        <?= t("Gallery Admin: %page_title", array("page_title" => $page_title)) ?>
+        <?= t('Gallery Admin: %page_title', array('page_title' => $page_title)) ?>
       <?php else: ?>
-        <?= t("Admin dashboard") ?>
+        <?= t('Admin dashboard') ?>
       <?php endif ?>
     </title>
     <link rel="shortcut icon"
-          href="<?= url::file(module::get_var("gallery", "favicon_url")) ?>"
+          href="<?= url::file(module::get_var('gallery', 'favicon_url')) ?>"
           type="image/x-icon" />
     <link rel="apple-touch-icon-precomposed"
-          href="<?= url::file(module::get_var("gallery", "apple_touch_icon_url")) ?>" />
+          href="<?= url::file(module::get_var('gallery', 'apple_touch_icon_url')) ?>" />
 
-    <?= $theme->script("jquery.js") ?>
-    <?= $theme->script("jquery.form.js") ?>
-    <?= $theme->script("jquery-ui.js") ?>
-    <?= $theme->script("gallery.common.js") ?>
+    <?= $theme->script('jquery.js') ?>
+    <?= $theme->script('jquery.form.js') ?>
+    <?= $theme->script('jquery-ui.js') ?>
+    <?= $theme->script('gallery.common.js') ?>
     <?php /* MSG_CANCEL is required by gallery.dialog.js */ ?>
     <script type="text/javascript">
-    var MSG_CANCEL = <?= t("Cancel")->for_js() ?>;
+    var MSG_CANCEL = <?= t('Cancel')->for_js() ?>;
     </script>
-    <?= $theme->script("gallery.ajax.js") ?>
-    <?= $theme->script("gallery.dialog.js") ?>
-    <?= $theme->script("superfish/js/superfish.js") ?>
-    <?= $theme->script("jquery.scrollTo.js") ?>
+    <?= $theme->script('gallery.ajax.js') ?>
+    <?= $theme->script('gallery.dialog.js') ?>
+    <?= $theme->script('superfish/js/superfish.js') ?>
+    <?= $theme->script('jquery.scrollTo.js') ?>
 
     <?= $theme->admin_head() ?>
 
     <?php /* Theme specific CSS/JS goes last so that it can override module CSS/JS */ ?>
-    <?= $theme->script("ui.init.js") ?>
-    <?= $theme->css("yui/reset-fonts-grids.css") ?>
-    <?= $theme->css("themeroller/ui.base.css") ?>
-    <?= $theme->css("superfish/css/superfish.css") ?>
-    <?= $theme->css("screen.css") ?>
+    <?= $theme->script('ui.init.js') ?>
+    <?= $theme->css('yui/reset-fonts-grids.css') ?>
+    <?= $theme->css('themeroller/ui.base.css') ?>
+    <?= $theme->css('superfish/css/superfish.css') ?>
+    <?= $theme->css('screen.css') ?>
     <?php if (locales::is_rtl()): ?>
-    <?= $theme->css("screen-rtl.css") ?>
+    <?= $theme->css('screen-rtl.css') ?>
     <?php endif; ?>
     <!--[if lt IE 8]>
-    <link rel="stylesheet" type="text/css" href="<?= $theme->url("css/fix-ie.css") ?>"
+    <link rel="stylesheet" type="text/css" href="<?= $theme->url('css/fix-ie.css') ?>"
           media="screen,print,projection" />
     <![endif]-->
 
-    <?= $theme->get_combined("css") ?>
-    <?= $theme->get_combined("script") ?>
+    <?= $theme->get_combined('css') ?>
+    <?= $theme->get_combined('script') ?>
   </head>
 
   <body <?= $theme->body_attributes() ?>>
@@ -61,8 +61,8 @@
       <?= $theme->site_status() ?>
       <div id="g-header" class="ui-helper-clearfix">
         <?= $theme->admin_header_top() ?>
-        <a id="g-logo" class="g-left" href="<?= item::root()->url() ?>" title="<?= t("go back to the Gallery")->for_html_attr() ?>">
-          &larr; <?= t("back to the ...") ?>
+        <a id="g-logo" class="g-left" href="<?= item::root()->url() ?>" title="<?= t('go back to the Gallery')->for_html_attr() ?>">
+          &larr; <?= t('back to the ...') ?>
         </a>
         <?= $theme->user_menu() ?>
         <!-- hide the menu until after the page has loaded, to minimize menu flicker -->
@@ -89,7 +89,7 @@
       </div>
       <div id="g-footer" class="g-inline ui-helper-clearfix">
         <?= $theme->admin_footer() ?>
-        <?php if (module::get_var("gallery", "show_credits")): ?>
+        <?php if (module::get_var('gallery', 'show_credits')): ?>
         <ul id="g-credits" class="g-inline">
           <?= $theme->admin_credits() ?>
         </ul>

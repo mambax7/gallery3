@@ -1,13 +1,13 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
+<?php defined('SYSPATH') or die('No direct script access.') ?>
 <script type="text/javascript">
   $("document").ready(function() {
     // using JS for adding link titles to avoid running t() for each tag
-    $("#g-tag-admin .g-tag-name").attr("title", <?= t("Click to edit this tag")->for_js() ?>);
+    $("#g-tag-admin .g-tag-name").attr("title", <?= t('Click to edit this tag')->for_js() ?>);
     $("#g-tag-admin .g-delete-link").attr("title", $(".g-delete-link:first span").html());
 
     // In-place editing for tag admin
     $(".g-editable").gallery_in_place_edit({
-      form_url: <?= html::js_string(url::site("admin/tags/form_rename/__ID__")) ?>
+      form_url: <?= html::js_string(url::site('admin/tags/form_rename/__ID__')) ?>
     });
   });
 </script>
@@ -16,12 +16,12 @@
 <?php $column_tag_count = 0 ?>
 
 <div class="g-block">
-  <h1> <?= t("Manage tags") ?> </h1>
+  <h1> <?= t('Manage tags') ?> </h1>
 
   <div class="g-block-content">
     <table id="g-tag-admin">
       <caption>
-        <?= t2("There is one tag", "There are %count tags", $tags->count()) ?>
+        <?= t2('There is one tag', 'There are %count tags', $tags->count()) ?>
       </caption>
       <tr>
         <td>
@@ -46,7 +46,7 @@
                 <span class="g-understate">(<?= $tag->count ?>)</span>
                 <a href="<?= url::site("admin/tags/form_delete/$tag->id") ?>"
                     class="g-dialog-link g-delete-link g-button">
-                  <span class="ui-icon ui-icon-trash"><?= t("Delete this tag") ?></span></a>
+                  <span class="ui-icon ui-icon-trash"><?= t('Delete this tag') ?></span></a>
               </li>
           <?php $column_tag_count++ ?>
           <?php $last_letter = $current_letter ?>

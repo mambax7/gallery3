@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -25,13 +25,13 @@ class Admin_Manage_Comments_Controller extends Admin_Controller
     {
         // Get rid of old deleted/spam comments once in a while
         db::build()
-      ->delete("comments")
-      ->where("state", "IN", array("deleted", "spam"))
-      ->where("updated", "<", db::expr("UNIX_TIMESTAMP() - 86400 * 7"))
+      ->delete('comments')
+      ->where('state', 'IN', array('deleted', 'spam'))
+      ->where('updated', '<', db::expr('UNIX_TIMESTAMP() - 86400 * 7'))
       ->execute();
 
-        $view = new Admin_View("admin.html");
-        $view->content = new View("admin_manage_comments.html");
+        $view = new Admin_View('admin.html');
+        $view->content = new View('admin_manage_comments.html');
         $view->content->menu = $this->_menu($this->_counts());
         print $view;
     }
@@ -39,24 +39,24 @@ class Admin_Manage_Comments_Controller extends Admin_Controller
     public function menu_labels()
     {
         $menu = $this->_menu($this->_counts());
-        json::reply(array((string) $menu->get("unpublished")->label,
-                      (string) $menu->get("published")->label,
-                      (string) $menu->get("spam")->label,
-                      (string) $menu->get("deleted")->label));
+        json::reply(array((string) $menu->get('unpublished')->label,
+                          (string) $menu->get('published')->label,
+                          (string) $menu->get('spam')->label,
+                          (string) $menu->get('deleted')->label));
     }
 
     public function queue($state)
     {
-        $page = max(Input::instance()->get("page"), 1);
+        $page = max(Input::instance()->get('page'), 1);
 
-        $view = new Gallery_View("admin_manage_comments_queue.html");
+        $view = new Gallery_View('admin_manage_comments_queue.html');
         $view->counts = $this->_counts();
         $view->menu = $this->_menu($view->counts);
         $view->state = $state;
-        $view->comments = ORM::factory("comment")
-      ->order_by("created", "DESC")
-      ->order_by("id", "DESC")
-      ->where("state", "=", $state)
+        $view->comments = ORM::factory('comment')
+      ->order_by('created', 'DESC')
+      ->order_by('id', 'DESC')
+      ->where('state', '=', $state)
       ->limit(self::$items_per_page)
       ->offset(($page - 1) * self::$items_per_page)
       ->find_all();
@@ -67,8 +67,8 @@ class Admin_Manage_Comments_Controller extends Admin_Controller
         $view->fallback_avatar_url = url::abs_file("themes/$atn/images/avatar.jpg");
 
         $view->page = $page;
-        $view->page_type = "collection";
-        $view->page_subtype = "admin_comments";
+        $view->page_type = 'collection';
+        $view->page_subtype = 'admin_comments';
         $view->page_size = self::$items_per_page;
         $view->children_count = $this->_counts()->$state;
         $view->max_pages = ceil($view->children_count / $view->page_size);
@@ -81,39 +81,35 @@ class Admin_Manage_Comments_Controller extends Admin_Controller
 
     private function _menu($counts)
     {
-        return Menu::factory("root")
-      ->append(Menu::factory("link")
-               ->id("unpublished")
+        return Menu::factory('root')
+      ->append(Menu::factory('link')
+               ->id('unpublished')
                ->label(t2(
-                   "Awaiting Moderation (%count)",
-                          "Awaiting Moderation (%count)",
-                          $counts->unpublished
+                           'Awaiting Moderation (%count)', 'Awaiting Moderation (%count)',
+                           $counts->unpublished
                ))
-               ->url(url::site("admin/manage_comments/queue/unpublished")))
-      ->append(Menu::factory("link")
-               ->id("published")
+               ->url(url::site('admin/manage_comments/queue/unpublished')))
+      ->append(Menu::factory('link')
+               ->id('published')
                ->label(t2(
-                   "Approved (%count)",
-                          "Approved (%count)",
-                          $counts->published
+                           'Approved (%count)', 'Approved (%count)',
+                           $counts->published
                ))
-               ->url(url::site("admin/manage_comments/queue/published")))
-      ->append(Menu::factory("link")
-               ->id("spam")
+               ->url(url::site('admin/manage_comments/queue/published')))
+      ->append(Menu::factory('link')
+               ->id('spam')
                ->label(t2(
-                   "Spam (%count)",
-                          "Spam (%count)",
-                          $counts->spam
+                           'Spam (%count)', 'Spam (%count)',
+                           $counts->spam
                ))
-               ->url(url::site("admin/manage_comments/queue/spam")))
-      ->append(Menu::factory("link")
-               ->id("deleted")
+               ->url(url::site('admin/manage_comments/queue/spam')))
+      ->append(Menu::factory('link')
+               ->id('deleted')
                ->label(t2(
-                   "Recently Deleted (%count)",
-                          "Recently Deleted (%count)",
-                          $counts->deleted
+                           'Recently Deleted (%count)', 'Recently Deleted (%count)',
+                           $counts->deleted
                ))
-               ->url(url::site("admin/manage_comments/queue/deleted")));
+               ->url(url::site('admin/manage_comments/queue/deleted')));
     }
 
     private function _counts()
@@ -124,10 +120,10 @@ class Admin_Manage_Comments_Controller extends Admin_Controller
         $counts->spam = 0;
         $counts->deleted = 0;
         foreach (db::build()
-             ->select("state")
-             ->select(array("c" => 'COUNT("*")'))
-             ->from("comments")
-             ->group_by("state")
+             ->select('state')
+             ->select(array('c' => 'COUNT("*")'))
+             ->from('comments')
+             ->group_by('state')
              ->execute() as $row) {
             $counts->{$row->state} = $row->c;
         }
@@ -138,7 +134,7 @@ class Admin_Manage_Comments_Controller extends Admin_Controller
     {
         access::verify_csrf();
 
-        $comment = ORM::factory("comment", $id);
+        $comment = ORM::factory('comment', $id);
         $orig = clone $comment;
         if ($comment->loaded()) {
             $comment->state = $state;
@@ -151,9 +147,9 @@ class Admin_Manage_Comments_Controller extends Admin_Controller
         access::verify_csrf();
 
         db::build()
-      ->delete("comments")
-      ->where("state", "=", "spam")
+      ->delete('comments')
+      ->where('state', '=', 'spam')
       ->execute();
-        url::redirect("admin/manage_comments/queue/spam");
+        url::redirect('admin/manage_comments/queue/spam');
     }
 }

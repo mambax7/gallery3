@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
+<?php defined('SYSPATH') or die('No direct script access.') ?>
 <?php echo '<?xml version="1.0" ?>' ?>
 <rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/"
    xmlns:atom="http://www.w3.org/2005/Atom"
@@ -25,13 +25,13 @@
       <title><?= html::purify($item->title) ?></title>
       <link><?= url::abs_site("{$item->type}s/{$item->id}") ?></link>
       <guid isPermaLink="true"><?= url::abs_site("{$item->type}s/{$item->id}") ?></guid>
-      <pubDate><?= date("D, d M Y H:i:s O", $item->created); ?></pubDate>
+      <pubDate><?= date('D, d M Y H:i:s O', $item->created); ?></pubDate>
       <description><?= html::purify($item->description) ?></description>
       <content:encoded>
         <![CDATA[
           <span><?= html::purify($item->description) ?></span>
           <p>
-          <?php if ($item->type == "photo"): ?>
+          <?php if ($item->type == 'photo'): ?>
             <img alt="" src="<?= $item->resize_url(true) ?>"
                  title="<?= html::purify($item->title)->for_html_attr() ?>"
                  height="<?= $item->resize_height ?>" width="<?= $item->resize_width ?>" /><br />
@@ -49,11 +49,11 @@
                        height="<?= $item->thumb_height ?>"
                        width="<?= $item->thumb_width ?>"
                        />
-    <?php $view_full = access::can("view_full", $item); ?>
-    <?php if ($item->type == "photo" && $view_full): ?>
+    <?php $view_full = access::can('view_full', $item); ?>
+    <?php if ($item->type == 'photo' && $view_full): ?>
       <media:group>
     <?php endif ?>
-      <?php if ($item->type == "photo"): ?>
+      <?php if ($item->type == 'photo'): ?>
         <media:content url="<?= $item->resize_url(true) ?>"
                        fileSize="<?= @filesize($item->resize_path()) ?>"
                        type="<?= $item->mime_type ?>"
@@ -70,7 +70,7 @@
                        isDefault="true"
                        />
       <?php endif ?>
-    <?php if ($item->type == "photo" && $view_full): ?>
+    <?php if ($item->type == 'photo' && $view_full): ?>
       </media:group>
     <?php endif ?>
     </item>

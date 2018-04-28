@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -129,7 +129,7 @@ class SafeString_Core
         $string = (string) $this->for_html();
         return strtr(
         $string,
-                 array("'"=>"&#039;",
+                 array("'"=> '&#039;',
                        '"'=>'&quot;')
     );
     }
@@ -168,7 +168,7 @@ class SafeString_Core
      */
     private static function _purify_for_html($dirty_html)
     {
-        if (class_exists("purifier") && method_exists("purifier", "purify")) {
+        if (class_exists('purifier') && method_exists('purifier', 'purify')) {
             return purifier::purify($dirty_html);
         } else {
             return self::_escape_for_html($dirty_html);

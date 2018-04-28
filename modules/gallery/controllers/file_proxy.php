@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -34,19 +34,19 @@ class File_Proxy_Controller extends Controller
 
     // Force zlib compression off.  Image and movie files are already compressed and
         // recompressing them is CPU intensive.
-        if (ini_get("zlib.output_compression")) {
-            ini_set("zlib.output_compression", "Off");
+        if (ini_get('zlib.output_compression')) {
+            ini_set('zlib.output_compression', 'Off');
         }
 
         // request_uri: gallery3/var/albums/foo/bar.jpg?m=1234
-        $request_uri = rawurldecode(Input::instance()->server("REQUEST_URI"));
+        $request_uri = rawurldecode(Input::instance()->server('REQUEST_URI'));
 
         // get rid of query parameters
         // request_uri: gallery3/var/albums/foo/bar.jpg
-        $request_uri = preg_replace("/\?.*/", "", $request_uri);
+        $request_uri = preg_replace("/\?.*/", '', $request_uri);
 
         // var_uri: gallery3/var/
-        $var_uri = url::file("var/");
+        $var_uri = url::file('var/');
 
         // Make sure that the request is for a file inside var
         $offset = strpos(rawurldecode($request_uri), $var_uri);
@@ -61,8 +61,8 @@ class File_Proxy_Controller extends Controller
 
         // type: albums
         // path: foo/bar.jpg
-        list($type, $path) = explode("/", $file_uri, 2);
-        if ($type != "resizes" && $type != "albums" && $type != "thumbs") {
+        list($type, $path) = explode('/', $file_uri, 2);
+        if ($type != 'resizes' && $type != 'albums' && $type != 'thumbs') {
             $e = new Kohana_404_Exception();
             $e->test_fail_code = 2;
             throw $e;
@@ -78,21 +78,21 @@ class File_Proxy_Controller extends Controller
         }
 
         // Make sure we have access to the item
-        if (!access::can("view", $item)) {
+        if (!access::can('view', $item)) {
             $e = new Kohana_404_Exception();
             $e->test_fail_code = 4;
             throw $e;
         }
 
         // Make sure we have view_full access to the original
-        if ($type == "albums" && !access::can("view_full", $item)) {
+        if ($type == 'albums' && !access::can('view_full', $item)) {
             $e = new Kohana_404_Exception();
             $e->test_fail_code = 5;
             throw $e;
         }
 
         // Don't try to load a directory
-        if ($type == "albums" && $item->is_album()) {
+        if ($type == 'albums' && $item->is_album()) {
             $e = new Kohana_404_Exception();
             $e->test_fail_code = 6;
             throw $e;
@@ -101,9 +101,9 @@ class File_Proxy_Controller extends Controller
         // Note: this code is roughly duplicated in data_rest, so if you modify this, please look to
         // see if you should make the same change there as well.
 
-        if ($type == "albums") {
+        if ($type == 'albums') {
             $file = $item->file_path();
-        } elseif ($type == "resizes") {
+        } elseif ($type == 'resizes') {
             $file = $item->resize_path();
         } else {
             $file = $item->thumb_path();
@@ -122,9 +122,9 @@ class File_Proxy_Controller extends Controller
             exit;
         }
 
-        header("Content-Length: " . filesize($file));
+        header('Content-Length: ' . filesize($file));
 
-        header("Pragma:");
+        header('Pragma:');
         // Check that the content hasn't expired or it wasn't changed since cached
         expires::check(2592000, $item->updated);
 
@@ -134,8 +134,8 @@ class File_Proxy_Controller extends Controller
         expires::set(2592000, $item->updated);  // 30 days
 
         // Dump out the image.  If the item is a movie or album, then its thumbnail will be a JPG.
-        if (($item->is_movie() || $item->is_album()) && $type == "thumbs") {
-            header("Content-Type: image/jpeg");
+        if (($item->is_movie() || $item->is_album()) && $type == 'thumbs') {
+            header('Content-Type: image/jpeg');
         } else {
             header("Content-Type: $item->mime_type");
         }

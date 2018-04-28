@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -27,15 +27,17 @@ class Comment_Model_Test extends Gallery_Unit_Test_Case
     public function guest_name_and_email_is_required_test()
     {
         try {
-            $comment = ORM::factory("comment");
+            $comment = ORM::factory('comment');
             $comment->item_id = item::root()->id;
             $comment->author_id = identity::guest()->id;
-            $comment->text = "text";
+            $comment->text = 'text';
             $comment->save();
         } catch (ORM_Validation_Exception $e) {
             $this->assert_equal(
-          array("guest_name" => "required",
-                                "guest_email" => "required"),
+          array(
+              'guest_name'  => 'required',
+              'guest_email' => 'required'
+          ),
                           $e->validation->errors()
       );
             return;
@@ -45,16 +47,16 @@ class Comment_Model_Test extends Gallery_Unit_Test_Case
     public function guest_email_must_be_well_formed_test()
     {
         try {
-            $comment = ORM::factory("comment");
+            $comment = ORM::factory('comment');
             $comment->item_id = item::root()->id;
             $comment->author_id = identity::guest()->id;
-            $comment->guest_name = "guest";
-            $comment->guest_email = "bogus";
-            $comment->text = "text";
+            $comment->guest_name = 'guest';
+            $comment->guest_email = 'bogus';
+            $comment->text = 'text';
             $comment->save();
         } catch (ORM_Validation_Exception $e) {
             $this->assert_equal(
-          array("guest_email" => "invalid"),
+          array('guest_email' => 'invalid'),
                           $e->validation->errors()
       );
             return;
@@ -65,24 +67,24 @@ class Comment_Model_Test extends Gallery_Unit_Test_Case
     {
         $album = test::random_album();
 
-        $comment = ORM::factory("comment");
+        $comment = ORM::factory('comment');
         $comment->item_id = $album->id;
         $comment->author_id = identity::admin_user()->id;
-        $comment->text = "text";
+        $comment->text = 'text';
         $comment->save();
 
         identity::set_active_user(identity::guest());
 
         // We can see the comment when permissions are granted on the album
-        access::allow(identity::everybody(), "view", $album);
+        access::allow(identity::everybody(), 'view', $album);
         $this->assert_true(
-      ORM::factory("comment")->viewable()->where("comments.id", "=", $comment->id)->count_all()
+      ORM::factory('comment')->viewable()->where('comments.id', '=', $comment->id)->count_all()
     );
 
         // We can't see the comment when permissions are denied on the album
-        access::deny(identity::everybody(), "view", $album);
+        access::deny(identity::everybody(), 'view', $album);
         $this->assert_false(
-      ORM::factory("comment")->viewable()->where("comments.id", "=", $comment->id)->count_all()
+      ORM::factory('comment')->viewable()->where('comments.id', '=', $comment->id)->count_all()
     );
     }
 }

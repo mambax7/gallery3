@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -19,18 +19,18 @@
  */
 class User_Model_Core extends ORM implements User_Definition
 {
-    protected $has_and_belongs_to_many = array("groups");
+    protected $has_and_belongs_to_many = array('groups');
     protected $password_length = null;
     protected $groups_cache = null;
 
     public function __set($column, $value)
     {
         switch ($column) {
-    case "hashed_password":
-      $column = "password";
+    case 'hashed_password':
+      $column = 'password';
       break;
 
-    case "password":
+    case 'password':
       $this->password_length = strlen($value);
       $value = user::hash_password($value);
       break;
@@ -44,15 +44,15 @@ class User_Model_Core extends ORM implements User_Definition
     public function delete($id=null)
     {
         $old = clone $this;
-        module::event("user_before_delete", $this);
+        module::event('user_before_delete', $this);
         parent::delete($id);
 
         db::build()
-      ->delete("groups_users")
-      ->where("user_id", "=", empty($id) ? $old->id : $id)
+      ->delete('groups_users')
+      ->where('user_id', '=', empty($id) ? $old->id : $id)
       ->execute();
 
-        module::event("user_deleted", $old);
+        module::event('user_deleted', $old);
         $this->groups_cache = null;
     }
 
@@ -64,10 +64,10 @@ class User_Model_Core extends ORM implements User_Definition
     public function avatar_url($size=80, $default=null)
     {
         return sprintf(
-        "//www.gravatar.com/avatar/%s.jpg?s=%d&r=pg%s",
-                   md5($this->email),
-        $size,
-        $default ? "&d=" . urlencode($default) : ""
+            '//www.gravatar.com/avatar/%s.jpg?s=%d&r=pg%s',
+            md5($this->email),
+            $size,
+            $default ? '&d=' . urlencode($default) : ''
     );
     }
 
@@ -87,15 +87,17 @@ class User_Model_Core extends ORM implements User_Definition
         // validate() is recursive, only modify the rules on the outermost call.
         if (!$array) {
             $this->rules = array(
-        "admin"     => array("callbacks" => array(array($this, "valid_admin"))),
-        "email"     => array("rules"     => array("length[1,255]", "valid::email"),
-                             "callbacks" => array(array($this, "valid_email"))),
-        "full_name" => array("rules"     => array("length[0,255]")),
-        "locale"    => array("rules"     => array("length[2,10]")),
-        "name"      => array("rules"     => array("length[1,32]", "required"),
-                             "callbacks" => array(array($this, "valid_name"))),
-        "password"  => array("callbacks" => array(array($this, "valid_password"))),
-        "url"       => array("rules"     => array("valid::url")),
+                'admin'     => array('callbacks' => array(array($this, 'valid_admin'))),
+                'email'     => array(
+                    'rules'     => array('length[1,255]', 'valid::email'),
+                    'callbacks' => array(array($this, 'valid_email'))),
+                'full_name' => array('rules' => array('length[0,255]')),
+                'locale'    => array('rules' => array('length[2,10]')),
+                'name'      => array(
+                    'rules'     => array('length[1,32]', 'required'),
+                    'callbacks' => array(array($this, 'valid_name'))),
+                'password'  => array('callbacks' => array(array($this, 'valid_password'))),
+                'url'       => array('rules' => array('valid::url')),
       );
         }
 
@@ -111,7 +113,7 @@ class User_Model_Core extends ORM implements User_Definition
     public function save()
     {
         if ($this->full_name === null) {
-            $this->full_name = "";
+            $this->full_name = '';
         }
 
         if (!$this->loaded()) {
@@ -122,12 +124,12 @@ class User_Model_Core extends ORM implements User_Definition
             }
 
             parent::save();
-            module::event("user_created", $this);
+            module::event('user_created', $this);
         } else {
             // Updated user
-            $original = ORM::factory("user", $this->id);
+            $original = ORM::factory('user', $this->id);
             parent::save();
-            module::event("user_updated", $original, $this);
+            module::event('user_updated', $original, $this);
         }
 
         $this->groups_cache = null;
@@ -149,11 +151,11 @@ class User_Model_Core extends ORM implements User_Definition
      */
     public function valid_name(Validation $v, $field)
     {
-        if (db::build()->from("users")
-        ->where("name", "=", $this->name)
-        ->merge_where($this->id ? array(array("id", "<>", $this->id)) : null)
+        if (db::build()->from('users')
+        ->where('name', '=', $this->name)
+        ->merge_where($this->id ? array(array('id', '<>', $this->id)) : null)
         ->count_records() == 1) {
-            $v->add_error("name", "conflict");
+            $v->add_error('name', 'conflict');
         }
     }
 
@@ -167,9 +169,9 @@ class User_Model_Core extends ORM implements User_Definition
         }
 
         if (!$this->loaded() || isset($this->password_length)) {
-            $minimum_length = module::get_var("user", "minimum_password_length", 5);
+            $minimum_length = module::get_var('user', 'minimum_password_length', 5);
             if ($this->password_length < $minimum_length) {
-                $v->add_error("password", "min_length");
+                $v->add_error('password', 'min_length');
             }
         }
     }
@@ -181,7 +183,7 @@ class User_Model_Core extends ORM implements User_Definition
     {
         $active = identity::active_user();
         if ($this->id == $active->id && $active->admin && !$this->admin) {
-            $v->add_error("admin", "locked");
+            $v->add_error('admin', 'locked');
         }
     }
 
@@ -195,7 +197,7 @@ class User_Model_Core extends ORM implements User_Definition
         }
 
         if (empty($this->email)) {
-            $v->add_error("email", "required");
+            $v->add_error('email', 'required');
         }
     }
 }

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -32,8 +32,8 @@ $config['language'] = array('en_US', 'English_United States');
  * Locale timezone.  Set in 'Advanced' settings, falling back to the server's zone.
  * @see http://php.net/timezones
  */
-if (file_exists(VARPATH . "database.php")) {
-    $config['timezone'] = module::get_var("gallery", "timezone", date_default_timezone_get());
+if (file_exists(VARPATH . 'database.php')) {
+    $config['timezone'] = module::get_var('gallery', 'timezone', date_default_timezone_get());
 } else {
     // Gallery3 is not installed yet -- don't make module::get_var() calls.
     $config['timezone'] = date_default_timezone_get();

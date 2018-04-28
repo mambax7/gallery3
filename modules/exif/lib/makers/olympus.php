@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 //================================================================================================
 //================================================================================================
 /*
@@ -33,19 +33,19 @@
 function lookup_Olympus_tag($tag)
 {
     switch ($tag) {
-        case "0200": $tag = "SpecialMode";break;
-        case "0201": $tag = "JpegQual";break;
-        case "0202": $tag = "Macro";break;
-        case "0203": $tag = "Unknown1";break;
-        case "0204": $tag = "DigiZoom";break;
-        case "0205": $tag = "Unknown2";break;
-        case "0206": $tag = "Unknown3";break;
-        case "0207": $tag = "SoftwareRelease";break;
-        case "0208": $tag = "PictInfo";break;
-        case "0209": $tag = "CameraID";break;
-        case "0f00": $tag = "DataDump";break;
+        case '0200': $tag = 'SpecialMode';break;
+        case '0201': $tag = 'JpegQual';break;
+        case '0202': $tag = 'Macro';break;
+        case '0203': $tag = 'Unknown1';break;
+        case '0204': $tag = 'DigiZoom';break;
+        case '0205': $tag = 'Unknown2';break;
+        case '0206': $tag = 'Unknown3';break;
+        case '0207': $tag = 'SoftwareRelease';break;
+        case '0208': $tag = 'PictInfo';break;
+        case '0209': $tag = 'CameraID';break;
+        case '0f00': $tag = 'DataDump';break;
         
-        default: $tag = "unknown:".$tag;break;
+        default: $tag = 'unknown:' . $tag;break;
     }
     
     return $tag;
@@ -56,42 +56,42 @@ function lookup_Olympus_tag($tag)
 //====================================================================
 function formatOlympusData($type, $tag, $intel, $data)
 {
-    if ($type=="ASCII") {
-    } elseif ($type=="URATIONAL" || $type=="SRATIONAL") {
+    if ($type == 'ASCII') {
+    } elseif ($type == 'URATIONAL' || $type == 'SRATIONAL') {
         $data = unRational($data, $type, $intel);
         if ($intel==1) {
             $data = intel2Moto($data);
         }
     
-        if ($tag=="0204") { //DigitalZoom
-            $data=$data."x";
+        if ($tag == '0204') { //DigitalZoom
+            $data= $data . 'x';
         }
-        if ($tag=="0205") { //Unknown2
+        if ($tag == '0205') { //Unknown2
         }
-    } elseif ($type=="USHORT" || $type=="SSHORT" || $type=="ULONG" || $type=="SLONG" || $type=="FLOAT" || $type=="DOUBLE") {
+    } elseif ($type == 'USHORT' || $type == 'SSHORT' || $type == 'ULONG' || $type == 'SLONG' || $type == 'FLOAT' || $type == 'DOUBLE') {
         $data = rational($data, $type, $intel);
         
-        if ($tag=="0201") { //JPEGQuality
+        if ($tag == '0201') { //JPEGQuality
             if ($data == 1) {
-                $data = "SQ";
+                $data = 'SQ';
             } elseif ($data == 2) {
-                $data = "HQ";
+                $data = 'HQ';
             } elseif ($data == 3) {
-                $data = "SHQ";
+                $data = 'SHQ';
             } else {
-                $data = (string) t("Unknown").": ".$data;
+                $data = (string) t('Unknown') . ': ' . $data;
             }
         }
-        if ($tag=="0202") { //Macro
+        if ($tag == '0202') { //Macro
             if ($data == 0) {
-                $data = "Normal";
+                $data = 'Normal';
             } elseif ($data == 1) {
-                $data = "Macro";
+                $data = 'Macro';
             } else {
-                $data = (string) t("Unknown").": ".$data;
+                $data = (string) t('Unknown') . ': ' . $data;
             }
         }
-    } elseif ($type=="UNDEFINED") {
+    } elseif ($type == 'UNDEFINED') {
     } else {
         $data = bin2hex($data);
         if ($intel==1) {
@@ -110,7 +110,7 @@ function formatOlympusData($type, $tag, $intel, $data)
 //==============================================================================
 function parseOlympus($block, &$result, $seek, $globalOffset)
 {
-    if ($result['Endien']=="Intel") {
+    if ($result['Endien'] == 'Intel') {
         $intel = 1;
     } else {
         $intel = 0;
@@ -198,15 +198,15 @@ function parseOlympus($block, &$result, $seek, $globalOffset)
         
         if ($result['VerboseOutput']==1) {
             $result['SubIFD']['MakerNote'][$tag_name] = $formated_data;
-            if ($type=="URATIONAL" || $type=="SRATIONAL" || $type=="USHORT" || $type=="SSHORT" || $type=="ULONG" || $type=="SLONG" || $type=="FLOAT" || $type=="DOUBLE") {
+            if ($type == 'URATIONAL' || $type == 'SRATIONAL' || $type == 'USHORT' || $type == 'SSHORT' || $type == 'ULONG' || $type == 'SLONG' || $type == 'FLOAT' || $type == 'DOUBLE') {
                 $data = bin2hex($data);
                 if ($intel==1) {
                     $data = intel2Moto($data);
                 }
             }
-            $result['SubIFD']['MakerNote'][$tag_name."_Verbose"]['RawData'] = $data;
-            $result['SubIFD']['MakerNote'][$tag_name."_Verbose"]['Type'] = $type;
-            $result['SubIFD']['MakerNote'][$tag_name."_Verbose"]['Bytes'] = $bytesofdata;
+            $result['SubIFD']['MakerNote'][$tag_name . '_Verbose']['RawData'] = $data;
+            $result['SubIFD']['MakerNote'][$tag_name . '_Verbose']['Type']    = $type;
+            $result['SubIFD']['MakerNote'][$tag_name . '_Verbose']['Bytes']   = $bytesofdata;
         } else {
             $result['SubIFD']['MakerNote'][$tag_name] = $formated_data;
         }

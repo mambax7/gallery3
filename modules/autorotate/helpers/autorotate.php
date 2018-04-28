@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -30,11 +30,11 @@ class autorotate
     {
         
         // Only try to rotate photos based on EXIF
-        if ($item->is_photo() && $item->mime_type == "image/jpeg") {
+        if ($item->is_photo() && $item->mime_type == 'image/jpeg') {
             $exif_data = exif_read_data($item->file_path());
 
-            if (isset($exif_data["Orientation"]) && $exif_data["Orientation"]) {
-                $orientation = $exif_data["Orientation"];
+            if (isset($exif_data['Orientation']) && $exif_data['Orientation']) {
+                $orientation = $exif_data['Orientation'];
                 $degrees = 0;
 
                 if ($orientation == '3') {
@@ -46,8 +46,8 @@ class autorotate
                 }
 
                 if ($degrees) {
-                    $tmpfile = tempnam(TMPPATH, "rotate");
-                    gallery_graphics::rotate($item->file_path(), $tmpfile, array("degrees" => $degrees));
+                    $tmpfile = tempnam(TMPPATH, 'rotate');
+                    gallery_graphics::rotate($item->file_path(), $tmpfile, array('degrees' => $degrees));
 
                     // Update EXIF info
                     $data = new PelDataWindow(file_get_contents($tmpfile));

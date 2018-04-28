@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,27 +21,27 @@ class comment_theme_Core
 {
     public static function head($theme)
     {
-        return $theme->css("comment.css")
-      . $theme->script("comment.js");
+        return $theme->css('comment.css')
+      . $theme->script('comment.js');
     }
 
     public static function admin_head($theme)
     {
-        return $theme->css("comment.css");
+        return $theme->css('comment.css');
     }
 
     public static function photo_bottom($theme)
     {
         $block = new Block;
-        $block->css_id = "g-comments";
-        $block->title = t("Comments");
-        $block->anchor = "comments";
+        $block->css_id = 'g-comments';
+        $block->title = t('Comments');
+        $block->anchor = 'comments';
 
-        $view = new View("comments.html");
-        $view->comments = ORM::factory("comment")
-      ->where("item_id", "=", $theme->item()->id)
-      ->where("state", "=", "published")
-      ->order_by("created", "ASC")
+        $view = new View('comments.html');
+        $view->comments = ORM::factory('comment')
+      ->where('item_id', '=', $theme->item()->id)
+      ->where('state', '=', 'published')
+      ->order_by('created', 'ASC')
       ->find_all();
 
         $block->content = $view;

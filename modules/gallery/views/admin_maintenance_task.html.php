@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
+<?php defined('SYSPATH') or die('No direct script access.') ?>
 <script type="text/javascript">
   var target_value;
   var animation = null;
@@ -27,8 +27,8 @@
     $.fn.gallery_hover_init();
   }
 
-  var FAILED_MSG = <?= t("Something went wrong...sorry!  <a>Retry</a> or check the task log for details")->for_js() ?>;
-  var ERROR_MSG = <?= t("Something went wrong!  Trying again in a moment... (__COUNT__)")->for_js() ?>;
+  var FAILED_MSG = <?= t('Something went wrong...sorry!  <a>Retry</a> or check the task log for details')->for_js() ?>;
+  var ERROR_MSG = <?= t('Something went wrong!  Trying again in a moment... (__COUNT__)')->for_js() ?>;
   update = function() {
     $.ajax({
       url: <?= html::js_string(url::site("admin/maintenance/run/$task->id?csrf=$csrf")) ?>,
@@ -75,10 +75,10 @@
   <h1> <?= $task->name ?> </h1>
   <div class="g-progress-bar"></div>
   <div id="g-status">
-    <?= t("Starting up...") ?>
+    <?= t('Starting up...') ?>
   </div>
   <div class="g-text-right">
-    <button id="g-pause-button" class="ui-state-default ui-corner-all" onclick="dismiss()"><?= t("Pause") ?></button>
-    <button id="g-done-button" class="ui-state-default ui-corner-all" style="display: none" onclick="dismiss()"><?= t("Close") ?></button>
+    <button id="g-pause-button" class="ui-state-default ui-corner-all" onclick="dismiss()"><?= t('Pause') ?></button>
+    <button id="g-done-button" class="ui-state-default ui-corner-all" style="display: none" onclick="dismiss()"><?= t('Close') ?></button>
   </div>
 </div>

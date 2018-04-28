@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,24 +21,25 @@ class info_theme_Core
 {
     public static function thumb_info($theme, $item)
     {
-        $results = "";
+        $results = '';
         if ($item->view_count) {
-            $results .= "<li>";
-            $results .= t("Views: %view_count", array("view_count" => $item->view_count));
-            $results .= "</li>";
+            $results .= '<li>';
+            $results .= t('Views: %view_count', array('view_count' => $item->view_count));
+            $results .= '</li>';
         }
         if ($item->owner) {
-            $results .= "<li>";
+            $results .= '<li>';
             if ($item->owner->url) {
                 $results .= t(
-            "By: <a href=\"%owner_url\">%owner_name</a>",
-                      array("owner_name" => $item->owner->display_name(),
-                            "owner_url" => $item->owner->url)
+                    'By: <a href="%owner_url">%owner_name</a>',
+                    array(
+                        'owner_name' => $item->owner->display_name(),
+                        'owner_url'  => $item->owner->url)
         );
             } else {
-                $results .= t("By: %owner_name", array("owner_name" => $item->owner->display_name()));
+                $results .= t('By: %owner_name', array('owner_name' => $item->owner->display_name()));
             }
-            $results .= "</li>";
+            $results .= '</li>';
         }
         return $results;
     }

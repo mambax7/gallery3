@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -31,8 +31,8 @@ class Gallery_I18n_Test extends Gallery_Unit_Test_Case
         $this->i18n = Gallery_I18n::instance($config);
 
         db::build()
-      ->delete("incoming_translations")
-      ->where("locale", "=", "te_ST")
+      ->delete('incoming_translations')
+      ->where('locale', '=', 'te_ST')
       ->execute();
 
         $messages_te_ST = array(
@@ -45,7 +45,7 @@ class Gallery_I18n_Test extends Gallery_Unit_Test_Case
 
         foreach ($messages_te_ST as $data) {
             list($message, $translation) = $data;
-            $entry = ORM::factory("incoming_translation");
+            $entry = ORM::factory('incoming_translation');
             $entry->key = Gallery_I18n::get_message_key($message);
             $entry->message = serialize($message);
             $entry->translation = serialize($translation);
@@ -58,14 +58,14 @@ class Gallery_I18n_Test extends Gallery_Unit_Test_Case
     public function get_locale_test()
     {
         $locale = $this->i18n->locale();
-        $this->assert_equal("te_ST", $locale);
+        $this->assert_equal('te_ST', $locale);
     }
 
     public function set_locale_test()
     {
-        $this->i18n->locale("de_DE");
+        $this->i18n->locale('de_DE');
         $locale = $this->i18n->locale();
-        $this->assert_equal("de_DE", $locale);
+        $this->assert_equal('de_DE', $locale);
     }
 
     public function translate_simple_test()

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -32,7 +32,7 @@ class group_Core
      */
     public static function everybody()
     {
-        return model_cache::get("group", 1);
+        return model_cache::get('group', 1);
     }
 
     /**
@@ -42,7 +42,7 @@ class group_Core
      */
     public static function registered_users()
     {
-        return model_cache::get("group", 2);
+        return model_cache::get('group', 2);
     }
 
     /**
@@ -52,7 +52,7 @@ class group_Core
      */
     public static function lookup($id)
     {
-        return self::_lookup_by_field("id", $id);
+        return self::_lookup_by_field('id', $id);
     }
 
     /**
@@ -62,7 +62,7 @@ class group_Core
      */
     public static function lookup_by_name($name)
     {
-        return self::_lookup_by_field("name", $name);
+        return self::_lookup_by_field('name', $name);
     }
 
     /**
@@ -74,12 +74,12 @@ class group_Core
     private static function _lookup_by_field($field_name, $value)
     {
         try {
-            $group = model_cache::get("group", $value, $field_name);
+            $group = model_cache::get('group', $value, $field_name);
             if ($group->loaded()) {
                 return $group;
             }
         } catch (Exception $e) {
-            if (strpos($e->getMessage(), "MISSING_MODEL") === false) {
+            if (strpos($e->getMessage(), 'MISSING_MODEL') === false) {
                 throw $e;
             }
         }

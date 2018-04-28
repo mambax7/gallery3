@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -68,9 +68,9 @@ class message_Core
     private static function _add($msg, $severity)
     {
         $session = Session::instance();
-        $status = $session->get("messages");
+        $status = $session->get('messages');
         $status[] = array($msg, $severity);
-        $session->set("messages", $status);
+        $session->set('messages', $status);
     }
 
     /**
@@ -83,13 +83,13 @@ class message_Core
     {
         $buf = array();
 
-        $messages = Session::instance()->get_once("messages", array());
+        $messages = Session::instance()->get_once('messages', array());
         foreach ($messages as $msg) {
-            $msg[0] = str_replace("__CSRF__", access::csrf_token(), $msg[0]);
-            $buf[] = "<li class=\"" . message::severity_class($msg[1]) . "\">$msg[0]</li>";
+            $msg[0] = str_replace('__CSRF__', access::csrf_token(), $msg[0]);
+            $buf[] = '<li class="' . message::severity_class($msg[1]) . "\">$msg[0]</li>";
         }
         if ($buf) {
-            return "<ul id=\"g-action-status\" class=\"g-message-block\">" . implode("", $buf) . "</ul>";
+            return '<ul id="g-action-status" class="g-message-block">' . implode('', $buf) . '</ul>';
         }
     }
 
@@ -102,16 +102,16 @@ class message_Core
     {
         switch ($severity) {
     case message::SUCCESS:
-      return "g-success";
+      return 'g-success';
 
     case message::INFO:
-      return "g-info";
+      return 'g-info';
 
     case message::WARNING:
-      return "g-warning";
+      return 'g-warning';
 
     case message::ERROR:
-      return "g-error";
+      return 'g-error';
     }
     }
 }

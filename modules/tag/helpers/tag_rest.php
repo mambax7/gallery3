@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -24,18 +24,18 @@ class tag_rest_Core
         $tag = rest::resolve($request->url);
         $tag_items = array();
         foreach ($tag->items() as $item) {
-            if (access::can("view", $item)) {
-                $tag_items[] = rest::url("tag_item", $tag, $item);
+            if (access::can('view', $item)) {
+                $tag_items[] = rest::url('tag_item', $tag, $item);
             }
         }
 
         return array(
-      "url" => $request->url,
-      "entity" => $tag->as_array(),
-      "relationships" => array(
-        "items" => array(
-          "url" => rest::url("tag_items", $tag),
-          "members" => $tag_items)));
+            'url'           => $request->url,
+            'entity'        => $tag->as_array(),
+            'relationships' => array(
+                'items' => array(
+                    'url'     => rest::url('tag_items', $tag),
+                    'members' => $tag_items)));
     }
 
     public static function put($request)
@@ -66,21 +66,21 @@ class tag_rest_Core
     public static function relationships($resource_type, $resource)
     {
         switch ($resource_type) {
-    case "item":
+    case 'item':
       $tags = array();
       foreach (tag::item_tags($resource) as $tag) {
-          $tags[] = rest::url("tag_item", $tag, $resource);
+          $tags[] = rest::url('tag_item', $tag, $resource);
       }
       return array(
-        "tags" => array(
-          "url" => rest::url("item_tags", $resource),
-          "members" => $tags));
+          'tags' => array(
+              'url'     => rest::url('item_tags', $resource),
+              'members' => $tags));
     }
     }
 
     public static function resolve($id)
     {
-        $tag = ORM::factory("tag", $id);
+        $tag = ORM::factory('tag', $id);
         if (!$tag->loaded()) {
             throw new Kohana_404_Exception();
         }

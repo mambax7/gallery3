@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -30,8 +30,8 @@ abstract class Database extends Database_Core
      */
     protected function __construct(array $config)
     {
-        if (!isset($config["connection"]["params"])) {
-            $config["connection"]["params"] = null;
+        if (!isset($config['connection']['params'])) {
+            $config['connection']['params'] = null;
         }
         parent::__construct($config);
         if (gallery::show_profiler()) {
@@ -53,24 +53,24 @@ abstract class Database extends Database_Core
 
     public function add_table_prefixes($sql)
     {
-        $prefix = $this->config["table_prefix"];
-        if (strpos($sql, "SHOW TABLES") === 0) {
+        $prefix = $this->config['table_prefix'];
+        if (strpos($sql, 'SHOW TABLES') === 0) {
             /*
              * Don't ignore "show tables", otherwise we could have a infinite
              * @todo this may have to be changed if we support more than mysql
              */
             return $sql;
-        } elseif (strpos($sql, "CREATE TABLE") === 0) {
+        } elseif (strpos($sql, 'CREATE TABLE') === 0) {
             // Creating a new table; add it to the table cache.
-            $open_brace = strpos($sql, "{") + 1;
-            $close_brace = strpos($sql, "}", $open_brace);
+            $open_brace = strpos($sql, '{') + 1;
+            $close_brace = strpos($sql, '}', $open_brace);
             $name = substr($sql, $open_brace, $close_brace - $open_brace);
             $this->_table_names["{{$name}}"] = "`{$prefix}$name`";
-        } elseif (strpos($sql, "RENAME TABLE") === 0) {
+        } elseif (strpos($sql, 'RENAME TABLE') === 0) {
             // Renaming a table; add it to the table cache.
             // You must use the form "TO {new_table_name}" exactly for this to work.
-            $open_brace = strpos($sql, "TO {") + 4;
-            $close_brace = strpos($sql, "}", $open_brace);
+            $open_brace = strpos($sql, 'TO {') + 4;
+            $close_brace = strpos($sql, '}', $open_brace);
             $name = substr($sql, $open_brace, $close_brace - $open_brace);
             $this->_table_names["{{$name}}"] = "`{$prefix}$name`";
         }
@@ -91,7 +91,7 @@ abstract class Database extends Database_Core
      */
     public static function set_default_instance($db)
     {
-        self::$instances["default"] = $db;
+        self::$instances['default'] = $db;
     }
 
     /**

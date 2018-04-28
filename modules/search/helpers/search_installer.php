@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -22,7 +22,7 @@ class search_installer
     public static function install()
     {
         $db = Database::instance();
-        $db->query("CREATE TABLE {search_records} (
+        $db->query('CREATE TABLE {search_records} (
                  `id` int(9) NOT NULL auto_increment,
                  `item_id` int(9),
                  `dirty` boolean default 1,
@@ -31,7 +31,7 @@ class search_installer
                  KEY(`item_id`),
                  FULLTEXT INDEX (`data`))
                ENGINE=MyISAM
-               DEFAULT CHARSET=utf8;");
+               DEFAULT CHARSET=utf8;');
     }
 
     public static function activate()
@@ -39,17 +39,17 @@ class search_installer
         // Update the root item.  This is a quick hack because the search module is activated as part
         // of the official install, so this way we don't start off with a "your index is out of date"
         // banner.
-        search::update(model_cache::get("item", 1));
+        search::update(model_cache::get('item', 1));
         search::check_index();
     }
 
     public static function deactivate()
     {
-        site_status::clear("search_index_out_of_date");
+        site_status::clear('search_index_out_of_date');
     }
 
     public static function uninstall()
     {
-        Database::instance()->query("DROP TABLE {search_records}");
+        Database::instance()->query('DROP TABLE {search_records}');
     }
 }

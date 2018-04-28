@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -31,9 +31,9 @@ class User_Profile_Controller extends Controller
             throw new Kohana_404_Exception();
         }
 
-        $v = new Theme_View("page.html", "other", "profile");
-        $v->page_title = t("%name Profile", array("name" => $user->display_name()));
-        $v->content = new View("user_profile.html");
+        $v = new Theme_View('page.html', 'other', 'profile');
+        $v->page_title = t('%name Profile', array('name' => $user->display_name()));
+        $v->content = new View('user_profile.html');
 
         $v->content->user = $user;
         $v->content->contactable =
@@ -41,8 +41,8 @@ class User_Profile_Controller extends Controller
         $v->content->editable =
       identity::is_writable() && !$user->guest && $user->id == identity::active_user()->id;
 
-        $event_data = (object)array("user" => $user, "content" => array());
-        module::event("show_user_profile", $event_data);
+        $event_data = (object)array('user' => $user, 'content' => array());
+        module::event('show_user_profile', $event_data);
         $v->content->info_parts = $event_data->content;
 
         print $v;
@@ -71,15 +71,15 @@ class User_Profile_Controller extends Controller
             Sendmail::factory()
         ->to($user->email)
         ->subject(html::clean($form->message->subject->value))
-        ->header("Mime-Version", "1.0")
-        ->header("Content-type", "text/html; charset=UTF-8")
+        ->header('Mime-Version', '1.0')
+        ->header('Content-type', 'text/html; charset=UTF-8')
         ->reply_to($form->message->reply_to->value)
         ->message(html::purify($form->message->message->value))
         ->send();
-            message::success(t("Sent message to %user_name", array("user_name" => $user->display_name())));
-            json::reply(array("result" => "success"));
+            message::success(t('Sent message to %user_name', array('user_name' => $user->display_name())));
+            json::reply(array('result' => 'success'));
         } else {
-            json::reply(array("result" => "error", "html" => (string)$form));
+            json::reply(array('result' => 'error', 'html' => (string)$form));
         }
     }
 
@@ -94,14 +94,14 @@ class User_Profile_Controller extends Controller
             return true;
         }
 
-        switch (module::get_var("gallery", "show_user_profiles_to")) {
-    case "admin_users":
+        switch (module::get_var('gallery', 'show_user_profiles_to')) {
+    case 'admin_users':
       return identity::active_user()->admin;
 
-    case "registered_users":
+    case 'registered_users':
       return !identity::active_user()->guest;
 
-    case "everybody":
+    case 'everybody':
       return true;
 
     default:

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -64,7 +64,7 @@ class identity_Core
             IdentityProvider::instance();
 
             $session = Session::instance();
-            if (!($user = $session->get("user"))) {
+            if (!($user = $session->get('user'))) {
                 identity::set_active_user($user = identity::guest());
             }
 
@@ -73,23 +73,23 @@ class identity_Core
             // @todo set the user name into the session instead of 2 and then use it to get the
             //       user object
             if ($user === 2) {
-                $session->delete("user");  // delete it so that identity code isn't confused by the integer
+                $session->delete('user');  // delete it so that identity code isn't confused by the integer
                 auth::login(IdentityProvider::instance()->admin_user());
             }
 
             // Cache the group ids for a day to trade off performance for security updates.
-            if (!$session->get("group_ids") || $session->get("group_ids_timeout", 0) < time()) {
+            if (!$session->get('group_ids') || $session->get('group_ids_timeout', 0) < time()) {
                 $ids = array();
                 foreach ($user->groups() as $group) {
                     $ids[] = $group->id;
                 }
-                $session->set("group_ids", $ids);
-                $session->set("group_ids_timeout", time() + 86400);
+                $session->set('group_ids', $ids);
+                $session->set('group_ids_timeout', time() + 86400);
             }
         } catch (Exception $e) {
             // Log it, so we at least have so notification that we swallowed the exception.
-            Kohana_Log::add("error", "load_user Exception: " .
-                      $e->getMessage() . "\n" . $e->getTraceAsString());
+            Kohana_Log::add('error', 'load_user Exception: ' .
+                                     $e->getMessage() . "\n" . $e->getTraceAsString());
             try {
                 Session::instance()->destroy();
             } catch (Exception $e) {
@@ -106,7 +106,7 @@ class identity_Core
      */
     public static function group_ids_for_active_user()
     {
-        return Session::instance()->get("group_ids", array(1));
+        return Session::instance()->get('group_ids', array(1));
     }
 
     /**
@@ -117,7 +117,7 @@ class identity_Core
     public static function active_user()
     {
         // @todo (maybe) cache this object so we're not always doing session lookups.
-        $user = Session::instance()->get("user", null);
+        $user = Session::instance()->get('user', null);
         if (!isset($user)) {
             // Don't do this as a fallback in the Session::get() call because it can trigger unnecessary
             // work.
@@ -133,8 +133,8 @@ class identity_Core
     public static function set_active_user($user)
     {
         $session = Session::instance();
-        $session->set("user", $user);
-        $session->delete("group_ids");
+        $session->set('user', $user);
+        $session->delete('group_ids');
         identity::load_user();
     }
 

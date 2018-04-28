@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -22,6 +22,6 @@ class Input_Library_Test extends Gallery_Unit_Test_Case
     public function clean_input_keys_test()
     {
         $input = Input::instance();
-        $this->assert_same("foo_bar", $input->clean_input_keys("foo|bar"));
+        $this->assert_same('foo_bar', $input->clean_input_keys('foo|bar'));
     }
 }

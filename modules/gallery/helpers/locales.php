@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -41,8 +41,8 @@ class locales_Core
     public static function installed()
     {
         $available = self::available();
-        $default = module::get_var("gallery", "default_locale");
-        $codes = explode("|", module::get_var("gallery", "installed_locales", $default));
+        $default = module::get_var('gallery', 'default_locale');
+        $codes = explode('|', module::get_var('gallery', 'installed_locales', $default));
         foreach ($codes as $code) {
             if (isset($available[$code])) {
                 $installed[$code] = $available[$code];
@@ -54,12 +54,12 @@ class locales_Core
     public static function update_installed($locales)
     {
         // Ensure that the default is included...
-        $default = module::get_var("gallery", "default_locale");
+        $default = module::get_var('gallery', 'default_locale');
         $locales = in_array($default, $locales)
       ? $locales
       : array_merge($locales, array($default));
 
-        module::set_var("gallery", "installed_locales", join("|", $locales));
+        module::set_var('gallery', 'installed_locales', join('|', $locales));
 
         // Clear the cache
         self::$locales = null;
@@ -71,63 +71,63 @@ class locales_Core
     // ref: http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/likely_subtags.html
     private static function _init_language_data()
     {
-        $l["af_ZA"] = "Afrikaans";                // Afrikaans
-    $l["ar_SA"] = "العربية";                   // Arabic
-    $l["be_BY"] = "Беларускі";           // Belarusian
-    $l["bg_BG"] = "български";           // Bulgarian
-    $l["bn_BD"] = "বাংলা";               // Bengali
-    $l["ca_ES"] = "Catalan";                  // Catalan
-    $l["cs_CZ"] = "čeština";                  // Czech
-    $l["da_DK"] = "Dansk";                    // Danish
-    $l["de_DE"] = "Deutsch";                  // German
-    $l["el_GR"] = "Greek";                    // Greek
-    $l["en_GB"] = "English (UK)";             // English (UK)
-    $l["en_US"] = "English (US)";             // English (US)
-    $l["es_AR"] = "Español (AR)";             // Spanish (AR)
-    $l["es_ES"] = "Español";                  // Spanish (ES)
-    $l["es_MX"] = "Español (MX)";             // Spanish (MX)
-    $l["et_EE"] = "Eesti";                    // Estonian
-    $l["eu_ES"] = "Euskara";                  // Basque
-    $l["fa_IR"] = "فارس";                     // Farsi
-    $l["fi_FI"] = "Suomi";                    // Finnish
-    $l["fo_FO"] = "Føroyskt";                    // Faroese
-    $l["fr_FR"] = "Français";                 // French
-    $l["ga_IE"] = "Gaeilge";                  // Irish
-    $l["he_IL"] = "עברית";                    // Hebrew
-    $l["hr_HR"] = "hr̀vātskī";                 // Croatian
-    $l["hu_HU"] = "Magyar";                   // Hungarian
-    $l["is_IS"] = "Icelandic";                // Icelandic
-    $l["it_IT"] = "Italiano";                 // Italian
-    $l["ja_JP"] = "日本語";                    // Japanese
-    $l["ko_KR"] = "한국어";                    // Korean
-    $l["lt_LT"] = "Lietuvių";                 // Lithuanian
-    $l["lv_LV"] = "Latviešu";                 // Latvian
-    $l["ms_MY"] = "Bahasa Melayu";            // Malay
-    $l["mk_MK"] = "Македонски јазик";         // Macedonian
-    $l["nl_NL"] = "Nederlands";               // Dutch
-    $l["no_NO"] = "Norsk bokmål";             // Norwegian
-    $l["pl_PL"] = "Polski";                   // Polish
-    $l["pt_BR"] = "Português do Brasil";      // Portuguese (BR)
-    $l["pt_PT"] = "Português ibérico";        // Portuguese (PT)
-    $l["ro_RO"] = "Română";                   // Romanian
-    $l["ru_RU"] = "Русский";              // Russian
-    $l["sk_SK"] = "Slovenčina";               // Slovak
-    $l["sl_SI"] = "Slovenščina";              // Slovenian
-    $l["sr_CS"] = "Srpski";                   // Serbian
-    $l["sv_SE"] = "Svenska";                  // Swedish
-    $l["th_TH"] = "ภาษาไทย";                     // Thai
-    $l["tn_ZA"] = "Setswana";                 // Setswana
-    $l["tr_TR"] = "Türkçe";                   // Turkish
-    $l["uk_UA"] = "українська";         // Ukrainian
-    $l["vi_VN"] = "Tiếng Việt";               // Vietnamese
-    $l["zh_CN"] = "简体中文";                  // Chinese (CN)
-    $l["zh_TW"] = "繁體中文";                  // Chinese (TW)
+        $l['af_ZA'] = 'Afrikaans';                // Afrikaans
+        $l['ar_SA'] = 'العربية';                   // Arabic
+        $l['be_BY'] = 'Беларускі';           // Belarusian
+        $l['bg_BG'] = 'български';           // Bulgarian
+        $l['bn_BD'] = 'বাংলা';               // Bengali
+        $l['ca_ES'] = 'Catalan';                  // Catalan
+        $l['cs_CZ'] = 'čeština';                  // Czech
+        $l['da_DK'] = 'Dansk';                    // Danish
+        $l['de_DE'] = 'Deutsch';                  // German
+        $l['el_GR'] = 'Greek';                    // Greek
+        $l['en_GB'] = 'English (UK)';             // English (UK)
+        $l['en_US'] = 'English (US)';             // English (US)
+        $l['es_AR'] = 'Español (AR)';             // Spanish (AR)
+        $l['es_ES'] = 'Español';                  // Spanish (ES)
+        $l['es_MX'] = 'Español (MX)';             // Spanish (MX)
+        $l['et_EE'] = 'Eesti';                    // Estonian
+        $l['eu_ES'] = 'Euskara';                  // Basque
+        $l['fa_IR'] = 'فارس';                     // Farsi
+        $l['fi_FI'] = 'Suomi';                    // Finnish
+        $l['fo_FO'] = 'Føroyskt';                    // Faroese
+        $l['fr_FR'] = 'Français';                 // French
+        $l['ga_IE'] = 'Gaeilge';                  // Irish
+        $l['he_IL'] = 'עברית';                    // Hebrew
+        $l['hr_HR'] = 'hr̀vātskī';                 // Croatian
+        $l['hu_HU'] = 'Magyar';                   // Hungarian
+        $l['is_IS'] = 'Icelandic';                // Icelandic
+        $l['it_IT'] = 'Italiano';                 // Italian
+        $l['ja_JP'] = '日本語';                    // Japanese
+        $l['ko_KR'] = '한국어';                    // Korean
+        $l['lt_LT'] = 'Lietuvių';                 // Lithuanian
+        $l['lv_LV'] = 'Latviešu';                 // Latvian
+        $l['ms_MY'] = 'Bahasa Melayu';            // Malay
+        $l['mk_MK'] = 'Македонски јазик';         // Macedonian
+        $l['nl_NL'] = 'Nederlands';               // Dutch
+        $l['no_NO'] = 'Norsk bokmål';             // Norwegian
+        $l['pl_PL'] = 'Polski';                   // Polish
+        $l['pt_BR'] = 'Português do Brasil';      // Portuguese (BR)
+        $l['pt_PT'] = 'Português ibérico';        // Portuguese (PT)
+        $l['ro_RO'] = 'Română';                   // Romanian
+        $l['ru_RU'] = 'Русский';              // Russian
+        $l['sk_SK'] = 'Slovenčina';               // Slovak
+        $l['sl_SI'] = 'Slovenščina';              // Slovenian
+        $l['sr_CS'] = 'Srpski';                   // Serbian
+        $l['sv_SE'] = 'Svenska';                  // Swedish
+        $l['th_TH'] = 'ภาษาไทย';                     // Thai
+        $l['tn_ZA'] = 'Setswana';                 // Setswana
+        $l['tr_TR'] = 'Türkçe';                   // Turkish
+        $l['uk_UA'] = 'українська';         // Ukrainian
+        $l['vi_VN'] = 'Tiếng Việt';               // Vietnamese
+        $l['zh_CN'] = '简体中文';                  // Chinese (CN)
+        $l['zh_TW'] = '繁體中文';                  // Chinese (TW)
     asort($l, SORT_LOCALE_STRING);
         self::$locales = $l;
 
         // Language subtag to (default) locale mapping
         foreach ($l as $locale => $name) {
-            list($language) = explode("_", $locale . "_");
+            list($language) = explode('_', $locale . '_');
             // The first one mentioned is the default
             if (!isset($d[$language])) {
                 $d[$language] = $locale;
@@ -158,31 +158,31 @@ class locales_Core
      */
     public static function locale_from_http_request()
     {
-        $http_accept_language = Input::instance()->server("HTTP_ACCEPT_LANGUAGE");
+        $http_accept_language = Input::instance()->server('HTTP_ACCEPT_LANGUAGE');
         if ($http_accept_language) {
             // Parse the HTTP header and build a preference list
             // Example value: "de,en-us;q=0.7,en-uk,fr-fr;q=0.2"
             $locale_preferences = array();
-            foreach (explode(",", $http_accept_language) as $code) {
-                list($requested_locale, $qvalue) = explode(";", $code . ";");
+            foreach (explode(',', $http_accept_language) as $code) {
+                list($requested_locale, $qvalue) = explode(';', $code . ';');
                 $requested_locale = trim($requested_locale);
                 $qvalue = trim($qvalue);
-                if (preg_match("/^([a-z]{2,3})(?:[_-]([a-zA-Z]{2}))?/", $requested_locale, $matches)) {
+                if (preg_match('/^([a-z]{2,3})(?:[_-]([a-zA-Z]{2}))?/', $requested_locale, $matches)) {
                     $requested_locale = strtolower($matches[1]);
                     if (!empty($matches[2])) {
-                        $requested_locale .= "_" . strtoupper($matches[2]);
+                        $requested_locale .= '_' . strtoupper($matches[2]);
                     }
-                    $requested_locale = trim(str_replace("-", "_", $requested_locale));
+                    $requested_locale = trim(str_replace('-', '_', $requested_locale));
                     if (!strlen($qvalue)) {
                         // If not specified, default to 1.
                         $qvalue = 1;
                     } else {
                         // qvalue is expected to be something like "q=0.7"
-                        list($ignored, $qvalue) = explode("=", $qvalue . "==");
+                        list($ignored, $qvalue) = explode('=', $qvalue . '==');
                         $qvalue = floatval($qvalue);
                     }
                     // Group by language to boost inexact same-language matches
-                    list($language) = explode("_", $requested_locale . "_");
+                    list($language) = explode('_', $requested_locale . '_');
                     if (!isset($locale_preferences[$language])) {
                         $locale_preferences[$language] = array();
                     }
@@ -228,7 +228,7 @@ class locales_Core
         if (isset($installed[$requested_locale])) {
             return array($requested_locale, $qvalue);
         }
-        list($language) = explode("_", $requested_locale . "_");
+        list($language) = explode('_', $requested_locale . '_');
         if (isset(self::$language_subtag_to_locale[$language]) &&
         isset($installed[self::$language_subtag_to_locale[$language]])) {
             $score = $adjustment_factor * $qvalue;
@@ -259,10 +259,10 @@ class locales_Core
     {
         // Can't use Input framework for client side cookies since
         // they're not signed.
-        $cookie_data = isset($_COOKIE["g_locale"]) ? $_COOKIE["g_locale"] : null;
+        $cookie_data = isset($_COOKIE['g_locale']) ? $_COOKIE['g_locale'] : null;
         $locale = null;
         if ($cookie_data) {
-            if (preg_match("/^([a-z]{2,3}(?:_[A-Z]{2})?)$/", trim($cookie_data), $matches)) {
+            if (preg_match('/^([a-z]{2,3}(?:_[A-Z]{2})?)$/', trim($cookie_data), $matches)) {
                 $requested_locale = $matches[1];
                 $installed_locales = locales::installed();
                 if (isset($installed_locales[$requested_locale])) {

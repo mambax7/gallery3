@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,19 +21,19 @@ class comment_block_Core
 {
     public static function get_admin_list()
     {
-        return array("recent_comments" => t("Recent comments"));
+        return array('recent_comments' => t('Recent comments'));
     }
 
     public static function get($block_id)
     {
         $block = new Block();
         switch ($block_id) {
-    case "recent_comments":
-      $block->css_id = "g-recent-comments";
-      $block->title = t("Recent comments");
-      $block->content = new View("admin_block_recent_comments.html");
+    case 'recent_comments':
+      $block->css_id = 'g-recent-comments';
+      $block->title = t('Recent comments');
+      $block->content = new View('admin_block_recent_comments.html');
       $block->content->comments =
-        ORM::factory("comment")->order_by("created", "DESC")->limit(5)->find_all();
+        ORM::factory('comment')->order_by('created', 'DESC')->limit(5)->find_all();
       break;
     }
 

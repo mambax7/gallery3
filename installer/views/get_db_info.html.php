@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
+<?php defined('SYSPATH') or die('No direct script access.') ?>
 <h1> Let's get going! </h1>
 <p>
   Installing Gallery is easy.  We just need a place to put your photos

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -31,18 +31,18 @@ class Url_Security_Test extends Gallery_Unit_Test_Case
 
     public function xss_in_current_url_test()
     {
-        Router::$current_uri = "foo/<xss>/bar";
-        Router::$complete_uri = "foo/<xss>/bar?foo=bar";
-        $this->assert_same("foo/&lt;xss&gt;/bar", url::current());
-        $this->assert_same("foo/&lt;xss&gt;/bar?foo=bar", url::current(true));
+        Router::$current_uri = 'foo/<xss>/bar';
+        Router::$complete_uri = 'foo/<xss>/bar?foo=bar';
+        $this->assert_same('foo/&lt;xss&gt;/bar', url::current());
+        $this->assert_same('foo/&lt;xss&gt;/bar?foo=bar', url::current(true));
     }
 
     public function xss_in_merged_url_test()
     {
-        Router::$current_uri = "foo/<xss>/bar";
-        Router::$complete_uri = "foo/<xss>/bar?foo=bar";
-        $_GET = array("foo" => "bar");
-        $this->assert_same("foo/&lt;xss&gt;/bar?foo=bar", url::merge(array()));
-        $this->assert_same("foo/&lt;xss&gt;/bar?foo=bar&amp;a=b", url::merge(array("a" => "b")));
+        Router::$current_uri = 'foo/<xss>/bar';
+        Router::$complete_uri = 'foo/<xss>/bar?foo=bar';
+        $_GET = array('foo' => 'bar');
+        $this->assert_same('foo/&lt;xss&gt;/bar?foo=bar', url::merge(array()));
+        $this->assert_same('foo/&lt;xss&gt;/bar?foo=bar&amp;a=b', url::merge(array('a' => 'b')));
     }
 }

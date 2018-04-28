@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -27,7 +27,7 @@ class random_Core
      */
     public static function hash($length=32)
     {
-        require_once(MODPATH . "gallery/vendor/joomla/crypt.php");
+        require_once(MODPATH . 'gallery/vendor/joomla/crypt.php');
         return md5(JCrypt::genRandomBytes($length));
     }
 

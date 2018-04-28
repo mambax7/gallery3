@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
+<?php defined('SYSPATH') or die('No direct script access.') ?>
 <script type="text/javascript">
   dismiss = function() {
     window.location.reload();
@@ -14,6 +14,6 @@ appendTo('body').submit().remove();
   <div class="g-task-log g-text-small">
     <pre><?= html::purify($task->get_log()) ?></pre>
   </div>
-  <button id="g-close" class="ui-state-default ui-corner-all" onclick="dismiss()"><?= t("Close") ?></button>
-  <button id="g-save" class="ui-state-default ui-corner-all" onclick="download()"><?= t("Download") ?></button>
+  <button id="g-close" class="ui-state-default ui-corner-all" onclick="dismiss()"><?= t('Close') ?></button>
+  <button id="g-save" class="ui-state-default ui-corner-all" onclick="download()"><?= t('Download') ?></button>
 </div>

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -27,8 +27,8 @@ class autorotate_event_Core
         try {
             autorotate::rotate_item($item);
         } catch (Exception $e) {
-            Kohana_Log::add("error", "@todo autorotate_event::item_created() failed");
-            Kohana_Log::add("error", $e->getMessage() . "\n" . $e->getTraceAsString());
+            Kohana_Log::add('error', '@todo autorotate_event::item_created() failed');
+            Kohana_Log::add('error', $e->getMessage() . "\n" . $e->getTraceAsString());
         }
     }
 }

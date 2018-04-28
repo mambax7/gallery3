@@ -1,13 +1,13 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
+<?php defined('SYSPATH') or die('No direct script access.') ?>
 <?= $theme->sidebar_top() ?>
 <div id="g-view-menu" class="g-buttonset ui-helper-clearfix">
-  <?php if ($page_subtype == "album"):?>
+  <?php if ($page_subtype == 'album'):?>
     <?= $theme->album_menu() ?>
-  <?php elseif ($page_subtype == "photo") : ?>
+  <?php elseif ($page_subtype == 'photo') : ?>
     <?= $theme->photo_menu() ?>
-  <?php elseif ($page_subtype == "movie") : ?>
+  <?php elseif ($page_subtype == 'movie') : ?>
     <?= $theme->movie_menu() ?>
-  <?php elseif ($page_subtype == "tag") : ?>
+  <?php elseif ($page_subtype == 'tag') : ?>
     <?= $theme->tag_menu() ?>
   <?php endif ?>
 </div>

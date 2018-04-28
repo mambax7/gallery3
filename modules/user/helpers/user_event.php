@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -22,10 +22,10 @@ class user_event_Core
 {
     public static function admin_menu($menu, $theme)
     {
-        $menu->add_after("appearance_menu", Menu::factory("link")
-                     ->id("users_groups")
-                     ->label(t("Users/Groups"))
-                     ->url(url::site("admin/users")));
+        $menu->add_after('appearance_menu', Menu::factory('link')
+                                                ->id('users_groups')
+                                                ->label(t('Users/Groups'))
+                                                ->url(url::site('admin/users')));
 
         return $menu;
     }

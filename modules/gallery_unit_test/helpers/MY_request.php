@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,7 +21,7 @@ class request extends request_Core
 {
     public static function set_user_agent($value)
     {
-        self::$user_agent = null;
-        $_SERVER["HTTP_USER_AGENT"] = $value;
+        self::$user_agent           = null;
+        $_SERVER['HTTP_USER_AGENT'] = $value;
     }
 }

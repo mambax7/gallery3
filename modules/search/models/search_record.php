@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,6 +21,6 @@ class Search_Record_Model_Core extends ORM
 {
     public function item()
     {
-        return model_cache::get("item", $this->item_id);
+        return model_cache::get('item', $this->item_id);
     }
 }

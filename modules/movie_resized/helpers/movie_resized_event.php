@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 
 class movie_resized_event_Core
 {
@@ -14,7 +14,7 @@ class movie_resized_event_Core
             list($width, $height, $mime_type, $ext, $duration) = movie::get_file_metadata($resize_file);
 
             // copied this from modules/gallery/models/items.php
-            $view = new View("movieplayer.html");
+            $view = new View('movieplayer.html');
             $view->max_size = $movie_img->max_size;
             $view->width = $width ? $width : $movie_img->width;
             ;

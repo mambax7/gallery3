@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,27 +21,27 @@ class info_installer
 {
     public static function install()
     {
-        module::set_var("info", "show_title", 1);
-        module::set_var("info", "show_description", 1);
-        module::set_var("info", "show_owner", 1);
-        module::set_var("info", "show_name", 1);
-        module::set_var("info", "show_captured", 1);
-        module::set_var("info", "show_dimensions", 1);
+        module::set_var('info', 'show_title', 1);
+        module::set_var('info', 'show_description', 1);
+        module::set_var('info', 'show_owner', 1);
+        module::set_var('info', 'show_name', 1);
+        module::set_var('info', 'show_captured', 1);
+        module::set_var('info', 'show_dimensions', 1);
     }
 
     public static function upgrade($version)
     {
         if ($version == 1) {
-            module::set_var("info", "show_title", 1);
-            module::set_var("info", "show_description", 1);
-            module::set_var("info", "show_owner", 1);
-            module::set_var("info", "show_name", 1);
-            module::set_var("info", "show_captured", 1);
-            module::set_version("info", $version = 2);
+            module::set_var('info', 'show_title', 1);
+            module::set_var('info', 'show_description', 1);
+            module::set_var('info', 'show_owner', 1);
+            module::set_var('info', 'show_name', 1);
+            module::set_var('info', 'show_captured', 1);
+            module::set_version('info', $version = 2);
         }
         if ($version == 2) {
-            module::set_var("info", "show_dimensions", 1);
-            module::set_version("info", $version = 3);
+            module::set_var('info', 'show_dimensions', 1);
+            module::set_version('info', $version = 3);
         }
     }
 }

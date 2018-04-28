@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -22,11 +22,11 @@ class Admin_Modules_Controller extends Admin_Controller
     public function index()
     {
         // If modules need upgrading, this will get recreated in module::available()
-        site_status::clear("upgrade_now");
+        site_status::clear('upgrade_now');
 
-        $view = new Admin_View("admin.html");
-        $view->page_title = t("Modules");
-        $view->content = new View("admin_modules.html");
+        $view = new Admin_View('admin.html');
+        $view->page_title = t('Modules');
+        $view->content = new View('admin_modules.html');
         $view->content->available = module::available();
         $view->content->obsolete_modules_message = module::get_obsolete_modules_message();
         print $view;
@@ -37,7 +37,7 @@ class Admin_Modules_Controller extends Admin_Controller
     {
         access::verify_csrf();
 
-        $messages = array("error" => array(), "warn" => array());
+        $messages = array('error' => array(), 'warn' => array());
         $desired_list = array();
         foreach (module::available() as $module_name => $info) {
             if ($info->locked) {
@@ -54,15 +54,15 @@ class Admin_Modules_Controller extends Admin_Controller
             }
         }
 
-        if (empty($messages["error"]) && empty($messages["warn"])) {
+        if (empty($messages['error']) && empty($messages['warn'])) {
             $this->_do_save();
-            $result["reload"] = 1;
+            $result['reload'] = 1;
         } else {
-            $v = new View("admin_modules_confirm.html");
-            $v->messages = $messages;
-            $v->modules = $desired_list;
-            $result["dialog"] = (string)$v;
-            $result["allow_continue"] = empty($messages["error"]);
+            $v                        = new View('admin_modules_confirm.html');
+            $v->messages              = $messages;
+            $v->modules               = $desired_list;
+            $result['dialog']         = (string)$v;
+            $result['allow_continue'] = empty($messages['error']);
         }
         json::reply($result);
     }
@@ -72,7 +72,7 @@ class Admin_Modules_Controller extends Admin_Controller
         access::verify_csrf();
 
         $this->_do_save();
-        url::redirect("admin/modules");
+        url::redirect('admin/modules');
     }
 
     private function _do_save()
@@ -105,21 +105,21 @@ class Admin_Modules_Controller extends Admin_Controller
                 }
             } catch (Exception $e) {
                 message::warning(t(
-            "An error occurred while installing the <b>%module_name</b> module",
-                           array("module_name" => $info->name)
+                                     'An error occurred while installing the <b>%module_name</b> module',
+                                     array('module_name' => $info->name)
         ));
-                Kohana_Log::add("error", (string)$e);
+                Kohana_Log::add('error', (string)$e);
             }
         }
 
-        module::event("module_change", $changes);
+        module::event('module_change', $changes);
 
         // @todo this type of collation is questionable from an i18n perspective
         if ($activated_names) {
-            message::success(t("Activated: %names", array("names" => join(", ", $activated_names))));
+            message::success(t('Activated: %names', array('names' => join(', ', $activated_names))));
         }
         if ($deactivated_names) {
-            message::success(t("Deactivated: %names", array("names" => join(", ", $deactivated_names))));
+            message::success(t('Deactivated: %names', array('names' => join(', ', $deactivated_names))));
         }
     }
 }

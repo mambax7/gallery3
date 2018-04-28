@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -23,7 +23,7 @@ class Logout_Controller extends Controller
     {
         access::verify_csrf();
         auth::logout();
-        if ($continue_url = Input::instance()->get("continue_url")) {
+        if ($continue_url = Input::instance()->get('continue_url')) {
             url::redirect($continue_url);
         }
         url::redirect(item::root()->abs_url());

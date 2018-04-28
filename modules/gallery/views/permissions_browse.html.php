@@ -1,6 +1,6 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
+<?php defined('SYSPATH') or die('No direct script access.') ?>
 <script type="text/javascript">
-  var form_url = "<?= url::site("permissions/form/__ITEM__") ?>";
+  var form_url = "<?= url::site('permissions/form/__ITEM__') ?>";
   show = function(id) {
     $.ajax({
       url: form_url.replace("__ITEM__", id),
@@ -29,23 +29,24 @@
   <ul id="g-action-status" class="g-message-block">
     <li class="g-error">
       <?= t(
-    "Oh no!  Your server needs a configuration change in order for you to hide photos!  Ask your server administrator to enable <a %mod_rewrite_attrs>mod_rewrite</a> and set <a %apache_attrs><i>AllowOverride FileInfo Options</i></a> to fix this.",
-            array("mod_rewrite_attrs" => html::mark_clean('href="http://httpd.apache.org/docs/2.0/mod/mod_rewrite.html" target="_blank"'),
-                  "apache_attrs" => html::mark_clean('href="http://httpd.apache.org/docs/2.0/mod/core.html#allowoverride" target="_blank"'))
+          'Oh no!  Your server needs a configuration change in order for you to hide photos!  Ask your server administrator to enable <a %mod_rewrite_attrs>mod_rewrite</a> and set <a %apache_attrs><i>AllowOverride FileInfo Options</i></a> to fix this.',
+          array(
+              'mod_rewrite_attrs' => html::mark_clean('href="http://httpd.apache.org/docs/2.0/mod/mod_rewrite.html" target="_blank"'),
+              'apache_attrs'      => html::mark_clean('href="http://httpd.apache.org/docs/2.0/mod/core.html#allowoverride" target="_blank"'))
 ) ?>
     </li>
   </ul>
   <?php endif ?>
 
-  <p><?= t("Edit permissions for album:") ?></p>
+  <p><?= t('Edit permissions for album:') ?></p>
 
   <ul class="g-breadcrumbs">
     <?php $i = 0 ?>
     <?php foreach ($parents as $parent): ?>
     <li id="item-<?= $parent->id ?>"<?php if ($i == 0) {
-    print " class=\"g-first\"";
+    print ' class="g-first"';
 } ?>>
-      <?php if (access::can("edit", $parent)): ?>
+      <?php if (access::can('edit', $parent)): ?>
       <a href="javascript:show(<?= $parent->id ?>)"> <?= html::purify($parent->title) ?> </a>
       <?php else: ?>
       <?= html::purify($parent->title) ?>

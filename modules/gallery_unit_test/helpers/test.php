@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -23,8 +23,8 @@ class test_Core
     {
         $rand = test::random_string(6);
 
-        $album = ORM::factory("item");
-        $album->type = "album";
+        $album = ORM::factory('item');
+        $album->type = 'album';
         $album->parent_id = $parent ? $parent->id : 1;
         $album->name = "name_$rand";
         $album->title = "title_$rand";
@@ -39,10 +39,10 @@ class test_Core
     public static function random_movie_unsaved($parent=null)
     {
         $rand = test::random_string(6);
-        $photo = ORM::factory("item");
-        $photo->type = "movie";
+        $photo = ORM::factory('item');
+        $photo->type = 'movie';
         $photo->parent_id = $parent ? $parent->id : 1;
-        $photo->set_data_file(MODPATH . "gallery/tests/test.flv");
+        $photo->set_data_file(MODPATH . 'gallery/tests/test.flv');
         $photo->name = "name_$rand.flv";
         $photo->title = "title_$rand";
         return $photo;
@@ -56,10 +56,10 @@ class test_Core
     public static function random_photo_unsaved($parent=null)
     {
         $rand = test::random_string(6);
-        $photo = ORM::factory("item");
-        $photo->type = "photo";
+        $photo = ORM::factory('item');
+        $photo->type = 'photo';
         $photo->parent_id = $parent ? $parent->id : 1;
-        $photo->set_data_file(MODPATH . "gallery/tests/test.jpg");
+        $photo->set_data_file(MODPATH . 'gallery/tests/test.jpg');
         $photo->name = "name_$rand.jpg";
         $photo->title = "title_$rand";
         return $photo;
@@ -75,12 +75,12 @@ class test_Core
     public static function random_unique_photo_unsaved($parent=null)
     {
         $rand = test::random_string(6);
-        $photo = ORM::factory("item");
-        $photo->type = "photo";
+        $photo = ORM::factory('item');
+        $photo->type = 'photo';
         $photo->parent_id = $parent ? $parent->id : 1;
-        if (function_exists("gd_info")) {
+        if (function_exists('gd_info')) {
             // Make image unique - color the black dot of test.jpg to the 6-digit hex code of rand.
-            $image = imagecreatefromjpeg(MODPATH . "gallery/tests/test.jpg");
+            $image = imagecreatefromjpeg(MODPATH . 'gallery/tests/test.jpg');
             imagefilter(
           $image,
           IMG_FILTER_COLORIZE,
@@ -93,7 +93,7 @@ class test_Core
             $photo->set_data_file(TMPPATH . "test_$rand.jpg");
         } else {
             // Just use the black dot.
-            $photo->set_data_file(MODPATH . "gallery/tests/test.jpg");
+            $photo->set_data_file(MODPATH . 'gallery/tests/test.jpg');
         }
         $photo->name = "name_$rand.jpg";
         $photo->title = "title_$rand";
@@ -105,9 +105,9 @@ class test_Core
         return test::random_unique_photo_unsaved($parent)->save()->reload();
     }
 
-    public static function random_user($password="password")
+    public static function random_user($password= 'password')
     {
-        $rand = "name_" . test::random_string(6);
+        $rand = 'name_' . test::random_string(6);
         return identity::create_user($rand, $rand, $password, "$rand@rand.com");
     }
 
@@ -118,9 +118,9 @@ class test_Core
 
     public static function random_name($item=null)
     {
-        $rand = "name_" . test::random_string(6);
+        $rand = 'name_' . test::random_string(6);
         if ($item && $item->is_photo()) {
-            $rand .= ".jpg";
+            $rand .= '.jpg';
         }
         return $rand;
     }
@@ -139,7 +139,7 @@ class test_Core
 
     public static function random_tag()
     {
-        $tag = ORM::factory("tag");
+        $tag = ORM::factory('tag');
         $tag->name = test::lorem_ipsum(rand(2, 4));
 
         // Reload so that ORM coerces all fields into strings.
@@ -148,14 +148,14 @@ class test_Core
 
     public static function diff($a, $b)
     {
-        fwrite(fopen($a_name = tempnam("/tmp", "test"), "w"), $a);
-        fwrite(fopen($b_name = tempnam("/tmp", "test"), "w"), $b);
+        fwrite(fopen($a_name = tempnam('/tmp', 'test'), 'w'), $a);
+        fwrite(fopen($b_name = tempnam('/tmp', 'test'), 'w'), $b);
         return `diff $a_name $b_name`;
     }
 
     public static function random_string($length)
     {
-        $buf = "";
+        $buf = '';
         do {
             $buf .= random::hash();
         } while (strlen($buf) < $length);
@@ -166,10 +166,10 @@ class test_Core
     {
         static $lorem_ipsum = null;
         if (!$lorem_ipsum) {
-            require_once(MODPATH . "gallery_unit_test/vendor/LoremIpsum.class.php");
+            require_once(MODPATH . 'gallery_unit_test/vendor/LoremIpsum.class.php');
             $lorem_ipsum = new LoremIpsumGenerator();
         }
         // skip past initial 'lorem ipsum'
-        return substr($lorem_ipsum->getContent($num + 2, "txt"), 13);
+        return substr($lorem_ipsum->getContent($num + 2, 'txt'), 13);
     }
 }

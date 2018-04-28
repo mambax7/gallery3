@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -22,23 +22,23 @@ class batch_Core
     public static function start()
     {
         $session = Session::instance();
-        $session->set("batch_level", $session->get("batch_level", 0) + 1);
+        $session->set('batch_level', $session->get('batch_level', 0) + 1);
     }
 
     public static function stop()
     {
         $session = Session::instance();
-        $batch_level = $session->get("batch_level", 0) - 1;
+        $batch_level = $session->get('batch_level', 0) - 1;
         if ($batch_level > 0) {
-            $session->set("batch_level", $batch_level);
+            $session->set('batch_level', $batch_level);
         } else {
-            $session->delete("batch_level");
-            module::event("batch_complete");
+            $session->delete('batch_level');
+            module::event('batch_complete');
         }
     }
 
     public static function in_progress()
     {
-        return Session::instance()->get("batch_level", 0) > 0;
+        return Session::instance()->get('batch_level', 0) > 0;
     }
 }

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,11 +21,11 @@ class Admin_Graphics_Controller extends Admin_Controller
 {
     public function index()
     {
-        $view = new Admin_View("admin.html");
-        $view->page_title = t("Graphics settings");
-        $view->content = new View("admin_graphics.html");
+        $view = new Admin_View('admin.html');
+        $view->page_title = t('Graphics settings');
+        $view->content = new View('admin_graphics.html');
         $view->content->tk = graphics::detect_toolkits();
-        $view->content->active = module::get_var("gallery", "graphics_toolkit", "none");
+        $view->content->active = module::get_var('gallery', 'graphics_toolkit', 'none');
         print $view;
     }
 
@@ -33,20 +33,20 @@ class Admin_Graphics_Controller extends Admin_Controller
     {
         access::verify_csrf();
 
-        if ($toolkit_id != module::get_var("gallery", "graphics_toolkit")) {
+        if ($toolkit_id != module::get_var('gallery', 'graphics_toolkit')) {
             $tk = graphics::detect_toolkits();
-            module::set_var("gallery", "graphics_toolkit", $toolkit_id);
-            module::set_var("gallery", "graphics_toolkit_path", $tk->$toolkit_id->dir);
+            module::set_var('gallery', 'graphics_toolkit', $toolkit_id);
+            module::set_var('gallery', 'graphics_toolkit_path', $tk->$toolkit_id->dir);
 
-            site_status::clear("missing_graphics_toolkit");
+            site_status::clear('missing_graphics_toolkit');
 
-            $msg = t("Changed graphics toolkit to: %toolkit", array("toolkit" => $tk->$toolkit_id->name));
+            $msg = t('Changed graphics toolkit to: %toolkit', array('toolkit' => $tk->$toolkit_id->name));
             message::success($msg);
-            log::success("graphics", $msg);
+            log::success('graphics', $msg);
 
-            module::event("graphics_toolkit_change", $toolkit_id);
+            module::event('graphics_toolkit_change', $toolkit_id);
         }
 
-        url::redirect("admin/graphics");
+        url::redirect('admin/graphics');
     }
 }

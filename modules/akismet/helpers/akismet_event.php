@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,22 +21,22 @@ class akismet_event_Core
 {
     public static function comment_created($comment)
     {
-        if (!module::get_var("akismet", "api_key")) {
+        if (!module::get_var('akismet', 'api_key')) {
             return;
         }
 
         switch (akismet::check_comment($comment)) {
-    case "spam":
-      $comment->state = "spam";
-      module::incr_var("comment", "spam_caught");
+    case 'spam':
+      $comment->state = 'spam';
+      module::incr_var('comment', 'spam_caught');
       break;
 
-    case "ham":
-      $comment->state = "published";
+    case 'ham':
+      $comment->state = 'published';
       break;
 
-    case "unknown":
-      $comment->state = "unpublished";
+    case 'unknown':
+      $comment->state = 'unpublished';
       break;
     }
         $comment->save();
@@ -44,31 +44,31 @@ class akismet_event_Core
 
     public static function comment_updated($original, $new)
     {
-        if (!module::get_var("akismet", "api_key")) {
+        if (!module::get_var('akismet', 'api_key')) {
             return;
         }
 
-        if ($original->state != "spam" && $new->state == "spam") {
+        if ($original->state != 'spam' && $new->state == 'spam') {
             akismet::submit_spam($new);
-        } elseif ($original->state == "spam" && $new->state != "spam") {
+        } elseif ($original->state == 'spam' && $new->state != 'spam') {
             akismet::submit_ham($new);
         }
     }
 
     public static function admin_menu($menu, $theme)
     {
-        $menu->get("settings_menu")
-      ->append(Menu::factory("link")
-               ->id("akismet")
-               ->label(t("Akismet"))
-               ->url(url::site("admin/akismet")));
+        $menu->get('settings_menu')
+      ->append(Menu::factory('link')
+               ->id('akismet')
+               ->label(t('Akismet'))
+               ->url(url::site('admin/akismet')));
 
-        if (module::get_var("akismet", "api_key")) {
-            $menu->get("statistics_menu")
-        ->append(Menu::factory("link")
-                 ->id("akismet")
-                 ->label(t("Akismet"))
-                 ->url(url::site("admin/akismet/stats")));
+        if (module::get_var('akismet', 'api_key')) {
+            $menu->get('statistics_menu')
+        ->append(Menu::factory('link')
+                 ->id('akismet')
+                 ->label(t('Akismet'))
+                 ->url(url::site('admin/akismet/stats')));
         }
     }
 }

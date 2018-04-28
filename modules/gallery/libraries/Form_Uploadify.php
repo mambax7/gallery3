@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -20,44 +20,45 @@
 class Form_Uploadify_Core extends Form_Input
 {
     protected $data = array(
-    "name" => false,
-    "type"  => "UNKNOWN",
-    "url" => "",
-    "text" => "");
+        'name' => false,
+        'type' => 'UNKNOWN',
+        'url'  => '',
+        'text' => ''
+    );
 
     public function __construct($name)
     {
         parent::__construct($name);
-        $this->data["script_data"] = array(
-      "g3sid" => Session::instance()->id(),
-      "user_agent" => Input::instance()->server("HTTP_USER_AGENT"),
-      "csrf" => access::csrf_token());
+        $this->data['script_data'] = array(
+            'g3sid'      => Session::instance()->id(),
+            'user_agent' => Input::instance()->server('HTTP_USER_AGENT'),
+            'csrf'       => access::csrf_token());
     }
 
     public function album(Item_Model $album)
     {
-        $this->data["album"] = $album;
+        $this->data['album'] = $album;
         return $this;
     }
 
     public function script_data($key, $value)
     {
-        $this->data["script_data"][$key] = $value;
+        $this->data['script_data'][$key] = $value;
     }
 
     public function render()
     {
-        $v = new View("form_uploadify.html");
-        $v->album = $this->data["album"];
-        $v->script_data = $this->data["script_data"];
-        $v->simultaneous_upload_limit = module::get_var("gallery", "simultaneous_upload_limit");
+        $v = new View('form_uploadify.html');
+        $v->album = $this->data['album'];
+        $v->script_data = $this->data['script_data'];
+        $v->simultaneous_upload_limit = module::get_var('gallery', 'simultaneous_upload_limit');
         $v->movies_allowed = movie::allow_uploads();
         $v->extensions = legal_file::get_filters();
-        $v->suhosin_session_encrypt = (bool) ini_get("suhosin.session.encrypt");
+        $v->suhosin_session_encrypt = (bool) ini_get('suhosin.session.encrypt');
 
         list($toolkit_max_filesize_bytes, $toolkit_max_filesize) = graphics::max_filesize();
 
-        $upload_max_filesize = trim(ini_get("upload_max_filesize"));
+        $upload_max_filesize = trim(ini_get('upload_max_filesize'));
         $upload_max_filesize_bytes = num::convert_to_bytes($upload_max_filesize);
 
         if ($upload_max_filesize_bytes < $toolkit_max_filesize_bytes) {

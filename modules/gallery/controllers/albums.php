@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,7 +21,7 @@ class Albums_Controller extends Items_Controller
 {
     public function index()
     {
-        $this->show(ORM::factory("item", 1));
+        $this->show(ORM::factory('item', 1));
     }
 
     public function show($album)
@@ -32,14 +32,14 @@ class Albums_Controller extends Items_Controller
             throw new Kohana_404_Exception();
         }
 
-        access::required("view", $album);
+        access::required('view', $album);
 
-        $page_size = module::get_var("gallery", "page_size", 9);
+        $page_size = module::get_var('gallery', 'page_size', 9);
         $input = Input::instance();
-        $show = $input->get("show");
+        $show = $input->get('show');
 
         if ($show) {
-            $child = ORM::factory("item", $show);
+            $child = ORM::factory('item', $show);
             $index = item::get_position($child);
             if ($index) {
                 $page = ceil($index / $page_size);
@@ -51,7 +51,7 @@ class Albums_Controller extends Items_Controller
             }
         }
 
-        $page = $input->get("page", "1");
+        $page = $input->get('page', '1');
         $children_count = $album->viewable()->children_count();
         $offset = ($page - 1) * $page_size;
         $max_pages = max(ceil($children_count / $page_size), 1);
@@ -63,28 +63,29 @@ class Albums_Controller extends Items_Controller
             url::redirect($album->abs_url("page=$max_pages"));
         }
 
-        $template = new Theme_View("page.html", "collection", "album");
+        $template = new Theme_View('page.html', 'collection', 'album');
         $template->set_global(
-      array("page" => $page,
-            "page_title" => null,
-            "max_pages" => $max_pages,
-            "page_size" => $page_size,
-            "item" => $album,
-            "children" => $album->viewable()->children($page_size, $offset),
-            "parents" => $album->parents()->as_array(), // view calls empty() on this
-            "breadcrumbs" => Breadcrumb::array_from_item_parents($album),
-            "children_count" => $children_count)
+      array(
+          'page'           => $page,
+          'page_title'     => null,
+          'max_pages'      => $max_pages,
+          'page_size'      => $page_size,
+          'item'           => $album,
+          'children'       => $album->viewable()->children($page_size, $offset),
+          'parents'        => $album->parents()->as_array(), // view calls empty() on this
+          'breadcrumbs'    => Breadcrumb::array_from_item_parents($album),
+          'children_count' => $children_count)
     );
-        $template->content = new View("album.html");
+        $template->content = new View('album.html');
         $album->increment_view_count();
 
         print $template;
-        item::set_display_context_callback("Albums_Controller::get_display_context");
+        item::set_display_context_callback('Albums_Controller::get_display_context');
     }
 
     public static function get_display_context($item)
     {
-        $where = array(array("type", "!=", "album"));
+        $where = array(array('type', '!=', 'album'));
         $position = item::get_position($item, $where);
         if ($position > 1) {
             list($previous_item, $ignore, $next_item) =
@@ -94,13 +95,14 @@ class Albums_Controller extends Items_Controller
             list($next_item) = $item->parent()->viewable()->children(1, $position, $where);
         }
 
-        return array("position" => $position,
-                 "previous_item" => $previous_item,
-                 "next_item" => $next_item,
-                 "sibling_count" => $item->parent()->viewable()->children_count($where),
-                 "siblings_callback" => array("Albums_Controller::get_siblings", array($item)),
-                 "parents" => $item->parents()->as_array(),
-                 "breadcrumbs" => Breadcrumb::array_from_item_parents($item));
+        return array(
+            'position'          => $position,
+            'previous_item'     => $previous_item,
+            'next_item'         => $next_item,
+            'sibling_count'     => $item->parent()->viewable()->children_count($where),
+            'siblings_callback' => array('Albums_Controller::get_siblings', array($item)),
+            'parents'           => $item->parents()->as_array(),
+            'breadcrumbs'       => Breadcrumb::array_from_item_parents($item));
     }
 
     public static function get_siblings($item, $limit=null, $offset=null)
@@ -112,19 +114,19 @@ class Albums_Controller extends Items_Controller
     public function create($parent_id)
     {
         access::verify_csrf();
-        $album = ORM::factory("item", $parent_id);
-        access::required("view", $album);
-        access::required("add", $album);
+        $album = ORM::factory('item', $parent_id);
+        access::required('view', $album);
+        access::required('add', $album);
 
         $form = album::get_add_form($album);
         try {
             $valid = $form->validate();
-            $album = ORM::factory("item");
-            $album->type = "album";
+            $album = ORM::factory('item');
+            $album->type = 'album';
             $album->parent_id = $parent_id;
-            $album->name = $form->add_album->inputs["name"]->value;
+            $album->name = $form->add_album->inputs['name']->value;
             $album->title = $form->add_album->title->value ?
-        $form->add_album->title->value : $form->add_album->inputs["name"]->value;
+        $form->add_album->title->value : $form->add_album->inputs['name']->value;
             $album->description = $form->add_album->description->value;
             $album->slug = $form->add_album->slug->value;
             $album->validate();
@@ -138,29 +140,28 @@ class Albums_Controller extends Items_Controller
 
         if ($valid) {
             $album->save();
-            module::event("album_add_form_completed", $album, $form);
+            module::event('album_add_form_completed', $album, $form);
             log::success(
-          "content",
-          "Created an album",
-                   html::anchor("albums/$album->id", "view album")
+                'content', 'Created an album',
+                html::anchor("albums/$album->id", 'view album')
       );
             message::success(t(
-          "Created album %album_title",
-                         array("album_title" => html::purify($album->title))
+                                 'Created album %album_title',
+                                 array('album_title' => html::purify($album->title))
       ));
 
-            json::reply(array("result" => "success", "location" => $album->url()));
+            json::reply(array('result' => 'success', 'location' => $album->url()));
         } else {
-            json::reply(array("result" => "error", "html" => (string)$form));
+            json::reply(array('result' => 'error', 'html' => (string)$form));
         }
     }
 
     public function update($album_id)
     {
         access::verify_csrf();
-        $album = ORM::factory("item", $album_id);
-        access::required("view", $album);
-        access::required("edit", $album);
+        $album = ORM::factory('item', $album_id);
+        access::required('view', $album);
+        access::required('edit', $album);
 
         $form = album::get_edit_form($album);
         try {
@@ -169,8 +170,8 @@ class Albums_Controller extends Items_Controller
             $album->description = $form->edit_item->description->value;
             $album->sort_column = $form->edit_item->sort_order->column->value;
             $album->sort_order = $form->edit_item->sort_order->direction->value;
-            if (array_key_exists("name", $form->edit_item->inputs)) {
-                $album->name = $form->edit_item->inputs["name"]->value;
+            if (array_key_exists('name', $form->edit_item->inputs)) {
+                $album->name = $form->edit_item->inputs['name']->value;
             }
             $album->slug = $form->edit_item->slug->value;
             $album->validate();
@@ -184,40 +185,40 @@ class Albums_Controller extends Items_Controller
 
         if ($valid) {
             $album->save();
-            module::event("item_edit_form_completed", $album, $form);
+            module::event('item_edit_form_completed', $album, $form);
 
-            log::success("content", "Updated album", "<a href=\"albums/$album->id\">view</a>");
+            log::success('content', 'Updated album', "<a href=\"albums/$album->id\">view</a>");
             message::success(t(
-          "Saved album %album_title",
-                         array("album_title" => html::purify($album->title))
+                                 'Saved album %album_title',
+                                 array('album_title' => html::purify($album->title))
       ));
 
             if ($form->from_id->value == $album->id) {
                 // Use the new url; it might have changed.
-                json::reply(array("result" => "success", "location" => $album->url()));
+                json::reply(array('result' => 'success', 'location' => $album->url()));
             } else {
                 // Stay on the same page
-                json::reply(array("result" => "success"));
+                json::reply(array('result' => 'success'));
             }
         } else {
-            json::reply(array("result" => "error", "html" => (string)$form));
+            json::reply(array('result' => 'error', 'html' => (string)$form));
         }
     }
 
     public function form_add($album_id)
     {
-        $album = ORM::factory("item", $album_id);
-        access::required("view", $album);
-        access::required("add", $album);
+        $album = ORM::factory('item', $album_id);
+        access::required('view', $album);
+        access::required('add', $album);
 
         print album::get_add_form($album);
     }
 
     public function form_edit($album_id)
     {
-        $album = ORM::factory("item", $album_id);
-        access::required("view", $album);
-        access::required("edit", $album);
+        $album = ORM::factory('item', $album_id);
+        access::required('view', $album);
+        access::required('edit', $album);
 
         print album::get_edit_form($album);
     }

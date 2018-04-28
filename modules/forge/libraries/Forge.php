@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * FORGE (FORm GEneration) library.
  *
@@ -271,7 +271,7 @@ class Forge_Core
             foreach ($this->hidden as $hidden) {
                 $form->open .= form::hidden($hidden->name, $hidden->value);
             }
-            $form->close = "</form>";
+            $form->close = '</form>';
 
             // Set the inputs
             $form->inputs = $this->inputs;

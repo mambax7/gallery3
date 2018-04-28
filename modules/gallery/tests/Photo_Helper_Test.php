@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -23,7 +23,7 @@ class Photo_Helper_Test extends Gallery_Unit_Test_Case
     {
         $photo = test::random_photo();
         $this->assert_equal(
-        array(1024, 768, "image/jpeg", "jpg"),
+        array(1024, 768, 'image/jpeg', 'jpg'),
                         photo::get_file_metadata($photo->file_path())
     );
     }
@@ -31,7 +31,7 @@ class Photo_Helper_Test extends Gallery_Unit_Test_Case
     public function get_file_metadata_with_non_existent_file_test()
     {
         try {
-            $metadata = photo::get_file_metadata(MODPATH . "gallery/tests/this_does_not_exist");
+            $metadata = photo::get_file_metadata(MODPATH . 'gallery/tests/this_does_not_exist');
             $this->assert_true(false, "Shouldn't get here");
         } catch (Exception $e) {
             // pass
@@ -40,18 +40,18 @@ class Photo_Helper_Test extends Gallery_Unit_Test_Case
 
     public function get_file_metadata_with_no_extension_test()
     {
-        copy(MODPATH . "gallery/tests/test.jpg", TMPPATH . "test_jpg_with_no_extension");
+        copy(MODPATH . 'gallery/tests/test.jpg', TMPPATH . 'test_jpg_with_no_extension');
         $this->assert_equal(
-        array(1024, 768, "image/jpeg", "jpg"),
-                        photo::get_file_metadata(TMPPATH . "test_jpg_with_no_extension")
+        array(1024, 768, 'image/jpeg', 'jpg'),
+                        photo::get_file_metadata(TMPPATH . 'test_jpg_with_no_extension')
     );
-        unlink(TMPPATH . "test_jpg_with_no_extension");
+        unlink(TMPPATH . 'test_jpg_with_no_extension');
     }
 
     public function get_file_metadata_with_illegal_extension_test()
     {
         try {
-            $metadata = photo::get_file_metadata(MODPATH . "gallery/tests/Photo_Helper_Test.php");
+            $metadata = photo::get_file_metadata(MODPATH . 'gallery/tests/Photo_Helper_Test.php');
             $this->assert_true(false, "Shouldn't get here");
         } catch (Exception $e) {
             // pass
@@ -64,23 +64,23 @@ class Photo_Helper_Test extends Gallery_Unit_Test_Case
         // themselves are valid.  This is needed to ensure that issues similar to those corrected by
         // ticket #1855, where an image that looked valid (header said jpg) with a php extension was
         // previously accepted without changing its extension, do not arise and cause security issues.
-        copy(MODPATH . "gallery/tests/test.jpg", TMPPATH . "test_jpg_with_php_extension.php");
+        copy(MODPATH . 'gallery/tests/test.jpg', TMPPATH . 'test_jpg_with_php_extension.php');
         $this->assert_equal(
-        array(1024, 768, "image/jpeg", "jpg"),
-                        photo::get_file_metadata(TMPPATH . "test_jpg_with_php_extension.php")
+        array(1024, 768, 'image/jpeg', 'jpg'),
+                        photo::get_file_metadata(TMPPATH . 'test_jpg_with_php_extension.php')
     );
-        unlink(TMPPATH . "test_jpg_with_php_extension.php");
+        unlink(TMPPATH . 'test_jpg_with_php_extension.php');
     }
 
     public function get_file_metadata_with_valid_extension_but_illegal_file_contents_test()
     {
-        copy(MODPATH . "gallery/tests/Photo_Helper_Test.php", TMPPATH . "test_php_with_jpg_extension.jpg");
+        copy(MODPATH . 'gallery/tests/Photo_Helper_Test.php', TMPPATH . 'test_php_with_jpg_extension.jpg');
         try {
-            $metadata = photo::get_file_metadata(TMPPATH . "test_php_with_jpg_extension.jpg");
+            $metadata = photo::get_file_metadata(TMPPATH . 'test_php_with_jpg_extension.jpg');
             $this->assert_true(false, "Shouldn't get here");
         } catch (Exception $e) {
             // pass
         }
-        unlink(TMPPATH . "test_php_with_jpg_extension.jpg");
+        unlink(TMPPATH . 'test_php_with_jpg_extension.jpg');
     }
 }

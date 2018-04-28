@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
+<?php defined('SYSPATH') or die('No direct script access.') ?>
 <html>
   <head>
     <title><?= html::clean($subject) ?> </title>
@@ -9,13 +9,13 @@
       <tr>
         <td colspan="2">
           <?= t(
-    "To view the changed album %title use the link below.",
-              array("title" => html::purify($item->parent()->title))
+              'To view the changed album %title use the link below.',
+              array('title' => html::purify($item->parent()->title))
 ) ?>
         </td>
       </tr>
       <tr>
-        <td><?= t("Url:") ?></td>
+        <td><?= t('Url:') ?></td>
         <td>
           <a href="<?= $item->parent()->abs_url() ?>">
             <?= $item->parent()->abs_url() ?>

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -39,8 +39,7 @@ $config = parse_cli_params();
 if (!installer::connect($config)) {
     oops("Unable to connect to the database.\n" . mysql_error() . "\n");
 } elseif (!installer::select_db($config)) {
-    oops("Database {$config['dbname']} doesn't exist and can't be created.  " .
-       "Please create the database by hand.");
+    oops("Database {$config['dbname']} doesn't exist and can't be created.  " . 'Please create the database by hand.');
 } elseif (is_string($count = installer::db_empty($config)) || !$count) {
     if (is_string($count)) {
         oops($count);
@@ -56,7 +55,7 @@ if (!installer::connect($config)) {
 } elseif (!installer::create_database_config($config)) {
     oops("Couldn't create var/database.php");
 } else {
-    system("chmod -R 777 " . VARPATH);
+    system('chmod -R 777 ' . VARPATH);
     try {
         list($user, $password) = installer::create_admin($config);
         print "Your Gallery has been successfully installed!\n";
@@ -76,7 +75,7 @@ function oops($message)
 {
     print "Oops! Something went wrong during the installation:\n\n";
 
-    print "==> " . $message;
+    print '==> ' . $message;
     print "\n";
     print "For help you can try:\n";
     print "  * The Gallery 3 FAQ   - http://codex.galleryproject.org/Gallery3:FAQ\n";
@@ -87,34 +86,36 @@ function oops($message)
 
 function parse_cli_params()
 {
-    $config = array("host" => "localhost",
-                  "user" => "root",
-                  "password" => "",
-                  "dbname" => "gallery3",
-                  "prefix" => "",
-                  "g3_password" => "",
-                  "type" => function_exists("mysqli_set_charset") ? "mysqli" : "mysql");
+    $config = array(
+        'host'        => 'localhost',
+        'user'        => 'root',
+        'password'    => '',
+        'dbname'      => 'gallery3',
+        'prefix'      => '',
+        'g3_password' => '',
+        'type'        => function_exists('mysqli_set_charset') ? 'mysqli' : 'mysql'
+    );
 
-    $argv = $_SERVER["argv"];
+    $argv = $_SERVER['argv'];
     for ($i = 1; $i < count($argv); $i++) {
         switch (strtolower($argv[$i])) {
-    case "-d":
-      $config["dbname"] = $argv[++$i];
+    case '-d':
+        $config['dbname'] = $argv[++$i];
       break;
-    case "-h":
-      list($config["host"], $config["port"]) = explode(":", $argv[++$i]);
+    case '-h':
+      list($config['host'], $config['port']) = explode(':', $argv[++$i]);
       break;
-    case "-u":
-      $config["user"] = $argv[++$i];
+    case '-u':
+        $config['user'] = $argv[++$i];
       break;
-    case "-p":
-      $config["password"] = $argv[++$i];
+    case '-p':
+        $config['password'] = $argv[++$i];
       break;
-    case "-x":
-      $config["prefix"] = $argv[++$i];
+    case '-x':
+        $config['prefix'] = $argv[++$i];
       break;
-    case "-g3p":
-      $config["g3_password"] = $argv[++$i];
+    case '-g3p':
+        $config['g3_password'] = $argv[++$i];
       break;
     }
     }

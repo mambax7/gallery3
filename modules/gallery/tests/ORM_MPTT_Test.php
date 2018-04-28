@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -99,7 +99,7 @@ class ORM_MPTT_Test extends Gallery_Unit_Test_Case
         try {
             $album1->parent_id = $album3->id;
             $album1->save();
-            $this->assert_true(false, "We should be unable to move an item inside its own hierarchy");
+            $this->assert_true(false, 'We should be unable to move an item inside its own hierarchy');
         } catch (Exception $e) {
             // pass
         }
@@ -109,7 +109,7 @@ class ORM_MPTT_Test extends Gallery_Unit_Test_Case
     {
         $album = test::random_album();
 
-        $parent = ORM::factory("item", 1);
+        $parent = ORM::factory('item', 1);
         $this->assert_equal($parent->id, $album->parent()->id);
     }
 
@@ -169,8 +169,8 @@ class ORM_MPTT_Test extends Gallery_Unit_Test_Case
         $parent->reload();
 
         $this->assert_equal(3, $parent->descendants()->count());
-        $this->assert_equal(2, $parent->descendants(null, null, array(array("type", "=", "photo")))->count());
-        $this->assert_equal(1, $parent->descendants(null, null, array(array("type", "=", "album")))->count());
+        $this->assert_equal(2, $parent->descendants(null, null, array(array('type', '=', 'photo')))->count());
+        $this->assert_equal(1, $parent->descendants(null, null, array(array('type', '=', 'album')))->count());
     }
 
     public function descendant_limit_test()
@@ -193,7 +193,7 @@ class ORM_MPTT_Test extends Gallery_Unit_Test_Case
         $parent->reload();
 
         $this->assert_equal(3, $parent->descendants_count());
-        $this->assert_equal(2, $parent->descendants_count(array(array("type", "=", "photo"))));
-        $this->assert_equal(1, $parent->descendants_count(array(array("type", "=", "album"))));
+        $this->assert_equal(2, $parent->descendants_count(array(array('type', '=', 'photo'))));
+        $this->assert_equal(1, $parent->descendants_count(array(array('type', '=', 'album'))));
     }
 }

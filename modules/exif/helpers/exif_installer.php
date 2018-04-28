@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -22,7 +22,7 @@ class exif_installer
     public static function install()
     {
         $db = Database::instance();
-        $db->query("CREATE TABLE IF NOT EXISTS {exif_records} (
+        $db->query('CREATE TABLE IF NOT EXISTS {exif_records} (
                  `id` int(9) NOT NULL auto_increment,
                  `item_id` INTEGER(9) NOT NULL,
                  `key_count` INTEGER(9) default 0,
@@ -30,7 +30,7 @@ class exif_installer
                  `dirty` BOOLEAN default 1,
                  PRIMARY KEY (`id`),
                  KEY(`item_id`))
-               DEFAULT CHARSET=utf8;");
+               DEFAULT CHARSET=utf8;');
     }
 
     public static function activate()
@@ -40,11 +40,11 @@ class exif_installer
 
     public static function deactivate()
     {
-        site_status::clear("exif_index_out_of_date");
+        site_status::clear('exif_index_out_of_date');
     }
 
     public static function uninstall()
     {
-        Database::instance()->query("DROP TABLE IF EXISTS {exif_records};");
+        Database::instance()->query('DROP TABLE IF EXISTS {exif_records};');
     }
 }

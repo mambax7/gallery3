@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,9 +21,9 @@ class Admin_Theme_Options_Controller extends Admin_Controller
 {
     public function index()
     {
-        $view = new Admin_View("admin.html");
-        $view->page_title = t("Theme options");
-        $view->content = new View("admin_theme_options.html");
+        $view = new Admin_View('admin.html');
+        $view->page_title = t('Theme options');
+        $view->content = new View('admin_theme_options.html');
         $view->content->form = $this->_get_edit_form_admin();
         print $view;
     }
@@ -34,65 +34,57 @@ class Admin_Theme_Options_Controller extends Admin_Controller
 
         $form = $this->_get_edit_form_admin();
         if ($form->validate()) {
-            module::set_var("gallery", "page_size", $form->edit_theme->page_size->value);
+            module::set_var('gallery', 'page_size', $form->edit_theme->page_size->value);
 
             $thumb_size = $form->edit_theme->thumb_size->value;
-            if (module::get_var("gallery", "thumb_size") != $thumb_size) {
-                graphics::remove_rule("gallery", "thumb", "gallery_graphics::resize");
+            if (module::get_var('gallery', 'thumb_size') != $thumb_size) {
+                graphics::remove_rule('gallery', 'thumb', 'gallery_graphics::resize');
                 graphics::add_rule(
-          "gallery",
-            "thumb",
-            "gallery_graphics::resize",
-          array("width" => $thumb_size, "height" => $thumb_size, "master" => Image::AUTO),
-          100
+                    'gallery', 'thumb', 'gallery_graphics::resize',
+                    array('width' => $thumb_size, 'height' => $thumb_size, 'master' => Image::AUTO),
+                    100
         );
-                module::set_var("gallery", "thumb_size", $thumb_size);
+                module::set_var('gallery', 'thumb_size', $thumb_size);
             }
 
             $resize_size = $form->edit_theme->resize_size->value;
-            if (module::get_var("gallery", "resize_size") != $resize_size) {
-                graphics::remove_rule("gallery", "resize", "gallery_graphics::resize");
+            if (module::get_var('gallery', 'resize_size') != $resize_size) {
+                graphics::remove_rule('gallery', 'resize', 'gallery_graphics::resize');
                 graphics::add_rule(
-          "gallery",
-            "resize",
-            "gallery_graphics::resize",
-          array("width" => $resize_size, "height" => $resize_size, "master" => Image::AUTO),
-          100
+                    'gallery', 'resize', 'gallery_graphics::resize',
+                    array('width' => $resize_size, 'height' => $resize_size, 'master' => Image::AUTO),
+                    100
         );
-                module::set_var("gallery", "resize_size", $resize_size);
+                module::set_var('gallery', 'resize_size', $resize_size);
             }
 
-            module::set_var("gallery", "show_credits", $form->edit_theme->show_credits->value);
+            module::set_var('gallery', 'show_credits', $form->edit_theme->show_credits->value);
 
             // Sanitize values that get placed directly in HTML output by theme.
             module::set_var(
-          "gallery",
-          "header_text",
-        html::purify($form->edit_theme->header_text->value)
+                'gallery', 'header_text',
+                html::purify($form->edit_theme->header_text->value)
       );
             module::set_var(
-          "gallery",
-          "footer_text",
-        html::purify($form->edit_theme->footer_text->value)
+                'gallery', 'footer_text',
+                html::purify($form->edit_theme->footer_text->value)
       );
             module::set_var(
-          "gallery",
-          "favicon_url",
-        html::purify($form->edit_theme->favicon_url->value)
+                'gallery', 'favicon_url',
+                html::purify($form->edit_theme->favicon_url->value)
       );
             module::set_var(
-          "gallery",
-          "apple_touch_icon_url",
-        html::purify($form->edit_theme->apple_touch_icon_url->value)
+                'gallery', 'apple_touch_icon_url',
+                html::purify($form->edit_theme->apple_touch_icon_url->value)
       );
 
-            module::event("theme_edit_form_completed", $form);
+            module::event('theme_edit_form_completed', $form);
 
-            message::success(t("Updated theme details"));
-            url::redirect("admin/theme_options");
+            message::success(t('Updated theme details'));
+            url::redirect('admin/theme_options');
         } else {
-            $view = new Admin_View("admin.html");
-            $view->content = new View("admin_theme_options.html");
+            $view = new Admin_View('admin.html');
+            $view->content = new View('admin_theme_options.html');
             $view->content->form = $form;
             print $view;
         }
@@ -100,48 +92,48 @@ class Admin_Theme_Options_Controller extends Admin_Controller
 
     private function _get_edit_form_admin()
     {
-        $form = new Forge("admin/theme_options/save/", "", null, array("id" =>"g-theme-options-form"));
-        $group = $form->group("edit_theme")->label(t("Theme layout"));
-        $group->input("page_size")->label(t("Items per page"))->id("g-page-size")
-      ->rules("required|valid_digit")
-      ->callback(array($this, "_valididate_page_size"))
-      ->error_messages("required", t("You must enter a number"))
-      ->error_messages("valid_digit", t("You must enter a number"))
-      ->error_messages("valid_min_value", t("The value must be greater than zero"))
-      ->value(module::get_var("gallery", "page_size"));
-        $group->input("thumb_size")->label(t("Thumbnail size (in pixels)"))->id("g-thumb-size")
-      ->rules("required|valid_digit")
-      ->error_messages("required", t("You must enter a number"))
-      ->error_messages("valid_digit", t("You must enter a number"))
-      ->value(module::get_var("gallery", "thumb_size"));
-        $group->input("resize_size")->label(t("Resized image size (in pixels)"))->id("g-resize-size")
-      ->rules("required|valid_digit")
-      ->error_messages("required", t("You must enter a number"))
-      ->error_messages("valid_digit", t("You must enter a number"))
-      ->value(module::get_var("gallery", "resize_size"));
-        $group->input("favicon_url")->label(t("URL (or relative path) to your favicon.ico"))
-      ->id("g-favicon")
-      ->value(module::get_var("gallery", "favicon_url"));
-        $group->input("apple_touch_icon_url")->label(t("URL (or relative path) to your Apple Touch icon"))
-      ->id("g-apple-touch")
-      ->value(module::get_var("gallery", "apple_touch_icon_url"));
-        $group->textarea("header_text")->label(t("Header text"))->id("g-header-text")
-      ->value(module::get_var("gallery", "header_text"));
-        $group->textarea("footer_text")->label(t("Footer text"))->id("g-footer-text")
-      ->value(module::get_var("gallery", "footer_text"));
-        $group->checkbox("show_credits")->label(t("Show site credits"))->id("g-footer-text")
-      ->checked(module::get_var("gallery", "show_credits"));
+        $form = new Forge('admin/theme_options/save/', '', null, array('id' => 'g-theme-options-form'));
+        $group = $form->group('edit_theme')->label(t('Theme layout'));
+        $group->input('page_size')->label(t('Items per page'))->id('g-page-size')
+              ->rules('required|valid_digit')
+              ->callback(array($this, '_valididate_page_size'))
+              ->error_messages('required', t('You must enter a number'))
+              ->error_messages('valid_digit', t('You must enter a number'))
+              ->error_messages('valid_min_value', t('The value must be greater than zero'))
+              ->value(module::get_var('gallery', 'page_size'));
+        $group->input('thumb_size')->label(t('Thumbnail size (in pixels)'))->id('g-thumb-size')
+              ->rules('required|valid_digit')
+              ->error_messages('required', t('You must enter a number'))
+              ->error_messages('valid_digit', t('You must enter a number'))
+              ->value(module::get_var('gallery', 'thumb_size'));
+        $group->input('resize_size')->label(t('Resized image size (in pixels)'))->id('g-resize-size')
+              ->rules('required|valid_digit')
+              ->error_messages('required', t('You must enter a number'))
+              ->error_messages('valid_digit', t('You must enter a number'))
+              ->value(module::get_var('gallery', 'resize_size'));
+        $group->input('favicon_url')->label(t('URL (or relative path) to your favicon.ico'))
+              ->id('g-favicon')
+              ->value(module::get_var('gallery', 'favicon_url'));
+        $group->input('apple_touch_icon_url')->label(t('URL (or relative path) to your Apple Touch icon'))
+              ->id('g-apple-touch')
+              ->value(module::get_var('gallery', 'apple_touch_icon_url'));
+        $group->textarea('header_text')->label(t('Header text'))->id('g-header-text')
+              ->value(module::get_var('gallery', 'header_text'));
+        $group->textarea('footer_text')->label(t('Footer text'))->id('g-footer-text')
+              ->value(module::get_var('gallery', 'footer_text'));
+        $group->checkbox('show_credits')->label(t('Show site credits'))->id('g-footer-text')
+              ->checked(module::get_var('gallery', 'show_credits'));
 
-        module::event("theme_edit_form", $form);
+        module::event('theme_edit_form', $form);
 
-        $group->submit("")->value(t("Save"));
+        $group->submit('')->value(t('Save'));
         return $form;
     }
 
     public function _valididate_page_size($input)
     {
         if ($input->value < 1) {
-            $input->add_error("valid_min_value", true);
+            $input->add_error('valid_min_value', true);
         }
     }
 }

@@ -1,22 +1,22 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
-<link rel="stylesheet" type="text/css" href="<?= url::file("modules/organize/vendor/ext/css/ext-all.css") ?>" />
-<link rel="stylesheet" type="text/css" href="<?= url::file("modules/organize/vendor/ext/css/ux-all.css") ?>" />
-<link rel="stylesheet" type="text/css" href="<?= url::file("modules/organize/css/organize_frame.css") ?>" />
+<?php defined('SYSPATH') or die('No direct script access.') ?>
+<link rel="stylesheet" type="text/css" href="<?= url::file('modules/organize/vendor/ext/css/ext-all.css') ?>" />
+<link rel="stylesheet" type="text/css" href="<?= url::file('modules/organize/vendor/ext/css/ux-all.css') ?>" />
+<link rel="stylesheet" type="text/css" href="<?= url::file('modules/organize/css/organize_frame.css') ?>" />
 <style type="text/css">
   .g-organize div.thumb-album div.icon {
-    background-image: url(<?= url::file("modules/organize/vendor/ext/images/default/tree/folder.gif") ?>);
+    background-image: url(<?= url::file('modules/organize/vendor/ext/images/default/tree/folder.gif') ?>);
   }
 </style>
-<script type="text/javascript" src="<?= url::file("modules/organize/vendor/ext/js/ext-organize-bundle.js") ?>"></script>
+<script type="text/javascript" src="<?= url::file('modules/organize/vendor/ext/js/ext-organize-bundle.js') ?>"></script>
 <script type="text/javascript">
-  Ext.BLANK_IMAGE_URL = "<?= url::file("modules/organize/vendor/ext/images/default/s.gif") ?>";
+  Ext.BLANK_IMAGE_URL = "<?= url::file('modules/organize/vendor/ext/images/default/s.gif') ?>";
   Ext.Ajax.timeout = 1000000;  // something really large
   // I18N for dialog boxes.
   Ext.Msg.buttonText = {
-    ok: <?= t("OK")->for_js() ?>,
-    cancel: <?= t("Cancel")->for_js() ?>,
-    yes: <?= t("Yes")->for_js() ?>,
-    no: <?= t("No")->for_js() ?>
+    ok: <?= t('OK')->for_js() ?>,
+    cancel: <?= t('Cancel')->for_js() ?>,
+    yes: <?= t('Yes')->for_js() ?>,
+    no: <?= t('No')->for_js() ?>
   };
 
   Ext.onReady(function() {
@@ -41,7 +41,7 @@
     var show_generic_error = function() {
       stop_busy();
       Ext.Msg.alert(
-        <?= t("An error occurred.  Consult your system administrator.")->for_js() ?>);
+        <?= t('An error occurred.  Consult your system administrator.')->for_js() ?>);
     }
 
     var current_album_id = null;
@@ -50,10 +50,10 @@
       if (current_album_id) {
         // Don't show the loading message on the initial load, it
         // feels a little jarring.
-        start_busy(<?= t("Loading...")->for_js() ?>);
+        start_busy(<?= t('Loading...')->for_js() ?>);
       }
       Ext.Ajax.request({
-        url: '<?= url::site("organize/album_info/__ID__") ?>'.replace("__ID__", id),
+        url: '<?= url::site('organize/album_info/__ID__') ?>'.replace("__ID__", id),
         success: function(xhr, opts) {
           stop_busy();
           var album_info = Ext.util.JSON.decode(xhr.responseText);
@@ -90,10 +90,10 @@
     };
 
     var set_album_sort = function(params) {
-      start_busy(<?= t("Changing sort...")->for_js() ?>);
+      start_busy(<?= t('Changing sort...')->for_js() ?>);
       params["csrf"] = '<?= access::csrf_token() ?>';
       Ext.Ajax.request({
-        url: '<?= url::site("organize/set_sort/__ID__") ?>'.replace("__ID__", current_album_id),
+        url: '<?= url::site('organize/set_sort/__ID__') ?>'.replace("__ID__", current_album_id),
         method: "post",
         success: function() {
           stop_busy();
@@ -111,9 +111,9 @@
         var node = Ext.fly(nodes[i]);
         item_ids.push(get_id_from_node(node));
       }
-      start_busy(<?= t("Tagging...")->for_js() ?>);
+      start_busy(<?= t('Tagging...')->for_js() ?>);
       Ext.Ajax.request({
-        url: '<?= url::site("organize/tag") ?>',
+        url: '<?= url::site('organize/tag') ?>',
         method: "post",
         success: function() {
           stop_busy();
@@ -135,9 +135,9 @@
         var node = Ext.fly(nodes[i]);
         item_ids.push(get_id_from_node(node));
       }
-      start_busy(<?= t("Deleting...")->for_js() ?>);
+      start_busy(<?= t('Deleting...')->for_js() ?>);
       Ext.Ajax.request({
-        url: '<?= url::site("organize/delete") ?>',
+        url: '<?= url::site('organize/delete') ?>',
         method: "post",
         success: function() {
           stop_busy();
@@ -258,10 +258,10 @@
               for (var i = 0; i != nodes.length; i++) {
                 source_ids.push(get_id_from_node(Ext.fly(nodes[i])));
               }
-              start_busy(<?= t("Rearranging...")->for_js() ?>);
+              start_busy(<?= t('Rearranging...')->for_js() ?>);
               target = Ext.fly(target);
               Ext.Ajax.request({
-                url: '<?= url::site("organize/rearrange") ?>',
+                url: '<?= url::site('organize/rearrange') ?>',
                 method: "post",
                 success: function() {
                   stop_busy();
@@ -296,7 +296,7 @@
         '</tpl>',
         '<tpl if="!thumb_url">',
         '<div class="thumb thumb-missing thumb-{type}" id="thumb-{id}" rel="{id}">',
-        '<span>' + <?= t("No thumbnail")->for_js() ?> + '</span>',
+        '<span>' + <?= t('No thumbnail')->for_js() ?> + '</span>',
         '<div class="icon"></div>',
         '</div>',
         '</tpl>',
@@ -345,8 +345,8 @@
         id: 0,
         fields: ["key", "value"],
         data: [
-          ["ASC", <?= t("Ascending")->for_js() ?>],
-          ["DESC", <?= t("Descending")->for_js() ?>]]
+          ["ASC", <?= t('Ascending')->for_js() ?>],
+          ["DESC", <?= t('Descending')->for_js() ?>]]
       }),
       listeners: {
         "select": function(combo, record, index) {
@@ -370,7 +370,7 @@
 
     var tag_button = new Ext.Button({
       flex: 2,
-        text: <?= t("Tag")->for_js() ?>,
+        text: <?= t('Tag')->for_js() ?>,
         cls: "x-btn-text-icon",
         id: "tag-button",
         disabled: true,
@@ -384,7 +384,7 @@
 
     var delete_button = new Ext.Button({
       flex: 2,
-      text: <?= t("Delete")->for_js() ?>,
+      text: <?= t('Delete')->for_js() ?>,
       cls: "x-btn-text-icon",
       iconCls: "delete",
       id: "delete-button",
@@ -392,7 +392,7 @@
       listeners: {
         "click": function() {
           Ext.Msg.show({
-            title: <?= t("Are you sure you want to delete the selected items?")->for_js() ?>,
+            title: <?= t('Are you sure you want to delete the selected items?')->for_js() ?>,
             buttons: Ext.Msg.YESNO,
             fn: function(buttonId) {
               if (buttonId == "yes") {
@@ -422,13 +422,13 @@
               xtype: "label",
               cls: "sort",
               flex: 2,
-              text: <?= t("Sort order: ")->for_js() ?>
+              text: <?= t('Sort order: ')->for_js() ?>
             },
             sort_column_combobox,
             sort_order_combobox
           ]
         },
-<?php if (module::is_active("tag")): ?>
+<?php if (module::is_active('tag')): ?>
         {
           xtype: "spacer",
           flex: 3
@@ -449,7 +449,7 @@
         {
           xtype: "button",
           flex: 2,
-          text: <?= t("Close")->for_js() ?>,
+          text: <?= t('Close')->for_js() ?>,
           listeners: {
             "click": function() {
               parent.done_organizing(current_album_id);
@@ -462,7 +462,7 @@
     var album_panel = new Ext.Panel({
       layout: "fit",
       region: "center",
-      title: <?= t("Drag and drop photos to re-order or move between albums")->for_js() ?>,
+      title: <?= t('Drag and drop photos to re-order or move between albums')->for_js() ?>,
       items: [thumb_data_view],
       bbar: button_panel
     });
@@ -529,9 +529,9 @@
               source_ids.push(get_id_from_node(node));
               moving_albums |= node.hasClass("thumb-album");
             }
-            start_busy(<?= t("Moving...")->for_js() ?>);
+            start_busy(<?= t('Moving...')->for_js() ?>);
             Ext.Ajax.request({
-              url: '<?= url::site("organize/reparent") ?>',
+              url: '<?= url::site('organize/reparent') ?>',
               method: "post",
               success: function() {
                 stop_busy();
@@ -570,7 +570,7 @@
       width: 200,
 
       root: {
-        allowDrop: Boolean(<?= access::can("edit", item::root()) ?>),
+        allowDrop: Boolean(<?= access::can('edit', item::root()) ?>),
         nodeType: "async",
         text: "<?= html::clean(item::root()->title) ?>",
         draggable: false,

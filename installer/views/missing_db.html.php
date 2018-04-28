@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
+<?php defined('SYSPATH') or die('No direct script access.') ?>
 <h1> Can't find that database! </h1>
 <p class="error">
   We were able to connect to your MySQL server, yay!  But the database

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -25,8 +25,23 @@ class legal_file_Core
     private static $movie_extensions;
     private static $photo_types;
     private static $movie_types;
-    private static $blacklist = array("php", "php3", "php4", "php5", "phtml", "phtm", "shtml", "shtm",
-                                    "pl", "cgi", "asp", "sh", "py", "c", "js");
+    private static $blacklist = array(
+        'php',
+        'php3',
+        'php4',
+        'php5',
+        'phtml',
+        'phtm',
+        'shtml',
+        'shtm',
+        'pl',
+        'cgi',
+        'asp',
+        'sh',
+        'py',
+        'c',
+        'js'
+    );
 
     /**
      * Create a default list of allowed photo MIME types paired with their extensions and then let
@@ -41,8 +56,9 @@ class legal_file_Core
         if (empty(self::$photo_types_by_extension)) {
             $types_by_extension_wrapper = new stdClass();
             $types_by_extension_wrapper->types_by_extension = array(
-        "jpg" => "image/jpeg", "jpeg" => "image/jpeg", "gif" => "image/gif", "png" => "image/png");
-            module::event("photo_types_by_extension", $types_by_extension_wrapper);
+                'jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg', 'gif' => 'image/gif', 'png' => 'image/png'
+            );
+            module::event('photo_types_by_extension', $types_by_extension_wrapper);
             foreach (self::$blacklist as $key) {
                 unset($types_by_extension_wrapper->types_by_extension[$key]);
             }
@@ -75,9 +91,10 @@ class legal_file_Core
         if (empty(self::$movie_types_by_extension)) {
             $types_by_extension_wrapper = new stdClass();
             $types_by_extension_wrapper->types_by_extension = array(
-        "flv" => "video/x-flv", "mp4" => "video/mp4", "m4v" => "video/x-m4v",
-        "webm" => "video/webm", "ogv" => "video/ogg");
-            module::event("movie_types_by_extension", $types_by_extension_wrapper);
+                'flv'  => 'video/x-flv', 'mp4' => 'video/mp4', 'm4v' => 'video/x-m4v',
+                'webm' => 'video/webm', 'ogv' => 'video/ogg'
+            );
+            module::event('movie_types_by_extension', $types_by_extension_wrapper);
             foreach (self::$blacklist as $key) {
                 unset($types_by_extension_wrapper->types_by_extension[$key]);
             }
@@ -137,7 +154,7 @@ class legal_file_Core
         if (empty(self::$photo_extensions)) {
             $extensions_wrapper = new stdClass();
             $extensions_wrapper->extensions = array_keys(legal_file::get_photo_types_by_extension());
-            module::event("legal_photo_extensions", $extensions_wrapper);
+            module::event('legal_photo_extensions', $extensions_wrapper);
             self::$photo_extensions = array_diff($extensions_wrapper->extensions, self::$blacklist);
         }
         if ($extension) {
@@ -160,7 +177,7 @@ class legal_file_Core
         if (empty(self::$movie_extensions)) {
             $extensions_wrapper = new stdClass();
             $extensions_wrapper->extensions = array_keys(legal_file::get_movie_types_by_extension());
-            module::event("legal_movie_extensions", $extensions_wrapper);
+            module::event('legal_movie_extensions', $extensions_wrapper);
             self::$movie_extensions = array_diff($extensions_wrapper->extensions, self::$blacklist);
         }
         if ($extension) {
@@ -218,7 +235,7 @@ class legal_file_Core
             $types_wrapper = new stdClass();
             // Need array_unique since types_by_extension can be many-to-one (e.g. jpeg and jpg).
             $types_wrapper->types = array_unique(array_values(legal_file::get_photo_types_by_extension()));
-            module::event("legal_photo_types", $types_wrapper);
+            module::event('legal_photo_types', $types_wrapper);
             self::$photo_types = $types_wrapper->types;
         }
         return self::$photo_types;
@@ -235,8 +252,8 @@ class legal_file_Core
             $types_wrapper = new stdClass();
             // Need array_unique since types_by_extension can be many-to-one (e.g. jpeg and jpg).
             $types_wrapper->types = array_unique(array_values(legal_file::get_movie_types_by_extension()));
-            $types_wrapper->types[] = "video/flv";
-            module::event("legal_movie_types", $types_wrapper);
+            $types_wrapper->types[] = 'video/flv';
+            module::event('legal_movie_types', $types_wrapper);
             self::$movie_types = $types_wrapper->types;
         }
         return self::$movie_types;
@@ -248,7 +265,7 @@ class legal_file_Core
      */
     public static function change_extension($filename, $new_ext)
     {
-        $filename_no_ext = preg_replace("/\.[^\.\/]*?$/", "", $filename);
+        $filename_no_ext = preg_replace("/\.[^\.\/]*?$/", '', $filename);
         return "{$filename_no_ext}.{$new_ext}";
     }
 
@@ -262,14 +279,14 @@ class legal_file_Core
             return $filename;
         }
         $parts = pathinfo($filename);
-        $result = "";
-        if ($parts["dirname"] != ".") {
-            $result .= $parts["dirname"] . "/";
+        $result = '';
+        if ($parts['dirname'] != '.') {
+            $result .= $parts['dirname'] . '/';
         }
-        $parts["filename"] = str_replace(".", "_", $parts["filename"]);
-        $parts["filename"] = preg_replace("/[_]+/", "_", $parts["filename"]);
-        $parts["filename"] = trim($parts["filename"], "_");
-        $result .= isset($parts["extension"]) ? "{$parts['filename']}.{$parts['extension']}" : $parts["filename"];
+        $parts['filename'] = str_replace('.', '_', $parts['filename']);
+        $parts['filename'] = preg_replace('/[_]+/', '_', $parts['filename']);
+        $parts['filename'] = trim($parts['filename'], '_');
+        $result            .= isset($parts['extension']) ? "{$parts['filename']}.{$parts['extension']}" : $parts['filename'];
         return $result;
     }
 
@@ -294,21 +311,21 @@ class legal_file_Core
         // original and target extensions; if not, throw an exception.
         $original_extension = pathinfo($filename, PATHINFO_EXTENSION);
         switch ($type) {
-      case "photo":
+      case 'photo':
         $mime_type = legal_file::get_photo_types_by_extension($extension);
         $original_mime_type = legal_file::get_photo_types_by_extension($original_extension);
         break;
-      case "movie":
+      case 'movie':
         $mime_type = legal_file::get_movie_types_by_extension($extension);
         $original_mime_type = legal_file::get_movie_types_by_extension($original_extension);
         break;
       default:
-        throw new Exception("@todo INVALID_TYPE");
+        throw new Exception('@todo INVALID_TYPE');
     }
 
         // Check if the target extension is blank or invalid - if so, throw an exception.
         if (!$extension || !$mime_type) {
-            throw new Exception("@todo ILLEGAL_EXTENSION");
+            throw new Exception('@todo ILLEGAL_EXTENSION');
         }
 
         // Check if the mime types of the original and target extensions match - if not, fix it.
@@ -317,14 +334,14 @@ class legal_file_Core
         }
 
         // It should be a filename without a directory - remove all slashes (and backslashes).
-        $filename = str_replace("/", "_", $filename);
-        $filename = str_replace("\\", "_", $filename);
+        $filename = str_replace('/', '_', $filename);
+        $filename = str_replace("\\", '_', $filename);
 
         // Remove extra dots from the filename.  Also removes extraneous and leading/trailing underscores.
         $filename = legal_file::smash_extensions($filename);
 
         // It's possible that the filename has no base (e.g. ".jpg") - if so, give it a generic one.
-        if (empty($filename) || (substr($filename, 0, 1) == ".")) {
+        if (empty($filename) || (substr($filename, 0, 1) == '.')) {
             $filename = $type . $filename;  // e.g. "photo.jpg" or "movie.mp4"
         }
 
@@ -341,19 +358,19 @@ class legal_file_Core
     public static function sanitize_dirname($dirname)
     {
         // It should be a dirname without a parent directory - remove all slashes (and backslashes).
-        $dirname = str_replace("/", "_", $dirname);
-        $dirname = str_replace("\\", "_", $dirname);
+        $dirname = str_replace('/', '_', $dirname);
+        $dirname = str_replace("\\", '_', $dirname);
 
         // Remove extraneous and leading/trailing underscores.
-        $dirname = preg_replace("/[_]+/", "_", $dirname);
-        $dirname = trim($dirname, "_");
+        $dirname = preg_replace('/[_]+/', '_', $dirname);
+        $dirname = trim($dirname, '_');
 
         // Remove any trailing dots.
-        $dirname = rtrim($dirname, ".");
+        $dirname = rtrim($dirname, '.');
 
         // It's possible that the dirname is now empty - if so, give it a generic one.
         if (empty($dirname)) {
-            $dirname = "album";
+            $dirname = 'album';
         }
 
         return $dirname;

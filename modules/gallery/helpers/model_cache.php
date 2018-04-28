@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,10 +21,10 @@ class model_cache_Core
 {
     private static $cache = array();
 
-    public static function get($model_name, $id, $field_name="id")
+    public static function get($model_name, $id, $field_name= 'id')
     {
         if (TEST_MODE || empty(self::$cache[$model_name][$field_name][$id])) {
-            $model = ORM::factory($model_name)->where($field_name, "=", $id)->find();
+            $model = ORM::factory($model_name)->where($field_name, '=', $id)->find();
             if (!$model->loaded()) {
                 throw new Exception("@todo MISSING_MODEL $model_name:$id");
             }

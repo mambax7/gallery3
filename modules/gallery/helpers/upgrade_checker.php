@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -19,7 +19,7 @@
  */
 class upgrade_checker_Core
 {
-    const CHECK_URL = "http://galleryproject.org/versioncheck/gallery3";
+    const CHECK_URL = 'http://galleryproject.org/versioncheck/gallery3';
     const AUTO_CHECK_INTERVAL = 604800;  // 7 days in seconds
 
     /**
@@ -28,7 +28,7 @@ class upgrade_checker_Core
      */
     public static function version_info()
     {
-        return unserialize(Cache::instance()->get("upgrade_checker_version_info"));
+        return unserialize(Cache::instance()->get('upgrade_checker_version_info'));
     }
 
     /**
@@ -36,7 +36,7 @@ class upgrade_checker_Core
      */
     public static function auto_check_enabled()
     {
-        return (bool)module::get_var("gallery", "upgrade_checker_auto_enabled");
+        return (bool)module::get_var('gallery', 'upgrade_checker_auto_enabled');
     }
 
     /**
@@ -60,21 +60,21 @@ class upgrade_checker_Core
         $result = new stdClass();
         try {
             list($status, $headers, $body) = remote::do_request(upgrade_checker::CHECK_URL);
-            if ($status == "HTTP/1.1 200 OK") {
-                $result->status = "success";
+            if ($status == 'HTTP/1.1 200 OK') {
+                $result->status = 'success';
                 foreach (explode("\n", $body) as $line) {
                     if ($line) {
-                        list($key, $val) = explode("=", $line, 2);
+                        list($key, $val) = explode('=', $line, 2);
                         $result->data[$key] = $val;
                     }
                 }
             } else {
-                $result->status = "error";
+                $result->status = 'error';
             }
         } catch (Exception $e) {
             Kohana_Log::add(
-          "error",
-                      sprintf(
+                'error',
+                sprintf(
                           "%s in %s at line %s:\n%s",
                           $e->getMessage(),
                           $e->getFile(),
@@ -85,9 +85,9 @@ class upgrade_checker_Core
         }
         $result->timestamp = time();
         Cache::instance()->set(
-        "upgrade_checker_version_info",
-        serialize($result),
-                           array("upgrade"),
+            'upgrade_checker_version_info',
+            serialize($result),
+            array('upgrade'),
         86400 * 365
     );
     }
@@ -99,12 +99,13 @@ class upgrade_checker_Core
     {
         $version_info = upgrade_checker::version_info();
         if ($version_info) {
-            if (gallery::RELEASE_CHANNEL == "release") {
-                if (version_compare($version_info->data["release_version"], gallery::VERSION, ">")) {
+            if (gallery::RELEASE_CHANNEL == 'release') {
+                if (version_compare($version_info->data['release_version'], gallery::VERSION, '>')) {
                     return t(
-              "A newer version of Gallery is available! <a href=\"%upgrade-url\">Upgrade now</a> to version %version",
-                   array("version" => $version_info->data["release_version"],
-                         "upgrade-url" => $version_info->data["release_upgrade_url"])
+                        'A newer version of Gallery is available! <a href="%upgrade-url">Upgrade now</a> to version %version',
+                        array(
+                            'version'     => $version_info->data['release_version'],
+                            'upgrade-url' => $version_info->data['release_upgrade_url'])
           );
                 }
             } else {
@@ -112,15 +113,15 @@ class upgrade_checker_Core
                 if (isset($version_info->data["branch_{$branch}_build_number"]) &&
             version_compare(
                 $version_info->data["branch_{$branch}_build_number"],
-                            gallery::build_number(),
-                ">"
+                            gallery::build_number(), '>'
             )) {
                     return t(
-              "A newer version of Gallery is available! <a href=\"%upgrade-url\">Upgrade now</a> to version %version (build %build on branch %branch)",
-                   array("version" => $version_info->data["branch_{$branch}_version"],
-                         "upgrade-url" => $version_info->data["branch_{$branch}_upgrade_url"],
-                         "build" => $version_info->data["branch_{$branch}_build_number"],
-                         "branch" => $branch)
+                        'A newer version of Gallery is available! <a href="%upgrade-url">Upgrade now</a> to version %version (build %build on branch %branch)',
+                        array(
+                            'version'     => $version_info->data["branch_{$branch}_version"],
+                            'upgrade-url' => $version_info->data["branch_{$branch}_upgrade_url"],
+                            'build'       => $version_info->data["branch_{$branch}_build_number"],
+                            'branch'      => $branch)
           );
                 }
             }

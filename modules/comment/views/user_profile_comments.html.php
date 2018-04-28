@@ -1,13 +1,14 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
+<?php defined('SYSPATH') or die('No direct script access.') ?>
 <div id="g-comment-detail">
 <ul>
   <?php foreach ($comments as $comment): ?>
   <li id="g-comment-<?= $comment->id ?>">
     <p class="g-author">
       <?= t(
-    "on %date for %title ",
-            array("date" => gallery::date_time($comment->created),
-                  "title" => $comment->item()->title)
+          'on %date for %title ',
+          array(
+              'date'  => gallery::date_time($comment->created),
+              'title' => $comment->item()->title)
 ); ?>
       <a href="<?= $comment->item()->url() ?>">
         <?= $comment->item()->thumb_img(array(), 50) ?>

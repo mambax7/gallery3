@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -25,19 +25,19 @@ class watermark_Core
             $range[$i] = "$i%";
         }
 
-        $form = new Forge("admin/watermarks/add", "", "post", array("id" => "g-add-watermark-form"));
-        $group = $form->group("add_watermark")->label(t("Upload watermark"));
-        $group->upload("file")->label(t("Watermark"))->rules("allow[jpg,png,gif]|size[1MB]|required")
-      ->error_messages("required", "You must select a watermark")
-      ->error_messages("invalid_type", "The watermark must be a JPG, GIF or PNG")
-      ->error_messages("max_size", "The watermark is too big (1 MB max)");
-        $group->dropdown("position")->label(t("Watermark position"))
-      ->options(self::positions())
-      ->selected("southeast");
-        $group->dropdown("transparency")->label(t("Transparency (100% = completely transparent)"))
-      ->options($range)
-      ->selected(1);
-        $group->submit("")->value(t("Upload"));
+        $form = new Forge('admin/watermarks/add', '', 'post', array('id' => 'g-add-watermark-form'));
+        $group = $form->group('add_watermark')->label(t('Upload watermark'));
+        $group->upload('file')->label(t('Watermark'))->rules('allow[jpg,png,gif]|size[1MB]|required')
+              ->error_messages('required', 'You must select a watermark')
+              ->error_messages('invalid_type', 'The watermark must be a JPG, GIF or PNG')
+              ->error_messages('max_size', 'The watermark is too big (1 MB max)');
+        $group->dropdown('position')->label(t('Watermark position'))
+              ->options(self::positions())
+              ->selected('southeast');
+        $group->dropdown('transparency')->label(t('Transparency (100% = completely transparent)'))
+              ->options($range)
+              ->selected(1);
+        $group->submit('')->value(t('Upload'));
         return $form;
     }
 
@@ -47,37 +47,38 @@ class watermark_Core
             $range[$i] = "$i%";
         }
 
-        $form = new Forge("admin/watermarks/edit", "", "post", array("id" => "g-edit-watermark-form"));
-        $group = $form->group("edit_watermark")->label(t("Edit Watermark"));
-        $group->dropdown("position")->label(t("Watermark Position"))
-      ->options(self::positions())
-      ->selected(module::get_var("watermark", "position"));
-        $group->dropdown("transparency")->label(t("Transparency (100% = completely transparent)"))
-      ->options($range)
-      ->selected(module::get_var("watermark", "transparency"));
-        $group->submit("")->value(t("Save"));
+        $form = new Forge('admin/watermarks/edit', '', 'post', array('id' => 'g-edit-watermark-form'));
+        $group = $form->group('edit_watermark')->label(t('Edit Watermark'));
+        $group->dropdown('position')->label(t('Watermark Position'))
+              ->options(self::positions())
+              ->selected(module::get_var('watermark', 'position'));
+        $group->dropdown('transparency')->label(t('Transparency (100% = completely transparent)'))
+              ->options($range)
+              ->selected(module::get_var('watermark', 'transparency'));
+        $group->submit('')->value(t('Save'));
         return $form;
     }
 
     public static function get_delete_form()
     {
-        $form = new Forge("admin/watermarks/delete", "", "post", array("id" => "g-delete-watermark-form"));
-        $group = $form->group("delete_watermark")->label(t("Really delete Watermark?"));
-        $group->submit("")->value(t("Delete"));
+        $form = new Forge('admin/watermarks/delete', '', 'post', array('id' => 'g-delete-watermark-form'));
+        $group = $form->group('delete_watermark')->label(t('Really delete Watermark?'));
+        $group->submit('')->value(t('Delete'));
         return $form;
     }
 
     public static function positions()
     {
-        return array("northwest" => t("Northwest"),
-                 "north" => t("North"),
-                 "northeast" => t("Northeast"),
-                 "west" => t("West"),
-                 "center" => t("Center"),
-                 "east" => t("East"),
-                 "southwest" => t("Southwest"),
-                 "south" => t("South"),
-                 "southeast" => t("Southeast"));
+        return array(
+            'northwest' => t('Northwest'),
+            'north'     => t('North'),
+            'northeast' => t('Northeast'),
+            'west'      => t('West'),
+            'center'    => t('Center'),
+            'east'      => t('East'),
+            'southwest' => t('Southwest'),
+            'south'     => t('South'),
+            'southeast' => t('Southeast'));
     }
 
     public static function position($key)

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -22,26 +22,26 @@ class item_comments_rest_Core
     public static function get($request)
     {
         $item = rest::resolve($request->url);
-        access::required("view", $item);
+        access::required('view', $item);
 
         $comments = array();
-        foreach (ORM::factory("comment")
+        foreach (ORM::factory('comment')
              ->viewable()
-             ->where("item_id", "=", $item->id)
-             ->order_by("created", "DESC")
+             ->where('item_id', '=', $item->id)
+             ->order_by('created', 'DESC')
              ->find_all() as $comment) {
-            $comments[] = rest::url("comment", $comment);
+            $comments[] = rest::url('comment', $comment);
         }
 
         return array(
-      "url" => $request->url,
-      "members" => $comments);
+            'url'     => $request->url,
+            'members' => $comments);
     }
 
     public static function resolve($id)
     {
-        $item = ORM::factory("item", $id);
-        if (!access::can("view", $item)) {
+        $item = ORM::factory('item', $id);
+        if (!access::can('view', $item)) {
             throw new Kohana_404_Exception();
         }
         return $item;

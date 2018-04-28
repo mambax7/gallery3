@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-require_once(MODPATH . "gallery/tests/Gallery_Filters.php");
+require_once(MODPATH . 'gallery/tests/Gallery_Filters.php');
 
 class File_Structure_Test extends Gallery_Unit_Test_Case
 {
@@ -37,7 +37,7 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
             }
         }
 
-        $this->assert_true($count > 500, "We should have analyzed at least this 500 files");
+        $this->assert_true($count > 500, 'We should have analyzed at least this 500 files');
         $this->assert_true($count < 1000, "We shouldn't be shipping 1000 files!");
     }
 
@@ -47,11 +47,11 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
       new RecursiveIteratorIterator(new RecursiveDirectoryIterator(DOCROOT))
     );
         foreach ($dir as $file) {
-            if (strpos($file, "views/kohana/error.php")) {
+            if (strpos($file, 'views/kohana/error.php')) {
                 continue;
             }
 
-            if (strpos($file, "views")) {
+            if (strpos($file, 'views')) {
                 $this->assert_true(
           preg_match("#/views/.*?\.(html|mrss|txt|json)\.php$#", $file->getPathname()),
           "{$file->getPathname()} should end in .{html,mrss,txt,json}.php"
@@ -88,7 +88,7 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
             $expected = "<?php defined(\"SYSPATH\") or die(\"No direct script access.\") ?>\n";
         }
 
-        $fp = fopen($path, "r");
+        $fp = fopen($path, 'r');
         $actual = fgets($fp);
         fclose($fp);
 
@@ -103,64 +103,65 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
         $expected_3 = null;
         $expected_4 = null;
         if (strpos($path, SYSPATH) === 0 ||
-        strpos($path, MODPATH . "unit_test") === 0) {
+            strpos($path, MODPATH . 'unit_test') === 0) {
             // Kohana: we only care about the first line
-            $fp = fopen($path, "r");
+            $fp = fopen($path, 'r');
             $actual = array(fgets($fp));
             fclose($fp);
             $expected = array("<?php defined('SYSPATH') OR die('No direct script access.');\n");
             $expected_2 = array("<?php defined('SYSPATH') OR die('No direct access allowed.');\n");
             $expected_3 = array("<?php defined('SYSPATH') or die('No direct access allowed.');\n");
             $expected_4 = array("<?php defined('SYSPATH') or die('No direct script access.');\n");
-        } elseif (strpos($path, MODPATH . "forge") === 0 ||
-               strpos($path, MODPATH . "exif/lib") === 0 ||
-               strpos($path, MODPATH . "gallery/vendor/joomla") === 0 ||
-               strpos($path, MODPATH . "gallery_unit_test/vendor") === 0 ||
-               strpos($path, MODPATH . "gallery/lib/HTMLPurifier") === 0 ||
-               $path == MODPATH . "user/lib/PasswordHash.php" ||
-               $path == DOCROOT . "var/database.php") {
+        } elseif (strpos($path, MODPATH . 'forge') === 0 ||
+                  strpos($path, MODPATH . 'exif/lib') === 0 ||
+                  strpos($path, MODPATH . 'gallery/vendor/joomla') === 0 ||
+                  strpos($path, MODPATH . 'gallery_unit_test/vendor') === 0 ||
+                  strpos($path, MODPATH . 'gallery/lib/HTMLPurifier') === 0 ||
+               $path == MODPATH . 'user/lib/PasswordHash.php'
+                  ||
+               $path == DOCROOT . 'var/database.php') {
             // 3rd party module security-only preambles, similar to Gallery's
             $expected = array("<?php defined(\"SYSPATH\") or die(\"No direct access allowed.\");\n");
             $expected_2 = array("<?php defined('SYSPATH') OR die('No direct access allowed.');\n");
             $expected_3 = array("<?php defined(\"SYSPATH\") or die(\"No direct script access.\");\n");
-            $fp = fopen($path, "r");
+            $fp = fopen($path, 'r');
             $actual = array(fgets($fp));
             fclose($fp);
-        } elseif (strpos($path, DOCROOT . "var/logs") === 0) {
+        } elseif (strpos($path, DOCROOT . 'var/logs') === 0) {
             // var/logs has the kohana one-liner preamble
             $expected = array("<?php defined('SYSPATH') or die('No direct script access.'); ?>\n");
-            $fp = fopen($path, "r");
+            $fp = fopen($path, 'r');
             $actual = array(fgets($fp));
             fclose($fp);
-        } elseif (strpos($path, DOCROOT . "var") === 0) {
+        } elseif (strpos($path, DOCROOT . 'var') === 0) {
             // Anything else under var has the Gallery one-liner
             $expected = array("<?php defined(\"SYSPATH\") or die(\"No direct script access.\") ?>\n");
-            $fp = fopen($path, "r");
+            $fp = fopen($path, 'r');
             $actual = array(fgets($fp));
             fclose($fp);
         } else {
             // Gallery: we care about the entire copyright
             $actual = $this->_get_preamble($path);
             $expected = array(
-        "<?php defined(\"SYSPATH\") or die(\"No direct script access.\");",
-        "/**",
-        " * Gallery - a web based photo album viewer and editor",
-        " * Copyright (C) 2000-2013 Bharat Mediratta",
-        " *",
-        " * This program is free software; you can redistribute it and/or modify",
-        " * it under the terms of the GNU General Public License as published by",
-        " * the Free Software Foundation; either version 2 of the License, or (at",
-        " * your option) any later version.",
-        " *",
-        " * This program is distributed in the hope that it will be useful, but",
-        " * WITHOUT ANY WARRANTY; without even the implied warranty of",
-        " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU",
-        " * General Public License for more details.",
-        " *",
-        " * You should have received a copy of the GNU General Public License",
-        " * along with this program; if not, write to the Free Software",
-        " * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.",
-        " */",
+                '<?php defined("SYSPATH") or die("No direct script access.");',
+                '/**',
+                ' * Gallery - a web based photo album viewer and editor',
+                ' * Copyright (C) 2000-2013 Bharat Mediratta',
+                ' *',
+                ' * This program is free software; you can redistribute it and/or modify',
+                ' * it under the terms of the GNU General Public License as published by',
+                ' * the Free Software Foundation; either version 2 of the License, or (at',
+                ' * your option) any later version.',
+                ' *',
+                ' * This program is distributed in the hope that it will be useful, but',
+                ' * WITHOUT ANY WARRANTY; without even the implied warranty of',
+                ' * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU',
+                ' * General Public License for more details.',
+                ' *',
+                ' * You should have received a copy of the GNU General Public License',
+                ' * along with this program; if not, write to the Free Software',
+                ' * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.',
+                ' */',
       );
         }
         if ($expected != $actual && $expected_2 != $actual && $expected_3 != $actual && $expected_4 != $actual) {
@@ -179,29 +180,29 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
         foreach ($dir as $file) {
             $path = $file->getPathname();
             switch ($path) {
-      case DOCROOT . "installer/database_config.php":
-      case DOCROOT . "installer/init_var.php":
+      case DOCROOT . 'installer/database_config.php':
+      case DOCROOT . 'installer/init_var.php':
         // Special case views
         $this->_check_view_preamble($path, $errors);
         break;
 
-      case DOCROOT . "index.php":
-      case DOCROOT . "installer/index.php":
+      case DOCROOT . 'index.php':
+      case DOCROOT . 'installer/index.php':
         // Front controllers
         break;
 
-      case DOCROOT . "lib/uploadify/uploadify.swf.php":
-      case DOCROOT . "lib/uploadify/uploadify.allglyphs.swf.php":
-      case DOCROOT . "lib/mediaelementjs/flashmediaelement.swf.php":
+      case DOCROOT . 'lib/uploadify/uploadify.swf.php':
+      case DOCROOT . 'lib/uploadify/uploadify.allglyphs.swf.php':
+      case DOCROOT . 'lib/mediaelementjs/flashmediaelement.swf.php':
         // SWF wrappers - directly accessible
         break;
 
-      case DOCROOT . "local.php":
+      case DOCROOT . 'local.php':
         // Special case optional file, not part of the codebase
         break;
 
       default:
-        if (preg_match("/views/", $path)) {
+        if (preg_match('/views/', $path)) {
             $this->_check_view_preamble($path, $errors);
         } else {
             $this->_check_php_preamble($path, $errors);
@@ -263,7 +264,7 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
       )
     );
         foreach ($dir as $file) {
-            if (basename(dirname($file)) == "helpers") {
+            if (basename(dirname($file)) == 'helpers') {
                 foreach (file($file) as $line) {
                     $this->assert_true(
             !preg_match("/\sfunction\s.*\(/", $line) ||
@@ -279,14 +280,14 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
     public function module_info_is_well_formed_test()
     {
         $info_files = array_merge(
-      glob("modules/*/module.info"),
-      glob("themes/*/module.info")
+      glob('modules/*/module.info'),
+      glob('themes/*/module.info')
     );
 
         $errors = array();
         foreach ($info_files as $file) {
             foreach (file($file) as $line) {
-                $parts = explode("=", $line, 2);
+                $parts = explode('=', $line, 2);
                 if (isset($parts[1])) {
                     $values[trim($parts[0])] = trim($parts[1]);
                 }
@@ -294,7 +295,7 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
 
             $module = dirname($file);
             // Certain keys must exist
-            foreach (array("name", "description", "version") as $key) {
+            foreach (array('name', 'description', 'version') as $key) {
                 if (!array_key_exists($key, $values)) {
                     $errors[] = "$module: missing key $key";
                 }
@@ -302,7 +303,7 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
 
             // Any values containing spaces must be quoted
             foreach ($values as $key => $value) {
-                if (strpos($value, " ") !== false && !preg_match('/^".*"$/', $value)) {
+                if (strpos($value, ' ') !== false && !preg_match('/^".*"$/', $value)) {
                     $errors[] = "$module: value for $key must be quoted";
                 }
             }
@@ -329,15 +330,15 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
     );
         foreach ($dir as $file) {
             $scan = 0;
-            if (basename(dirname($file)) == "tests") {
+            if (basename(dirname($file)) == 'tests') {
                 foreach (file($file) as $line) {
-                    if (!substr($file, -9, 9) == "_Test.php") {
+                    if (!substr($file, -9, 9) == '_Test.php') {
                         continue;
                     }
 
-                    if (preg_match("/class.*extends.*Gallery_Unit_Test_Case/", $line)) {
+                    if (preg_match('/class.*extends.*Gallery_Unit_Test_Case/', $line)) {
                         $scan = 1;
-                    } elseif (preg_match("/class.*extends/", $line)) {
+                    } elseif (preg_match('/class.*extends/', $line)) {
                         $scan = 0;
                     }
 
@@ -359,11 +360,11 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
         $dir = new GalleryCodeFilterIterator(
       new RecursiveIteratorIterator(new RecursiveDirectoryIterator(DOCROOT))
     );
-        $errors = "";
+        $errors = '';
         foreach ($dir as $file) {
             if (preg_match("/\.(php|css|html|js)$/", $file)) {
                 foreach (file($file) as $line_num => $line) {
-                    if ((substr($line, -2) == " \n") || (substr($line, -1) == " ")) {
+                    if ((substr($line, -2) == " \n") || (substr($line, -1) == ' ')) {
                         $errors .= "$file at line " . ($line_num + 1) . "\n";
                     }
                 }

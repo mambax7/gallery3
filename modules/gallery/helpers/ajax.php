@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -26,7 +26,7 @@ class ajax_Core
      */
     public static function response($content)
     {
-        header("Content-Type: text/plain; charset=" . Kohana::CHARSET);
+        header('Content-Type: text/plain; charset=' . Kohana::CHARSET);
         print "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\">\n";
         print $content;
     }

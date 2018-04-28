@@ -293,7 +293,7 @@ class text_Core
                 .'(?:#[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?' // fragment
                 .'(?=[?.!,;:"]?(?:\s|$))~'; // punctuation and url end
 
-        $result = "";
+        $result = '';
         $position = 0;
 
         while (preg_match($regex, $text, $match, PREG_OFFSET_CAPTURE, $position)) {

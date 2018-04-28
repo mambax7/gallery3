@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -17,9 +17,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-include(SYSPATH . "config/user_agents.php");
-$config["robot"]["mj12bot"] = "MJ12bot";
-$config["robot"]["speedy spider"] = "Speedy Spider";
-$config["robot"]["baidu"] = "Baiduspider";
-$config["robot"]["bing"] = "Ezooms";
-$config["robot"]["yandex"] = "YandexBot";
+include(SYSPATH . 'config/user_agents.php');
+$config['robot']['mj12bot']       = 'MJ12bot';
+$config['robot']['speedy spider'] = 'Speedy Spider';
+$config['robot']['baidu']         = 'Baiduspider';
+$config['robot']['bing']          = 'Ezooms';
+$config['robot']['yandex']        = 'YandexBot';

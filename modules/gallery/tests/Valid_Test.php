@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,10 +21,10 @@ class Valid_Test extends Gallery_Unit_Test_Case
 {
     public function url_test()
     {
-        $this->assert_true(valid::url("http://foo.bar.com"));
-        $this->assert_true(valid::url("https://foo.bar.com"));
+        $this->assert_true(valid::url('http://foo.bar.com'));
+        $this->assert_true(valid::url('https://foo.bar.com'));
 
-        $this->assert_false(valid::url("mailto://bar"));
-        $this->assert_false(valid::url("ftp://bar"));
+        $this->assert_false(valid::url('mailto://bar'));
+        $this->assert_false(valid::url('ftp://bar'));
     }
 }

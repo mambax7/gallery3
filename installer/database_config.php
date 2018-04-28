@@ -1,5 +1,5 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
-<?php print "<?php" ?> defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php print '<?php' ?> defined("SYSPATH") or die("No direct script access.");
 
 /**
  * @package  Database

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,7 +21,7 @@ class Comment_Model_Core extends ORM
 {
     public function item()
     {
-        return ORM::factory("item", $this->item_id);
+        return ORM::factory('item', $this->item_id);
     }
 
     public function author()
@@ -67,12 +67,12 @@ class Comment_Model_Core extends ORM
         // validate() is recursive, only modify the rules on the outermost call.
         if (!$array) {
             $this->rules = array(
-        "guest_name"  => array("callbacks" => array(array($this, "valid_author"))),
-        "guest_email" => array("callbacks" => array(array($this, "valid_email"))),
-        "guest_url"   => array("rules"     => array("url")),
-        "item_id"     => array("callbacks" => array(array($this, "valid_item"))),
-        "state"       => array("rules"     => array("Comment_Model::valid_state")),
-        "text"        => array("rules"     => array("required")),
+                'guest_name'  => array('callbacks' => array(array($this, 'valid_author'))),
+                'guest_email' => array('callbacks' => array(array($this, 'valid_email'))),
+                'guest_url'   => array('rules' => array('url')),
+                'item_id'     => array('callbacks' => array(array($this, 'valid_item'))),
+                'state'       => array('rules' => array('Comment_Model::valid_state')),
+                'text'        => array('rules' => array('required')),
       );
         }
 
@@ -89,7 +89,7 @@ class Comment_Model_Core extends ORM
             // New comment
             $this->created = $this->updated;
             if (empty($this->state)) {
-                $this->state = module::get_var("comment", "initial_state");
+                $this->state = module::get_var('comment', 'initial_state');
             }
 
             // These values are useful for spam fighting, so save them with the comment.  It's painful to
@@ -97,35 +97,35 @@ class Comment_Model_Core extends ORM
             // as a semaphore for now (we use that in g2_import.php)
             if (empty($this->server_http_host)) {
                 $input = Input::instance();
-                $this->server_http_accept = substr($input->server("HTTP_ACCEPT"), 0, 128);
-                $this->server_http_accept_charset = substr($input->server("HTTP_ACCEPT_CHARSET"), 0, 64);
-                $this->server_http_accept_encoding = substr($input->server("HTTP_ACCEPT_ENCODING"), 0, 64);
-                $this->server_http_accept_language = substr($input->server("HTTP_ACCEPT_LANGUAGE"), 0, 64);
-                $this->server_http_connection = substr($input->server("HTTP_CONNECTION"), 0, 64);
-                $this->server_http_host = substr($input->server("HTTP_HOST"), 0, 64);
-                $this->server_http_referer = substr($input->server("HTTP_REFERER"), 0, 255);
-                $this->server_http_user_agent = substr($input->server("HTTP_USER_AGENT"), 0, 128);
-                $this->server_query_string = substr($input->server("QUERY_STRING"), 0, 64);
-                $this->server_remote_addr = substr($input->server("REMOTE_ADDR"), 0, 40);
-                $this->server_remote_host = substr($input->server("REMOTE_HOST"), 0, 255);
-                $this->server_remote_port = substr($input->server("REMOTE_PORT"), 0, 16);
+                $this->server_http_accept = substr($input->server('HTTP_ACCEPT'), 0, 128);
+                $this->server_http_accept_charset = substr($input->server('HTTP_ACCEPT_CHARSET'), 0, 64);
+                $this->server_http_accept_encoding = substr($input->server('HTTP_ACCEPT_ENCODING'), 0, 64);
+                $this->server_http_accept_language = substr($input->server('HTTP_ACCEPT_LANGUAGE'), 0, 64);
+                $this->server_http_connection = substr($input->server('HTTP_CONNECTION'), 0, 64);
+                $this->server_http_host = substr($input->server('HTTP_HOST'), 0, 64);
+                $this->server_http_referer = substr($input->server('HTTP_REFERER'), 0, 255);
+                $this->server_http_user_agent = substr($input->server('HTTP_USER_AGENT'), 0, 128);
+                $this->server_query_string = substr($input->server('QUERY_STRING'), 0, 64);
+                $this->server_remote_addr = substr($input->server('REMOTE_ADDR'), 0, 40);
+                $this->server_remote_host = substr($input->server('REMOTE_HOST'), 0, 255);
+                $this->server_remote_port = substr($input->server('REMOTE_PORT'), 0, 16);
             }
 
-            $visible_change = $this->state == "published";
+            $visible_change = $this->state == 'published';
             parent::save();
-            module::event("comment_created", $this);
+            module::event('comment_created', $this);
         } else {
             // Updated comment
-            $original = ORM::factory("comment", $this->id);
-            $visible_change = $original->state == "published" || $this->state == "published";
+            $original = ORM::factory('comment', $this->id);
+            $visible_change = $original->state == 'published' || $this->state == 'published';
             parent::save();
-            module::event("comment_updated", $original, $this);
+            module::event('comment_updated', $original, $this);
         }
 
         // We only notify on the related items if we're making a visible change.
         if ($visible_change) {
             $item = $this->item();
-            module::event("item_related_update", $item);
+            module::event('item_related_update', $item);
         }
 
         return $this;
@@ -138,7 +138,7 @@ class Comment_Model_Core extends ORM
      */
     public function viewable()
     {
-        $this->join("items", "items.id", "comments.item_id");
+        $this->join('items', 'items.id', 'comments.item_id');
         return item::viewable($this);
     }
 
@@ -148,9 +148,9 @@ class Comment_Model_Core extends ORM
     public function valid_author(Validation $v, $field)
     {
         if (empty($this->author_id)) {
-            $v->add_error("author_id", "required");
+            $v->add_error('author_id', 'required');
         } elseif ($this->author_id == identity::guest()->id && empty($this->guest_name)) {
-            $v->add_error("guest_name", "required");
+            $v->add_error('guest_name', 'required');
         }
     }
 
@@ -161,9 +161,9 @@ class Comment_Model_Core extends ORM
     {
         if ($this->author_id == identity::guest()->id) {
             if (empty($v->guest_email)) {
-                $v->add_error("guest_email", "required");
+                $v->add_error('guest_email', 'required');
             } elseif (!valid::email($v->guest_email)) {
-                $v->add_error("guest_email", "invalid");
+                $v->add_error('guest_email', 'invalid');
             }
         }
     }
@@ -174,10 +174,10 @@ class Comment_Model_Core extends ORM
     public function valid_item(Validation $v, $field)
     {
         if (db::build()
-        ->from("items")
-        ->where("id", "=", $this->item_id)
+        ->from('items')
+        ->where('id', '=', $this->item_id)
         ->count_records() != 1) {
-            $v->add_error("item_id", "invalid");
+            $v->add_error('item_id', 'invalid');
         }
     }
 
@@ -186,7 +186,7 @@ class Comment_Model_Core extends ORM
      */
     public static function valid_state($value)
     {
-        return in_array($value, array("published", "unpublished", "spam", "deleted"));
+        return in_array($value, array('published', 'unpublished', 'spam', 'deleted'));
     }
 
     /**
@@ -196,12 +196,12 @@ class Comment_Model_Core extends ORM
     {
         $data = array();
         foreach ($this->as_array() as $key => $value) {
-            if (strncmp($key, "server_", 7)) {
+            if (strncmp($key, 'server_', 7)) {
                 $data[$key] = $value;
             }
         }
-        $data["item"] = rest::url("item", $this->item());
-        unset($data["item_id"]);
+        $data['item'] = rest::url('item', $this->item());
+        unset($data['item_id']);
 
         return $data;
     }

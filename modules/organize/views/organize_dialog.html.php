@@ -1,11 +1,11 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
-<link rel="stylesheet" type="text/css" href="<?= url::file("modules/organize/css/organize_dialog.css") ?>" />
+<?php defined('SYSPATH') or die('No direct script access.') ?>
+<link rel="stylesheet" type="text/css" href="<?= url::file('modules/organize/css/organize_dialog.css') ?>" />
 <script type="text/javascript">
   var ORGANIZE_TITLE =
-    <?= t("Organize :: %album_title", array("album_title" => "__TITLE__"))->for_js() ?>;
+    <?= t('Organize :: %album_title', array('album_title' => '__TITLE__'))->for_js() ?>;
   var done_organizing = function(album_id) {
     $("#g-dialog").dialog("close");
-    window.location = '<?= url::site("items/__ID__") ?>'.replace("__ID__", album_id);
+    window.location = '<?= url::site('items/__ID__') ?>'.replace("__ID__", album_id);
   }
 
   var set_title = function(title) {

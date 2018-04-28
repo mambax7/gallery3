@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -27,7 +27,7 @@ class json_Core
      */
     public static function reply($message)
     {
-        header("Content-Type: application/json; charset=" . Kohana::CHARSET);
+        header('Content-Type: application/json; charset=' . Kohana::CHARSET);
         print json_encode($message);
     }
 }

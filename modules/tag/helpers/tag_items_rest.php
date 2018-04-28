@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -24,21 +24,21 @@ class tag_items_rest_Core
         $tag = rest::resolve($request->url);
         $items = array();
         foreach ($tag->items() as $item) {
-            if (access::can("view", $item)) {
-                $items[] = rest::url("tag_item", $tag, $item);
+            if (access::can('view', $item)) {
+                $items[] = rest::url('tag_item', $tag, $item);
             }
         }
 
         return array(
-      "url" => $request->url,
-      "members" => $items);
+            'url'     => $request->url,
+            'members' => $items);
     }
 
     public static function post($request)
     {
         $tag = rest::resolve($request->params->entity->tag);
         $item = rest::resolve($request->params->entity->item);
-        access::required("view", $item);
+        access::required('view', $item);
 
         if (!$tag->loaded()) {
             throw new Kohana_404_Exception();
@@ -46,10 +46,10 @@ class tag_items_rest_Core
 
         tag::add($item, $tag->name);
         return array(
-      "url" => rest::url("tag_item", $tag, $item),
-      "members" => array(
-        "tag" => rest::url("tag", $tag),
-        "item" => rest::url("item", $item)));
+            'url'     => rest::url('tag_item', $tag, $item),
+            'members' => array(
+                'tag'  => rest::url('tag', $tag),
+                'item' => rest::url('item', $item)));
     }
 
     public static function delete($request)
@@ -60,7 +60,7 @@ class tag_items_rest_Core
 
     public static function resolve($id)
     {
-        return ORM::factory("tag", $id);
+        return ORM::factory('tag', $id);
     }
 
     public static function url($tag)

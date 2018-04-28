@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -24,32 +24,32 @@ class item_tags_rest_Core
         $item = rest::resolve($request->url);
         $tags = array();
         foreach (tag::item_tags($item) as $tag) {
-            $tags[] = rest::url("tag_item", $tag, $item);
+            $tags[] = rest::url('tag_item', $tag, $item);
         }
 
         return array(
-      "url" => $request->url,
-      "members" => $tags);
+            'url'     => $request->url,
+            'members' => $tags);
     }
 
     public static function post($request)
     {
         $tag = rest::resolve($request->params->entity->tag);
         $item = rest::resolve($request->params->entity->item);
-        access::required("view", $item);
+        access::required('view', $item);
 
         tag::add($item, $tag->name);
         return array(
-      "url" => rest::url("tag_item", $tag, $item),
-      "members" => array(
-        rest::url("tag", $tag),
-        rest::url("item", $item)));
+            'url'     => rest::url('tag_item', $tag, $item),
+            'members' => array(
+                rest::url('tag', $tag),
+                rest::url('item', $item)));
     }
 
     public static function delete($request)
     {
         $item = rest::resolve($request->url);
-        access::required("edit", $item);
+        access::required('edit', $item);
 
         // Deleting this collection means removing all tags associated with the item.
         tag::clear_all($item);
@@ -57,8 +57,8 @@ class item_tags_rest_Core
 
     public static function resolve($id)
     {
-        $item = ORM::factory("item", $id);
-        if (!access::can("view", $item)) {
+        $item = ORM::factory('item', $id);
+        if (!access::can('view', $item)) {
             throw new Kohana_404_Exception();
         }
 

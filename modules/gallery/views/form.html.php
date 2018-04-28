@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
+<?php defined('SYSPATH') or die('No direct script access.') ?>
 <?php
 print($open);
 
@@ -10,11 +10,11 @@ if ($title) {
     print $title;
 }
 
-if (!function_exists("DrawForm")) {
+if (!function_exists('DrawForm')) {
     function DrawForm($inputs, $level=1)
     {
         $error_messages = array();
-        $prefix = str_repeat("  ", $level);
+        $prefix = str_repeat('  ', $level);
         $haveGroup = false;
         // On the first level, make sure we have a group if not add the <ul> tag now
         if ($level == 1) {

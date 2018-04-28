@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
+<?php defined('SYSPATH') or die('No direct script access.') ?>
 <script type="text/javscript">
   $(document).ready(function() {
     $("#g-akismet-external-stats").css("height", "600");

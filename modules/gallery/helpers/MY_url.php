@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -26,9 +26,9 @@ class url extends url_Core
         }
 
         // Work around problems with the CGI sapi by enforcing our default path
-        if ($_SERVER["SCRIPT_NAME"] && "/" . Router::$current_uri == $_SERVER["SCRIPT_NAME"]) {
-            Router::$controller_path = MODPATH . "gallery/controllers/albums.php";
-            Router::$controller = "albums";
+        if ($_SERVER['SCRIPT_NAME'] && '/' . Router::$current_uri == $_SERVER['SCRIPT_NAME']) {
+            Router::$controller_path = MODPATH . 'gallery/controllers/albums.php';
+            Router::$controller = 'albums';
             Router::$method = 1;
             return;
         }
@@ -37,7 +37,7 @@ class url extends url_Core
         if ($item && $item->loaded()) {
             Router::$controller = "{$item->type}s";
             Router::$controller_path = MODPATH . "gallery/controllers/{$item->type}s.php";
-            Router::$method = "show";
+            Router::$method = 'show';
             Router::$arguments = array($item);
         }
     }
@@ -91,8 +91,8 @@ class url extends url_Core
      */
     public static function merge_querystring($url, $query_params)
     {
-        $qs = implode("&", $query_params);
-        if (strpos($url, "?") === false) {
+        $qs = implode('&', $query_params);
+        if (strpos($url, '?') === false) {
             return $url . "?$qs";
         } else {
             return $url . "&$qs";

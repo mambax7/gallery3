@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -22,7 +22,7 @@ class g2_import_installer
     public static function install()
     {
         $db = Database::instance();
-        $db->query("CREATE TABLE IF NOT EXISTS {g2_maps} (
+        $db->query('CREATE TABLE IF NOT EXISTS {g2_maps} (
                  `id` int(9) NOT NULL auto_increment,
                  `g2_id` int(9) NOT NULL,
                  `g3_id` int(9) NOT NULL,
@@ -31,24 +31,24 @@ class g2_import_installer
                PRIMARY KEY (`id`),
                KEY `g2_url` (`g2_url`),
                KEY `g2_id` (`g2_id`))
-               DEFAULT CHARSET=utf8;");
+               DEFAULT CHARSET=utf8;');
 
-        mkdir(VARPATH . "modules/g2_import");
+        mkdir(VARPATH . 'modules/g2_import');
     }
 
     public static function upgrade($version)
     {
         $db = Database::instance();
         if ($version == 1) {
-            $db->query("ALTER TABLE {g2_maps} ADD COLUMN `g2_url` VARCHAR(255)");
-            $db->query("ALTER TABLE {g2_maps} ADD COLUMN `resource_type` VARCHAR(64)");
-            $db->query("ALTER TABLE {g2_maps} ADD KEY `g2_url` (`g2_url`)");
-            module::set_version("g2_import", $version = 2);
+            $db->query('ALTER TABLE {g2_maps} ADD COLUMN `g2_url` VARCHAR(255)');
+            $db->query('ALTER TABLE {g2_maps} ADD COLUMN `resource_type` VARCHAR(64)');
+            $db->query('ALTER TABLE {g2_maps} ADD KEY `g2_url` (`g2_url`)');
+            module::set_version('g2_import', $version = 2);
         }
     }
 
     public static function uninstall()
     {
-        @dir::unlink(VARPATH . "modules/g2_import");
+        @dir::unlink(VARPATH . 'modules/g2_import');
     }
 }

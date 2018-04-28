@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,12 +21,12 @@ class Admin_Sidebar_Controller extends Admin_Controller
 {
     public function index()
     {
-        $view = new Admin_View("admin.html");
-        $view->page_title = t("Manage sidebar");
-        $view->content = new View("admin_sidebar.html");
+        $view = new Admin_View('admin.html');
+        $view->page_title = t('Manage sidebar');
+        $view->content = new View('admin_sidebar.html');
         $view->content->csrf = access::csrf_token();
-        $view->content->available = new View("admin_sidebar_blocks.html");
-        $view->content->active = new View("admin_sidebar_blocks.html");
+        $view->content->available = new View('admin_sidebar_blocks.html');
+        $view->content->active = new View('admin_sidebar_blocks.html');
         list($view->content->available->blocks, $view->content->active->blocks) = $this->_get_blocks();
         print $view;
     }
@@ -38,21 +38,21 @@ class Admin_Sidebar_Controller extends Admin_Controller
         $available_blocks = block_manager::get_available_site_blocks();
 
         $active_blocks = array();
-        foreach (Input::instance()->get("block", array()) as $block_id) {
-            $active_blocks[md5($block_id)] = explode(":", (string) $block_id);
+        foreach (Input::instance()->get('block', array()) as $block_id) {
+            $active_blocks[md5($block_id)] = explode(':', (string) $block_id);
         }
-        block_manager::set_active("site_sidebar", $active_blocks);
+        block_manager::set_active('site_sidebar', $active_blocks);
 
-        $result = array("result" => "success");
+        $result = array('result' => 'success');
         list($available, $active) = $this->_get_blocks();
-        $v = new View("admin_sidebar_blocks.html");
-        $v->blocks = $available;
-        $result["available"] = $v->render();
-        $v = new View("admin_sidebar_blocks.html");
-        $v->blocks = $active;
-        $result["active"] = $v->render();
-        $message = t("Updated sidebar blocks");
-        $result["message"] = (string) $message;
+        $v                   = new View('admin_sidebar_blocks.html');
+        $v->blocks           = $available;
+        $result['available'] = $v->render();
+        $v                   = new View('admin_sidebar_blocks.html');
+        $v->blocks           = $active;
+        $result['active']    = $v->render();
+        $message             = t('Updated sidebar blocks');
+        $result['message']   = (string) $message;
         json::reply($result);
     }
 
@@ -60,7 +60,7 @@ class Admin_Sidebar_Controller extends Admin_Controller
     {
         $active_blocks = array();
         $available_blocks = block_manager::get_available_site_blocks();
-        foreach (block_manager::get_active("site_sidebar") as $block) {
+        foreach (block_manager::get_active('site_sidebar') as $block) {
             $id = "{$block[0]}:{$block[1]}";
             if (!empty($available_blocks[$id])) {
                 $active_blocks[$id] = $available_blocks[$id];

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,11 +21,11 @@ class recaptcha_theme_Core
 {
     public static function head($theme)
     {
-        return $theme->css("recaptcha.css");
+        return $theme->css('recaptcha.css');
     }
 
     public static function admin_head($theme)
     {
-        return $theme->css("recaptcha.css");
+        return $theme->css('recaptcha.css');
     }
 }

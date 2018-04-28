@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -28,15 +28,15 @@ class L10n_Client_Controller extends Controller
 
         $locale = Gallery_I18n::instance()->locale();
         $input = Input::instance();
-        $key = $input->post("l10n-message-key");
+        $key = $input->post('l10n-message-key');
 
-        $root_message = ORM::factory("incoming_translation")
-      ->where("key", "=", $key)
-      ->where("locale", "=", "root")
+        $root_message = ORM::factory('incoming_translation')
+      ->where('key', '=', $key)
+      ->where('locale', '=', 'root')
       ->find();
 
         if (!$root_message->loaded()) {
-            throw new Exception("@todo bad request data / illegal state");
+            throw new Exception('@todo bad request data / illegal state');
         }
         $is_plural = Gallery_I18n::is_plural_message(unserialize($root_message->message));
 
@@ -47,22 +47,22 @@ class L10n_Client_Controller extends Controller
             foreach ($plural_forms as $plural_form) {
                 $value = $input->post("l10n-edit-plural-translation-$plural_form");
                 if (null === $value || !is_string($value)) {
-                    throw new Exception("@todo bad request data");
+                    throw new Exception('@todo bad request data');
                 }
                 $translation[$plural_form] = $value;
                 $is_empty = $is_empty && empty($value);
             }
         } else {
-            $translation = $input->post("l10n-edit-translation");
+            $translation = $input->post('l10n-edit-translation');
             $is_empty = empty($translation);
             if (null === $translation || !is_string($translation)) {
-                throw new Exception("@todo bad request data");
+                throw new Exception('@todo bad request data');
             }
         }
 
-        $entry = ORM::factory("outgoing_translation")
-      ->where("key", "=", $key)
-      ->where("locale", "=", $locale)
+        $entry = ORM::factory('outgoing_translation')
+      ->where('key', '=', $key)
+      ->where('locale', '=', $locale)
       ->find();
 
         if ($is_empty) {
@@ -79,9 +79,9 @@ class L10n_Client_Controller extends Controller
 
             $entry->translation = serialize($translation);
 
-            $entry_from_incoming = ORM::factory("incoming_translation")
-        ->where("key", "=", $key)
-        ->where("locale", "=", $locale)
+            $entry_from_incoming = ORM::factory('incoming_translation')
+        ->where('key', '=', $key)
+        ->where('locale', '=', $locale)
         ->find();
 
             if (!$entry_from_incoming->loaded()) {
@@ -104,12 +104,12 @@ class L10n_Client_Controller extends Controller
         }
 
         $session = Session::instance();
-        $l10n_mode = $session->get("l10n_mode", false);
-        $session->set("l10n_mode", !$l10n_mode);
+        $l10n_mode = $session->get('l10n_mode', false);
+        $session->set('l10n_mode', !$l10n_mode);
 
-        $redirect_url = "admin/languages";
+        $redirect_url = 'admin/languages';
         if (!$l10n_mode) {
-            $redirect_url .= "#l10n-client";
+            $redirect_url .= '#l10n-client';
         }
 
         url::redirect($redirect_url);
@@ -117,21 +117,21 @@ class L10n_Client_Controller extends Controller
 
     private static function _l10n_client_search_form()
     {
-        $form = new Forge("#", "", "post", array("id" => "g-l10n-search-form"));
-        $group = $form->group("l10n_search");
-        $group->input("l10n-search")->id("g-l10n-search");
+        $form = new Forge('#', '', 'post', array('id' => 'g-l10n-search-form'));
+        $group = $form->group('l10n_search');
+        $group->input('l10n-search')->id('g-l10n-search');
 
         return $form;
     }
 
     public static function l10n_form()
     {
-        if (Input::instance()->get("show_all_l10n_messages")) {
+        if (Input::instance()->get('show_all_l10n_messages')) {
             $calls = array();
             foreach (db::build()
-               ->select("key", "message")
-               ->from("incoming_translations")
-               ->where("locale", "=", "root")
+               ->select('key', 'message')
+               ->from('incoming_translations')
+               ->where('locale', '=', 'root')
                ->execute() as $row) {
                 $calls[$row->key] = array(unserialize($row->message), array());
             }
@@ -143,17 +143,17 @@ class L10n_Client_Controller extends Controller
         if ($calls) {
             $translations = array();
             foreach (db::build()
-               ->select("key", "translation")
-               ->from("incoming_translations")
-               ->where("locale", "=", $locale)
+               ->select('key', 'translation')
+               ->from('incoming_translations')
+               ->where('locale', '=', $locale)
                ->execute() as $row) {
                 $translations[$row->key] = unserialize($row->translation);
             }
             // Override incoming with outgoing...
             foreach (db::build()
-               ->select("key", "translation")
-               ->from("outgoing_translations")
-               ->where("locale", "=", $locale)
+               ->select('key', 'translation')
+               ->from('outgoing_translations')
+               ->where('locale', '=', $locale)
                ->execute() as $row) {
                 $translations[$row->key] = unserialize($row->translation);
             }

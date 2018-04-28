@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,11 +21,11 @@ class search_theme_Core
 {
     public static function header_top($theme)
     {
-        if ($theme->page_subtype() != "login") {
-            $view = new View("search_link.html");
+        if ($theme->page_subtype() != 'login') {
+            $view = new View('search_link.html');
             return $view->render();
         } else {
-            return "";
+            return '';
         }
     }
 }

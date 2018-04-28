@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -38,10 +38,10 @@ class Sendmail_Core
     public function __construct()
     {
         $this->headers = array();
-        $this->from(module::get_var("gallery", "email_from", ""));
-        $this->reply_to(module::get_var("gallery", "email_reply_to", ""));
-        $this->line_length(module::get_var("gallery", "email_line_length", 70));
-        $separator = module::get_var("gallery", "email_header_separator", null);
+        $this->from(module::get_var('gallery', 'email_from', ''));
+        $this->reply_to(module::get_var('gallery', 'email_reply_to', ''));
+        $this->line_length(module::get_var('gallery', 'email_line_length', 70));
+        $separator = module::get_var('gallery', 'email_header_separator', null);
         $this->header_separator(empty($separator) ? "\n" : unserialize($separator));
     }
 
@@ -53,21 +53,21 @@ class Sendmail_Core
     public function __call($key, $value)
     {
         switch ($key) {
-    case "to":
+    case 'to':
       $this->to = is_array($value[0]) ? $value[0] : array($value[0]);
       break;
-    case  "header":
+    case  'header':
       if (count($value) != 2) {
-          Kohana_Log::add("error", wordwrap("Invalid header parameters\n" . Kohana::debug($value)));
-          throw new Exception("@todo INVALID_HEADER_PARAMETERS");
+          Kohana_Log::add('error', wordwrap("Invalid header parameters\n" . Kohana::debug($value)));
+          throw new Exception('@todo INVALID_HEADER_PARAMETERS');
       }
       $this->headers[$value[0]] = $value[1];
       break;
-    case "from":
-      $this->headers["From"] = $value[0];
+    case 'from':
+        $this->headers['From'] = $value[0];
       break;
-    case "reply_to":
-      $this->headers["Reply-To"] = $value[0];
+    case 'reply_to':
+        $this->headers['Reply-To'] = $value[0];
       break;
     default:
       $this->$key = $value[0];
@@ -78,10 +78,10 @@ class Sendmail_Core
     public function send()
     {
         if (empty($this->to)) {
-            Kohana_Log::add("error", wordwrap("Sending mail failed:\nNo to address specified"));
-            throw new Exception("@todo TO_IS_REQUIRED_FOR_MAIL");
+            Kohana_Log::add('error', wordwrap("Sending mail failed:\nNo to address specified"));
+            throw new Exception('@todo TO_IS_REQUIRED_FOR_MAIL');
         }
-        $to = implode(", ", $this->to);
+        $to = implode(', ', $this->to);
         $headers = array();
         foreach ($this->headers as $key => $value) {
             $key = ucfirst($key);
@@ -93,7 +93,7 @@ class Sendmail_Core
         $headers = implode($this->header_separator, $headers);
         $message = wordwrap($this->message, $this->line_length, "\n");
         if (!$this->mail($to, $this->subject, $message, $headers)) {
-            throw new Exception("@todo SEND_MAIL_FAILED");
+            throw new Exception('@todo SEND_MAIL_FAILED');
         }
         return $this;
     }

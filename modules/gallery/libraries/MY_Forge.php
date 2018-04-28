@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -26,13 +26,13 @@ class Forge extends Forge_Core
     public function __construct($action=null, $title='', $method=null, $attr=array())
     {
         parent::__construct($action, $title, $method, $attr);
-        $this->hidden("csrf")->value(access::csrf_token());
+        $this->hidden('csrf')->value(access::csrf_token());
     }
 
     /**
      * Use our own template
      */
-    public function render($template="form.html", $custom=false)
+    public function render($template= 'form.html', $custom=false)
     {
         return parent::render($template, $custom);
     }

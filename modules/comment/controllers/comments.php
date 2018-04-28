@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -24,8 +24,8 @@ class Comments_Controller extends Controller
      */
     public function create($id)
     {
-        $item = ORM::factory("item", $id);
-        access::required("view", $item);
+        $item = ORM::factory('item', $id);
+        access::required('view', $item);
         if (!comment::can_comment()) {
             access::forbidden();
         }
@@ -33,11 +33,11 @@ class Comments_Controller extends Controller
         $form = comment::get_add_form($item);
         try {
             $valid = $form->validate();
-            $comment = ORM::factory("comment");
+            $comment = ORM::factory('comment');
             $comment->item_id = $id;
             $comment->author_id = identity::active_user()->id;
             $comment->text = $form->add_comment->text->value;
-            $comment->guest_name = $form->add_comment->inputs["name"]->value;
+            $comment->guest_name = $form->add_comment->inputs['name']->value;
             $comment->guest_email = $form->add_comment->email->value;
             $comment->guest_url = $form->add_comment->url->value;
             $comment->validate();
@@ -45,9 +45,9 @@ class Comments_Controller extends Controller
             // Translate ORM validation errors into form error messages
             foreach ($e->validation->errors() as $key => $error) {
                 switch ($key) {
-        case "guest_name":  $key = "name";  break;
-        case "guest_email": $key = "email"; break;
-        case "guest_url":   $key = "url";   break;
+        case 'guest_name':  $key = 'name';  break;
+        case 'guest_email': $key = 'email'; break;
+        case 'guest_url':   $key = 'url';   break;
         }
                 $form->add_comment->inputs[$key]->add_error($error, 1);
             }
@@ -56,15 +56,16 @@ class Comments_Controller extends Controller
 
         if ($valid) {
             $comment->save();
-            $view = new Theme_View("comment.html", "other", "comment-fragment");
+            $view = new Theme_View('comment.html', 'other', 'comment-fragment');
             $view->comment = $comment;
 
-            json::reply(array("result" => "success",
-                        "view" => (string)$view,
-                        "form" => (string)comment::get_add_form($item)));
+            json::reply(array(
+                            'result' => 'success',
+                            'view'   => (string)$view,
+                            'form'   => (string)comment::get_add_form($item)));
         } else {
             $form = comment::prefill_add_form($form);
-            json::reply(array("result" => "error", "form" => (string)$form));
+            json::reply(array('result' => 'error', 'form' => (string)$form));
         }
     }
 
@@ -73,8 +74,8 @@ class Comments_Controller extends Controller
      */
     public function form_add($item_id)
     {
-        $item = ORM::factory("item", $item_id);
-        access::required("view", $item);
+        $item = ORM::factory('item', $item_id);
+        access::required('view', $item);
         if (!comment::can_comment()) {
             access::forbidden();
         }

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,29 +21,29 @@ class autorotate_installer
 {
     public static function install()
     {
-        module::set_version("autorotate", 3);
+        module::set_version('autorotate', 3);
     }
 
     public static function upgrade($version)
     {
         if ($version == 1) {
-            module::set_version("autorotate", $version = 2);
+            module::set_version('autorotate', $version = 2);
         }
         if ($version == 2) {
-            module::set_version("autorotate", $version = 3);
+            module::set_version('autorotate', $version = 3);
         }
     }
 
     public static function deactivate()
     {
-        site_status::clear("autorotate_needs_exif");
+        site_status::clear('autorotate_needs_exif');
     }
 
     public static function can_activate()
     {
         $messages = array();
-        if (!module::is_active("exif")) {
-            $messages["warn"][] = t("The autorotate module requires the EXIF module.");
+        if (!module::is_active('exif')) {
+            $messages['warn'][] = t('The autorotate module requires the EXIF module.');
         }
         return $messages;
     }

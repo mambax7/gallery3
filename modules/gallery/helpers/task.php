@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -27,8 +27,8 @@ class task_Core
         $tasks = array();
         foreach (module::active() as $module) {
             $class_name = "{$module->name}_task";
-            if (class_exists($class_name) && method_exists($class_name, "available_tasks")) {
-                foreach (call_user_func(array($class_name, "available_tasks")) as $task) {
+            if (class_exists($class_name) && method_exists($class_name, 'available_tasks')) {
+                foreach (call_user_func(array($class_name, 'available_tasks')) as $task) {
                     $tasks[$task->callback] = $task;
                 }
             }
@@ -43,20 +43,20 @@ class task_Core
         $task = task::create($tasks[$task_callback], array());
 
         $task->log(t(
-        "Task %task_name started (task id %task_id)",
-                 array("task_name" => $task->name, "task_id" => $task->id)
+                       'Task %task_name started (task id %task_id)',
+                       array('task_name' => $task->name, 'task_id' => $task->id)
     ));
         return $task;
     }
 
     public static function create($task_def, $context)
     {
-        $task = ORM::factory("task");
+        $task = ORM::factory('task');
         $task->callback = $task_def->callback;
         $task->name = $task_def->name;
         $task->percent_complete = 0;
-        $task->status = "";
-        $task->state = "started";
+        $task->status = '';
+        $task->state = 'started';
         $task->owner_id = identity::active_user()->id;
         $task->context = serialize($context);
         $task->save();
@@ -66,15 +66,15 @@ class task_Core
 
     public static function cancel($task_id)
     {
-        $task = ORM::factory("task", $task_id);
+        $task = ORM::factory('task', $task_id);
         if (!$task->loaded()) {
-            throw new Exception("@todo MISSING_TASK");
+            throw new Exception('@todo MISSING_TASK');
         }
         $task->done = 1;
-        $task->state = "cancelled";
+        $task->state = 'cancelled';
         $task->log(t(
-        "Task %task_name cancelled (task id %task_id)",
-                 array("task_name" => $task->name, "task_id" => $task->id)
+                       'Task %task_name cancelled (task id %task_id)',
+                       array('task_name' => $task->name, 'task_id' => $task->id)
     ));
         $task->save();
 
@@ -83,7 +83,7 @@ class task_Core
 
     public static function remove($task_id)
     {
-        $task = ORM::factory("task", $task_id);
+        $task = ORM::factory('task', $task_id);
         if ($task->loaded()) {
             $task->delete();
         }
@@ -91,29 +91,29 @@ class task_Core
 
     public static function run($task_id)
     {
-        $task = ORM::factory("task", $task_id);
+        $task = ORM::factory('task', $task_id);
         if (!$task->loaded()) {
-            throw new Exception("@todo MISSING_TASK");
+            throw new Exception('@todo MISSING_TASK');
         }
 
         try {
-            $task->state = "running";
+            $task->state = 'running';
             call_user_func_array($task->callback, array(&$task));
             if ($task->done) {
                 $task->log($task->status);
             }
             $task->save();
         } catch (Exception $e) {
-            Kohana_Log::add("error", (string)$e);
+            Kohana_Log::add('error', (string)$e);
 
             // Ugh.  I hate to use instanceof, But this beats catching the exception separately since
             // we mostly want to treat it the same way as all other exceptions
             if ($e instanceof ORM_Validation_Exception) {
-                Kohana_Log::add("error", "Validation errors: " . print_r($e->validation->errors(), 1));
+                Kohana_Log::add('error', 'Validation errors: ' . print_r($e->validation->errors(), 1));
             }
 
             $task->log((string)$e);
-            $task->state = "error";
+            $task->state = 'error';
             $task->done = true;
             $task->status = substr($e->getMessage(), 0, 255);
             $task->save();

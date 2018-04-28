@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -20,17 +20,18 @@
 class Form_Script_Core extends Forge
 {
     protected $data = array(
-    "name" => false,
-    "type"  => "script",
-    "url" => "",
-    "text" => "");
+        'name' => false,
+        'type' => 'script',
+        'url'  => '',
+        'text' => ''
+    );
 
     public function __construct($name)
     {
         // Set dummy data so we don"t get errors
-        $this->attr["action"] = "";
-        $this->attr["method"] = "post";
-        $this->data["name"] = $name;
+        $this->attr['action'] = '';
+        $this->attr['method'] = 'post';
+        $this->data['name']   = $name;
     }
 
     public function __get($key)
@@ -43,26 +44,26 @@ class Form_Script_Core extends Forge
      */
     public function url($url)
     {
-        $this->data["url"] = $url;
+        $this->data['url'] = $url;
 
         return $this;
     }
 
     public function text($script_text)
     {
-        $this->data["text"] = $script_text;
+        $this->data['text'] = $script_text;
 
         return $this;
     }
 
-    public function render($template="forge_template", $custom=false)
+    public function render($template= 'forge_template', $custom=false)
     {
         $script = array();
-        if (!empty($this->data["url"])) {
-            $script[] = html::script($this->data["url"]);
+        if (!empty($this->data['url'])) {
+            $script[] = html::script($this->data['url']);
         }
 
-        if (!empty($this->data["text"])) {
+        if (!empty($this->data['text'])) {
             $script[] = "<script type=\"text/javascript\">\n{$this->data['text']}\n</script>\n";
         }
 

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -22,151 +22,143 @@ class Database_Test extends Gallery_Unit_Test_Case
     public function setup()
     {
         $config = Kohana_Config::instance();
-        $config->set("database.mock.connection.type", "mock");
-        $config->set("database.mock.cache", false);
-        $config->set("database.mock.table_prefix", "g_");
+        $config->set('database.mock.connection.type', 'mock');
+        $config->set('database.mock.cache', false);
+        $config->set('database.mock.table_prefix', 'g_');
     }
 
     public function simple_where_test()
     {
-        $sql = db::build("mock")
-      ->select("some_column")
-      ->from("some_table")
-      ->where("a", "=", 1)
-      ->where("b", "=", 2)
+        $sql = db::build('mock')
+      ->select('some_column')
+      ->from('some_table')
+      ->where('a', '=', 1)
+      ->where('b', '=', 2)
       ->compile();
-        $sql = str_replace("\n", " ", $sql);
-        $this->assert_same("SELECT [some_column] FROM [some_table] WHERE [a] = [1] AND [b] = [2]", $sql);
+        $sql = str_replace("\n", ' ', $sql);
+        $this->assert_same('SELECT [some_column] FROM [some_table] WHERE [a] = [1] AND [b] = [2]', $sql);
     }
 
     public function compound_where_test()
     {
-        $sql = db::build("mock")
+        $sql = db::build('mock')
       ->select()
-      ->where("outer1", "=", 1)
+      ->where('outer1', '=', 1)
       ->and_open()
-      ->where("inner1", "=", 1)
-      ->or_where("inner2", "=", 2)
+      ->where('inner1', '=', 1)
+      ->or_where('inner2', '=', 2)
       ->close()
-      ->where("outer2", "=", 2)
+      ->where('outer2', '=', 2)
       ->compile();
-        $sql = str_replace("\n", " ", $sql);
+        $sql = str_replace("\n", ' ', $sql);
         $this->assert_same(
-      "SELECT [*] WHERE [outer1] = [1] AND ([inner1] = [1] OR [inner2] = [2]) AND [outer2] = [2]",
-      $sql
+            'SELECT [*] WHERE [outer1] = [1] AND ([inner1] = [1] OR [inner2] = [2]) AND [outer2] = [2]',
+            $sql
     );
     }
 
     public function group_first_test()
     {
-        $sql = db::build("mock")
+        $sql = db::build('mock')
       ->select()
       ->and_open()
-      ->where("inner1", "=", 1)
-      ->or_where("inner2", "=", 2)
+      ->where('inner1', '=', 1)
+      ->or_where('inner2', '=', 2)
       ->close()
-      ->where("outer1", "=", 1)
-      ->where("outer2", "=", 2)
+      ->where('outer1', '=', 1)
+      ->where('outer2', '=', 2)
       ->compile();
-        $sql = str_replace("\n", " ", $sql);
+        $sql = str_replace("\n", ' ', $sql);
         $this->assert_same(
-      "SELECT [*] WHERE ([inner1] = [1] OR [inner2] = [2]) AND [outer1] = [1] AND [outer2] = [2]",
-      $sql
+            'SELECT [*] WHERE ([inner1] = [1] OR [inner2] = [2]) AND [outer1] = [1] AND [outer2] = [2]',
+            $sql
     );
     }
 
     public function where_array_test()
     {
-        $sql = db::build("mock")
+        $sql = db::build('mock')
       ->select()
-      ->where("outer1", "=", 1)
+      ->where('outer1', '=', 1)
       ->and_open()
-      ->where("inner1", "=", 1)
-      ->or_where("inner2", "=", 2)
-      ->or_where("inner3", "=", 3)
+      ->where('inner1', '=', 1)
+      ->or_where('inner2', '=', 2)
+      ->or_where('inner3', '=', 3)
       ->close()
       ->compile();
-        $sql = str_replace("\n", " ", $sql);
+        $sql = str_replace("\n", ' ', $sql);
         $this->assert_same(
-      "SELECT [*] WHERE [outer1] = [1] AND ([inner1] = [1] OR [inner2] = [2] OR [inner3] = [3])",
-      $sql
+            'SELECT [*] WHERE [outer1] = [1] AND ([inner1] = [1] OR [inner2] = [2] OR [inner3] = [3])',
+            $sql
     );
     }
 
     public function notlike_test()
     {
-        $sql = db::build("mock")
+        $sql = db::build('mock')
       ->select()
-      ->where("outer1", "=", 1)
+      ->where('outer1', '=', 1)
       ->or_open()
-      ->where("inner1", "NOT LIKE", "%1%")
+      ->where('inner1', 'NOT LIKE', '%1%')
       ->close()
       ->compile();
-        $sql = str_replace("\n", " ", $sql);
+        $sql = str_replace("\n", ' ', $sql);
         $this->assert_same(
-      "SELECT [*] WHERE [outer1] = [1] OR ([inner1] NOT LIKE [%1%])",
-      $sql
+            'SELECT [*] WHERE [outer1] = [1] OR ([inner1] NOT LIKE [%1%])',
+            $sql
     );
     }
 
     public function prefix_replacement_test()
     {
-        $db = Database::instance("mock");
-        $converted = $db->add_table_prefixes("CREATE TABLE IF NOT EXISTS {test} (
+        $db = Database::instance('mock');
+        $converted = $db->add_table_prefixes('CREATE TABLE IF NOT EXISTS {test} (
                    `id` int(9) NOT NULL auto_increment,
                    `name` varchar(32) NOT NULL,
                    PRIMARY KEY (`id`),
                    UNIQUE KEY(`name`))
-                 ENGINE=InnoDB DEFAULT CHARSET=utf8");
-        $expected = "CREATE TABLE IF NOT EXISTS `g_test` (
+                 ENGINE=InnoDB DEFAULT CHARSET=utf8');
+        $expected = 'CREATE TABLE IF NOT EXISTS `g_test` (
                    `id` int(9) NOT NULL auto_increment,
                    `name` varchar(32) NOT NULL,
                    PRIMARY KEY (`id`),
                    UNIQUE KEY(`name`))
-                 ENGINE=InnoDB DEFAULT CHARSET=utf8";
+                 ENGINE=InnoDB DEFAULT CHARSET=utf8';
         $this->assert_same($expected, $converted);
 
-        $sql = "UPDATE {test} SET `name` = '{test string}' " .
-        "WHERE `item_id` IN " .
-        "  (SELECT `id` FROM {test} " .
-        "  WHERE `left_ptr` >= 1 " .
-        "  AND `right_ptr` <= 6)";
+        $sql = "UPDATE {test} SET `name` = '{test string}' " . 'WHERE `item_id` IN ' . '  (SELECT `id` FROM {test} ' . '  WHERE `left_ptr` >= 1 ' . '  AND `right_ptr` <= 6)';
         $sql = $db->add_table_prefixes($sql);
 
-        $expected = "UPDATE `g_test` SET `name` = '{test string}' " .
-        "WHERE `item_id` IN " .
-        "  (SELECT `id` FROM `g_test` " .
-        "  WHERE `left_ptr` >= 1 " .
-        "  AND `right_ptr` <= 6)";
+        $expected = "UPDATE `g_test` SET `name` = '{test string}' " . 'WHERE `item_id` IN ' . '  (SELECT `id` FROM `g_test` ' . '  WHERE `left_ptr` >= 1 ' . '  AND `right_ptr` <= 6)';
 
         $this->assert_same($expected, $sql);
     }
 
     public function prefix_replacement_for_rename_table_test()
     {
-        $db = Database::instance("mock");
+        $db = Database::instance('mock');
         $this->assert_same(
-      "RENAME TABLE `g_test` TO `g_new_test`",
-      $db->add_table_prefixes("RENAME TABLE {test} TO {new_test}")
+            'RENAME TABLE `g_test` TO `g_new_test`',
+            $db->add_table_prefixes('RENAME TABLE {test} TO {new_test}')
     );
     }
 
     public function prefix_no_replacement_test()
     {
-        $sql = db::build("mock")
-      ->from("test_tables")
-      ->where("1", "=", "1")
-      ->set(array("name" => "Test Name"))
+        $sql = db::build('mock')
+      ->from('test_tables')
+      ->where('1', '=', '1')
+      ->set(array('name' => 'Test Name'))
       ->update()
       ->compile();
-        $sql = str_replace("\n", " ", $sql);
-        $this->assert_same("UPDATE [test_tables] SET [name] = [Test Name] WHERE [1] = [1]", $sql);
+        $sql = str_replace("\n", ' ', $sql);
+        $this->assert_same('UPDATE [test_tables] SET [name] = [Test Name] WHERE [1] = [1]', $sql);
     }
 
     public function escape_for_like_test()
     {
         // Note: literal double backslash is written as \\\
-        $this->assert_same('basic\_test', Database::escape_for_like("basic_test"));
+        $this->assert_same('basic\_test', Database::escape_for_like('basic_test'));
         $this->assert_same('\\\100\%\_test/', Database::escape_for_like('\100%_test/'));
     }
 }
@@ -203,7 +195,7 @@ class Database_Mock extends Database
 
     public function list_tables()
     {
-        return array("test");
+        return array('test');
     }
 
     public function quote_column($val, $alias=null)

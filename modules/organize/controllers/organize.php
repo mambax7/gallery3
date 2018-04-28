@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,32 +21,32 @@ class Organize_Controller extends Controller
 {
     public function frame($album_id)
     {
-        $album = ORM::factory("item", $album_id);
-        access::required("view", $album);
-        access::required("edit", $album);
+        $album = ORM::factory('item', $album_id);
+        access::required('view', $album);
+        access::required('edit', $album);
 
-        $v = new View("organize_frame.html");
+        $v = new View('organize_frame.html');
         $v->album = $album;
         print $v;
     }
 
     public function dialog($album_id)
     {
-        $album = ORM::factory("item", $album_id);
-        access::required("view", $album);
-        access::required("edit", $album);
+        $album = ORM::factory('item', $album_id);
+        access::required('view', $album);
+        access::required('edit', $album);
 
-        $v = new View("organize_dialog.html");
+        $v = new View('organize_dialog.html');
         $v->album = $album;
         print $v;
     }
 
     public function tree($selected_album_id)
     {
-        $root = ORM::factory("item", Input::instance()->post("root_id", 1));
-        $selected_album = ORM::factory("item", $selected_album_id);
-        access::required("view", $root);
-        access::required("view", $selected_album);
+        $root = ORM::factory('item', Input::instance()->post('root_id', 1));
+        $selected_album = ORM::factory('item', $selected_album_id);
+        access::required('view', $root);
+        access::required('view', $selected_album);
 
         $tree = $this->_get_tree($root, $selected_album);
         json::reply($tree);
@@ -54,25 +54,25 @@ class Organize_Controller extends Controller
 
     public function album_info($album_id)
     {
-        $album = ORM::factory("item", $album_id);
-        access::required("view", $album);
+        $album = ORM::factory('item', $album_id);
+        access::required('view', $album);
 
         $data = array(
-      "sort_column" => $album->sort_column,
-      "sort_order" => $album->sort_order,
-      "editable" => access::can("edit", $album),
-      "title" => (string)html::clean($album->title),
-      "children" => array());
+            'sort_column' => $album->sort_column,
+            'sort_order'  => $album->sort_order,
+            'editable'    => access::can('edit', $album),
+            'title'       => (string)html::clean($album->title),
+            'children'    => array());
 
         foreach ($album->viewable()->children() as $child) {
-            $dims = $child->scale_dimensions(120);
-            $data["children"][] = array(
-        "id" => $child->id,
-        "thumb_url" => $child->has_thumb() ? $child->thumb_url() : null,
-        "width" => $dims[1],
-        "height" => $dims[0],
-        "type" => $child->type,
-        "title" => (string)html::clean($child->title));
+            $dims               = $child->scale_dimensions(120);
+            $data['children'][] = array(
+                'id'        => $child->id,
+                'thumb_url' => $child->has_thumb() ? $child->thumb_url() : null,
+                'width'     => $dims[1],
+                'height'    => $dims[0],
+                'type'      => $child->type,
+                'title'     => (string)html::clean($child->title));
         }
         json::reply($data);
     }
@@ -82,15 +82,15 @@ class Organize_Controller extends Controller
         access::verify_csrf();
 
         $input = Input::instance();
-        $new_parent = ORM::factory("item", $input->post("target_id"));
-        access::required("edit", $new_parent);
+        $new_parent = ORM::factory('item', $input->post('target_id'));
+        access::required('edit', $new_parent);
 
-        foreach (explode(",", $input->post("source_ids")) as $source_id) {
-            $source = ORM::factory("item", $source_id);
+        foreach (explode(',', $input->post('source_ids')) as $source_id) {
+            $source = ORM::factory('item', $source_id);
             if (!$source->loaded()) {
                 continue;
             }
-            access::required("edit", $source->parent());
+            access::required('edit', $source->parent());
 
             if ($source->contains($new_parent) || $source->id == $new_parent->id) {
                 // Can't move an item into its own hierarchy.  Silently skip this,
@@ -107,11 +107,11 @@ class Organize_Controller extends Controller
     public function set_sort($album_id)
     {
         access::verify_csrf();
-        $album = ORM::factory("item", $album_id);
-        access::required("view", $album);
-        access::required("edit", $album);
+        $album = ORM::factory('item', $album_id);
+        access::required('view', $album);
+        access::required('edit', $album);
 
-        foreach (array("sort_column", "sort_order") as $key) {
+        foreach (array('sort_column', 'sort_order') as $key) {
             if ($val = Input::instance()->post($key)) {
                 $album->$key = $val;
             }
@@ -126,42 +126,42 @@ class Organize_Controller extends Controller
         access::verify_csrf();
 
         $input = Input::instance();
-        $target = ORM::factory("item", $input->post("target_id"));
+        $target = ORM::factory('item', $input->post('target_id'));
         if (!$target->loaded()) {
             json::reply(null);
             return;
         }
 
         $album = $target->parent();
-        access::required("edit", $album);
+        access::required('edit', $album);
 
-        if ($album->sort_column != "weight") {
+        if ($album->sort_column != 'weight') {
             // Force all the weights into the current order before changing the order to manual
             // @todo: consider making this a trigger in the Item_Model.
             item::resequence_child_weights($album);
-            $album->sort_column = "weight";
-            $album->sort_order = "ASC";
+            $album->sort_column = 'weight';
+            $album->sort_order = 'ASC';
             $album->save();
         }
 
-        $source_ids = explode(",", $input->post("source_ids"));
+        $source_ids = explode(',', $input->post('source_ids'));
         $base_weight = $target->weight;
-        if ($input->post("relative") == "after") {
+        if ($input->post('relative') == 'after') {
             $base_weight++;
         }
 
         if ($source_ids) {
             // Make a hole the right size
             db::build()
-        ->update("items")
-        ->set("weight", db::expr("`weight` + " . count($source_ids)))
-        ->where("parent_id", "=", $album->id)
-        ->where("weight", ">=", $base_weight)
+        ->update('items')
+        ->set('weight', db::expr('`weight` + ' . count($source_ids)))
+        ->where('parent_id', '=', $album->id)
+        ->where('weight', '>=', $base_weight)
         ->execute();
 
             // Move all the source items to the right spots.
             for ($i = 0; $i < count($source_ids); $i++) {
-                $source = ORM::factory("item", $source_ids[$i]);
+                $source = ORM::factory('item', $source_ids[$i]);
                 if ($source->parent_id == $album->id) {
                     $source->weight = $base_weight + $i;
                     $source->save();
@@ -177,9 +177,9 @@ class Organize_Controller extends Controller
 
         $input = Input::instance();
 
-        foreach (explode(",", $input->post("item_ids")) as $item_id) {
-            $item = ORM::factory("item", $item_id);
-            if (access::can("edit", $item)) {
+        foreach (explode(',', $input->post('item_ids')) as $item_id) {
+            $item = ORM::factory('item', $item_id);
+            if (access::can('edit', $item)) {
                 $item->delete();
             }
         }
@@ -192,13 +192,13 @@ class Organize_Controller extends Controller
         access::verify_csrf();
         $input = Input::instance();
 
-        foreach (explode(",", $input->post("item_ids")) as $item_id) {
-            $item = ORM::factory("item", $item_id);
-            if (access::can("edit", $item)) {
+        foreach (explode(',', $input->post('item_ids')) as $item_id) {
+            $item = ORM::factory('item', $item_id);
+            if (access::can('edit', $item)) {
                 // Assuming the user can view/edit the current item, loop
                 // through each tag that was submitted and apply it to
                 // the current item.
-                foreach (explode(",", $input->post("tag_names")) as $tag_name) {
+                foreach (explode(',', $input->post('tag_names')) as $tag_name) {
                     $tag_name = trim($tag_name);
                     if ($tag_name) {
                         tag::add($item, $tag_name);
@@ -214,23 +214,24 @@ class Organize_Controller extends Controller
     {
         $tree = array();
         $children = $item->viewable()
-      ->children(null, null, array(array("type", "=", "album")))
+      ->children(null, null, array(array('type', '=', 'album')))
       ->as_array();
         foreach ($children as $child) {
             $node = array(
-        "allowDrag" => false,
-        "allowDrop" => access::can("edit", $child),
-        "editable" => false,
-        "expandable" => false,
-        "id" => $child->id,
-        "leaf" => $child->children_count(array(array("type", "=", "album"))) == 0,
-        "text" => (string)html::clean($child->title),
-        "nodeType" => "async");
+                'allowDrag'  => false,
+                'allowDrop'  => access::can('edit', $child),
+                'editable'   => false,
+                'expandable' => false,
+                'id'         => $child->id,
+                'leaf'       => $child->children_count(array(array('type', '=', 'album'))) == 0,
+                'text'       => (string)html::clean($child->title),
+                'nodeType'   => 'async'
+            );
 
             // If the child is in the selected path, open it now.  Else, mark it async.
             if ($child->contains($selected)) {
-                $node["children"] = $this->_get_tree($child, $selected);
-                $node["expanded"] = true;
+                $node['children'] = $this->_get_tree($child, $selected);
+                $node['expanded'] = true;
             }
             $tree[] = $node;
         }

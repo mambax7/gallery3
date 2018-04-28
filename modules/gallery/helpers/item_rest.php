@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -41,54 +41,54 @@ class item_rest_Core
     public static function get($request)
     {
         $item = rest::resolve($request->url);
-        access::required("view", $item);
+        access::required('view', $item);
 
         $p = $request->params;
         if (isset($p->random)) {
             $orm = item::random_query()->offset(0)->limit(1);
         } else {
-            $orm = ORM::factory("item")->viewable();
+            $orm = ORM::factory('item')->viewable();
         }
 
         if (empty($p->scope)) {
-            $p->scope = "direct";
+            $p->scope = 'direct';
         }
 
-        if (!in_array($p->scope, array("direct", "all"))) {
-            throw new Rest_Exception("Bad Request", 400);
+        if (!in_array($p->scope, array('direct', 'all'))) {
+            throw new Rest_Exception('Bad Request', 400);
         }
 
-        if ($p->scope == "direct") {
-            $orm->where("parent_id", "=", $item->id);
+        if ($p->scope == 'direct') {
+            $orm->where('parent_id', '=', $item->id);
         } else {
-            $orm->where("left_ptr", ">", $item->left_ptr);
-            $orm->where("right_ptr", "<", $item->right_ptr);
+            $orm->where('left_ptr', '>', $item->left_ptr);
+            $orm->where('right_ptr', '<', $item->right_ptr);
         }
 
         if (isset($p->name)) {
-            $orm->where("name", "LIKE", "%" . Database::escape_for_like($p->name) . "%");
+            $orm->where('name', 'LIKE', '%' . Database::escape_for_like($p->name) . '%');
         }
 
         if (isset($p->type)) {
-            $orm->where("type", "IN", explode(",", $p->type));
+            $orm->where('type', 'IN', explode(',', $p->type));
         }
 
         // Apply the item's sort order, using id as the tie breaker.
         // See Item_Model::children()
         $order_by = array($item->sort_column => $item->sort_order);
-        if ($item->sort_column != "id") {
-            $order_by["id"] = "ASC";
+        if ($item->sort_column != 'id') {
+            $order_by['id'] = 'ASC';
         }
         $orm->order_by($order_by);
 
         $result = array(
-      "url" => $request->url,
-      "entity" => $item->as_restful_array(),
-      "relationships" => rest::relationships("item", $item));
+            'url'           => $request->url,
+            'entity'        => $item->as_restful_array(),
+            'relationships' => rest::relationships('item', $item));
         if ($item->is_album()) {
-            $result["members"] = array();
+            $result['members'] = array();
             foreach ($orm->find_all() as $child) {
-                $result["members"][] = rest::url("item", $child);
+                $result['members'][] = rest::url('item', $child);
             }
         }
 
@@ -98,28 +98,45 @@ class item_rest_Core
     public static function put($request)
     {
         $item = rest::resolve($request->url);
-        access::required("edit", $item);
+        access::required('edit', $item);
 
         if ($entity = $request->params->entity) {
             // Only change fields from a whitelist.
-            foreach (array("album_cover", "captured", "description",
-                     "height", "mime_type", "name", "parent", "rand_key", "resize_dirty",
-                     "resize_height", "resize_width", "slug", "sort_column", "sort_order",
-                     "thumb_dirty", "thumb_height", "thumb_width", "title", "view_count",
-                     "width") as $key) {
+            foreach (array(
+                         'album_cover',
+                         'captured',
+                         'description',
+                         'height',
+                         'mime_type',
+                         'name',
+                         'parent',
+                         'rand_key',
+                         'resize_dirty',
+                         'resize_height',
+                         'resize_width',
+                         'slug',
+                         'sort_column',
+                         'sort_order',
+                         'thumb_dirty',
+                         'thumb_height',
+                         'thumb_width',
+                         'title',
+                         'view_count',
+                         'width'
+                     ) as $key) {
                 switch ($key) {
-        case "album_cover":
-          if (property_exists($entity, "album_cover")) {
+        case 'album_cover':
+          if (property_exists($entity, 'album_cover')) {
               $album_cover_item = rest::resolve($entity->album_cover);
-              access::required("view", $album_cover_item);
+              access::required('view', $album_cover_item);
               $item->album_cover_item_id = $album_cover_item->id;
           }
           break;
 
-        case "parent":
-          if (property_exists($entity, "parent")) {
+        case 'parent':
+          if (property_exists($entity, 'parent')) {
               $parent = rest::resolve($entity->parent);
-              access::required("edit", $parent);
+              access::required('edit', $parent);
               $item->parent_id = $parent->id;
           }
           break;
@@ -138,7 +155,7 @@ class item_rest_Core
 
         $item->save();
 
-        if (isset($request->params->members) && $item->sort_column == "weight") {
+        if (isset($request->params->members) && $item->sort_column == 'weight') {
             $weight = 0;
             foreach ($request->params->members as $url) {
                 $child = rest::resolve($url);
@@ -154,13 +171,13 @@ class item_rest_Core
     public static function post($request)
     {
         $parent = rest::resolve($request->url);
-        access::required("add", $parent);
+        access::required('add', $parent);
 
         $entity = $request->params->entity;
-        $item = ORM::factory("item");
+        $item = ORM::factory('item');
         switch ($entity->type) {
-    case "album":
-      $item->type = "album";
+    case 'album':
+      $item->type = 'album';
       $item->parent_id = $parent->id;
       $item->name = $entity->name;
       $item->title = isset($entity->title) ? $entity->title : $entity->name;
@@ -169,13 +186,13 @@ class item_rest_Core
       $item->save();
       break;
 
-    case "photo":
-    case "movie":
+    case 'photo':
+    case 'movie':
       if (empty($request->file)) {
           throw new Rest_Exception(
-          "Bad Request",
-            400,
-            array("errors" => array("file" => t("Upload failed")))
+              'Bad Request',
+              400,
+              array('errors' => array('file' => t('Upload failed')))
         );
       }
     $item->type = $entity->type;
@@ -190,27 +207,27 @@ class item_rest_Core
 
     default:
       throw new Rest_Exception(
-        "Bad Request",
+          'Bad Request',
           400,
-          array("errors" => array("type" => "invalid"))
+          array('errors' => array('type' => 'invalid'))
       );
     }
 
-        return array("url" => rest::url("item", $item));
+        return array('url' => rest::url('item', $item));
     }
 
     public static function delete($request)
     {
         $item = rest::resolve($request->url);
-        access::required("edit", $item);
+        access::required('edit', $item);
 
         $item->delete();
     }
 
     public static function resolve($id)
     {
-        $item = ORM::factory("item", $id);
-        if (!access::can("view", $item)) {
+        $item = ORM::factory('item', $id);
+        if (!access::can('view', $item)) {
             throw new Kohana_404_Exception();
         }
         return $item;

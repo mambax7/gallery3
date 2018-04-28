@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -22,37 +22,37 @@ class notification_installer
     public static function install()
     {
         $db = Database::instance();
-        $db->query("CREATE TABLE IF NOT EXISTS {subscriptions} (
+        $db->query('CREATE TABLE IF NOT EXISTS {subscriptions} (
                `id` int(9) NOT NULL auto_increment,
                `item_id` int(9) NOT NULL,
                `user_id` int(9) NOT NULL,
                PRIMARY KEY (`id`),
                UNIQUE KEY (`item_id`, `user_id`),
                UNIQUE KEY (`user_id`, `item_id`))
-               DEFAULT CHARSET=utf8;");
-        $db->query("CREATE TABLE IF NOT EXISTS {pending_notifications} (
+               DEFAULT CHARSET=utf8;');
+        $db->query('CREATE TABLE IF NOT EXISTS {pending_notifications} (
                `id` int(9) NOT NULL auto_increment,
                `locale` char(10) default NULL,
                `email` varchar(128) NOT NULL,
                `subject` varchar(255) NOT NULL,
                `text` text,
                PRIMARY KEY (`id`))
-               DEFAULT CHARSET=utf8;");
+               DEFAULT CHARSET=utf8;');
     }
 
     public static function upgrade($version)
     {
         $db = Database::instance();
         if ($version == 1) {
-            $db->query("ALTER TABLE {pending_notifications} ADD COLUMN `locale` char(10) default NULL");
-            module::set_version("notification", $version = 2);
+            $db->query('ALTER TABLE {pending_notifications} ADD COLUMN `locale` char(10) default NULL');
+            module::set_version('notification', $version = 2);
         }
     }
 
     public static function uninstall()
     {
         $db = Database::instance();
-        $db->query("DROP TABLE IF EXISTS {subscriptions};");
-        $db->query("DROP TABLE IF EXISTS {pending_notifications};");
+        $db->query('DROP TABLE IF EXISTS {subscriptions};');
+        $db->query('DROP TABLE IF EXISTS {pending_notifications};');
     }
 }

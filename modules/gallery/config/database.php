@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -18,6 +18,6 @@
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-if (file_exists(VARPATH . "database.php")) {
-    include(VARPATH . "database.php");
+if (file_exists(VARPATH . 'database.php')) {
+    include(VARPATH . 'database.php');
 }

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
+<?php defined('SYSPATH') or die('No direct script access.') ?>
 <div id="g-item">
   <?= $theme->photo_top() ?>
 
@@ -6,7 +6,7 @@
 
   <div id="g-movie" class="ui-helper-clearfix">
     <?= $theme->resize_top($item) ?>
-    <?= $item->movie_img(array("class" => "g-movie", "id" => "g-item-id-{$item->id}")) ?>
+    <?= $item->movie_img(array('class' => 'g-movie', 'id' => "g-item-id-{$item->id}")) ?>
     <?= $theme->resize_bottom($item) ?>
   </div>
 

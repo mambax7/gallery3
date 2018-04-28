@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -36,8 +36,8 @@ class exif_event_Core
     public static function item_deleted($item)
     {
         db::build()
-      ->delete("exif_records")
-      ->where("item_id", "=", $item->id)
+      ->delete('exif_records')
+      ->where('item_id', '=', $item->id)
       ->execute();
     }
 }

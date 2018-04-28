@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -31,9 +31,9 @@ class l10n_scanner_Core
     {
         if (empty($cache)) {
             foreach (db::build()
-               ->select("key")
-               ->from("incoming_translations")
-               ->where("locale", "=", "root")
+               ->select('key')
+               ->from('incoming_translations')
+               ->where('locale', '=', 'root')
                ->execute() as $row) {
                 $cache[$row->key] = true;
             }
@@ -44,11 +44,11 @@ class l10n_scanner_Core
             return $cache[$key];
         }
 
-        $entry = ORM::factory("incoming_translation")->where("key", "=", $key)->find();
+        $entry = ORM::factory('incoming_translation')->where('key', '=', $key)->find();
         if (!$entry->loaded()) {
             $entry->key = $key;
             $entry->message = serialize($message);
-            $entry->locale = "root";
+            $entry->locale = 'root';
             $entry->save();
         }
     }
@@ -60,13 +60,13 @@ class l10n_scanner_Core
         unset($code);
 
         $tokens = array();
-        $func_token_list = array("t" => array(), "t2" => array());
+        $func_token_list = array('t' => array(), 't2' => array());
         $token_number = 0;
         // Filter out HTML / whitespace, and build a lookup for global function calls.
         foreach ($raw_tokens as $token) {
             if ((!is_array($token)) || (($token[0] != T_WHITESPACE) && ($token[0] != T_INLINE_HTML))) {
                 if (is_array($token)) {
-                    if ($token[0] == T_STRING && in_array($token[1], array("t", "t2"))) {
+                    if ($token[0] == T_STRING && in_array($token[1], array('t', 't2'))) {
                         $func_token_list[$token[1]][] = $token_number;
                     }
                 }
@@ -76,24 +76,22 @@ class l10n_scanner_Core
         }
         unset($raw_tokens);
 
-        if (!empty($func_token_list["t"])) {
-            $errors = l10n_scanner::_parse_t_calls($tokens, $func_token_list["t"], $cache);
+        if (!empty($func_token_list['t'])) {
+            $errors = l10n_scanner::_parse_t_calls($tokens, $func_token_list['t'], $cache);
             foreach ($errors as $line => $error) {
                 Kohana_Log::add(
-          "error",
-            "Translation scanner error.  " .
-          "file: " . substr($file, strlen(DOCROOT)) . ", line: $line, context: $error"
+                    'error',
+                    'Translation scanner error.  ' . 'file: ' . substr($file, strlen(DOCROOT)) . ", line: $line, context: $error"
         );
             }
         }
 
-        if (!empty($func_token_list["t2"])) {
-            $errors = l10n_scanner::_parse_plural_calls($tokens, $func_token_list["t2"], $cache);
+        if (!empty($func_token_list['t2'])) {
+            $errors = l10n_scanner::_parse_plural_calls($tokens, $func_token_list['t2'], $cache);
             foreach ($errors as $line => $error) {
                 Kohana_Log::add(
-          "error",
-            "Translation scanner error.  " .
-          "file: " . substr($file, strlen(DOCROOT)) . ", line: $line, context: $error"
+                    'error',
+                    'Translation scanner error.  ' . 'file: ' . substr($file, strlen(DOCROOT)) . ", line: $line, context: $error"
         );
             }
         }
@@ -118,8 +116,8 @@ class l10n_scanner_Core
             $first_param = $tokens[$index++];
             $next_token = $tokens[$index];
 
-            if ($parens == "(") {
-                if (in_array($next_token, array(")", ","))
+            if ($parens == '(') {
+                if (in_array($next_token, array(')', ','))
             && (is_array($first_param) && ($first_param[0] == T_CONSTANT_ENCAPSED_STRING))) {
                     $message = self::_escape_quoted_string($first_param[1]);
                     l10n_scanner::process_message($message, $cache);
@@ -148,13 +146,13 @@ class l10n_scanner_Core
             $second_param = $tokens[$index++];
             $next_token = $tokens[$index];
 
-            if ($parens == "(") {
-                if ($first_separator == "," && $next_token == ","
+            if ($parens == '(') {
+                if ($first_separator == ',' && $next_token == ','
             && is_array($first_param) && $first_param[0] == T_CONSTANT_ENCAPSED_STRING
             && is_array($second_param) && $second_param[0] == T_CONSTANT_ENCAPSED_STRING) {
                     $singular = self::_escape_quoted_string($first_param[1]);
                     $plural = self::_escape_quoted_string($second_param[1]);
-                    l10n_scanner::process_message(array("one" => $singular, "other" => $plural), $cache);
+                    l10n_scanner::process_message(array('one' => $singular, 'other' => $plural), $cache);
                 } else {
                     if (is_array($first_param) && $first_param[0] == T_CONSTANT_ENCAPSED_STRING) {
                         $errors[$first_param[2]] = var_export(

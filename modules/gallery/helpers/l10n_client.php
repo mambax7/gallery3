@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -27,26 +27,26 @@ class l10n_client_Core
 
     public static function server_api_key_url()
     {
-        return self::_server_url("userkey/" . self::client_token());
+        return self::_server_url('userkey/' . self::client_token());
     }
 
     public static function client_token()
     {
-        return md5("l10n_client_client_token" . access::private_key());
+        return md5('l10n_client_client_token' . access::private_key());
     }
 
     public static function api_key($api_key=null)
     {
         if ($api_key !== null) {
-            module::set_var("gallery", "l10n_client_key", $api_key);
+            module::set_var('gallery', 'l10n_client_key', $api_key);
         }
-        return module::get_var("gallery", "l10n_client_key", "");
+        return module::get_var('gallery', 'l10n_client_key', '');
     }
 
     public static function server_uid($api_key=null)
     {
         $api_key = $api_key == null ? l10n_client::api_key() : $api_key;
-        $parts = explode(":", $api_key);
+        $parts = explode(':', $api_key);
         return empty($parts) ? 0 : $parts[0];
     }
 
@@ -58,21 +58,22 @@ class l10n_client_Core
 
     public static function validate_api_key($api_key)
     {
-        $version = "1.0";
-        $url = self::_server_url("status");
+        $version = '1.0';
+        $url = self::_server_url('status');
         $signature = self::_sign($version, $api_key);
 
         try {
             list($response_data, $response_status) = remote::post(
         $url,
-          array("version" => $version,
-                    "client_token" => l10n_client::client_token(),
-                    "signature" => $signature,
-                    "uid" => l10n_client::server_uid($api_key))
+          array(
+              'version'      => $version,
+              'client_token' => l10n_client::client_token(),
+              'signature'    => $signature,
+              'uid'          => l10n_client::server_uid($api_key))
       );
         } catch (ErrorException $e) {
             // Log the error, but then return a "can't make connection" error
-            Kohana_Log::add("error", $e->getMessage() . "\n" . $e->getTraceAsString());
+            Kohana_Log::add('error', $e->getMessage() . "\n" . $e->getTraceAsString());
         }
         if (!isset($response_data) && !isset($response_status)) {
             return array(false, false);
@@ -109,9 +110,9 @@ class l10n_client_Core
         $max_messages = 2000 / count($locales);
         $num_messages = 0;
         $rows = db::build()
-        ->select("key", "locale", "revision", "translation")
-        ->from("incoming_translations")
-        ->order_by("key")
+        ->select('key', 'locale', 'revision', 'translation')
+        ->from('incoming_translations')
+        ->order_by('key')
         ->limit(1000000)  // ignore, just there to satisfy SQL syntax
         ->offset($num_fetched)
         ->execute();
@@ -141,10 +142,10 @@ class l10n_client_Core
         }
 
         $request_data = json_encode($request);
-        $url = self::_server_url("fetch");
-        list($response_data, $response_status) = remote::post($url, array("data" => $request_data));
+        $url = self::_server_url('fetch');
+        list($response_data, $response_status) = remote::post($url, array('data' => $request_data));
         if (!remote::success($response_status)) {
-            throw new Exception("@todo TRANSLATIONS_FETCH_REQUEST_FAILED " . $response_status);
+            throw new Exception('@todo TRANSLATIONS_FETCH_REQUEST_FAILED ' . $response_status);
         }
         if (empty($response_data)) {
             return $num_remaining;
@@ -160,7 +161,7 @@ class l10n_client_Core
             // @todo Better input validation
             if (empty($message_data->key) || empty($message_data->translation) ||
           empty($message_data->locale) || empty($message_data->rev)) {
-                throw new Exception("@todo TRANSLATIONS_FETCH_REQUEST_FAILED: Invalid response data");
+                throw new Exception('@todo TRANSLATIONS_FETCH_REQUEST_FAILED: Invalid response data');
             }
             $key = $message_data->key;
             $locale = $message_data->locale;
@@ -176,15 +177,15 @@ class l10n_client_Core
             // and incoming_translations(id, translation, locale, revision)? Or just allow
             // incoming_translations.message to be NULL?
             $locale = $message_data->locale;
-            $entry = ORM::factory("incoming_translation")
-        ->where("key", "=", $key)
-        ->where("locale", "=", $locale)
+            $entry = ORM::factory('incoming_translation')
+        ->where('key', '=', $key)
+        ->where('locale', '=', $locale)
         ->find();
             if (!$entry->loaded()) {
                 // @todo Load a message key -> message (text) dict into memory outside of this loop
-                $root_entry = ORM::factory("incoming_translation")
-          ->where("key", "=", $key)
-          ->where("locale", "=", "root")
+                $root_entry = ORM::factory('incoming_translation')
+          ->where('key', '=', $key)
+          ->where('locale', '=', 'root')
           ->find();
                 $entry->key = $key;
                 $entry->message = $root_entry->message;
@@ -216,8 +217,8 @@ class l10n_client_Core
         // @todo include base_revision in submission / how to handle resubmissions / edit fights?
         $request = new stdClass();
         foreach (db::build()
-             ->select("key", "message", "locale", "base_revision", "translation")
-             ->from("outgoing_translations")
+             ->select('key', 'message', 'locale', 'base_revision', 'translation')
+             ->from('outgoing_translations')
              ->execute() as $row) {
             $key = $row->key;
             if (!isset($request->{$key})) {
@@ -230,19 +231,20 @@ class l10n_client_Core
 
         // @todo reduce memory consumption, e.g. free $request
         $request_data = json_encode($request);
-        $url = self::_server_url("submit");
+        $url = self::_server_url('submit');
         $signature = self::_sign($request_data);
 
         list($response_data, $response_status) = remote::post(
       $url,
-        array("data" => $request_data,
-                  "client_token" => l10n_client::client_token(),
-                  "signature" => $signature,
-                  "uid" => l10n_client::server_uid())
+        array(
+            'data'         => $request_data,
+            'client_token' => l10n_client::client_token(),
+            'signature'    => $signature,
+            'uid'          => l10n_client::server_uid())
     );
 
         if (!remote::success($response_status)) {
-            throw new Exception("@todo TRANSLATIONS_SUBMISSION_FAILED " . $response_status);
+            throw new Exception('@todo TRANSLATIONS_SUBMISSION_FAILED ' . $response_status);
         }
         if (empty($response_data)) {
             return;

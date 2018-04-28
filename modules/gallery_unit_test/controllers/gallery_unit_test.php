@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -26,19 +26,19 @@ class Gallery_Unit_Test_Controller extends Controller
         }
 
         // Force strict behavior to flush out bugs early
-        ini_set("display_errors", true);
+        ini_set('display_errors', true);
         error_reporting(-1);
 
         // Jump through some hoops to satisfy the way that we check for the site_domain in
         // config.php.  We structure this such that the code in config will leave us with a
         // site_domain of "." (for historical reasons)
         // @todo: for tests, we should force the site_domain to something like example.com
-        $_SERVER["SCRIPT_FILENAME"] = "index.php";
-        $_SERVER["SCRIPT_NAME"] = "./index.php";
+        $_SERVER['SCRIPT_FILENAME'] = 'index.php';
+        $_SERVER['SCRIPT_NAME']     = './index.php';
 
         $config = Kohana_Config::instance();
-        $original_config = DOCROOT . "var/database.php";
-        $test_config = VARPATH . "database.php";
+        $original_config = DOCROOT . 'var/database.php';
+        $test_config = VARPATH . 'database.php';
         if (!file_exists($original_config)) {
             print "Please copy kohana/config/database.php to $original_config.\n";
             return;
@@ -94,7 +94,7 @@ class Gallery_Unit_Test_Controller extends Controller
             // Clean out the filesystem.  Note that this cleans out test/var/database.php, but that's ok
             // because we technically don't need it anymore.  If this is confusing, we could always
             // arrange to preserve that one file.
-            @system("rm -rf test/var");
+            @system('rm -rf test/var');
             @mkdir('test/var/logs', 0777, true);
 
             $active_modules = module::$active;
@@ -106,18 +106,18 @@ class Gallery_Unit_Test_Controller extends Controller
             $db->clear_cache();
 
             // Rest the cascading class path
-            $config->set("core", $config->load("core"));
+            $config->set('core', $config->load('core'));
 
             // Install the active modules
             // Force gallery and user to be installed first to resolve dependencies.
-            module::install("gallery");
+            module::install('gallery');
             module::load_modules();
 
-            module::install("user");
-            module::activate("user");
+            module::install('user');
+            module::activate('user');
             $modules = $paths = array();
             foreach (module::available() as $module_name => $unused) {
-                if (in_array($module_name, array("gallery", "user"))) {
+                if (in_array($module_name, array('gallery', 'user'))) {
                     $paths[] = MODPATH . "{$module_name}/tests";
                     continue;
                 }
@@ -133,7 +133,7 @@ class Gallery_Unit_Test_Controller extends Controller
             // Trigger late-binding install actions (defined in gallery_event::user_login)
             graphics::choose_default_toolkit();
 
-            $filter = count($_SERVER["argv"]) > 2 ? $_SERVER["argv"][2] : null;
+            $filter = count($_SERVER['argv']) > 2 ? $_SERVER['argv'][2] : null;
             $unit_test = new Unit_Test($modules, $filter);
             print $unit_test;
         } catch (ORM_Validation_Exception $e) {
@@ -153,7 +153,7 @@ class Gallery_Unit_Test_Controller extends Controller
         } else {
             $failed = 0;
             foreach ($unit_test->stats as $class => $stats) {
-                $failed += ($stats["failed"] + $stats["errors"]);
+                $failed += ($stats['failed'] + $stats['errors']);
             }
         }
         if (PHP_SAPI == 'cli') {

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,29 +21,29 @@ class rss_block_Core
 {
     public static function get_site_list()
     {
-        return array("rss_feeds" => t("Available RSS feeds"));
+        return array('rss_feeds' => t('Available RSS feeds'));
     }
 
     public static function get($block_id, $theme)
     {
-        $block = "";
+        $block = '';
         switch ($block_id) {
-    case "rss_feeds":
+    case 'rss_feeds':
       $feeds = array();
       foreach (module::active() as $module) {
           $class_name = "{$module->name}_rss";
-          if (class_exists($class_name) && method_exists($class_name, "available_feeds")) {
+          if (class_exists($class_name) && method_exists($class_name, 'available_feeds')) {
               $feeds = array_merge(
               $feeds,
-            call_user_func(array($class_name, "available_feeds"), $theme->item(), $theme->tag())
+            call_user_func(array($class_name, 'available_feeds'), $theme->item(), $theme->tag())
           );
           }
       }
       if (!empty($feeds)) {
           $block = new Block();
-          $block->css_id = "g-rss";
-          $block->title = t("Available RSS feeds");
-          $block->content = new View("rss_block.html");
+          $block->css_id = 'g-rss';
+          $block->title = t('Available RSS feeds');
+          $block->content = new View('rss_block.html');
           $block->content->feeds = $feeds;
       }
       break;

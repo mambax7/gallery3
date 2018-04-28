@@ -17,11 +17,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-define("DOCROOT", dirname(dirname(__FILE__)) . "/");
-define("VARPATH", DOCROOT . "var/");
-define("SYSPATH", "DEFINED_TO_SOMETHING_SO_THAT_WE_CAN_KEEP_CONSISTENT_PREAMBLES_IN_THE_INSTALLER");
+define('DOCROOT', dirname(dirname(__FILE__)) . '/');
+define('VARPATH', DOCROOT . 'var/');
+define('SYSPATH', 'DEFINED_TO_SOMETHING_SO_THAT_WE_CAN_KEEP_CONSISTENT_PREAMBLES_IN_THE_INSTALLER');
 
-if (version_compare(PHP_VERSION, "5.2.3", "<")) {
+if (version_compare(PHP_VERSION, '5.2.3', '<')) {
     print "Gallery 3 requires PHP 5.2.3 or newer.\n";
     exit;
 }
@@ -29,11 +29,11 @@ if (version_compare(PHP_VERSION, "5.2.3", "<")) {
 // Turn off session.use_trans_sid -- that feature attempts to inject session ids
 // into generated URLs and forms, but it doesn't interoperate will with Gallery's
 // Ajax code.
-ini_set("session.use_trans_sid", false);
+ini_set('session.use_trans_sid', false);
 
-require(DOCROOT . "installer/installer.php");
-if (PHP_SAPI == "cli") {
-    include("cli.php");
+require(DOCROOT . 'installer/installer.php');
+if (PHP_SAPI == 'cli') {
+    include('cli.php');
 } else {
-    include("web.php");
+    include('web.php');
 }

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
+<?php defined('SYSPATH') or die('No direct script access.') ?>
 <ul>
 <?php foreach ($photos as $photo): ?>
   <li class="g-item g-photo">
@@ -10,5 +10,5 @@
 <?php endforeach ?>
 </ul>
 <p>
-  <?= t("Recent photos added to your Gallery") ?>
+  <?= t('Recent photos added to your Gallery') ?>
 </p>

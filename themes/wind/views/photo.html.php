@@ -1,6 +1,6 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
+<?php defined('SYSPATH') or die('No direct script access.') ?>
 
-<?php if (access::can("view_full", $theme->item())): ?>
+<?php if (access::can('view_full', $theme->item())): ?>
 <!-- Use javascript to show the full size as an overlay on the current page -->
 <script type="text/javascript">
   $(document).ready(function() {
@@ -14,7 +14,7 @@
     // so that the full size view isn't distorted.
     $("#g-photo").on("gallery.change", function() {
       $.ajax({
-        url: "<?= url::site("items/dimensions/" . $theme->item()->id) ?>",
+        url: "<?= url::site('items/dimensions/' . $theme->item()->id) ?>",
         dataType: "json",
         success: function(data, textStatus) {
           full_dims = data.full;
@@ -32,11 +32,11 @@
 
   <div id="g-photo">
     <?= $theme->resize_top($item) ?>
-    <?php if (access::can("view_full", $item)): ?>
-    <a href="<?= $item->file_url() ?>" class="g-fullsize-link" title="<?= t("View full size")->for_html_attr() ?>">
+    <?php if (access::can('view_full', $item)): ?>
+    <a href="<?= $item->file_url() ?>" class="g-fullsize-link" title="<?= t('View full size')->for_html_attr() ?>">
       <?php endif ?>
-      <?= $item->resize_img(array("id" => "g-item-id-{$item->id}", "class" => "g-resize")) ?>
-      <?php if (access::can("view_full", $item)): ?>
+      <?= $item->resize_img(array('id' => "g-item-id-{$item->id}", 'class' => 'g-resize')) ?>
+      <?php if (access::can('view_full', $item)): ?>
     </a>
     <?php endif ?>
     <?= $theme->resize_bottom($item) ?>

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
+<?php defined('SYSPATH') or die('No direct script access.') ?>
 <script type="text/javascript">
   $("#g-add-tag-form").ready(function() {
     var url = $("#g-tag-cloud-autocomplete-url").attr("href");
@@ -22,7 +22,7 @@
 </script>
 <div id="g-tag-cloud">
    <a id="g-tag-cloud-autocomplete-url" style="display: none"
-      href="<?= url::site("tags/autocomplete") ?>"></a>
+      href="<?= url::site('tags/autocomplete') ?>"></a>
   <?= $cloud ?>
 </div>
 <?= $form ?>

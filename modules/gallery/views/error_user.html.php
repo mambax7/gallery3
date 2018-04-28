@@ -1,5 +1,5 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
-<?php if (!function_exists("t")) {
+<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php if (!function_exists('t')) {
     function t($msg)
     {
         return $msg;
@@ -42,7 +42,7 @@
       }
     </style>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title><?= t("Something went wrong!") ?></title>
+    <title><?= t('Something went wrong!') ?></title>
   </head>
   <body>
     <div class="big_box" id="framework_error">
@@ -51,13 +51,13 @@
       </div>
       <div class="title">
         <h1>
-          <?= t("Dang...  Something went wrong!") ?>
+          <?= t('Dang...  Something went wrong!') ?>
         </h1>
         <h2>
           <?= t("We tried really hard, but it's broken.") ?>
         </h2>
         <p>
-          <?= t("Talk to your Gallery administrator for help fixing this!") ?>
+          <?= t('Talk to your Gallery administrator for help fixing this!') ?>
         </p>
       </div>
     </div>

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -23,7 +23,7 @@ class InPlaceEdit_Core
     private $messages = array();
     private $callback = array();
     private $initial_value;
-    private $action = "";
+    private $action = '';
     private $errors;
     private $form;
 
@@ -31,8 +31,8 @@ class InPlaceEdit_Core
     {
         $instance = new InPlaceEdit();
         $instance->initial_value = $initial_value;
-        $instance->form = array("input" => $initial_value);
-        $instance->errors = array("input" => "");
+        $instance->form = array('input' => $initial_value);
+        $instance->errors = array('input' => '');
 
         return $instance;
     }
@@ -66,11 +66,11 @@ class InPlaceEdit_Core
         $post = Validation::factory($_POST);
 
         if (!empty($this->callback)) {
-            $post->add_callbacks("input", $this->callback);
+            $post->add_callbacks('input', $this->callback);
         }
 
         foreach ($this->rules as $rule) {
-            $post->add_rules("input", $rule);
+            $post->add_rules('input', $rule);
         }
 
         $valid = $post->validate();
@@ -81,7 +81,7 @@ class InPlaceEdit_Core
 
     public function render()
     {
-        $v = new View("in_place_edit.html");
+        $v = new View('in_place_edit.html');
         $v->action = $this->action;
         $v->form = $this->form;
         $v->errors = $this->errors;
@@ -95,6 +95,6 @@ class InPlaceEdit_Core
 
     public function value()
     {
-        return $this->form["input"];
+        return $this->form['input'];
     }
 }

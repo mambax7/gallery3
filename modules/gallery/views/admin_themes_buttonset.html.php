@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
+<?php defined('SYSPATH') or die('No direct script access.') ?>
 <ul class="g-buttonset">
   <li>
     <a target="_blank"
@@ -29,7 +29,7 @@
        href="#"
        <?php endif ?>
        >
-      <?= t("info") ?>
+      <?= t('info') ?>
     </a>
   </li>
   <li>
@@ -42,7 +42,7 @@
        href="#"
        <?php endif ?>
        >
-      <?= t("discuss") ?>
+      <?= t('discuss') ?>
     </a>
   </li>
 </ul>

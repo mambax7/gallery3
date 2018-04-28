@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -26,7 +26,7 @@ class ORM extends ORM_Core
     public static function factory($model, $id=null)
     {
         if ($id && !is_int($id) && !is_string($id)) {
-            throw new Exception("@todo ORM::factory requires integer ids");
+            throw new Exception('@todo ORM::factory requires integer ids');
         }
         return ORM_Core::factory($model, (int) $id);
     }

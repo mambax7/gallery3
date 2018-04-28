@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -65,7 +65,7 @@ class View extends View_Core
     public function __construct($name = null, $data = null, $type = null)
     {
         parent::__construct($name, $data, $type);
-        $this->set_global("csrf", access::csrf_token());
+        $this->set_global('csrf', access::csrf_token());
     }
 
     /**
@@ -80,12 +80,12 @@ class View extends View_Core
             $this->kohana_local_data = array_merge(self::$global_data, $this->kohana_local_data);
             return parent::render($print, $renderer, $modifier);
         } catch (ORM_Validation_Exception $e) {
-            Kohana_Log::add("error", $e->getMessage() . "\n" . $e->getTraceAsString());
-            Kohana_Log::add("error", "Validation errors: " . print_r($e->validation->errors(), 1));
-            return "";
+            Kohana_Log::add('error', $e->getMessage() . "\n" . $e->getTraceAsString());
+            Kohana_Log::add('error', 'Validation errors: ' . print_r($e->validation->errors(), 1));
+            return '';
         } catch (Exception $e) {
-            Kohana_Log::add("error", $e->getMessage() . "\n" . $e->getTraceAsString());
-            return "";
+            Kohana_Log::add('error', $e->getMessage() . "\n" . $e->getTraceAsString());
+            return '';
         }
     }
 }

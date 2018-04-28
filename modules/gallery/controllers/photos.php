@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -27,14 +27,15 @@ class Photos_Controller extends Items_Controller
             throw new Kohana_404_Exception();
         }
 
-        access::required("view", $photo);
+        access::required('view', $photo);
 
-        $template = new Theme_View("page.html", "item", "photo");
-        $template->set_global(array("item" => $photo,
-                                "children" => array(),
-                                "children_count" => 0));
+        $template = new Theme_View('page.html', 'item', 'photo');
+        $template->set_global(array(
+                                  'item'           => $photo,
+                                  'children'       => array(),
+                                  'children_count' => 0));
         $template->set_global(item::get_display_context($photo));
-        $template->content = new View("photo.html");
+        $template->content = new View('photo.html');
 
         $photo->increment_view_count();
 
@@ -44,9 +45,9 @@ class Photos_Controller extends Items_Controller
     public function update($photo_id)
     {
         access::verify_csrf();
-        $photo = ORM::factory("item", $photo_id);
-        access::required("view", $photo);
-        access::required("edit", $photo);
+        $photo = ORM::factory('item', $photo_id);
+        access::required('view', $photo);
+        access::required('edit', $photo);
 
         $form = photo::get_edit_form($photo);
         try {
@@ -54,7 +55,7 @@ class Photos_Controller extends Items_Controller
             $photo->title = $form->edit_item->title->value;
             $photo->description = $form->edit_item->description->value;
             $photo->slug = $form->edit_item->slug->value;
-            $photo->name = $form->edit_item->inputs["name"]->value;
+            $photo->name = $form->edit_item->inputs['name']->value;
             $photo->validate();
         } catch (ORM_Validation_Exception $e) {
             // Translate ORM validation errors into form error messages
@@ -66,30 +67,30 @@ class Photos_Controller extends Items_Controller
 
         if ($valid) {
             $photo->save();
-            module::event("item_edit_form_completed", $photo, $form);
+            module::event('item_edit_form_completed', $photo, $form);
 
-            log::success("content", "Updated photo", "<a href=\"{$photo->url()}\">view</a>");
+            log::success('content', 'Updated photo', "<a href=\"{$photo->url()}\">view</a>");
             message::success(
-        t("Saved photo %photo_title", array("photo_title" => html::purify($photo->title)))
+        t('Saved photo %photo_title', array('photo_title' => html::purify($photo->title)))
       );
 
             if ($form->from_id->value == $photo->id) {
                 // Use the new url; it might have changed.
-                json::reply(array("result" => "success", "location" => $photo->url()));
+                json::reply(array('result' => 'success', 'location' => $photo->url()));
             } else {
                 // Stay on the same page
-                json::reply(array("result" => "success"));
+                json::reply(array('result' => 'success'));
             }
         } else {
-            json::reply(array("result" => "error", "html" => (string)$form));
+            json::reply(array('result' => 'error', 'html' => (string)$form));
         }
     }
 
     public function form_edit($photo_id)
     {
-        $photo = ORM::factory("item", $photo_id);
-        access::required("view", $photo);
-        access::required("edit", $photo);
+        $photo = ORM::factory('item', $photo_id);
+        access::required('view', $photo);
+        access::required('edit', $photo);
 
         print photo::get_edit_form($photo);
     }

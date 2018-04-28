@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -29,24 +29,24 @@ class data_rest_Core
         $item = rest::resolve($request->url);
 
         $p = $request->params;
-        if (!isset($p->size) || !in_array($p->size, array("thumb", "resize", "full"))) {
-            throw new Rest_Exception("Bad Request", 400, array("errors" => array("size" => "invalid")));
+        if (!isset($p->size) || !in_array($p->size, array('thumb', 'resize', 'full'))) {
+            throw new Rest_Exception('Bad Request', 400, array('errors' => array('size' => 'invalid')));
         }
 
         // Note: this code is roughly duplicated in file_proxy, so if you modify this, please look to
         // see if you should make the same change there as well.
 
-        if ($p->size == "full") {
+        if ($p->size == 'full') {
             if ($item->is_album()) {
                 throw new Kohana_404_Exception();
             }
-            access::required("view_full", $item);
+            access::required('view_full', $item);
             $file = $item->file_path();
-        } elseif ($p->size == "resize") {
-            access::required("view", $item);
+        } elseif ($p->size == 'resize') {
+            access::required('view', $item);
             $file = $item->resize_path();
         } else {
-            access::required("view", $item);
+            access::required('view', $item);
             $file = $item->thumb_path();
         }
 
@@ -54,10 +54,10 @@ class data_rest_Core
             throw new Kohana_404_Exception();
         }
 
-        header("Content-Length: " . filesize($file));
+        header('Content-Length: ' . filesize($file));
 
         if (isset($p->m)) {
-            header("Pragma:");
+            header('Pragma:');
             // Check that the content hasn't expired or it wasn't changed since cached
             expires::check(2592000, $item->updated);
 
@@ -68,8 +68,8 @@ class data_rest_Core
         Session::instance()->abort_save();
 
         // Dump out the image.  If the item is a movie or album, then its thumbnail will be a JPG.
-        if (($item->is_movie() || $item->is_album()) && $p->size == "thumb") {
-            header("Content-Type: image/jpeg");
+        if (($item->is_movie() || $item->is_album()) && $p->size == 'thumb') {
+            header('Content-Type: image/jpeg');
         } else {
             header("Content-Type: $item->mime_type");
         }
@@ -79,7 +79,7 @@ class data_rest_Core
         } else {
             Kohana::close_buffers(false);
 
-            if (isset($p->encoding) && $p->encoding == "base64") {
+            if (isset($p->encoding) && $p->encoding == 'base64') {
                 print base64_encode(file_get_contents($file));
             } else {
                 readfile($file);
@@ -93,8 +93,8 @@ class data_rest_Core
 
     public static function resolve($id)
     {
-        $item = ORM::factory("item", $id);
-        if (!access::can("view", $item)) {
+        $item = ORM::factory('item', $id);
+        if (!access::can('view', $item)) {
             throw new Kohana_404_Exception();
         }
         return $item;
@@ -102,9 +102,9 @@ class data_rest_Core
 
     public static function url($item, $size)
     {
-        if ($size == "full") {
+        if ($size == 'full') {
             $file = $item->file_path();
-        } elseif ($size == "resize") {
+        } elseif ($size == 'resize') {
             $file = $item->resize_path();
         } else {
             $file = $item->thumb_path();

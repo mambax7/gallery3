@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,24 +21,24 @@ class image_block_block_Core
 {
     public static function get_site_list()
     {
-        return array("random_image" => t("Random image"));
+        return array('random_image' => t('Random image'));
     }
 
     public static function get($block_id, $theme)
     {
-        $block = "";
+        $block = '';
         switch ($block_id) {
-    case "random_image":
+    case 'random_image':
       // The random_query approach is flawed and doesn't always return a
       // result when there actually is one. Retry a *few* times.
       // @todo Consider another fallback if further optimizations are necessary.
-      $image_count = module::get_var("image_block", "image_count");
+      $image_count = module::get_var('image_block', 'image_count');
       $items = array();
       for ($i = 0; $i < $image_count; $i++) {
           $attempts = 0;
           $item = null;
           do {
-              $item = item::random_query()->where("type", "!=", "album")->find_all(1)->current();
+              $item = item::random_query()->where('type', '!=', 'album')->find_all(1)->current();
           } while (!$item && $attempts++ < 3);
           if ($item) {
               $items[] = $item;
@@ -46,9 +46,9 @@ class image_block_block_Core
       }
       if ($items) {
           $block = new Block();
-          $block->css_id = "g-image-block";
-          $block->title = t2("Random image", "Random images", $image_count);
-          $block->content = new View("image_block_block.html");
+          $block->css_id = 'g-image-block';
+          $block->title = t2('Random image', 'Random images', $image_count);
+          $block->content = new View('image_block_block.html');
           $block->content->items = $items;
       }
       break;

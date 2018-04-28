@@ -312,15 +312,15 @@ class Image_GD_Driver extends Image_Driver
     public function composite($properties)
     {
         switch ($properties['mime']) {
-            case "image/jpeg":
+            case 'image/jpeg':
                 $overlay_img = imagecreatefromjpeg($properties['overlay_file']);
             break;
 
-            case "image/gif":
+            case 'image/gif':
                 $overlay_img = imagecreatefromgif($properties['overlay_file']);
             break;
 
-            case "image/png":
+            case 'image/png':
                 $overlay_img = imagecreatefrompng($properties['overlay_file']);
             break;
         }

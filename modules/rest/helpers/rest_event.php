@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -26,8 +26,8 @@ class rest_event
     public static function user_before_delete($user)
     {
         db::build()
-      ->delete("user_access_keys")
-       ->where("id", "=", $user->id)
+      ->delete('user_access_keys')
+       ->where('id', '=', $user->id)
        ->execute();
     }
 
@@ -35,7 +35,7 @@ class rest_event
     public static function change_provider($new_provider)
     {
         db::build()
-      ->delete("user_access_keys")
+      ->delete('user_access_keys')
       ->execute();
     }
 
@@ -45,7 +45,7 @@ class rest_event
      */
     public static function user_add_form_admin_completed($user, $form)
     {
-        $key = ORM::factory("user_access_key");
+        $key = ORM::factory('user_access_key');
         $key->user_id = $user->id;
         $key->access_key = random::hash();
         $key->save();
@@ -64,8 +64,8 @@ class rest_event
      */
     public static function _get_access_key_form($user, $form)
     {
-        $key = ORM::factory("user_access_key")
-      ->where("user_id", "=", $user->id)
+        $key = ORM::factory('user_access_key')
+      ->where('user_id', '=', $user->id)
       ->find();
 
         if (!$key->loaded()) {
@@ -74,11 +74,11 @@ class rest_event
             $key->save();
         }
 
-        $form->edit_user->input("user_access_key")
+        $form->edit_user->input('user_access_key')
       ->value($key->access_key)
-      ->readonly("readonly")
-      ->class("g-form-static")
-      ->label(t("Remote access key"));
+      ->readonly('readonly')
+      ->class('g-form-static')
+      ->label(t('Remote access key'));
     }
 
     public static function show_user_profile($data)
@@ -93,9 +93,9 @@ class rest_event
             return;
         }
 
-        $view = new View("user_profile_rest.html");
-        $key = ORM::factory("user_access_key")
-      ->where("user_id", "=", $data->user->id)
+        $view = new View('user_profile_rest.html');
+        $key = ORM::factory('user_access_key')
+      ->where('user_id', '=', $data->user->id)
       ->find();
 
         if (!$key->loaded()) {
@@ -104,6 +104,6 @@ class rest_event
             $key->save();
         }
         $view->rest_key = $key->access_key;
-        $data->content[] = (object)array("title" => t("REST API"), "view" => $view);
+        $data->content[] = (object)array('title' => t('REST API'), 'view' => $view);
     }
 }

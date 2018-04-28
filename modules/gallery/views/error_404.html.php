@@ -1,15 +1,15 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
+<?php defined('SYSPATH') or die('No direct script access.') ?>
 <div id="g-error">
   <h1>
-    <?= t("Dang...  Page not found!") ?>
+    <?= t('Dang...  Page not found!') ?>
   </h1>
   <?php if ($is_guest): ?>
     <h2>
       <?= t("Hey wait, you're not signed in yet!") ?>
     </h2>
     <p>
-       <?= t("Maybe the page exists, but is only visible to authorized users.") ?>
-       <?= t("Please sign in to find out.") ?>
+       <?= t('Maybe the page exists, but is only visible to authorized users.') ?>
+       <?= t('Please sign in to find out.') ?>
     </p>
     <?= $login_form ?>
     <script type="text/javascript">
@@ -19,8 +19,8 @@
     </script>
   <?php else: ?>
     <p>
-      <?= t("Maybe the page exists, but is only visible to authorized users.") ?>
-      <?= t("If you think this is an error, talk to your Gallery administrator!") ?>
+      <?= t('Maybe the page exists, but is only visible to authorized users.') ?>
+      <?= t('If you think this is an error, talk to your Gallery administrator!') ?>
     </p>
  <?php endif; ?>
 </div>

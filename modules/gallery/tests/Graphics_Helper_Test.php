@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -24,11 +24,11 @@ class Graphics_Helper_Test extends Gallery_Unit_Test_Case
         $photo = test::random_photo();
         // Check that the images were correctly resized
         $this->assert_equal(
-        array(640, 480, "image/jpeg", "jpg"),
+        array(640, 480, 'image/jpeg', 'jpg'),
                         photo::get_file_metadata($photo->resize_path())
     );
         $this->assert_equal(
-        array(200, 150, "image/jpeg", "jpg"),
+        array(200, 150, 'image/jpeg', 'jpg'),
                         photo::get_file_metadata($photo->thumb_path())
     );
         // Check that the items table got updated
@@ -44,7 +44,7 @@ class Graphics_Helper_Test extends Gallery_Unit_Test_Case
         $movie = test::random_movie();
         // Check that the image was correctly resized
         $this->assert_equal(
-        array(200, 160, "image/jpeg", "jpg"),
+        array(200, 160, 'image/jpeg', 'jpg'),
                         photo::get_file_metadata($movie->thumb_path())
     );
         // Check that the items table got updated
@@ -71,19 +71,19 @@ class Graphics_Helper_Test extends Gallery_Unit_Test_Case
 
     public function generate_album_cover_from_png_test()
     {
-        $input_file = MODPATH . "gallery/tests/test.jpg";
-        $output_file = TMPPATH . test::random_name() . ".png";
+        $input_file = MODPATH . 'gallery/tests/test.jpg';
+        $output_file = TMPPATH . test::random_name() . '.png';
         gallery_graphics::resize($input_file, $output_file, null, null);
 
         $album = test::random_album();
         $photo = test::random_photo_unsaved($album);
         $photo->set_data_file($output_file);
-        $photo->name = "album_cover_from_png.png";
+        $photo->name = 'album_cover_from_png.png';
         $photo->save();
         $album->reload();
         // Check that the image was correctly resized and converted to jpg
         $this->assert_equal(
-        array(200, 150, "image/jpeg", "jpg"),
+        array(200, 150, 'image/jpeg', 'jpg'),
                         photo::get_file_metadata($album->thumb_path())
     );
         // Check that the items table got updated
@@ -97,7 +97,7 @@ class Graphics_Helper_Test extends Gallery_Unit_Test_Case
         $album = test::random_album();
         // Check that the album cover is the missing image placeholder
         $this->assert_same(
-        file_get_contents(MODPATH . "gallery/images/missing_album_cover.jpg"),
+        file_get_contents(MODPATH . 'gallery/images/missing_album_cover.jpg'),
                        file_get_contents($album->thumb_path())
     );
         // Check that the items table got updated with new metadata
@@ -122,11 +122,11 @@ class Graphics_Helper_Test extends Gallery_Unit_Test_Case
         }
         // Check that the images got replaced with missing image placeholders
         $this->assert_same(
-        file_get_contents(MODPATH . "gallery/images/missing_photo.jpg"),
+        file_get_contents(MODPATH . 'gallery/images/missing_photo.jpg'),
                        file_get_contents($photo->resize_path())
     );
         $this->assert_same(
-        file_get_contents(MODPATH . "gallery/images/missing_photo.jpg"),
+        file_get_contents(MODPATH . 'gallery/images/missing_photo.jpg'),
                        file_get_contents($photo->thumb_path())
     );
         // Check that the items table got updated with new metadata
@@ -148,7 +148,7 @@ class Graphics_Helper_Test extends Gallery_Unit_Test_Case
         graphics::generate($movie);
         // Check that the image got replaced with a missing image placeholder
         $this->assert_same(
-        file_get_contents(MODPATH . "gallery/images/missing_movie.jpg"),
+        file_get_contents(MODPATH . 'gallery/images/missing_movie.jpg'),
                        file_get_contents($movie->thumb_path())
     );
         // Check that the items table got updated with new metadata
@@ -176,7 +176,7 @@ class Graphics_Helper_Test extends Gallery_Unit_Test_Case
         }
         // Check that the image got replaced with a missing image placeholder
         $this->assert_same(
-        file_get_contents(MODPATH . "gallery/images/missing_photo.jpg"),
+        file_get_contents(MODPATH . 'gallery/images/missing_photo.jpg'),
                        file_get_contents($album->thumb_path())
     );
         // Check that the items table got updated with new metadata

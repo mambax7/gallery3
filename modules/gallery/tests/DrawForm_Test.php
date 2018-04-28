@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,121 +21,110 @@ class DrawForm_Test extends Gallery_Unit_Test_Case
 {
     public function no_group_test()
     {
-        $form = new Forge("test/controller", "", "post", array("id" => "g-test-group-form"));
-        $form->input("title")->label(t("Title"));
-        $form->textarea("description")->label(t("Text Area"));
-        $form->submit("")->value(t("Submit"));
+        $form = new Forge('test/controller', '', 'post', array('id' => 'g-test-group-form'));
+        $form->input('title')->label(t('Title'));
+        $form->textarea('description')->label(t('Text Area'));
+        $form->submit('')->value(t('Submit'));
 
         $csrf = access::csrf_token();
-        $expected = "<form action=\"http://./index.php/test/controller\" method=\"post\" " .
-                      "id=\"g-test-group-form\">\n" .
-                "<input type=\"hidden\" name=\"csrf\" value=\"$csrf\"  />" .
-                "  <ul>\n" .
-                "  <li>\n" .
-                "    <label for=\"title\" >Title</label>\n" .
-                "    <input type=\"text\" name=\"title\" value=\"\" " .
-                            "class=\"textbox\"  />\n" .
-                "  </li>\n" .
-                "  <li>\n" .
-                "    <label for=\"description\" >Text Area</label>\n" .
-                "    <textarea name=\"description\" rows=\"\" cols=\"\" " .
-                              "class=\"textarea\" ></textarea>\n" .
-                "  </li>\n" .
-                "  <li>\n" .
-                "    <input type=\"submit\" value=\"Submit\" class=\"submit\"  />\n" .
-                "  </li>\n" .
-                "  </ul>\n" .
-                "</form>";
+        $expected = '<form action="http://./index.php/test/controller" method="post" ' .
+                    "id=\"g-test-group-form\">\n" .
+                    "<input type=\"hidden\" name=\"csrf\" value=\"$csrf\"  />" .
+                    "  <ul>\n" .
+                    "  <li>\n" .
+                    "    <label for=\"title\" >Title</label>\n" . '    <input type="text" name="title" value="" ' .
+                    "class=\"textbox\"  />\n" .
+                    "  </li>\n" .
+                    "  <li>\n" .
+                    "    <label for=\"description\" >Text Area</label>\n" . '    <textarea name="description" rows="" cols="" ' .
+                    "class=\"textarea\" ></textarea>\n" .
+                    "  </li>\n" .
+                    "  <li>\n" .
+                    "    <input type=\"submit\" value=\"Submit\" class=\"submit\"  />\n" .
+                    "  </li>\n" .
+                    "  </ul>\n" . '</form>';
         $this->assert_same($expected, (string) $form);
     }
 
     public function group_test()
     {
-        $form = new Forge("test/controller", "", "post", array("id" => "g-test-group-form"));
-        $group = $form->group("test_group")->label(t("Test Group"));
-        $group->input("title")->label(t("Title"));
-        $group->textarea("description")->label(t("Text Area"));
-        $group->submit("")->value(t("Submit"));
+        $form = new Forge('test/controller', '', 'post', array('id' => 'g-test-group-form'));
+        $group = $form->group('test_group')->label(t('Test Group'));
+        $group->input('title')->label(t('Title'));
+        $group->textarea('description')->label(t('Text Area'));
+        $group->submit('')->value(t('Submit'));
 
         $csrf = access::csrf_token();
-        $expected = "<form action=\"http://./index.php/test/controller\" method=\"post\" " .
-                      "id=\"g-test-group-form\">\n" .
-                "<input type=\"hidden\" name=\"csrf\" value=\"$csrf\"  />" .
-                "  <fieldset>\n" .
-                "    <legend>Test Group</legend>\n" .
-                "    <ul>\n" .
-                "      <li>\n" .
-                "        <label for=\"title\" >Title</label>\n" .
-                "        <input type=\"text\" name=\"title\" value=\"\" " .
-                            "class=\"textbox\"  />\n" .
-                "      </li>\n" .
-                "      <li>\n" .
-                "        <label for=\"description\" >Text Area</label>\n" .
-                "        <textarea name=\"description\" rows=\"\" cols=\"\" " .
-                              "class=\"textarea\" ></textarea>\n" .
-                "      </li>\n" .
-                "      <li>\n" .
-                "        <input type=\"submit\" value=\"Submit\" class=\"submit\"  />\n" .
-                "      </li>\n" .
-                "    </ul>\n" .
-                "  </fieldset>\n" .
-                "</form>";
+        $expected = '<form action="http://./index.php/test/controller" method="post" ' .
+                    "id=\"g-test-group-form\">\n" .
+                    "<input type=\"hidden\" name=\"csrf\" value=\"$csrf\"  />" .
+                    "  <fieldset>\n" .
+                    "    <legend>Test Group</legend>\n" .
+                    "    <ul>\n" .
+                    "      <li>\n" .
+                    "        <label for=\"title\" >Title</label>\n" . '        <input type="text" name="title" value="" ' .
+                    "class=\"textbox\"  />\n" .
+                    "      </li>\n" .
+                    "      <li>\n" .
+                    "        <label for=\"description\" >Text Area</label>\n" . '        <textarea name="description" rows="" cols="" ' .
+                    "class=\"textarea\" ></textarea>\n" .
+                    "      </li>\n" .
+                    "      <li>\n" .
+                    "        <input type=\"submit\" value=\"Submit\" class=\"submit\"  />\n" .
+                    "      </li>\n" .
+                    "    </ul>\n" .
+                    "  </fieldset>\n" . '</form>';
         $this->assert_same($expected, (string) $form);
     }
 
     public function form_script_test()
     {
-        $form = new Forge("test/controller", "", "post", array("id" => "g-test-group-form"));
-        $group = $form->group("test_group")->label(t("Test Group"));
-        $group->input("title")->label(t("Title"));
-        $group->textarea("description")->label(t("Text Area"));
-        $form->script("")
-      ->url(url::file("test.js"))
+        $form = new Forge('test/controller', '', 'post', array('id' => 'g-test-group-form'));
+        $group = $form->group('test_group')->label(t('Test Group'));
+        $group->input('title')->label(t('Title'));
+        $group->textarea('description')->label(t('Text Area'));
+        $form->script('')
+      ->url(url::file('test.js'))
       ->text("alert('Test Javascript');");
-        $group->submit("")->value(t("Submit"));
+        $group->submit('')->value(t('Submit'));
 
         $csrf = access::csrf_token();
-        $expected = "<form action=\"http://./index.php/test/controller\" method=\"post\" " .
-                      "id=\"g-test-group-form\">\n" .
-                "<input type=\"hidden\" name=\"csrf\" value=\"$csrf\"  />" .
-                "  <fieldset>\n" .
-                "    <legend>Test Group</legend>\n" .
-                "    <ul>\n" .
-                "      <li>\n" .
-                "        <label for=\"title\" >Title</label>\n" .
-                "        <input type=\"text\" name=\"title\" value=\"\" " .
-                            "class=\"textbox\"  />\n" .
-                "      </li>\n" .
-                "      <li>\n" .
-                "        <label for=\"description\" >Text Area</label>\n" .
-                "        <textarea name=\"description\" rows=\"\" cols=\"\" " .
-                              "class=\"textarea\" ></textarea>\n" .
-                "      </li>\n" .
-                "      <li>\n" .
-                "        <input type=\"submit\" value=\"Submit\" class=\"submit\"  />\n" .
-                "      </li>\n" .
-                "    </ul>\n" .
-                "  </fieldset>\n" .
-                "<script type=\"text/javascript\" src=\"http://./test.js\"></script>\n\n" .
-                "<script type=\"text/javascript\">\n" .
-                "alert('Test Javascript');\n" .
-                "</script>\n" .
-                "</form>";
+        $expected = '<form action="http://./index.php/test/controller" method="post" ' .
+                    "id=\"g-test-group-form\">\n" .
+                    "<input type=\"hidden\" name=\"csrf\" value=\"$csrf\"  />" .
+                    "  <fieldset>\n" .
+                    "    <legend>Test Group</legend>\n" .
+                    "    <ul>\n" .
+                    "      <li>\n" .
+                    "        <label for=\"title\" >Title</label>\n" . '        <input type="text" name="title" value="" ' .
+                    "class=\"textbox\"  />\n" .
+                    "      </li>\n" .
+                    "      <li>\n" .
+                    "        <label for=\"description\" >Text Area</label>\n" . '        <textarea name="description" rows="" cols="" ' .
+                    "class=\"textarea\" ></textarea>\n" .
+                    "      </li>\n" .
+                    "      <li>\n" .
+                    "        <input type=\"submit\" value=\"Submit\" class=\"submit\"  />\n" .
+                    "      </li>\n" .
+                    "    </ul>\n" .
+                    "  </fieldset>\n" .
+                    "<script type=\"text/javascript\" src=\"http://./test.js\"></script>\n\n" .
+                    "<script type=\"text/javascript\">\n" .
+                    "alert('Test Javascript');\n" .
+                    "</script>\n" . '</form>';
         $this->assert_same($expected, (string) $form);
     }
 
     public function two_hiddens_test()
     {
-        $form = new Forge("test/controller", "", "post");
-        $form->hidden("HIDDEN_NAME")->value("HIDDEN_VALUE");
+        $form = new Forge('test/controller', '', 'post');
+        $form->hidden('HIDDEN_NAME')->value('HIDDEN_VALUE');
 
         $csrf = access::csrf_token();
         $expected = "<form action=\"http://./index.php/test/controller\" method=\"post\" class=\"form\">\n" .
-                "<input type=\"hidden\" name=\"csrf\" value=\"$csrf\"  />" .
-                "<input type=\"hidden\" name=\"HIDDEN_NAME\" value=\"HIDDEN_VALUE\"  />" .
+                "<input type=\"hidden\" name=\"csrf\" value=\"$csrf\"  />" . '<input type="hidden" name="HIDDEN_NAME" value="HIDDEN_VALUE"  />' .
                 "  <ul>\n" .
-                "  </ul>\n" .
-                "</form>";
+                "  </ul>\n" . '</form>';
         $this->assert_same($expected, (string) $form);
     }
 }

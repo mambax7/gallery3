@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,13 +21,12 @@ class Admin_Dashboard_Controller extends Admin_Controller
 {
     public function index()
     {
-        $view = new Admin_View("admin.html");
-        $view->page_title = t("Dashboard");
-        $view->content = new View("admin_dashboard.html");
-        $view->content->blocks = block_manager::get_html("dashboard_center");
-        $view->sidebar = "<div id=\"g-admin-dashboard-sidebar\">" .
-      block_manager::get_html("dashboard_sidebar") .
-      "</div>";
+        $view = new Admin_View('admin.html');
+        $view->page_title = t('Dashboard');
+        $view->content = new View('admin_dashboard.html');
+        $view->content->blocks = block_manager::get_html('dashboard_center');
+        $view->sidebar = '<div id="g-admin-dashboard-sidebar">' .
+                         block_manager::get_html('dashboard_sidebar') . '</div>';
         $view->content->obsolete_modules_message = module::get_obsolete_modules_message();
         print $view;
     }
@@ -38,52 +37,52 @@ class Admin_Dashboard_Controller extends Admin_Controller
 
         $form = gallery_block::get_add_block_form();
         if ($form->validate()) {
-            list($module_name, $id) = explode(":", $form->add_block->id->value);
+            list($module_name, $id) = explode(':', $form->add_block->id->value);
             $available = block_manager::get_available_admin_blocks();
 
             if ($form->add_block->center->value) {
-                block_manager::add("dashboard_center", $module_name, $id);
+                block_manager::add('dashboard_center', $module_name, $id);
                 message::success(
           t(
-              "Added <b>%title</b> block to the dashboard center",
-            array("title" => $available["$module_name:$id"])
+              'Added <b>%title</b> block to the dashboard center',
+              array('title' => $available["$module_name:$id"])
           )
         );
             } else {
-                block_manager::add("dashboard_sidebar", $module_name, $id);
+                block_manager::add('dashboard_sidebar', $module_name, $id);
                 message::success(
           t(
-              "Added <b>%title</b> to the dashboard sidebar",
-            array("title" => $available["$module_name:$id"])
+              'Added <b>%title</b> to the dashboard sidebar',
+              array('title' => $available["$module_name:$id"])
           )
         );
             }
         }
-        url::redirect("admin/dashboard");
+        url::redirect('admin/dashboard');
     }
 
     public function remove_block($id)
     {
         access::verify_csrf();
 
-        $blocks_center = block_manager::get_active("dashboard_center");
-        $blocks_sidebar = block_manager::get_active("dashboard_sidebar");
+        $blocks_center = block_manager::get_active('dashboard_center');
+        $blocks_sidebar = block_manager::get_active('dashboard_sidebar');
 
         if (array_key_exists($id, $blocks_sidebar)) {
             $deleted = $blocks_sidebar[$id];
-            block_manager::remove("dashboard_sidebar", $id);
+            block_manager::remove('dashboard_sidebar', $id);
         } elseif (array_key_exists($id, $blocks_center)) {
             $deleted = $blocks_center[$id];
-            block_manager::remove("dashboard_center", $id);
+            block_manager::remove('dashboard_center', $id);
         }
 
         if (!empty($deleted)) {
             $available = block_manager::get_available_admin_blocks();
-            $title = $available[join(":", $deleted)];
-            message::success(t("Removed <b>%title</b> block", array("title" => $title)));
+            $title = $available[join(':', $deleted)];
+            message::success(t('Removed <b>%title</b> block', array('title' => $title)));
         }
 
-        url::redirect("admin");
+        url::redirect('admin');
     }
 
     public function reorder()
@@ -91,13 +90,13 @@ class Admin_Dashboard_Controller extends Admin_Controller
         access::verify_csrf();
 
         $active_set = array();
-        foreach (array("dashboard_sidebar", "dashboard_center") as $location) {
+        foreach (array('dashboard_sidebar', 'dashboard_center') as $location) {
             foreach (block_manager::get_active($location) as $id => $info) {
                 $active_set[$id] = $info;
             }
         }
 
-        foreach (array("dashboard_sidebar", "dashboard_center") as $location) {
+        foreach (array('dashboard_sidebar', 'dashboard_center') as $location) {
             $new_blocks = array();
             foreach (Input::instance()->get($location, array()) as $id) {
                 $new_blocks[$id] = $active_set[$id];

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,32 +21,32 @@ class Html_Helper_Test extends Gallery_Unit_Test_Case
 {
     public function clean_test()
     {
-        $safe_string = html::clean("hello <p  >world</p>");
+        $safe_string = html::clean('hello <p  >world</p>');
         $this->assert_equal(
-        "hello &lt;p  &gt;world&lt;/p&gt;",
-                        $safe_string
+            'hello &lt;p  &gt;world&lt;/p&gt;',
+            $safe_string
     );
         $this->assert_true($safe_string instanceof SafeString);
     }
 
     public function purify_test()
     {
-        $safe_string = html::purify("hello <p  >world</p>");
-        $expected = (class_exists("purifier") && method_exists("purifier", "purify"))
-      ? "hello <p>world</p>"
-      : "hello &lt;p  &gt;world&lt;/p&gt;";
+        $safe_string = html::purify('hello <p  >world</p>');
+        $expected = (class_exists('purifier') && method_exists('purifier', 'purify'))
+      ? 'hello <p>world</p>'
+      : 'hello &lt;p  &gt;world&lt;/p&gt;';
         $this->assert_equal($expected, $safe_string->unescaped());
         $this->assert_true($safe_string instanceof SafeString);
     }
 
     public function mark_clean_test()
     {
-        $safe_string = html::mark_clean("hello <p  >world</p>");
+        $safe_string = html::mark_clean('hello <p  >world</p>');
         $this->assert_true($safe_string instanceof SafeString);
         $safe_string_2 = html::clean($safe_string);
         $this->assert_equal(
-        "hello <p  >world</p>",
-                        $safe_string_2
+            'hello <p  >world</p>',
+            $safe_string_2
     );
     }
 
@@ -64,8 +64,8 @@ class Html_Helper_Test extends Gallery_Unit_Test_Case
         $safe_string = SafeString::of_safe_html("hello's <p  >world</p>");
         $safe_string = html::clean_attribute($safe_string);
         $this->assert_equal(
-        "hello&#039;s <p  >world</p>",
-                        $safe_string
+            'hello&#039;s <p  >world</p>',
+            $safe_string
     );
     }
 }

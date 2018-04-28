@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -104,7 +104,7 @@ class Menu_Element_Link extends Menu_Element
 {
     public function render()
     {
-        $view = new View(isset($this->view) ? $this->view : "menu_link.html");
+        $view = new View(isset($this->view) ? $this->view : 'menu_link.html');
         $view->menu = $this;
         return $view;
     }
@@ -129,7 +129,7 @@ class Menu_Element_Ajax_Link extends Menu_Element
 
     public function render()
     {
-        $view = new View(isset($this->view) ? $this->view : "menu_ajax_link.html");
+        $view = new View(isset($this->view) ? $this->view : 'menu_ajax_link.html');
         $view->menu = $this;
         return $view;
     }
@@ -142,7 +142,7 @@ class Menu_Element_Dialog extends Menu_Element
 {
     public function render()
     {
-        $view = new View(isset($this->view) ? $this->view : "menu_dialog.html");
+        $view = new View(isset($this->view) ? $this->view : 'menu_dialog.html');
         $view->menu = $this;
         return $view;
     }
@@ -163,25 +163,25 @@ class Menu_Core extends Menu_Element
     public static function factory($type)
     {
         switch ($type) {
-    case "link":
+    case 'link':
       return new Menu_Element_Link($type);
 
-    case "ajax_link":
+    case 'ajax_link':
       return new Menu_Element_Ajax_Link($type);
 
-    case "dialog":
+    case 'dialog':
       return new Menu_Element_Dialog($type);
 
-    case "root":
-      $menu = new Menu("root");
-      $menu->css_class("g-menu");
+    case 'root':
+      $menu = new Menu('root');
+      $menu->css_class('g-menu');
       return $menu;
 
-    case "submenu":
-      return new Menu("submenu");
+    case 'submenu':
+      return new Menu('submenu');
 
     default:
-      throw Exception("@todo UNKNOWN_MENU_TYPE");
+      throw Exception('@todo UNKNOWN_MENU_TYPE');
     }
     }
 
@@ -189,7 +189,7 @@ class Menu_Core extends Menu_Element
     {
         parent::__construct($type);
         $this->elements = array();
-        $this->is_root = $type == "root";
+        $this->is_root = $type == 'root';
     }
 
     /**
@@ -270,7 +270,7 @@ class Menu_Core extends Menu_Element
 
     public function render()
     {
-        $view = new View(isset($this->view) ? $this->view : "menu.html");
+        $view = new View(isset($this->view) ? $this->view : 'menu.html');
         $view->menu = $this;
         return $view;
     }

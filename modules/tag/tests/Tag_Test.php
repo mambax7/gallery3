@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,22 +21,22 @@ class Tag_Test extends Gallery_Unit_Test_Case
 {
     public function setup()
     {
-        ORM::factory("tag")->delete_all();
+        ORM::factory('tag')->delete_all();
     }
 
     public function create_tag_test()
     {
         $album = test::random_album();
 
-        tag::add($album, "tag1");
-        $tag = ORM::factory("tag")->where("name", "=", "tag1")->find();
+        tag::add($album, 'tag1');
+        $tag = ORM::factory('tag')->where('name', '=', 'tag1')->find();
         $this->assert_equal(1, $tag->count);
 
         // Make sure adding the tag again doesn't increase the count
-        tag::add($album, "tag1");
+        tag::add($album, 'tag1');
         $this->assert_equal(1, $tag->reload()->count);
 
-        tag::add(test::random_album(), "tag1");
+        tag::add(test::random_album(), 'tag1');
         $this->assert_equal(2, $tag->reload()->count);
     }
 
@@ -45,11 +45,11 @@ class Tag_Test extends Gallery_Unit_Test_Case
         $album1 = test::random_album();
         $album2 = test::random_album();
 
-        tag::add($album1, "tag1");
-        tag::add($album2, "tag2");
+        tag::add($album1, 'tag1');
+        tag::add($album2, 'tag2');
 
-        $tag1 = ORM::factory("tag")->where("name", "=", "tag1")->find();
-        $tag1->name = "tag2";
+        $tag1 = ORM::factory('tag')->where('name', '=', 'tag1')->find();
+        $tag1->name = 'tag2';
         $tag1->save();
 
         // Tags should be merged; $tag2 should be deleted
@@ -58,18 +58,18 @@ class Tag_Test extends Gallery_Unit_Test_Case
         $this->assert_equal(2, $tag1->count);
         $this->assert_true($tag1->has($album1));
         $this->assert_true($tag1->has($album2));
-        $this->assert_equal(1, ORM::factory("tag")->count_all());
+        $this->assert_equal(1, ORM::factory('tag')->count_all());
     }
 
     public function rename_merge_tag_with_same_items_test()
     {
         $album = test::random_album();
 
-        tag::add($album, "tag1");
-        tag::add($album, "tag2");
+        tag::add($album, 'tag1');
+        tag::add($album, 'tag2');
 
-        $tag1 = ORM::factory("tag")->where("name", "=", "tag1")->find();
-        $tag1->name = "tag2";
+        $tag1 = ORM::factory('tag')->where('name', '=', 'tag1')->find();
+        $tag1->name = 'tag2';
         $tag1->save();
 
         // Tags should be merged
@@ -77,6 +77,6 @@ class Tag_Test extends Gallery_Unit_Test_Case
 
         $this->assert_equal(1, $tag1->count);
         $this->assert_true($tag1->has($album));
-        $this->assert_equal(1, ORM::factory("tag")->count_all());
+        $this->assert_equal(1, ORM::factory('tag')->count_all());
     }
 }

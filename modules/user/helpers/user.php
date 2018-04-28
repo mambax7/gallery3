@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -34,7 +34,7 @@ class user_Core
      */
     public static function guest()
     {
-        return model_cache::get("user", 1);
+        return model_cache::get('user', 1);
     }
 
     /**
@@ -49,7 +49,7 @@ class user_Core
             return $active;
         }
 
-        return ORM::factory("user")->where("admin", "=", 1)->order_by("id", "ASC")->find();
+        return ORM::factory('user')->where('admin', '=', 1)->order_by('id', 'ASC')->find();
     }
 
     /**
@@ -65,7 +65,7 @@ class user_Core
 
         // Try phpass first, since that's what we generate.
         if (strlen($valid) == 34) {
-            require_once(MODPATH . "user/lib/PasswordHash.php");
+            require_once(MODPATH . 'user/lib/PasswordHash.php');
             $hashGenerator = new PasswordHash(10, true);
             return $hashGenerator->CheckPassword($password, $valid);
         }
@@ -91,14 +91,14 @@ class user_Core
     public static function valid_password($password_input)
     {
         if (!user::is_correct_password(identity::active_user(), $password_input->value)) {
-            $password_input->add_error("invalid_password", 1);
+            $password_input->add_error('invalid_password', 1);
         }
     }
 
     public static function valid_username($text_input)
     {
         if (!self::lookup_by_name($text_input->value)) {
-            $text_input->add_error("invalid_username", 1);
+            $text_input->add_error('invalid_username', 1);
         }
     }
 
@@ -109,7 +109,7 @@ class user_Core
      */
     public static function hash_password($password)
     {
-        require_once(MODPATH . "user/lib/PasswordHash.php");
+        require_once(MODPATH . 'user/lib/PasswordHash.php');
         $hashGenerator = new PasswordHash(10, true);
         return $hashGenerator->HashPassword($password);
     }
@@ -121,7 +121,7 @@ class user_Core
      */
     public static function lookup($id)
     {
-        return self::_lookup_user_by_field("id", $id);
+        return self::_lookup_user_by_field('id', $id);
     }
 
     /**
@@ -131,7 +131,7 @@ class user_Core
      */
     public static function lookup_by_name($name)
     {
-        return self::_lookup_user_by_field("name", $name);
+        return self::_lookup_user_by_field('name', $name);
     }
 
     /**
@@ -141,7 +141,7 @@ class user_Core
      */
     public static function lookup_by_hash($hash)
     {
-        return self::_lookup_user_by_field("hash", $hash);
+        return self::_lookup_user_by_field('hash', $hash);
     }
 
     /**
@@ -151,11 +151,11 @@ class user_Core
      */
     public static function get_user_list($filter=array())
     {
-        $user = ORM::factory("user");
+        $user = ORM::factory('user');
 
         foreach ($filter as $method => $args) {
             switch ($method) {
-      case "in":
+      case 'in':
         $user->in($args[0], $args[1]);
         break;
       default:
@@ -174,12 +174,12 @@ class user_Core
     private static function _lookup_user_by_field($field_name, $value)
     {
         try {
-            $user = model_cache::get("user", $value, $field_name);
+            $user = model_cache::get('user', $value, $field_name);
             if ($user->loaded()) {
                 return $user;
             }
         } catch (Exception $e) {
-            if (strpos($e->getMessage(), "MISSING_MODEL") === false) {
+            if (strpos($e->getMessage(), 'MISSING_MODEL') === false) {
                 throw $e;
             }
         }

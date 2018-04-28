@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
+<?php defined('SYSPATH') or die('No direct script access.') ?>
 <div class="g-block ui-helper-clearfix">
   <script type="text/javascript">
   $("#g-module-update-form").ready(function() {
@@ -6,7 +6,7 @@
       dataType: "json",
       success: function(data) {
         if (data.reload) {
-          window.location = "<?php url::site("/admin/modules") ?>";
+          window.location = "<?php url::site('/admin/modules') ?>";
         } else {
           $("body").append('<div id="g-dialog">' + data.dialog + '</div>');
           $("#g-dialog").dialog({
@@ -18,21 +18,21 @@
             height: 400,
             width: 500,
             position: "center",
-            title: <?= t("Confirm module activation")->for_js() ?>,
+            title: <?= t('Confirm module activation')->for_js() ?>,
             buttons: {
-              <?= t("Continue")->for_js() ?>: function() {
+              <?= t('Continue')->for_js() ?>: function() {
                 $("form", this).submit();
-                $(".ui-dialog-buttonpane button:contains(" + <?= t("Continue")->for_js() ?> + ")")
+                $(".ui-dialog-buttonpane button:contains(" + <?= t('Continue')->for_js() ?> + ")")
                   .attr("disabled", "disabled")
                   .addClass("ui-state-disabled");
               },
-              <?= t("Cancel")->for_js() ?>: function() {
+              <?= t('Cancel')->for_js() ?>: function() {
                 $(this).dialog("destroy").remove();
               }
             }
           });
           if (!data.allow_continue) {
-            $(".ui-dialog-buttonpane button:contains(" + <?= t("Continue")->for_js() ?> + ")")
+            $(".ui-dialog-buttonpane button:contains(" + <?= t('Continue')->for_js() ?> + ")")
               .attr("disabled", "disabled")
               .addClass("ui-state-disabled");
           }
@@ -41,9 +41,9 @@
     });
   });
   </script>
-  <h1> <?= t("Gallery Modules") ?> </h1>
+  <h1> <?= t('Gallery Modules') ?> </h1>
   <p>
-    <?= t("Power up your Gallery by <a href=\"%url\">adding more modules</a>! Each module provides new cool features.", array("url" => "http://codex.galleryproject.org/Category:Gallery_3:Modules")) ?>
+    <?= t('Power up your Gallery by <a href="%url">adding more modules</a>! Each module provides new cool features.', array('url' => 'http://codex.galleryproject.org/Category:Gallery_3:Modules')) ?>
   </p>
 
   <?php if ($obsolete_modules_message): ?>
@@ -53,21 +53,21 @@
   <?php endif ?>
 
   <div class="g-block-content">
-    <form id="g-module-update-form" method="post" action="<?= url::site("admin/modules/confirm") ?>">
+    <form id="g-module-update-form" method="post" action="<?= url::site('admin/modules/confirm') ?>">
       <?= access::csrf_form_field() ?>
       <table>
         <tr>
-          <th> <?= t("Installed") ?> </th>
-          <th style="width: 8em"> <?= t("Name") ?> </th>
-          <th> <?= t("Version") ?> </th>
-          <th> <?= t("Description") ?> </th>
-          <th style="width: 60px"> <?= t("Details") ?> </th>
+          <th> <?= t('Installed') ?> </th>
+          <th style="width: 8em"> <?= t('Name') ?> </th>
+          <th> <?= t('Version') ?> </th>
+          <th> <?= t('Description') ?> </th>
+          <th style="width: 60px"> <?= t('Details') ?> </th>
         </tr>
         <?php foreach ($available as $module_name => $module_info):  ?>
-        <tr class="<?= text::alternate("g-odd", "g-even") ?>">
-          <?php $data = array("name" => $module_name); ?>
+        <tr class="<?= text::alternate('g-odd', 'g-even') ?>">
+          <?php $data = array('name' => $module_name); ?>
           <?php if ($module_info->locked) {
-    $data["disabled"] = 1;
+              $data['disabled'] = 1;
 } ?>
           <td> <?= form::checkbox($data, '1', module::is_active($module_name)) ?> </td>
           <td> <?= t($module_info->name) ?> </td>
@@ -104,7 +104,7 @@
                    href="#"
                    <?php endif ?>
                    >
-                  <?= t("info") ?>
+                  <?= t('info') ?>
                 </a>
               </li>
               <li>
@@ -117,7 +117,7 @@
                    href="#"
                    <?php endif ?>
                    >
-                  <?= t("discuss") ?>
+                  <?= t('discuss') ?>
                 </a>
               </li>
             </ul>
@@ -125,7 +125,7 @@
         </tr>
         <?php endforeach ?>
       </table>
-      <input type="submit" value="<?= t("Update")->for_html_attr() ?>" />
+      <input type="submit" value="<?= t('Update')->for_html_attr() ?>" />
     </form>
   </div>
 </div>

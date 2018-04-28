@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -22,35 +22,35 @@ class rest_installer
     public static function install()
     {
         Database::instance()
-      ->query("CREATE TABLE {user_access_keys} (
+      ->query('CREATE TABLE {user_access_keys} (
                 `id` int(9) NOT NULL auto_increment,
                 `user_id` int(9) NOT NULL,
                 `access_key` char(32) NOT NULL,
                 PRIMARY KEY (`id`),
                 UNIQUE KEY(`access_key`),
                 UNIQUE KEY(`user_id`))
-              DEFAULT CHARSET=utf8;");
-        module::set_var("rest", "allow_guest_access", false);
+              DEFAULT CHARSET=utf8;');
+        module::set_var('rest', 'allow_guest_access', false);
     }
 
     public static function upgrade($version)
     {
         $db = Database::instance();
         if ($version == 1) {
-            if (in_array("user_access_tokens", Database::instance()->list_tables())) {
-                $db->query("RENAME TABLE {user_access_tokens} TO {user_access_keys}");
+            if (in_array('user_access_tokens', Database::instance()->list_tables())) {
+                $db->query('RENAME TABLE {user_access_tokens} TO {user_access_keys}');
             }
-            module::set_version("rest", $version = 2);
+            module::set_version('rest', $version = 2);
         }
 
         if ($version == 2) {
-            module::set_var("rest", "allow_guest_access", false);
-            module::set_version("rest", $version = 3);
+            module::set_var('rest', 'allow_guest_access', false);
+            module::set_version('rest', $version = 3);
         }
     }
 
     public static function uninstall()
     {
-        Database::instance()->query("DROP TABLE IF EXISTS {user_access_keys}");
+        Database::instance()->query('DROP TABLE IF EXISTS {user_access_keys}');
     }
 }

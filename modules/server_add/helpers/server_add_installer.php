@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -22,7 +22,7 @@ class server_add_installer
     public static function install()
     {
         $db = Database::instance();
-        $db->query("CREATE TABLE {server_add_entries} (
+        $db->query('CREATE TABLE {server_add_entries} (
                   `id` int(9) NOT NULL auto_increment,
                   `checked` boolean default 0,
                   `is_directory` boolean default 0,
@@ -31,7 +31,7 @@ class server_add_installer
                   `path` varchar(255) NOT NULL,
                   `task_id` int(9) NOT NULL,
                   PRIMARY KEY (`id`))
-                DEFAULT CHARSET=utf8;");
+                DEFAULT CHARSET=utf8;');
         server_add::check_config();
     }
 
@@ -39,24 +39,24 @@ class server_add_installer
     {
         $db = Database::instance();
         if ($version == 1) {
-            $db->query("CREATE TABLE {server_add_files} (
+            $db->query('CREATE TABLE {server_add_files} (
                     `id` int(9) NOT NULL auto_increment,
                     `task_id` int(9) NOT NULL,
                     `file` varchar(255) NOT NULL,
                     PRIMARY KEY (`id`))
-                  DEFAULT CHARSET=utf8;");
-            module::set_version("server_add", $version = 2);
+                  DEFAULT CHARSET=utf8;');
+            module::set_version('server_add', $version = 2);
         }
 
         if ($version == 2) {
-            $db->query("ALTER TABLE {server_add_files} ADD COLUMN `item_id` int(9)");
-            $db->query("ALTER TABLE {server_add_files} ADD COLUMN `parent_id` int(9)");
-            module::set_version("server_add", $version = 3);
+            $db->query('ALTER TABLE {server_add_files} ADD COLUMN `item_id` int(9)');
+            $db->query('ALTER TABLE {server_add_files} ADD COLUMN `parent_id` int(9)');
+            module::set_version('server_add', $version = 3);
         }
 
         if ($version == 3) {
-            $db->query("DROP TABLE {server_add_files}");
-            $db->query("CREATE TABLE {server_add_entries} (
+            $db->query('DROP TABLE {server_add_files}');
+            $db->query('CREATE TABLE {server_add_entries} (
                     `id` int(9) NOT NULL auto_increment,
                     `checked` boolean default 0,
                     `is_directory` boolean default 0,
@@ -65,13 +65,13 @@ class server_add_installer
                     `path` varchar(255) NOT NULL,
                     `task_id` int(9) NOT NULL,
                     PRIMARY KEY (`id`))
-                  DEFAULT CHARSET=utf8;");
-            module::set_version("server_add", $version = 4);
+                  DEFAULT CHARSET=utf8;');
+            module::set_version('server_add', $version = 4);
         }
     }
 
     public static function deactivate()
     {
-        site_status::clear("server_add_configuration");
+        site_status::clear('server_add_configuration');
     }
 }

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,25 +21,25 @@ class recaptcha_event_Core
 {
     public static function captcha_protect_form($form)
     {
-        if (module::get_var("recaptcha", "public_key")) {
+        if (module::get_var('recaptcha', 'public_key')) {
             foreach ($form->inputs as $input) {
                 if ($input instanceof Form_Group) {
-                    $input->recaptcha("recaptcha")->label("")->id("g-recaptcha");
+                    $input->recaptcha('recaptcha')->label('')->id('g-recaptcha');
                     return;
                 }
             }
 
             // If we haven't returned yet, then add the captcha at the end of the form
-            $form->recaptcha("recaptcha")->label("")->id("g-recaptcha");
+            $form->recaptcha('recaptcha')->label('')->id('g-recaptcha');
         }
     }
 
     public static function admin_menu($menu, $theme)
     {
-        $menu->get("settings_menu")
-      ->append(Menu::factory("link")
-               ->id("recaptcha")
-               ->label(t("reCAPTCHA"))
-               ->url(url::site("admin/recaptcha")));
+        $menu->get('settings_menu')
+      ->append(Menu::factory('link')
+               ->id('recaptcha')
+               ->label(t('reCAPTCHA'))
+               ->url(url::site('admin/recaptcha')));
     }
 }

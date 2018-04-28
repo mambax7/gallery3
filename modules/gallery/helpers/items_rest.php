@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -44,12 +44,12 @@ class items_rest_Core
 
         if (isset($request->params->urls)) {
             if (isset($request->params->type)) {
-                $types = explode(",", $request->params->type);
+                $types = explode(',', $request->params->type);
             }
 
             foreach (json_decode($request->params->urls) as $url) {
                 $item = rest::resolve($url);
-                if (!access::can("view", $item)) {
+                if (!access::can('view', $item)) {
                     continue;
                 }
 
@@ -59,7 +59,7 @@ class items_rest_Core
             }
         } elseif (isset($request->params->ancestors_for)) {
             $item = rest::resolve($request->params->ancestors_for);
-            if (!access::can("view", $item)) {
+            if (!access::can('view', $item)) {
                 throw new Kohana_404_Exception();
             }
             $items[] = items_rest::_format_restful_item($item, $types);
@@ -73,8 +73,8 @@ class items_rest_Core
 
     public static function resolve($id)
     {
-        $item = ORM::factory("item", $id);
-        if (!access::can("view", $item)) {
+        $item = ORM::factory('item', $id);
+        if (!access::can('view', $item)) {
             throw new Kohana_404_Exception();
         }
         return $item;
@@ -82,17 +82,18 @@ class items_rest_Core
 
     private static function _format_restful_item($item, $types)
     {
-        $item_rest = array("url" => rest::url("item", $item),
-                       "entity" => $item->as_restful_array(),
-                       "relationships" => rest::relationships("item", $item));
-        if ($item->type == "album") {
+        $item_rest = array(
+            'url'           => rest::url('item', $item),
+            'entity'        => $item->as_restful_array(),
+            'relationships' => rest::relationships('item', $item));
+        if ($item->type == 'album') {
             $members = array();
             foreach ($item->viewable()->children() as $child) {
                 if (empty($types) || in_array($child->type, $types)) {
-                    $members[] = rest::url("item", $child);
+                    $members[] = rest::url('item', $child);
                 }
             }
-            $item_rest["members"] = $members;
+            $item_rest['members'] = $members;
         }
 
         return $item_rest;

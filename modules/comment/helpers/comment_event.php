@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -22,8 +22,8 @@ class comment_event_Core
     public static function item_deleted($item)
     {
         db::build()
-      ->delete("comments")
-      ->where("item_id", "=", $item->id)
+      ->delete('comments')
+      ->where('item_id', '=', $item->id)
       ->execute();
     }
 
@@ -32,12 +32,12 @@ class comment_event_Core
         $guest = identity::guest();
         if (!empty($guest)) {          // could be empty if there is not identity provider
             db::build()
-        ->update("comments")
-        ->set("author_id", $guest->id)
-        ->set("guest_email", null)
-        ->set("guest_name", "guest")
-        ->set("guest_url", null)
-        ->where("author_id", "=", $user->id)
+        ->update('comments')
+        ->set('author_id', $guest->id)
+        ->set('guest_email', null)
+        ->set('guest_name', 'guest')
+        ->set('guest_url', null)
+        ->where('author_id', '=', $user->id)
         ->execute();
         }
     }
@@ -46,45 +46,45 @@ class comment_event_Core
     {
         $guest = identity::guest();
         db::build()
-      ->update("comments")
-      ->set("author_id", $guest->id)
-      ->set("guest_email", null)
-      ->set("guest_name", "guest")
-      ->set("guest_url", null)
+      ->update('comments')
+      ->set('author_id', $guest->id)
+      ->set('guest_email', null)
+      ->set('guest_name', 'guest')
+      ->set('guest_url', null)
       ->execute();
     }
 
     public static function admin_menu($menu, $theme)
     {
-        $menu->get("settings_menu")
-      ->append(Menu::factory("link")
-               ->id("comment")
-               ->label(t("Comments"))
-               ->url(url::site("admin/comments")));
+        $menu->get('settings_menu')
+      ->append(Menu::factory('link')
+               ->id('comment')
+               ->label(t('Comments'))
+               ->url(url::site('admin/comments')));
 
-        $menu->get("content_menu")
-      ->append(Menu::factory("link")
-               ->id("comments")
-               ->label(t("Comments"))
-               ->url(url::site("admin/manage_comments")));
+        $menu->get('content_menu')
+      ->append(Menu::factory('link')
+               ->id('comments')
+               ->label(t('Comments'))
+               ->url(url::site('admin/manage_comments')));
     }
 
     public static function photo_menu($menu, $theme)
     {
         $menu
-      ->append(Menu::factory("link")
-               ->id("comments")
-               ->label(t("View comments on this item"))
-               ->url("#comments")
-               ->css_id("g-comments-link"));
+      ->append(Menu::factory('link')
+               ->id('comments')
+               ->label(t('View comments on this item'))
+               ->url('#comments')
+               ->css_id('g-comments-link'));
     }
 
     public static function item_index_data($item, $data)
     {
         foreach (db::build()
-             ->select("text")
-             ->from("comments")
-             ->where("item_id", "=", $item->id)
+             ->select('text')
+             ->from('comments')
+             ->where('item_id', '=', $item->id)
              ->execute() as $row) {
             $data[] = $row->text;
         }
@@ -92,14 +92,14 @@ class comment_event_Core
 
     public static function show_user_profile($data)
     {
-        $view = new View("user_profile_comments.html");
-        $view->comments = ORM::factory("comment")
-      ->order_by("created", "DESC")
-      ->where("state", "=", "published")
-      ->where("author_id", "=", $data->user->id)
+        $view = new View('user_profile_comments.html');
+        $view->comments = ORM::factory('comment')
+      ->order_by('created', 'DESC')
+      ->where('state', '=', 'published')
+      ->where('author_id', '=', $data->user->id)
       ->find_all();
         if ($view->comments->count()) {
-            $data->content[] = (object)array("title" => t("Comments"), "view" => $view);
+            $data->content[] = (object)array('title' => t('Comments'), 'view' => $view);
         }
     }
 }

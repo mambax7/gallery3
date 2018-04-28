@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -31,40 +31,41 @@ class Admin_View_Core extends Gallery_View
     {
         parent::__construct($name);
 
-        $this->theme_name = module::get_var("gallery", "active_admin_theme");
+        $this->theme_name = module::get_var('gallery', 'active_admin_theme');
         if (identity::active_user()->admin) {
-            $theme_name = Input::instance()->get("theme");
+            $theme_name = Input::instance()->get('theme');
             if ($theme_name &&
           file_exists(THEMEPATH . $theme_name) &&
           strpos(realpath(THEMEPATH . $theme_name), THEMEPATH) == 0) {
                 $this->theme_name = $theme_name;
             }
         }
-        $this->sidebar = "";
-        $this->set_global(array("theme" => $this,
-                            "user" => identity::active_user(),
-                            "page_type" => "admin",
-                            "page_subtype" => $name,
-                            "page_title" => null));
+        $this->sidebar = '';
+        $this->set_global(array(
+                              'theme'        => $this,
+                              'user'         => identity::active_user(),
+                              'page_type'    => 'admin',
+                              'page_subtype' => $name,
+                              'page_title'   => null));
     }
 
     public function admin_menu()
     {
-        $menu = Menu::factory("root");
-        module::event("admin_menu", $menu, $this);
+        $menu = Menu::factory('root');
+        module::event('admin_menu', $menu, $this);
 
-        $settings_menu = $menu->get("settings_menu");
-        uasort($settings_menu->elements, array("Menu", "title_comparator"));
+        $settings_menu = $menu->get('settings_menu');
+        uasort($settings_menu->elements, array('Menu', 'title_comparator'));
 
         return $menu->render();
     }
 
     public function user_menu()
     {
-        $menu = Menu::factory("root")
-      ->css_id("g-login-menu")
-      ->css_class("g-inline ui-helper-clear-fix");
-        module::event("user_menu", $menu, $this);
+        $menu = Menu::factory('root')
+      ->css_id('g-login-menu')
+      ->css_class('g-inline ui-helper-clear-fix');
+        module::event('user_menu', $menu, $this);
         return $menu->render();
     }
 
@@ -90,17 +91,17 @@ class Admin_View_Core extends Gallery_View
     public function __call($function, $args)
     {
         switch ($function) {
-    case "admin_credits":
-    case "admin_footer":
-    case "admin_header_top":
-    case "admin_header_bottom":
-    case "admin_page_bottom":
-    case "admin_page_top":
-    case "admin_head":
-    case "body_attributes":
-    case "html_attributes":
+    case 'admin_credits':
+    case 'admin_footer':
+    case 'admin_header_top':
+    case 'admin_header_bottom':
+    case 'admin_page_bottom':
+    case 'admin_page_top':
+    case 'admin_head':
+    case 'body_attributes':
+    case 'html_attributes':
       $blocks = array();
-      if (method_exists("gallery_theme", $function)) {
+      if (method_exists('gallery_theme', $function)) {
           switch (count($args)) {
         case 0:
           $blocks[] = gallery_theme::$function($this);
@@ -113,14 +114,14 @@ class Admin_View_Core extends Gallery_View
           break;
         default:
           $blocks[] = call_user_func_array(
-            array("gallery_theme", $function),
+            array('gallery_theme', $function),
             array_merge(array($this), $args)
           );
         }
       }
 
       foreach (module::active() as $module) {
-          if ($module->name == "gallery") {
+          if ($module->name == 'gallery') {
               continue;
           }
           $helper_class = "{$module->name}_theme";
@@ -132,7 +133,7 @@ class Admin_View_Core extends Gallery_View
           }
       }
 
-      $helper_class = theme::$admin_theme_name . "_theme";
+      $helper_class = theme::$admin_theme_name . '_theme';
       if (class_exists($helper_class) && method_exists($helper_class, $function)) {
           $blocks[] = call_user_func_array(
           array($helper_class, $function),
@@ -140,14 +141,14 @@ class Admin_View_Core extends Gallery_View
         );
       }
 
-      if (Session::instance()->get("debug")) {
-          if ($function != "admin_head" && $function != "body_attributes") {
+      if (Session::instance()->get('debug')) {
+          if ($function != 'admin_head' && $function != 'body_attributes') {
               array_unshift(
             $blocks,
             "<div class=\"g-annotated-theme-block g-annotated-theme-block_$function g-clear-fix\">" .
             "<div class=\"title\">$function</div>"
           );
-              $blocks[] = "</div>";
+              $blocks[] = '</div>';
           }
       }
       return implode("\n", $blocks);

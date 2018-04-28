@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -72,8 +72,8 @@ class site_status_Core
      */
     private static function _add($msg, $severity, $permanent_key)
     {
-        $message = ORM::factory("message")
-      ->where("key", "=", $permanent_key)
+        $message = ORM::factory('message')
+      ->where('key', '=', $permanent_key)
       ->find();
         if (!$message->loaded()) {
             $message->key = $permanent_key;
@@ -89,7 +89,7 @@ class site_status_Core
      */
     public static function clear($permanent_key)
     {
-        $message = ORM::factory("message")->where("key", "=", $permanent_key)->find();
+        $message = ORM::factory('message')->where('key', '=', $permanent_key)->find();
         if ($message->loaded()) {
             $message->delete();
         }
@@ -107,13 +107,13 @@ class site_status_Core
             return;
         }
         $buf = array();
-        foreach (ORM::factory("message")->find_all() as $msg) {
-            $value = str_replace("__CSRF__", access::csrf_token(), $msg->value);
-            $buf[] = "<li class=\"" . site_status::severity_class($msg->severity) . "\">$value</li>";
+        foreach (ORM::factory('message')->find_all() as $msg) {
+            $value = str_replace('__CSRF__', access::csrf_token(), $msg->value);
+            $buf[] = '<li class="' . site_status::severity_class($msg->severity) . "\">$value</li>";
         }
 
         if ($buf) {
-            return "<ul id=\"g-site-status\">" . implode("", $buf) . "</ul>";
+            return '<ul id="g-site-status">' . implode('', $buf) . '</ul>';
         }
     }
 
@@ -126,16 +126,16 @@ class site_status_Core
     {
         switch ($severity) {
     case site_status::SUCCESS:
-      return "g-success";
+      return 'g-success';
 
     case site_status::INFO:
-      return "g-info";
+      return 'g-info';
 
     case site_status::WARNING:
-      return "g-warning";
+      return 'g-warning';
 
     case site_status::ERROR:
-      return "g-error";
+      return 'g-error';
     }
     }
 }

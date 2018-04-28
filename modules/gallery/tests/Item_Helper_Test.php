@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -32,34 +32,34 @@ class Item_Helper_Test extends Gallery_Unit_Test_Case
         identity::set_active_user(identity::guest());
 
         // We can see the item when permissions are granted
-        access::allow(identity::everybody(), "view", $album);
+        access::allow(identity::everybody(), 'view', $album);
         $this->assert_equal(
       1,
-      ORM::factory("item")->viewable()->where("id", "=", $item->id)->count_all()
+      ORM::factory('item')->viewable()->where('id', '=', $item->id)->count_all()
     );
 
         // We can't see the item when permissions are denied
-        access::deny(identity::everybody(), "view", $album);
+        access::deny(identity::everybody(), 'view', $album);
         $this->assert_equal(
       0,
-      ORM::factory("item")->viewable()->where("id", "=", $item->id)->count_all()
+      ORM::factory('item')->viewable()->where('id', '=', $item->id)->count_all()
     );
     }
 
     public function convert_filename_to_title_test()
     {
-        $this->assert_equal("foo", item::convert_filename_to_title("foo.jpg"));
-        $this->assert_equal("foo.bar", item::convert_filename_to_title("foo.bar.jpg"));
+        $this->assert_equal('foo', item::convert_filename_to_title('foo.jpg'));
+        $this->assert_equal('foo.bar', item::convert_filename_to_title('foo.bar.jpg'));
     }
 
     public function convert_filename_to_slug_test()
     {
-        $this->assert_equal("foo", item::convert_filename_to_slug("{[foo]}"));
-        $this->assert_equal("foo-bar", item::convert_filename_to_slug("{[foo!@#!$@#^$@($!(@bar]}"));
-        $this->assert_equal("english-text", item::convert_filename_to_slug("english text"));
-        $this->assert_equal("new-line", item::convert_filename_to_slug("new \n line"));
-        $this->assert_equal("foo-and-bar", item::convert_filename_to_slug("foo&bar"));
-        $this->assert_equal("special", item::convert_filename_to_slug("šṗëçîąļ"));
+        $this->assert_equal('foo', item::convert_filename_to_slug('{[foo]}'));
+        $this->assert_equal('foo-bar', item::convert_filename_to_slug('{[foo!@#!$@#^$@($!(@bar]}'));
+        $this->assert_equal('english-text', item::convert_filename_to_slug('english text'));
+        $this->assert_equal('new-line', item::convert_filename_to_slug("new \n line"));
+        $this->assert_equal('foo-and-bar', item::convert_filename_to_slug('foo&bar'));
+        $this->assert_equal('special', item::convert_filename_to_slug('šṗëçîąļ'));
     }
 
     public function move_test()
@@ -146,16 +146,16 @@ class Item_Helper_Test extends Gallery_Unit_Test_Case
     {
         $level1 = test::random_album();
         $level2 = test::random_album_unsaved($level1);
-        $level2->name = "plus + space";
+        $level2->name = 'plus + space';
         $level2->save()->reload();
 
         $level3 = test::random_photo_unsaved($level2);
-        $level3->name = "same.jpg";
+        $level3->name = 'same.jpg';
         $level3->save()->reload();
 
         $level2b = test::random_album($level1);
         $level3b = test::random_photo_unsaved($level2b);
-        $level3b->name = "same.jpg";
+        $level3b->name = 'same.jpg';
         $level3b->save()->reload();
 
         // Item in album
@@ -177,7 +177,7 @@ class Item_Helper_Test extends Gallery_Unit_Test_Case
     );
 
         // Return root if "" is passed
-        $this->assert_same(item::root()->id, item::find_by_path("")->id);
+        $this->assert_same(item::root()->id, item::find_by_path('')->id);
 
         // Verify that we don't get confused by the part names, using the fallback code.
         self::_remove_relative_path_caches();
@@ -195,7 +195,7 @@ class Item_Helper_Test extends Gallery_Unit_Test_Case
 
         // Verify that we don't get false positives
         $this->assert_false(
-      item::find_by_path("foo/bar/baz")->loaded()
+      item::find_by_path('foo/bar/baz')->loaded()
     );
     }
 
@@ -205,35 +205,35 @@ class Item_Helper_Test extends Gallery_Unit_Test_Case
         $jpg = test::random_photo($parent);
 
         $jpg_path = "{$parent->name}/{$jpg->name}";
-        $flv_path = legal_file::change_extension($jpg_path, "flv");
+        $flv_path = legal_file::change_extension($jpg_path, 'flv');
 
         // Check normal operation.
-        $this->assert_equal($jpg->id, item::find_by_path($jpg_path, "albums")->id);
-        $this->assert_equal($jpg->id, item::find_by_path($jpg_path, "resizes")->id);
-        $this->assert_equal($jpg->id, item::find_by_path($jpg_path, "thumbs")->id);
+        $this->assert_equal($jpg->id, item::find_by_path($jpg_path, 'albums')->id);
+        $this->assert_equal($jpg->id, item::find_by_path($jpg_path, 'resizes')->id);
+        $this->assert_equal($jpg->id, item::find_by_path($jpg_path, 'thumbs')->id);
         $this->assert_equal($jpg->id, item::find_by_path($jpg_path)->id);
 
         // Check that we don't get false positives.
-        $this->assert_equal(null, item::find_by_path($flv_path, "albums")->id);
-        $this->assert_equal(null, item::find_by_path($flv_path, "resizes")->id);
-        $this->assert_equal(null, item::find_by_path($flv_path, "thumbs")->id);
+        $this->assert_equal(null, item::find_by_path($flv_path, 'albums')->id);
+        $this->assert_equal(null, item::find_by_path($flv_path, 'resizes')->id);
+        $this->assert_equal(null, item::find_by_path($flv_path, 'thumbs')->id);
         $this->assert_equal(null, item::find_by_path($flv_path)->id);
 
         // Check normal operation without relative path cache.
         self::_remove_relative_path_caches();
-        $this->assert_equal($jpg->id, item::find_by_path($jpg_path, "albums")->id);
+        $this->assert_equal($jpg->id, item::find_by_path($jpg_path, 'albums')->id);
         self::_remove_relative_path_caches();
-        $this->assert_equal($jpg->id, item::find_by_path($jpg_path, "resizes")->id);
+        $this->assert_equal($jpg->id, item::find_by_path($jpg_path, 'resizes')->id);
         self::_remove_relative_path_caches();
-        $this->assert_equal($jpg->id, item::find_by_path($jpg_path, "thumbs")->id);
+        $this->assert_equal($jpg->id, item::find_by_path($jpg_path, 'thumbs')->id);
         self::_remove_relative_path_caches();
         $this->assert_equal($jpg->id, item::find_by_path($jpg_path)->id);
 
         // Check that we don't get false positives without relative path cache.
         self::_remove_relative_path_caches();
-        $this->assert_equal(null, item::find_by_path($flv_path, "albums")->id);
-        $this->assert_equal(null, item::find_by_path($flv_path, "resizes")->id);
-        $this->assert_equal(null, item::find_by_path($flv_path, "thumbs")->id);
+        $this->assert_equal(null, item::find_by_path($flv_path, 'albums')->id);
+        $this->assert_equal(null, item::find_by_path($flv_path, 'resizes')->id);
+        $this->assert_equal(null, item::find_by_path($flv_path, 'thumbs')->id);
         $this->assert_equal(null, item::find_by_path($flv_path)->id);
     }
 
@@ -241,39 +241,39 @@ class Item_Helper_Test extends Gallery_Unit_Test_Case
     {
         $parent = test::random_album();
         $png = test::random_photo_unsaved($parent);
-        $png->set_data_file(MODPATH . "gallery/images/graphicsmagick.png");
+        $png->set_data_file(MODPATH . 'gallery/images/graphicsmagick.png');
         $png->save();
 
         $png_path = "{$parent->name}/{$png->name}";
-        $jpg_path = legal_file::change_extension($png_path, "jpg");
+        $jpg_path = legal_file::change_extension($png_path, 'jpg');
 
         // Check normal operation.
-        $this->assert_equal($png->id, item::find_by_path($png_path, "albums")->id);
-        $this->assert_equal($png->id, item::find_by_path($png_path, "resizes")->id);
-        $this->assert_equal($png->id, item::find_by_path($png_path, "thumbs")->id);
+        $this->assert_equal($png->id, item::find_by_path($png_path, 'albums')->id);
+        $this->assert_equal($png->id, item::find_by_path($png_path, 'resizes')->id);
+        $this->assert_equal($png->id, item::find_by_path($png_path, 'thumbs')->id);
         $this->assert_equal($png->id, item::find_by_path($png_path)->id);
 
         // Check that we don't get false positives.
-        $this->assert_equal(null, item::find_by_path($jpg_path, "albums")->id);
-        $this->assert_equal(null, item::find_by_path($jpg_path, "resizes")->id);
-        $this->assert_equal(null, item::find_by_path($jpg_path, "thumbs")->id);
+        $this->assert_equal(null, item::find_by_path($jpg_path, 'albums')->id);
+        $this->assert_equal(null, item::find_by_path($jpg_path, 'resizes')->id);
+        $this->assert_equal(null, item::find_by_path($jpg_path, 'thumbs')->id);
         $this->assert_equal(null, item::find_by_path($jpg_path)->id);
 
         // Check normal operation without relative path cache.
         self::_remove_relative_path_caches();
-        $this->assert_equal($png->id, item::find_by_path($png_path, "albums")->id);
+        $this->assert_equal($png->id, item::find_by_path($png_path, 'albums')->id);
         self::_remove_relative_path_caches();
-        $this->assert_equal($png->id, item::find_by_path($png_path, "resizes")->id);
+        $this->assert_equal($png->id, item::find_by_path($png_path, 'resizes')->id);
         self::_remove_relative_path_caches();
-        $this->assert_equal($png->id, item::find_by_path($png_path, "thumbs")->id);
+        $this->assert_equal($png->id, item::find_by_path($png_path, 'thumbs')->id);
         self::_remove_relative_path_caches();
         $this->assert_equal($png->id, item::find_by_path($png_path)->id);
 
         // Check that we don't get false positives without relative path cache.
         self::_remove_relative_path_caches();
-        $this->assert_equal(null, item::find_by_path($jpg_path, "albums")->id);
-        $this->assert_equal(null, item::find_by_path($jpg_path, "resizes")->id);
-        $this->assert_equal(null, item::find_by_path($jpg_path, "thumbs")->id);
+        $this->assert_equal(null, item::find_by_path($jpg_path, 'albums')->id);
+        $this->assert_equal(null, item::find_by_path($jpg_path, 'resizes')->id);
+        $this->assert_equal(null, item::find_by_path($jpg_path, 'thumbs')->id);
         $this->assert_equal(null, item::find_by_path($jpg_path)->id);
     }
 
@@ -283,30 +283,30 @@ class Item_Helper_Test extends Gallery_Unit_Test_Case
         $flv = test::random_movie($parent);
 
         $flv_path = "{$parent->name}/{$flv->name}";
-        $jpg_path = legal_file::change_extension($flv_path, "jpg");
+        $jpg_path = legal_file::change_extension($flv_path, 'jpg');
 
         // Check normal operation.
-        $this->assert_equal($flv->id, item::find_by_path($flv_path, "albums")->id);
-        $this->assert_equal($flv->id, item::find_by_path($jpg_path, "thumbs")->id);
+        $this->assert_equal($flv->id, item::find_by_path($flv_path, 'albums')->id);
+        $this->assert_equal($flv->id, item::find_by_path($jpg_path, 'thumbs')->id);
         $this->assert_equal($flv->id, item::find_by_path($flv_path)->id);
 
         // Check that we don't get false positives.
-        $this->assert_equal(null, item::find_by_path($jpg_path, "albums")->id);
-        $this->assert_equal(null, item::find_by_path($flv_path, "thumbs")->id);
+        $this->assert_equal(null, item::find_by_path($jpg_path, 'albums')->id);
+        $this->assert_equal(null, item::find_by_path($flv_path, 'thumbs')->id);
         $this->assert_equal(null, item::find_by_path($jpg_path)->id);
 
         // Check normal operation without relative path cache.
         self::_remove_relative_path_caches();
-        $this->assert_equal($flv->id, item::find_by_path($flv_path, "albums")->id);
+        $this->assert_equal($flv->id, item::find_by_path($flv_path, 'albums')->id);
         self::_remove_relative_path_caches();
-        $this->assert_equal($flv->id, item::find_by_path($jpg_path, "thumbs")->id);
+        $this->assert_equal($flv->id, item::find_by_path($jpg_path, 'thumbs')->id);
         self::_remove_relative_path_caches();
         $this->assert_equal($flv->id, item::find_by_path($flv_path)->id);
 
         // Check that we don't get false positives without relative path cache.
         self::_remove_relative_path_caches();
-        $this->assert_equal(null, item::find_by_path($jpg_path, "albums")->id);
-        $this->assert_equal(null, item::find_by_path($flv_path, "thumbs")->id);
+        $this->assert_equal(null, item::find_by_path($jpg_path, 'albums')->id);
+        $this->assert_equal(null, item::find_by_path($flv_path, 'thumbs')->id);
         $this->assert_equal(null, item::find_by_path($jpg_path)->id);
     }
 
@@ -319,27 +319,27 @@ class Item_Helper_Test extends Gallery_Unit_Test_Case
         $thumb_path = "{$album_path}/.album.jpg";
 
         // Check normal operation.
-        $this->assert_equal($album->id, item::find_by_path($album_path, "albums")->id);
-        $this->assert_equal($album->id, item::find_by_path($thumb_path, "thumbs")->id);
+        $this->assert_equal($album->id, item::find_by_path($album_path, 'albums')->id);
+        $this->assert_equal($album->id, item::find_by_path($thumb_path, 'thumbs')->id);
         $this->assert_equal($album->id, item::find_by_path($album_path)->id);
 
         // Check that we don't get false positives.
-        $this->assert_equal(null, item::find_by_path($thumb_path, "albums")->id);
-        $this->assert_equal(null, item::find_by_path($album_path, "thumbs")->id);
+        $this->assert_equal(null, item::find_by_path($thumb_path, 'albums')->id);
+        $this->assert_equal(null, item::find_by_path($album_path, 'thumbs')->id);
         $this->assert_equal(null, item::find_by_path($thumb_path)->id);
 
         // Check normal operation without relative path cache.
         self::_remove_relative_path_caches();
-        $this->assert_equal($album->id, item::find_by_path($album_path, "albums")->id);
+        $this->assert_equal($album->id, item::find_by_path($album_path, 'albums')->id);
         self::_remove_relative_path_caches();
-        $this->assert_equal($album->id, item::find_by_path($thumb_path, "thumbs")->id);
+        $this->assert_equal($album->id, item::find_by_path($thumb_path, 'thumbs')->id);
         self::_remove_relative_path_caches();
         $this->assert_equal($album->id, item::find_by_path($album_path)->id);
 
         // Check that we don't get false positives without relative path cache.
         self::_remove_relative_path_caches();
-        $this->assert_equal(null, item::find_by_path($thumb_path, "albums")->id);
-        $this->assert_equal(null, item::find_by_path($album_path, "thumbs")->id);
+        $this->assert_equal(null, item::find_by_path($thumb_path, 'albums')->id);
+        $this->assert_equal(null, item::find_by_path($album_path, 'thumbs')->id);
         $this->assert_equal(null, item::find_by_path($thumb_path)->id);
     }
 
@@ -347,8 +347,8 @@ class Item_Helper_Test extends Gallery_Unit_Test_Case
     {
         // This gets used *many* times in the find_by_path tests above to check the fallback code.
         db::build()
-      ->update("items")
-      ->set("relative_path_cache", null)
+      ->update('items')
+      ->set('relative_path_cache', null)
       ->execute();
     }
 
@@ -357,12 +357,12 @@ class Item_Helper_Test extends Gallery_Unit_Test_Case
         $level1 = test::random_album();
         $level2 = test::random_album($level1);
         $level3 = test::random_photo_unsaved($level2);
-        $level3->slug = "same";
+        $level3->slug = 'same';
         $level3->save()->reload();
 
         $level2b = test::random_album($level1);
         $level3b = test::random_photo_unsaved($level2b);
-        $level3b->slug = "same";
+        $level3b->slug = 'same';
         $level3b->save()->reload();
 
         // Item in album
@@ -378,13 +378,13 @@ class Item_Helper_Test extends Gallery_Unit_Test_Case
     );
 
         // Return root if "" is passed
-        $this->assert_same(item::root()->id, item::find_by_relative_url("")->id);
+        $this->assert_same(item::root()->id, item::find_by_relative_url('')->id);
 
         // Verify that we don't get confused by the part slugs, using the fallback code.
         db::build()
-      ->update("items")
-      ->set(array("relative_url_cache" => null))
-      ->where("id", "IN", array($level3->id, $level3b->id))
+      ->update('items')
+      ->set(array('relative_url_cache' => null))
+      ->where('id', 'IN', array($level3->id, $level3b->id))
       ->execute();
         $this->assert_same(
       $level3->id,
@@ -398,7 +398,7 @@ class Item_Helper_Test extends Gallery_Unit_Test_Case
 
         // Verify that we don't get false positives
         $this->assert_false(
-      item::find_by_relative_url("foo/bar/baz")->loaded()
+      item::find_by_relative_url('foo/bar/baz')->loaded()
     );
 
         // Verify that the fallback code works
@@ -411,7 +411,7 @@ class Item_Helper_Test extends Gallery_Unit_Test_Case
     public function resequence_child_weights_test()
     {
         $album = test::random_album_unsaved();
-        $album->sort_column = "id";
+        $album->sort_column = 'id';
         $album->save();
 
         $photo1 = test::random_photo($album);
@@ -419,7 +419,7 @@ class Item_Helper_Test extends Gallery_Unit_Test_Case
         $this->assert_true($photo2->weight > $photo1->weight);
 
         $album->reload();
-        $album->sort_order = "DESC";
+        $album->sort_order = 'DESC';
         $album->save();
         item::resequence_child_weights($album);
 

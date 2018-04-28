@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,9 +21,9 @@ class Uploader_Controller extends Controller
 {
     public function index($id)
     {
-        $item = ORM::factory("item", $id);
-        access::required("view", $item);
-        access::required("add", $item);
+        $item = ORM::factory('item', $id);
+        access::required('view', $item);
+        access::required('add', $item);
         if (!$item->is_album()) {
             $item = $item->parent();
         }
@@ -39,9 +39,9 @@ class Uploader_Controller extends Controller
 
     public function add_photo($id)
     {
-        $album = ORM::factory("item", $id);
-        access::required("view", $album);
-        access::required("add", $album);
+        $album = ORM::factory('item', $id);
+        access::required('view', $album);
+        access::required('add', $album);
         access::verify_csrf();
 
         // The Flash uploader not call /start directly, so simulate it here for now.
@@ -54,25 +54,25 @@ class Uploader_Controller extends Controller
         if ($form->validate()) {
             // Uploadify puts the result in $_FILES["Filedata"] - process it.
             try {
-                list($tmp_name, $name) = $this->_process_upload("Filedata");
+                list($tmp_name, $name) = $this->_process_upload('Filedata');
             } catch (Exception $e) {
-                header("HTTP/1.1 400 Bad Request");
-                print "ERROR: " . $e->getMessage();
+                header('HTTP/1.1 400 Bad Request');
+                print 'ERROR: ' . $e->getMessage();
                 return;
             }
 
             // We have a valid upload file (of unknown type) - build an item from it.
             try {
                 $item = $this->_add_item($id, $tmp_name, $name);
-                module::event("add_photos_form_completed", $item, $form);
+                module::event('add_photos_form_completed', $item, $form);
                 print "FILEID: $item->id";
             } catch (Exception $e) {
-                header("HTTP/1.1 500 Internal Server Error");
-                print "ERROR: " . $e->getMessage();
+                header('HTTP/1.1 500 Internal Server Error');
+                print 'ERROR: ' . $e->getMessage();
             }
         } else {
-            header("HTTP/1.1 400 Bad Request");
-            print "ERROR: " . t("Invalid upload");
+            header('HTTP/1.1 400 Bad Request');
+            print 'ERROR: ' . t('Invalid upload');
         }
     }
 
@@ -81,13 +81,12 @@ class Uploader_Controller extends Controller
         if ($error_count) {
             // The "errors" won't be properly pluralized :-/
             print t2(
-          "Uploaded %count photo (%error errors)",
-               "Uploaded %count photos (%error errors)",
-               (int)$success_count,
-               array("error" => (int)$error_count)
+                'Uploaded %count photo (%error errors)', 'Uploaded %count photos (%error errors)',
+                (int)$success_count,
+                array('error' => (int)$error_count)
       );
         } else {
-            print t2("Uploaded %count photo", "Uploaded %count photos", $success_count);
+            print t2('Uploaded %count photo', 'Uploaded %count photos', $success_count);
         }
     }
 
@@ -95,21 +94,21 @@ class Uploader_Controller extends Controller
     {
         access::verify_csrf();
         batch::stop();
-        json::reply(array("result" => "success"));
+        json::reply(array('result' => 'success'));
     }
 
     private function _get_add_form($album)
     {
-        $form = new Forge("uploader/finish", "", "post", array("id" => "gAddPhotosForm", 'class' => 'dropzone'));
-        $group = $form->group("add_photos")
-      ->label(t("Add photos to %album_title", array("album_title" => html::purify($album->title))));
-        $group->dropzone("dropzone")->album($album);
+        $form = new Forge('uploader/finish', '', 'post', array('id' => 'gAddPhotosForm', 'class' => 'dropzone'));
+        $group = $form->group('add_photos')
+      ->label(t('Add photos to %album_title', array('album_title' => html::purify($album->title))));
+        $group->dropzone('dropzone')->album($album);
 
-        $group_actions = $form->group("actions");
-        $group_actions->dropzone_buttons("");
+        $group_actions = $form->group('actions');
+        $group_actions->dropzone_buttons('');
 
         $inputs_before_event = array_keys($form->add_photos->inputs);
-        module::event("add_photos_form", $album, $form);
+        module::event('add_photos_form', $album, $form);
         $inputs_after_event = array_keys($form->add_photos->inputs);
 
         return $form;
@@ -117,16 +116,16 @@ class Uploader_Controller extends Controller
 
     private function _get_add_form_uploadify($album)
     {
-        $form = new Forge("uploader/finish", "", "post", array("id" => "g-add-photos-form"));
-        $group = $form->group("add_photos")
-      ->label(t("Add photos to %album_title", array("album_title" => html::purify($album->title))));
-        $group->uploadify("uploadify")->album($album);
+        $form = new Forge('uploader/finish', '', 'post', array('id' => 'g-add-photos-form'));
+        $group = $form->group('add_photos')
+      ->label(t('Add photos to %album_title', array('album_title' => html::purify($album->title))));
+        $group->uploadify('uploadify')->album($album);
 
-        $group_actions = $form->group("actions");
-        $group_actions->uploadify_buttons("");
+        $group_actions = $form->group('actions');
+        $group_actions->uploadify_buttons('');
 
         $inputs_before_event = array_keys($form->add_photos->inputs);
-        module::event("add_photos_form", $album, $form);
+        module::event('add_photos_form', $album, $form);
         $inputs_after_event = array_keys($form->add_photos->inputs);
 
         // For each new input in add_photos, attach JS to make uploadify update its value.
@@ -136,7 +135,7 @@ class Uploader_Controller extends Controller
                 continue;
             }
             $group->uploadify->script_data($input, $group->{$input}->value);
-            $group->script("")
+            $group->script('')
         ->text("$('input[name=\"$input\"]').change(function (event) {
                   $('#g-uploadify').uploadifySettings('scriptData', {'$input': $(this).val()});
                 });");
@@ -160,9 +159,9 @@ class Uploader_Controller extends Controller
     {
         // Validate file data.  At this point, any file extension is still valid.
         $file_validation = new Validation($_FILES);
-        $file_validation->add_rules($file, "upload::valid", "upload::required");
+        $file_validation->add_rules($file, 'upload::valid', 'upload::required');
         if (!$file_validation->validate()) {
-            throw new Exception(t("Invalid upload"));
+            throw new Exception(t('Invalid upload'));
         }
 
         // Save temp file and mark for deletion when done.
@@ -170,7 +169,7 @@ class Uploader_Controller extends Controller
         system::delete_later($tmp_name);
 
         // Get uploaded filename.  This is different than tmp_name since it hasn't been uniquified.
-        $name = $_FILES[$file]["name"];
+        $name = $_FILES[$file]['name'];
 
         return array($tmp_name, $name);
     }
@@ -191,40 +190,40 @@ class Uploader_Controller extends Controller
         $extension = pathinfo($name, PATHINFO_EXTENSION);
 
         try {
-            $item = ORM::factory("item");
+            $item = ORM::factory('item');
             $item->name = $name;
             $item->title = item::convert_filename_to_title($name);
             $item->parent_id = $album_id;
             $item->set_data_file($tmp_name);
 
             if (!$extension) {
-                throw new Exception(t("Uploaded file has no extension"));
+                throw new Exception(t('Uploaded file has no extension'));
             } elseif (legal_file::get_photo_extensions($extension)) {
-                $item->type = "photo";
+                $item->type = 'photo';
                 $item->save();
                 log::success(
-            "content",
-            t("Added a photo"),
-                     html::anchor("photos/$item->id", t("view photo"))
+                    'content',
+                    t('Added a photo'),
+                    html::anchor("photos/$item->id", t('view photo'))
         );
             } elseif (movie::allow_uploads() && legal_file::get_movie_extensions($extension)) {
-                $item->type = "movie";
+                $item->type = 'movie';
                 $item->save();
                 log::success(
-            "content",
-            t("Added a movie"),
-                     html::anchor("movies/$item->id", t("view movie"))
+                    'content',
+                    t('Added a movie'),
+                    html::anchor("movies/$item->id", t('view movie'))
         );
             } else {
-                throw new Exception(t("Uploaded file has illegal extension"));
+                throw new Exception(t('Uploaded file has illegal extension'));
             }
         } catch (Exception $e) {
             // Log errors then re-throw exception.
-            Kohana_Log::add("error", $e->getMessage() . "\n" . $e->getTraceAsString());
+            Kohana_Log::add('error', $e->getMessage() . "\n" . $e->getTraceAsString());
 
             // If we have a validation error, add an additional log entry.
             if ($e instanceof ORM_Validation_Exception) {
-                Kohana_Log::add("error", "Validation errors: " . print_r($e->validation->errors(), 1));
+                Kohana_Log::add('error', 'Validation errors: ' . print_r($e->validation->errors(), 1));
             }
 
             throw $e;

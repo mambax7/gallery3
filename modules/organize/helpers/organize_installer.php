@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -23,8 +23,8 @@ class organize_installer
     {
         if ($version < 4) {
             // No longer necessary, make sure that it's cleared.
-            site_status::clear("organize_needs_rest");
-            module::set_version("organize", $version = 4);
+            site_status::clear('organize_needs_rest');
+            module::set_version('organize', $version = 4);
         }
     }
 }

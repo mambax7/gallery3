@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
+<?php defined('SYSPATH') or die('No direct script access.') ?>
 <?php
 
 function green_start()
@@ -22,16 +22,16 @@ function magenta_start()
 }
 
 foreach ($results as $class => $methods) {
-    echo "+", str_repeat("-", 98), "+\n";
+    echo '+', str_repeat('-', 98), "+\n";
     printf("| %-96.96s |\n", $class);
-    echo "+", str_repeat("-", 87), "+", str_repeat("-", 10), "+\n";
+    echo '+', str_repeat('-', 87), '+', str_repeat('-', 10), "+\n";
 
-    foreach (array("score", "total", "passed", "failed", "errors") as $key) {
+    foreach (array('score', 'total', 'passed', 'failed', 'errors') as $key) {
         @$totals[$key] += $stats[$class][$key];
     }
 
     if (empty($methods)) {
-        printf("| %s%-96.96s%s |\n", magenta_start(), "NO TESTS FOUND", color_end());
+        printf("| %s%-96.96s%s |\n", magenta_start(), 'NO TESTS FOUND', color_end());
     } else {
         foreach ($methods as $method => $result) {
             // Hide passed tests from report
@@ -56,11 +56,11 @@ foreach ($results as $class => $methods) {
                red_start(),
             color_end()
         );
-                echo "  ", $result->getMessage(), "\n";
-                echo "  ", $result->getFile();
-                echo " ", "(line " . $result->getLine(), ")\n";
+                echo '  ', $result->getMessage(), "\n";
+                echo '  ', $result->getFile();
+                echo ' ', '(line ' . $result->getLine(), ")\n";
                 if ($result->getDebug() !== null) {
-                    echo "  ", "(", gettype($result->getDebug()), ") ",
+                    echo '  ', '(', gettype($result->getDebug()), ') ',
             var_export($result->getDebug(), true), "\n";
                 }
                 echo "\n";
@@ -74,7 +74,7 @@ foreach ($results as $class => $methods) {
             color_end()
         );
                 if ($result->getMessage()) {
-                    echo "  ", $result->getMessage(), "\n";
+                    echo '  ', $result->getMessage(), "\n";
                 }
                 if ($result instanceof ORM_Validation_Exception) {
                     echo "  Validation errors:\n";
@@ -82,14 +82,14 @@ foreach ($results as $class => $methods) {
                         echo "    $key: $value\n";
                     }
                 }
-                echo "  ", $result->getFile(), " (Line ", $result->getLine(), ")\n";
+                echo '  ', $result->getFile(), ' (Line ', $result->getLine(), ")\n";
                 echo "\n";
                 echo $result->getTraceAsString(), "\n";
             }
         }
     }
 
-    echo "+", str_repeat("=", 87), "+", str_repeat("=", 10), "+\n";
+    echo '+', str_repeat('=', 87), '+', str_repeat('=', 10), "+\n";
     printf(
       "| %-40.40s %-10.10s %-10.10s %-10.10s %-10.10s %-10.10s  |\n",
          $class,
@@ -99,15 +99,14 @@ foreach ($results as $class => $methods) {
          "FAIL: {$stats[$class]['failed']}",
          "ERROR: {$stats[$class]['errors']}"
   );
-    echo "+", str_repeat("=", 98), "+\n\n\n";
+    echo '+', str_repeat('=', 98), "+\n\n\n";
 }
 
 printf(
-    "  %-40.40s %-10.10s %-10.10s %-10.10s %-10.10s %-10.10s\n",
-       "TOTAL",
-       "Score: " . ($totals["total"] ? 100 * ($totals["passed"] / $totals["total"]) : 0),
-       "Total: {$totals['total']}",
-       "PASS: {$totals['passed']}",
-       "FAIL: {$totals['failed']}",
-       "ERROR: {$totals['errors']}"
+    "  %-40.40s %-10.10s %-10.10s %-10.10s %-10.10s %-10.10s\n", 'TOTAL',
+    'Score: ' . ($totals['total'] ? 100 * ($totals['passed'] / $totals['total']) : 0),
+    "Total: {$totals['total']}",
+    "PASS: {$totals['passed']}",
+    "FAIL: {$totals['failed']}",
+    "ERROR: {$totals['errors']}"
 );

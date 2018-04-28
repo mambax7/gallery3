@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -24,7 +24,7 @@ class registry_rest_Core
         $results = array();
         foreach (module::active() as $module) {
             foreach (glob(MODPATH . "{$module->name}/helpers/*_rest.php") as $filename) {
-                $results[] = str_replace("_rest.php", "", basename($filename));
+                $results[] = str_replace('_rest.php', '', basename($filename));
             }
         }
         return array_unique($results);

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -24,13 +24,13 @@ class exif_theme_Core
         $item = $theme->item();
         if ($item && $item->is_photo()) {
             $record = db::build()
-        ->select("key_count")
-        ->from("exif_records")
-        ->where("item_id", "=", $item->id)
+        ->select('key_count')
+        ->from('exif_records')
+        ->where('item_id', '=', $item->id)
         ->execute()
         ->current();
             if ($record && $record->key_count) {
-                $view = new View("exif_sidebar.html");
+                $view = new View('exif_sidebar.html');
                 $view->item = $item;
                 return $view;
             }

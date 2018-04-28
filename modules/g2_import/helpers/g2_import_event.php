@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -22,8 +22,8 @@ class g2_import_event_Core
     public static function item_deleted($item)
     {
         db::build()
-      ->delete("g2_maps")
-      ->where("g3_id", "=", $item->id)
+      ->delete('g2_maps')
+      ->where('g3_id', '=', $item->id)
       ->execute();
     }
 
@@ -35,10 +35,10 @@ class g2_import_event_Core
     public static function admin_menu($menu, $theme)
     {
         $menu
-      ->get("settings_menu")
-      ->append(Menu::factory("link")
-               ->id("g2_import")
-               ->label(t("Gallery 2 import"))
-               ->url(url::site("admin/g2_import")));
+      ->get('settings_menu')
+      ->append(Menu::factory('link')
+               ->id('g2_import')
+               ->label(t('Gallery 2 import'))
+               ->url(url::site('admin/g2_import')));
     }
 }

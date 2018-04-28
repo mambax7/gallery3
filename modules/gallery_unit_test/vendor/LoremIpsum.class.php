@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 class LoremIpsumGenerator {
 	/**
 	*	Copyright (c) 2009, Mathew Tinsley (tinsley@tinsology.net)

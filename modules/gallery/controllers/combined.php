@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -27,7 +27,7 @@ class Combined_Controller extends Controller
      */
     public function javascript($key)
     {
-        return $this->_emit("javascript", $key);
+        return $this->_emit('javascript', $key);
     }
 
     /**
@@ -35,7 +35,7 @@ class Combined_Controller extends Controller
      */
     public function css($key)
     {
-        return $this->_emit("css", $key);
+        return $this->_emit('css', $key);
     }
 
     /**
@@ -52,13 +52,13 @@ class Combined_Controller extends Controller
         Session::instance()->abort_save();
 
         // Our data is immutable, so if they already have a copy then it needs no updating.
-        if ($input->server("HTTP_IF_MODIFIED_SINCE")) {
+        if ($input->server('HTTP_IF_MODIFIED_SINCE')) {
             header('HTTP/1.0 304 Not Modified');
-            header("Expires: Tue, 19 Jan 2038 00:00:00 GMT");
-            header("Cache-Control: public,max-age=2678400");
+            header('Expires: Tue, 19 Jan 2038 00:00:00 GMT');
+            header('Cache-Control: public,max-age=2678400');
             header('Pragma: public');
             Kohana::close_buffers(false);
-            return "";
+            return '';
         }
 
         if (empty($key)) {
@@ -66,13 +66,13 @@ class Combined_Controller extends Controller
         }
 
         $cache = Cache::instance();
-        $use_gzip = function_exists("gzencode") &&
-      stripos($input->server("HTTP_ACCEPT_ENCODING"), "gzip") !== false &&
-      (int) ini_get("zlib.output_compression") === 0;
+        $use_gzip = function_exists('gzencode') &&
+                    stripos($input->server('HTTP_ACCEPT_ENCODING'), 'gzip') !== false &&
+                    (int) ini_get('zlib.output_compression') === 0;
 
         if ($use_gzip && $content = $cache->get("{$key}_gz")) {
-            header("Content-Encoding: gzip");
-            header("Vary: Accept-Encoding");
+            header('Content-Encoding: gzip');
+            header('Vary: Accept-Encoding');
         } else {
             // Fall back to non-gzipped if we have to
             $content = $cache->get($key);
@@ -82,16 +82,16 @@ class Combined_Controller extends Controller
         }
 
         // $type is either 'javascript' or 'css'
-        if ($type == "javascript") {
-            header("Content-Type: application/javascript; charset=UTF-8");
+        if ($type == 'javascript') {
+            header('Content-Type: application/javascript; charset=UTF-8');
         } else {
-            header("Content-Type: text/css; charset=UTF-8");
+            header('Content-Type: text/css; charset=UTF-8');
         }
-        header("Expires: Tue, 19 Jan 2038 00:00:00 GMT");
-        header("Cache-Control: public,max-age=2678400");
-        header("Pragma: public");
-        header("Last-Modified: " . gmdate("D, d M Y H:i:s T", time()));
-        header("Content-Length: " . strlen($content));
+        header('Expires: Tue, 19 Jan 2038 00:00:00 GMT');
+        header('Cache-Control: public,max-age=2678400');
+        header('Pragma: public');
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s T', time()));
+        header('Content-Length: ' . strlen($content));
 
         Kohana::close_buffers(false);
         print $content;

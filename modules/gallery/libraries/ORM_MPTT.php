@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -51,19 +51,19 @@ class ORM_MPTT_Core extends ORM
     {
         if (!$this->loaded()) {
             $this->lock();
-            $parent = ORM::factory("item", $this->parent_id);
+            $parent = ORM::factory('item', $this->parent_id);
 
             try {
                 // Make a hole in the parent for this new item
                 db::build()
           ->update($this->table_name)
-          ->set("left_ptr", db::expr("`left_ptr` + 2"))
-          ->where("left_ptr", ">=", $parent->right_ptr)
+          ->set('left_ptr', db::expr('`left_ptr` + 2'))
+          ->where('left_ptr', '>=', $parent->right_ptr)
           ->execute();
                 db::build()
           ->update($this->table_name)
-          ->set("right_ptr", db::expr("`right_ptr` + 2"))
-          ->where("right_ptr", ">=", $parent->right_ptr)
+          ->set('right_ptr', db::expr('`right_ptr` + 2'))
+          ->where('right_ptr', '>=', $parent->right_ptr)
           ->execute();
                 $parent->right_ptr += 2;
 
@@ -113,13 +113,13 @@ class ORM_MPTT_Core extends ORM
         try {
             db::build()
         ->update($this->table_name)
-        ->set("left_ptr", db::expr("`left_ptr` - 2"))
-        ->where("left_ptr", ">", $this->right_ptr)
+        ->set('left_ptr', db::expr('`left_ptr` - 2'))
+        ->where('left_ptr', '>', $this->right_ptr)
         ->execute();
             db::build()
         ->update($this->table_name)
-        ->set("right_ptr", db::expr("`right_ptr` - 2"))
-        ->where("right_ptr", ">", $this->right_ptr)
+        ->set('right_ptr', db::expr('`right_ptr` - 2'))
+        ->where('right_ptr', '>', $this->right_ptr)
         ->execute();
         } catch (Exception $e) {
             $this->unlock();
@@ -162,10 +162,10 @@ class ORM_MPTT_Core extends ORM
     {
         return $this
       ->merge_where($where)
-      ->where("left_ptr", "<=", $this->left_ptr)
-      ->where("right_ptr", ">=", $this->right_ptr)
-      ->where("id", "<>", $this->id)
-      ->order_by("left_ptr", "ASC")
+      ->where('left_ptr', '<=', $this->left_ptr)
+      ->where('right_ptr', '>=', $this->right_ptr)
+      ->where('id', '<>', $this->id)
+      ->order_by('left_ptr', 'ASC')
       ->find_all();
     }
 
@@ -179,11 +179,11 @@ class ORM_MPTT_Core extends ORM
      * @param   array    order_by
      * @return array ORM
      */
-    public function children($limit=null, $offset=null, $where=null, $order_by=array("id" => "ASC"))
+    public function children($limit=null, $offset=null, $where=null, $order_by=array('id' => 'ASC'))
     {
         return $this
       ->merge_where($where)
-      ->where("parent_id", "=", $this->id)
+      ->where('parent_id', '=', $this->id)
       ->order_by($order_by)
       ->find_all($limit, $offset);
     }
@@ -199,7 +199,7 @@ class ORM_MPTT_Core extends ORM
     {
         return $this
       ->merge_where($where)
-      ->where("parent_id", "=", $this->id)
+      ->where('parent_id', '=', $this->id)
       ->count_all();
     }
 
@@ -212,12 +212,12 @@ class ORM_MPTT_Core extends ORM
      * @param   array    order_by
      * @return object ORM_Iterator
      */
-    public function descendants($limit=null, $offset=null, $where=null, $order_by=array("id" => "ASC"))
+    public function descendants($limit=null, $offset=null, $where=null, $order_by=array('id' => 'ASC'))
     {
         return $this
       ->merge_where($where)
-      ->where("left_ptr", ">", $this->left_ptr)
-      ->where("right_ptr", "<=", $this->right_ptr)
+      ->where('left_ptr', '>', $this->left_ptr)
+      ->where('right_ptr', '<=', $this->right_ptr)
       ->order_by($order_by)
       ->find_all($limit, $offset);
     }
@@ -232,8 +232,8 @@ class ORM_MPTT_Core extends ORM
     {
         return $this
       ->merge_where($where)
-      ->where("left_ptr", ">", $this->left_ptr)
-      ->where("right_ptr", "<=", $this->right_ptr)
+      ->where('left_ptr', '>', $this->left_ptr)
+      ->where('right_ptr', '<=', $this->right_ptr)
       ->count_all();
     }
 
@@ -266,29 +266,29 @@ class ORM_MPTT_Core extends ORM
                 // Update the levels for the to-be-moved items
                 db::build()
           ->update($this->table_name)
-          ->set("level", db::expr("`level` + $level_delta"))
-          ->where("left_ptr", ">=", $original_left_ptr)
-          ->where("right_ptr", "<=", $original_right_ptr)
+          ->set('level', db::expr("`level` + $level_delta"))
+          ->where('left_ptr', '>=', $original_left_ptr)
+          ->where('right_ptr', '<=', $original_right_ptr)
           ->execute();
             }
 
             // Make a hole in the target for the move
             db::build()
         ->update($this->table_name)
-        ->set("left_ptr", db::expr("`left_ptr` + $size_of_hole"))
-        ->where("left_ptr", ">=", $target_right_ptr)
+        ->set('left_ptr', db::expr("`left_ptr` + $size_of_hole"))
+        ->where('left_ptr', '>=', $target_right_ptr)
         ->execute();
             db::build()
         ->update($this->table_name)
-        ->set("right_ptr", db::expr("`right_ptr` + $size_of_hole"))
-        ->where("right_ptr", ">=", $target_right_ptr)
+        ->set('right_ptr', db::expr("`right_ptr` + $size_of_hole"))
+        ->where('right_ptr', '>=', $target_right_ptr)
         ->execute();
 
             // Change the parent.
             db::build()
         ->update($this->table_name)
-        ->set("parent_id", $target->id)
-        ->where("id", "=", $this->id)
+        ->set('parent_id', $target->id)
+        ->where('id', '=', $this->id)
         ->execute();
 
             // If the source is to the right of the target then we just adjusted its left_ptr and
@@ -303,22 +303,22 @@ class ORM_MPTT_Core extends ORM
             $new_offset = $target->right_ptr - $left_ptr;
             db::build()
         ->update($this->table_name)
-        ->set("left_ptr", db::expr("`left_ptr` + $new_offset"))
-        ->set("right_ptr", db::expr("`right_ptr` + $new_offset"))
-        ->where("left_ptr", ">=", $left_ptr)
-        ->where("right_ptr", "<=", $right_ptr)
+        ->set('left_ptr', db::expr("`left_ptr` + $new_offset"))
+        ->set('right_ptr', db::expr("`right_ptr` + $new_offset"))
+        ->where('left_ptr', '>=', $left_ptr)
+        ->where('right_ptr', '<=', $right_ptr)
         ->execute();
 
             // Close the hole in the source's parent after the move
             db::build()
         ->update($this->table_name)
-        ->set("left_ptr", db::expr("`left_ptr` - $size_of_hole"))
-        ->where("left_ptr", ">", $right_ptr)
+        ->set('left_ptr', db::expr("`left_ptr` - $size_of_hole"))
+        ->where('left_ptr', '>', $right_ptr)
         ->execute();
             db::build()
         ->update($this->table_name)
-        ->set("right_ptr", db::expr("`right_ptr` - $size_of_hole"))
-        ->where("right_ptr", ">", $right_ptr)
+        ->set('right_ptr', db::expr("`right_ptr` - $size_of_hole"))
+        ->where('right_ptr', '>', $right_ptr)
         ->execute();
         } catch (Exception $e) {
             $this->unlock();
@@ -338,10 +338,10 @@ class ORM_MPTT_Core extends ORM
      */
     protected function lock()
     {
-        $timeout = module::get_var("gallery", "lock_timeout", 1);
+        $timeout = module::get_var('gallery', 'lock_timeout', 1);
         $result = $this->db->query("SELECT GET_LOCK('{$this->table_name}', $timeout) AS l")->current();
         if (empty($result->l)) {
-            throw new Exception("@todo UNABLE_TO_LOCK_EXCEPTION");
+            throw new Exception('@todo UNABLE_TO_LOCK_EXCEPTION');
         }
     }
 

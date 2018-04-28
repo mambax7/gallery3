@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -41,10 +41,10 @@
  *             caches are deleted. This is commonly referred to as "garbage collection".
  *             Setting this to 0 or a negative number will disable automatic garbage collection.
  */
-$config["default"] = array(
-  "driver"   => "database",
-  "params"   => null,
-  "lifetime" => 84600,
-  "requests" => 1000,
-  "prefix"   => null,
+$config['default'] = array(
+    'driver'   => 'database',
+    'params'   => null,
+    'lifetime' => 84600,
+    'requests' => 1000,
+    'prefix'   => null,
 );

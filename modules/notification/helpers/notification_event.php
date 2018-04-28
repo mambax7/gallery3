@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -27,8 +27,8 @@ class notification_event_Core
         try {
             notification::send_item_add($item);
         } catch (Exception $e) {
-            Kohana_Log::add("error", "@todo notification_event::item_created() failed");
-            Kohana_Log::add("error", $e->getMessage() . "\n" . $e->getTraceAsString());
+            Kohana_Log::add('error', '@todo notification_event::item_created() failed');
+            Kohana_Log::add('error', $e->getMessage() . "\n" . $e->getTraceAsString());
         }
     }
 
@@ -41,47 +41,47 @@ class notification_event_Core
                 notification::remove_watch($item);
             }
         } catch (Exception $e) {
-            Kohana_Log::add("error", "@todo notification_event::item_deleted() failed");
-            Kohana_Log::add("error", $e->getMessage() . "\n" . $e->getTraceAsString());
+            Kohana_Log::add('error', '@todo notification_event::item_deleted() failed');
+            Kohana_Log::add('error', $e->getMessage() . "\n" . $e->getTraceAsString());
         }
     }
 
     public static function user_deleted($user)
     {
         db::build()
-      ->delete("subscriptions")
-      ->where("user_id", "=", $user->id)
+      ->delete('subscriptions')
+      ->where('user_id', '=', $user->id)
       ->execute();
     }
 
     public static function identity_provider_changed($old_provider, $new_provider)
     {
         db::build()
-      ->delete("subscriptions")
+      ->delete('subscriptions')
       ->execute();
     }
 
     public static function comment_created($comment)
     {
         try {
-            if ($comment->state == "published") {
+            if ($comment->state == 'published') {
                 notification::send_comment_published($comment);
             }
         } catch (Exception $e) {
-            Kohana_Log::add("error", "@todo notification_event::comment_created() failed");
-            Kohana_Log::add("error", $e->getMessage() . "\n" . $e->getTraceAsString());
+            Kohana_Log::add('error', '@todo notification_event::comment_created() failed');
+            Kohana_Log::add('error', $e->getMessage() . "\n" . $e->getTraceAsString());
         }
     }
 
     public static function comment_updated($original, $new)
     {
         try {
-            if ($new->state == "published" && $original->state != "published") {
+            if ($new->state == 'published' && $original->state != 'published') {
                 notification::send_comment_published($new);
             }
         } catch (Exception $e) {
-            Kohana_Log::add("error", "@todo notification_event::comment_updated() failed");
-            Kohana_Log::add("error", $e->getMessage() . "\n" . $e->getTraceAsString());
+            Kohana_Log::add('error', '@todo notification_event::comment_updated() failed');
+            Kohana_Log::add('error', $e->getMessage() . "\n" . $e->getTraceAsString());
         }
     }
 
@@ -89,12 +89,12 @@ class notification_event_Core
     {
         try {
             db::build()
-        ->delete("subscriptions")
-        ->where("user_id", "=", $user->id)
+        ->delete('subscriptions')
+        ->where('user_id', '=', $user->id)
         ->execute();
         } catch (Exception $e) {
-            Kohana_Log::add("error", "@todo notification_event::user_before_delete() failed");
-            Kohana_Log::add("error", $e->getMessage() . "\n" . $e->getTraceAsString());
+            Kohana_Log::add('error', '@todo notification_event::user_before_delete() failed');
+            Kohana_Log::add('error', $e->getMessage() . "\n" . $e->getTraceAsString());
         }
     }
 
@@ -103,8 +103,8 @@ class notification_event_Core
         try {
             notification::send_pending_notifications();
         } catch (Exception $e) {
-            Kohana_Log::add("error", "@todo notification_event::batch_complete() failed");
-            Kohana_Log::add("error", $e->getMessage() . "\n" . $e->getTraceAsString());
+            Kohana_Log::add('error', '@todo notification_event::batch_complete() failed');
+            Kohana_Log::add('error', $e->getMessage() . "\n" . $e->getTraceAsString());
         }
     }
 
@@ -113,16 +113,16 @@ class notification_event_Core
         if (!identity::active_user()->guest) {
             $item = $theme->item();
 
-            if ($item && $item->is_album() && access::can("view", $item)) {
+            if ($item && $item->is_album() && access::can('view', $item)) {
                 $watching = notification::is_watching($item);
 
-                $label = $watching ? t("Remove notifications") : t("Enable notifications");
+                $label = $watching ? t('Remove notifications') : t('Enable notifications');
 
-                $menu->get("options_menu")
-          ->append(Menu::factory("link")
-                   ->id("watch")
+                $menu->get('options_menu')
+          ->append(Menu::factory('link')
+                   ->id('watch')
                    ->label($label)
-                   ->css_id("g-notify-link")
+                   ->css_id('g-notify-link')
                    ->url(url::site("notification/watch/$item->id?csrf=" . access::csrf_token())));
             }
         }
@@ -140,21 +140,22 @@ class notification_event_Core
             return;
         }
 
-        $view = new View("user_profile_notification.html");
+        $view = new View('user_profile_notification.html');
         $view->subscriptions = array();
-        foreach (ORM::factory("subscription")
-            ->where("user_id", "=", $data->user->id)
+        foreach (ORM::factory('subscription')
+            ->where('user_id', '=', $data->user->id)
             ->find_all() as $subscription) {
-            $item = ORM::factory("item")
-          ->where("id", "=", $subscription->item_id)
+            $item = ORM::factory('item')
+          ->where('id', '=', $subscription->item_id)
           ->find();
             if ($item->loaded()) {
-                $view->subscriptions[] = (object)array("id" => $subscription->id, "title" => $item->title,
-                                               "url" => $item->url());
+                $view->subscriptions[] = (object)array(
+                    'id'  => $subscription->id, 'title' => $item->title,
+                    'url' => $item->url());
             }
         }
         if (count($view->subscriptions) > 0) {
-            $data->content[] = (object)array("title" => t("Watching"), "view" => $view);
+            $data->content[] = (object)array('title' => t('Watching'), 'view' => $view);
         }
     }
 }

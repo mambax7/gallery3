@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -40,13 +40,13 @@
  *
  * Rawurlencode each of the elements to avoid breaking the page layout.
  */
-$config["site_domain"] =
-  implode("/", array_map("rawurlencode", explode(
-      "/",
+$config['site_domain'] =
+  implode('/', array_map('rawurlencode', explode(
+      '/',
       substr(
-          $_SERVER["SCRIPT_NAME"],
+          $_SERVER['SCRIPT_NAME'],
           0,
-             strpos($_SERVER["SCRIPT_NAME"], basename($_SERVER["SCRIPT_FILENAME"]))
+             strpos($_SERVER['SCRIPT_NAME'], basename($_SERVER['SCRIPT_FILENAME']))
       )
   )));
 
@@ -55,27 +55,27 @@ $config["site_domain"] =
  * specified, then the current protocol is used, or when possible, only an
  * absolute path (with no protocol/domain) is used.
  */
-$config["site_protocol"] = "";
+$config['site_protocol'] = '';
 
 /**
  * Name of the front controller for this application. Default: index.php
  *
  * This can be removed by using URL rewriting.
  */
-$config["index_page"] = isset($_GET["kohana_uri"]) ? "" : "index.php";
+$config['index_page'] = isset($_GET['kohana_uri']) ? '' : 'index.php';
 
 /**
  * Fake file extension that will be added to all generated URLs. Example: .html
  */
-$config["url_suffix"] = "";
+$config['url_suffix'] = '';
 
 /**
  * Length of time of the internal cache in seconds. 0 or FALSE means no caching.
  * The internal cache stores file paths and config entries across requests and
  * can give significant speed improvements at the expense of delayed updating.
  */
-$config["internal_cache"] = false;
-$config["internal_cache_path"] = VARPATH . "tmp/";
+$config['internal_cache']      = false;
+$config['internal_cache_path'] = VARPATH . 'tmp/';
 
 /**
  * Enable or disable gzip output compression. This can dramatically decrease
@@ -84,20 +84,20 @@ $config["internal_cache_path"] = VARPATH . "tmp/";
  *
  * Do not enable this option if you are using output compression in php.ini!
  */
-$config["output_compression"] = false;
+$config['output_compression'] = false;
 
 /**
  * Enable or disable global XSS filtering of GET, POST, and SERVER data. This
  * option also accepts a string to specify a specific XSS filtering tool.
  */
-$config["global_xss_filtering"] = true;
+$config['global_xss_filtering'] = true;
 
 /**
  * Enable or disable hooks. Setting this option to TRUE will enable
  * all hooks. By using an array of hook filenames, you can control
  * which hooks are enabled. Setting this option to FALSE disables hooks.
  */
-$config["enable_hooks"] = true;
+$config['enable_hooks'] = true;
 
 /**
  * Log thresholds:
@@ -107,21 +107,21 @@ $config["enable_hooks"] = true;
  *  3 - Notices
  *  4 - Debugging
  */
-$config["log_threshold"] = 3;
+$config['log_threshold'] = 3;
 
 /**
  * Message logging directory.
  */
-$config["log_directory"] = VARPATH . "logs";
-if (@!is_writable($config["log_directory"])) {
-    $config["log_threshold"] = 0;
+$config['log_directory'] = VARPATH . 'logs';
+if (@!is_writable($config['log_directory'])) {
+    $config['log_threshold'] = 0;
 }
 
 /**
  * Enable or disable displaying of Kohana error pages. This will not affect
  * logging. Turning this off will disable ALL error pages.
  */
-$config["display_errors"] = true;
+$config['display_errors'] = true;
 
 /**
  * Enable or disable statistics in the final output. Stats are replaced via
@@ -129,13 +129,13 @@ $config["display_errors"] = true;
  *
  * @see http://docs.kohanaphp.com/general/configuration
  */
-$config["render_stats"] = true;
+$config['render_stats'] = true;
 
 /**
  * Filename prefixed used to determine extensions. For example, an
  * extension to the Controller class would be named MY_Controller.php.
  */
-$config["extension_prefix"] = "MY_";
+$config['extension_prefix'] = 'MY_';
 
 /**
  * An optional list of Config Drivers to use, they "fallback" to the one below them if they
@@ -148,18 +148,19 @@ $config['config_drivers'] = array();
  * or relative to the docroot. Modules can include any resource that can exist
  * in your application directory, configuration files, controllers, views, etc.
  */
-$config["modules"] = array(
-  MODPATH . "forge",
-  MODPATH . "kohana23_compat",
-  MODPATH . "gallery",  // gallery must be *last* in the order
+$config['modules'] = array(
+    MODPATH . 'forge',
+    MODPATH . 'kohana23_compat',
+    MODPATH . 'gallery',  // gallery must be *last* in the order
 );
 
 if (TEST_MODE) {
     array_splice(
-      $config["modules"],
+        $config['modules'],
       0,
       0,
-               array(MODPATH . "gallery_unit_test",
-                     MODPATH . "unit_test")
+               array(MODPATH . 'gallery_unit_test',
+                     MODPATH . 'unit_test'
+        )
   );
 }

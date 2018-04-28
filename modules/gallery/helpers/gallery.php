@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -19,10 +19,10 @@
  */
 class gallery_Core
 {
-    const VERSION = "3.0+";
-    const CODE_NAME = "";
-    const RELEASE_CHANNEL = "git";
-    const RELEASE_BRANCH = "master";
+    const VERSION = '3.0+';
+    const CODE_NAME = '';
+    const RELEASE_CHANNEL = 'git';
+    const RELEASE_BRANCH = 'master';
 
     /**
      * If Gallery is in maintenance mode, then force all non-admins to get routed to a "This site is
@@ -30,25 +30,25 @@ class gallery_Core
      */
     public static function maintenance_mode()
     {
-        if (module::get_var("gallery", "maintenance_mode", 0) &&
-        !identity::active_user()->admin) {
+        if (module::get_var('gallery', 'maintenance_mode', 0) &&
+            !identity::active_user()->admin) {
             try {
                 $class = new ReflectionClass(ucfirst(Router::$controller).'_Controller');
-                $allowed = $class->getConstant("ALLOW_MAINTENANCE_MODE") === true;
+                $allowed = $class->getConstant('ALLOW_MAINTENANCE_MODE') === true;
             } catch (ReflectionClass $e) {
                 $allowed = false;
             }
             if (!$allowed) {
-                if (Router::$controller == "admin") {
+                if (Router::$controller == 'admin') {
                     // At this point we're in the admin theme and it doesn't have a themed login page, so
                     // we can't just swap in the login controller and have it work.  So redirect back to the
                     // root item where we'll run this code again with the site theme.
                     url::redirect(item::root()->abs_url());
                 } else {
-                    Session::instance()->set("continue_url", url::abs_site("admin/maintenance"));
-                    Router::$controller = "login";
-                    Router::$controller_path = MODPATH . "gallery/controllers/login.php";
-                    Router::$method = "html";
+                    Session::instance()->set('continue_url', url::abs_site('admin/maintenance'));
+                    Router::$controller = 'login';
+                    Router::$controller_path = MODPATH . 'gallery/controllers/login.php';
+                    Router::$method = 'html';
                 }
             }
         }
@@ -61,25 +61,25 @@ class gallery_Core
     public static function private_gallery()
     {
         if (identity::active_user()->guest &&
-        !access::user_can(identity::guest(), "view", item::root()) &&
-        php_sapi_name() != "cli") {
+        !access::user_can(identity::guest(), 'view', item::root()) &&
+            php_sapi_name() != 'cli') {
             try {
                 $class = new ReflectionClass(ucfirst(Router::$controller).'_Controller');
-                $allowed = $class->getConstant("ALLOW_PRIVATE_GALLERY") === true;
+                $allowed = $class->getConstant('ALLOW_PRIVATE_GALLERY') === true;
             } catch (ReflectionClass $e) {
                 $allowed = false;
             }
             if (!$allowed) {
-                if (Router::$controller == "admin") {
+                if (Router::$controller == 'admin') {
                     // At this point we're in the admin theme and it doesn't have a themed login page, so
                     // we can't just swap in the login controller and have it work.  So redirect back to the
                     // root item where we'll run this code again with the site theme.
                     url::redirect(item::root()->abs_url());
                 } else {
-                    Session::instance()->set("continue_url", url::abs_current());
-                    Router::$controller = "login";
-                    Router::$controller_path = MODPATH . "gallery/controllers/login.php";
-                    Router::$method = "html";
+                    Session::instance()->set('continue_url', url::abs_current());
+                    Router::$controller = 'login';
+                    Router::$controller_path = MODPATH . 'gallery/controllers/login.php';
+                    Router::$method = 'html';
                 }
             }
         }
@@ -93,11 +93,11 @@ class gallery_Core
     public static function ready()
     {
         // Don't keep a session for robots; it's a waste of database space.
-        if (request::user_agent("robot")) {
+        if (request::user_agent('robot')) {
             Session::instance()->abort_save();
         }
 
-        module::event("gallery_ready");
+        module::event('gallery_ready');
     }
 
     /**
@@ -107,7 +107,7 @@ class gallery_Core
      */
     public static function shutdown()
     {
-        module::event("gallery_shutdown");
+        module::event('gallery_shutdown');
     }
 
     /**
@@ -117,7 +117,7 @@ class gallery_Core
      */
     public static function date_time($timestamp)
     {
-        return date(module::get_var("gallery", "date_time_format"), $timestamp);
+        return date(module::get_var('gallery', 'date_time_format'), $timestamp);
     }
 
     /**
@@ -127,7 +127,7 @@ class gallery_Core
      */
     public static function date($timestamp)
     {
-        return date(module::get_var("gallery", "date_format"), $timestamp);
+        return date(module::get_var('gallery', 'date_format'), $timestamp);
     }
 
     /**
@@ -137,7 +137,7 @@ class gallery_Core
      */
     public static function time($timestamp)
     {
-        return date(module::get_var("gallery", "time_format", "H:i:s"), $timestamp);
+        return date(module::get_var('gallery', 'time_format', 'H:i:s'), $timestamp);
     }
 
     /**
@@ -164,21 +164,21 @@ class gallery_Core
 
         if (is_string($file_name)) {
             // make relative to DOCROOT
-            $parts = explode("/", $file_name);
+            $parts = explode('/', $file_name);
             $count = count($parts);
             foreach ($parts as $idx => $part) {
                 // If this part is "modules" or "themes" make sure that the part 2 after this
                 // is the target directory, and if it is then we're done.  This check makes
                 // sure that if Gallery is installed in a directory called "modules" or "themes"
                 // We don't parse the directory structure incorrectly.
-                if (in_array($part, array("modules", "themes")) &&
+                if (in_array($part, array('modules', 'themes')) &&
             $idx + 2 < $count &&
             $parts[$idx + 2] == $directory) {
                     break;
                 }
                 unset($parts[$idx]);
             }
-            $file_name = implode("/", $parts);
+            $file_name = implode('/', $parts);
         }
         return $file_name;
     }
@@ -195,7 +195,7 @@ class gallery_Core
                 array_push($path_env, $path);
             }
         }
-        putenv("PATH=" .  implode(":", $path_env));
+        putenv('PATH=' . implode(':', $path_env));
     }
 
     /**
@@ -203,16 +203,16 @@ class gallery_Core
      */
     public static function version_string()
     {
-        if (gallery::RELEASE_CHANNEL == "git") {
+        if (gallery::RELEASE_CHANNEL == 'git') {
             $build_number = gallery::build_number();
             return sprintf(
-        "%s (branch %s, %s)",
-          gallery::VERSION,
-          gallery::RELEASE_BRANCH,
-        $build_number ? " build $build_number" : "unknown build number"
+                '%s (branch %s, %s)',
+                gallery::VERSION,
+                gallery::RELEASE_BRANCH,
+                $build_number ? " build $build_number" : 'unknown build number'
       );
         } else {
-            return sprintf("%s (%s)", gallery::VERSION, gallery::CODE_NAME);
+            return sprintf('%s (%s)', gallery::VERSION, gallery::CODE_NAME);
         }
     }
 
@@ -222,10 +222,10 @@ class gallery_Core
      */
     public static function build_number()
     {
-        $build_file = DOCROOT . ".build_number";
+        $build_file = DOCROOT . '.build_number';
         if (file_exists($build_file)) {
-            $result = parse_ini_file(DOCROOT . ".build_number");
-            return $result["build_number"];
+            $result = parse_ini_file(DOCROOT . '.build_number');
+            return $result['build_number'];
         }
         return null;
     }
@@ -236,7 +236,7 @@ class gallery_Core
      */
     public static function show_profiler()
     {
-        return file_exists(VARPATH . "PROFILE");
+        return file_exists(VARPATH . 'PROFILE');
     }
 
     /**
@@ -245,6 +245,6 @@ class gallery_Core
      */
     public static function allow_css_and_js_combining()
     {
-        return !file_exists(VARPATH . "DONT_COMBINE");
+        return !file_exists(VARPATH . 'DONT_COMBINE');
     }
 }

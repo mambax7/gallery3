@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,7 +21,7 @@ class Items_Controller extends Controller
 {
     public function __call($function, $args)
     {
-        $item = ORM::factory("item", (int)$function);
+        $item = ORM::factory('item', (int)$function);
         if (!$item->loaded()) {
             throw new Kohana_404_Exception();
         }
@@ -30,17 +30,18 @@ class Items_Controller extends Controller
         // delegate here because we may have gotten to this page via /items/<id> which means that we
         // don't have a type-specific controller.  Also, we want to drive a single canonical resource
         // mapping where possible.
-        access::required("view", $item);
+        access::required('view', $item);
         url::redirect($item->abs_url());
     }
 
     // Return the width/height dimensions for the given item
     public function dimensions($id)
     {
-        $item = ORM::factory("item", $id);
-        access::required("view", $item);
-        json::reply(array("thumb" => array((int)$item->thumb_width, (int)$item->thumb_height),
-                      "resize" => array((int)$item->resize_width, (int)$item->resize_height),
-                      "full" => array((int)$item->width, (int)$item->height)));
+        $item = ORM::factory('item', $id);
+        access::required('view', $item);
+        json::reply(array(
+                        'thumb'  => array((int)$item->thumb_width, (int)$item->thumb_height),
+                        'resize' => array((int)$item->resize_width, (int)$item->resize_height),
+                        'full'   => array((int)$item->width, (int)$item->height)));
     }
 }

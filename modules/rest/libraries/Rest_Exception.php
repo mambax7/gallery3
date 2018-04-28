@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -30,12 +30,12 @@ class Rest_Exception_Core extends Kohana_Exception
     public function sendHeaders()
     {
         if (!headers_sent()) {
-            header("HTTP/1.1 " . $this->getCode() . " " . $this->getMessage());
+            header('HTTP/1.1 ' . $this->getCode() . ' ' . $this->getMessage());
         }
     }
 
     public function getTemplate()
     {
-        return "error_rest.json";
+        return 'error_rest.json';
     }
 }

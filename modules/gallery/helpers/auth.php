@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,19 +21,19 @@ class auth_Core
 {
     public static function get_login_form($url)
     {
-        $form = new Forge($url, "", "post", array("id" => "g-login-form"));
-        $form->set_attr("class", "g-narrow");
-        $form->hidden("continue_url")->value(Session::instance()->get("continue_url"));
-        $group = $form->group("login")->label(t("Login"));
-        $group->input("name")->label(t("Username"))->id("g-username")->class(null)
-      ->callback("auth::validate_too_many_failed_logins")
-      ->error_messages(
-        "too_many_failed_logins",
-          t("Too many failed login attempts.  Try again later")
+        $form = new Forge($url, '', 'post', array('id' => 'g-login-form'));
+        $form->set_attr('class', 'g-narrow');
+        $form->hidden('continue_url')->value(Session::instance()->get('continue_url'));
+        $group = $form->group('login')->label(t('Login'));
+        $group->input('name')->label(t('Username'))->id('g-username')->class(null)
+              ->callback('auth::validate_too_many_failed_logins')
+              ->error_messages(
+                  'too_many_failed_logins',
+                  t('Too many failed login attempts.  Try again later')
       );
-        $group->password("password")->label(t("Password"))->id("g-password")->class(null);
-        $group->inputs["name"]->error_messages("invalid_login", t("Invalid name or password"));
-        $group->submit("")->value(t("Login"));
+        $group->password('password')->label(t('Password'))->id('g-password')->class(null);
+        $group->inputs['name']->error_messages('invalid_login', t('Invalid name or password'));
+        $group->submit('')->value(t('Login'));
         return $form;
     }
 
@@ -45,8 +45,8 @@ class auth_Core
             $user->last_login = time();
             $user->save();
         }
-        log::info("user", t("User %name logged in", array("name" => $user->name)));
-        module::event("user_login", $user);
+        log::info('user', t('User %name logged in', array('name' => $user->name)));
+        module::event('user_login', $user);
     }
 
     public static function logout()
@@ -56,17 +56,18 @@ class auth_Core
             try {
                 Session::instance()->destroy();
             } catch (Exception $e) {
-                Kohana_Log::add("error", $e);
+                Kohana_Log::add('error', $e);
             }
-            module::event("user_logout", $user);
+            module::event('user_logout', $user);
         }
         log::info(
-        "user",
-        t("User %name logged out", array("name" => $user->name)),
-              t(
+            'user',
+            t('User %name logged out', array('name' => $user->name)),
+            t(
                   '<a href="%url">%user_name</a>',
-                array("url" => user_profile::url($user->id),
-                      "user_name" => html::clean($user->name))
+                array(
+                    'url'       => user_profile::url($user->id),
+                    'user_name' => html::clean($user->name))
               )
     );
     }
@@ -77,8 +78,8 @@ class auth_Core
      */
     public static function too_many_failures($name)
     {
-        $failed = ORM::factory("failed_auth")
-      ->where("name", "=", $name)
+        $failed = ORM::factory('failed_auth')
+      ->where('name', '=', $name)
       ->find();
         return ($failed->loaded() &&
             $failed->count > 5 &&
@@ -88,14 +89,14 @@ class auth_Core
     public static function validate_too_many_failed_logins($name_input)
     {
         if (auth::too_many_failures($name_input->value)) {
-            $name_input->add_error("too_many_failed_logins", 1);
+            $name_input->add_error('too_many_failed_logins', 1);
         }
     }
 
     public static function validate_too_many_failed_auth_attempts($form_input)
     {
         if (auth::too_many_failures(identity::active_user()->name)) {
-            $form_input->add_error("too_many_failed_auth_attempts", 1);
+            $form_input->add_error('too_many_failed_auth_attempts', 1);
         }
     }
 
@@ -104,8 +105,8 @@ class auth_Core
      */
     public static function record_failed_attempt($name)
     {
-        $failed = ORM::factory("failed_auth")
-      ->where("name", "=", $name)
+        $failed = ORM::factory('failed_auth')
+      ->where('name', '=', $name)
       ->find();
         if (!$failed->loaded()) {
             $failed->name = $name;
@@ -120,8 +121,8 @@ class auth_Core
      */
     public static function clear_failed_attempts($user)
     {
-        ORM::factory("failed_auth")
-      ->where("name", "=", $user->name)
+        ORM::factory('failed_auth')
+      ->where('name', '=', $user->name)
       ->delete_all();
     }
 
@@ -137,15 +138,15 @@ class auth_Core
         }
 
         $session = Session::instance();
-        $last_active_auth = $session->get("active_auth_timestamp", 0);
-        $last_admin_area_activity = $session->get("admin_area_activity_timestamp", 0);
-        $admin_area_timeout = module::get_var("gallery", "admin_area_timeout");
+        $last_active_auth = $session->get('active_auth_timestamp', 0);
+        $last_admin_area_activity = $session->get('admin_area_activity_timestamp', 0);
+        $admin_area_timeout = module::get_var('gallery', 'admin_area_timeout');
 
         if (max($last_active_auth, $last_admin_area_activity) + $admin_area_timeout < time()) {
             return true;
         }
 
-        $session->set("admin_area_activity_timestamp", time());
+        $session->set('admin_area_activity_timestamp', time());
         return false;
     }
 }

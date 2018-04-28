@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -49,7 +49,7 @@ class num extends num_Core
      */
     public static function convert_to_human_readable($num)
     {
-        foreach (array("G" => 1e9, "M" => 1e6, "K" => 1e3) as $k => $v) {
+        foreach (array('G' => 1e9, 'M' => 1e6, 'K' => 1e3) as $k => $v) {
             if ($num > $v) {
                 $num = round($num / $v) . $k;
             }

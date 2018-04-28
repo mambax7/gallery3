@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -31,13 +31,13 @@ class Admin_Movies_Controller extends Admin_Controller
         access::verify_csrf();
         $form = $this->_get_admin_form();
         if ($form->validate()) {
-            module::set_var("gallery", "movie_allow_uploads", $form->settings->allow_uploads->value);
+            module::set_var('gallery', 'movie_allow_uploads', $form->settings->allow_uploads->value);
             if ($form->settings->rebuild_thumbs->value) {
-                graphics::mark_dirty(true, false, "movie");
+                graphics::mark_dirty(true, false, 'movie');
             }
             // All done - redirect with message.
-            message::success(t("Movies settings updated successfully"));
-            url::redirect("admin/movies");
+            message::success(t('Movies settings updated successfully'));
+            url::redirect('admin/movies');
         }
         // Something went wrong - print view from existing form.
         $this->_print_view($form);
@@ -48,11 +48,11 @@ class Admin_Movies_Controller extends Admin_Controller
         list($ffmpeg_version, $ffmpeg_date) = movie::get_ffmpeg_version();
         $ffmpeg_version = $ffmpeg_date ? "{$ffmpeg_version} ({$ffmpeg_date})" : $ffmpeg_version;
         $ffmpeg_path = movie::find_ffmpeg();
-        $ffmpeg_dir = substr($ffmpeg_path, 0, strrpos($ffmpeg_path, "/"));
+        $ffmpeg_dir = substr($ffmpeg_path, 0, strrpos($ffmpeg_path, '/'));
 
-        $view = new Admin_View("admin.html");
-        $view->page_title = t("Movies settings");
-        $view->content = new View("admin_movies.html");
+        $view = new Admin_View('admin.html');
+        $view->page_title = t('Movies settings');
+        $view->content = new View('admin_movies.html');
         $view->content->form = $form;
         $view->content->ffmpeg_dir = $ffmpeg_dir;
         $view->content->ffmpeg_version = $ffmpeg_version;
@@ -61,17 +61,18 @@ class Admin_Movies_Controller extends Admin_Controller
 
     private function _get_admin_form()
     {
-        $form = new Forge("admin/movies/save", "", "post", array("id" => "g-movies-admin-form"));
-        $group = $form->group("settings")->label(t("Settings"));
-        $group->dropdown("allow_uploads")
-      ->label(t("Allow movie uploads into Gallery (does not affect existing movies)"))
-      ->options(array("autodetect"=>t("only if FFmpeg is detected (default)"),
-                      "always"=>t("always"), "never"=>t("never")))
-      ->selected(module::get_var("gallery", "movie_allow_uploads", "autodetect"));
-        $group->checkbox("rebuild_thumbs")
-      ->label(t("Rebuild all movie thumbnails (once FFmpeg is installed, use this to update existing movie thumbnails)"))
+        $form = new Forge('admin/movies/save', '', 'post', array('id' => 'g-movies-admin-form'));
+        $group = $form->group('settings')->label(t('Settings'));
+        $group->dropdown('allow_uploads')
+      ->label(t('Allow movie uploads into Gallery (does not affect existing movies)'))
+      ->options(array(
+                    'autodetect' =>t('only if FFmpeg is detected (default)'),
+                    'always'     =>t('always'), 'never' =>t('never')))
+      ->selected(module::get_var('gallery', 'movie_allow_uploads', 'autodetect'));
+        $group->checkbox('rebuild_thumbs')
+      ->label(t('Rebuild all movie thumbnails (once FFmpeg is installed, use this to update existing movie thumbnails)'))
       ->checked(false);  // always set as false
-        $form->submit("save")->value(t("Save"));
+        $form->submit('save')->value(t('Save'));
         return $form;
     }
 }

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -22,26 +22,27 @@ class Tag_Rest_Helper_Test extends Gallery_Unit_Test_Case
     public function setup()
     {
         try {
-            Database::instance()->query("TRUNCATE {tags}");
-            Database::instance()->query("TRUNCATE {items_tags}");
+            Database::instance()->query('TRUNCATE {tags}');
+            Database::instance()->query('TRUNCATE {items_tags}');
         } catch (Exception $e) {
         }
     }
 
     public function get_test()
     {
-        $tag = tag::add(item::root(), "tag1")->reload();
+        $tag = tag::add(item::root(), 'tag1')->reload();
 
         $request = new stdClass();
-        $request->url = rest::url("tag", $tag);
+        $request->url = rest::url('tag', $tag);
         $this->assert_equal_array(
-      array("url" => rest::url("tag", $tag),
-            "entity" => $tag->as_array(),
-            "relationships" => array(
-              "items" => array(
-                "url" => rest::url("tag_items", $tag),
-                "members" => array(
-                  rest::url("tag_item", $tag, item::root()))))),
+      array(
+          'url'           => rest::url('tag', $tag),
+          'entity'        => $tag->as_array(),
+          'relationships' => array(
+              'items' => array(
+                  'url'     => rest::url('tag_items', $tag),
+                  'members' => array(
+                  rest::url('tag_item', $tag, item::root()))))),
       tag_rest::get($request)
     );
     }
@@ -49,7 +50,7 @@ class Tag_Rest_Helper_Test extends Gallery_Unit_Test_Case
     public function get_with_invalid_url_test()
     {
         $request = new stdClass();
-        $request->url = "bogus";
+        $request->url = 'bogus';
         try {
             tag_rest::get($request);
         } catch (Kohana_404_Exception $e) {
@@ -63,14 +64,15 @@ class Tag_Rest_Helper_Test extends Gallery_Unit_Test_Case
         $tag = test::random_tag();
 
         $request = new stdClass();
-        $request->url = rest::url("tag", $tag);
+        $request->url = rest::url('tag', $tag);
         $this->assert_equal_array(
-      array("url" => rest::url("tag", $tag),
-            "entity" => $tag->as_array(),
-            "relationships" => array(
-              "items" => array(
-                "url" => rest::url("tag_items", $tag),
-                "members" => array()))),
+      array(
+          'url'           => rest::url('tag', $tag),
+          'entity'        => $tag->as_array(),
+          'relationships' => array(
+              'items' => array(
+                  'url'     => rest::url('tag_items', $tag),
+                  'members' => array()))),
       tag_rest::get($request)
     );
     }
@@ -79,20 +81,20 @@ class Tag_Rest_Helper_Test extends Gallery_Unit_Test_Case
     {
         $tag = test::random_tag();
         $request = new stdClass();
-        $request->url = rest::url("tag", $tag);
+        $request->url = rest::url('tag', $tag);
         $request->params = new stdClass();
         $request->params->entity = new stdClass();
-        $request->params->entity->name = "new name";
+        $request->params->entity->name = 'new name';
 
         tag_rest::put($request);
-        $this->assert_equal("new name", $tag->reload()->name);
+        $this->assert_equal('new name', $tag->reload()->name);
     }
 
     public function delete_tag_test()
     {
         $tag = test::random_tag();
         $request = new stdClass();
-        $request->url = rest::url("tag", $tag);
+        $request->url = rest::url('tag', $tag);
         tag_rest::delete($request);
 
         $this->assert_false($tag->reload()->loaded());
@@ -104,7 +106,7 @@ class Tag_Rest_Helper_Test extends Gallery_Unit_Test_Case
 
         $this->assert_equal(
       $tag->as_array(),
-      rest::resolve(rest::url("tag", $tag))->as_array()
+      rest::resolve(rest::url('tag', $tag))->as_array()
     );
     }
 }

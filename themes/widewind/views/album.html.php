@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
+<?php defined('SYSPATH') or die('No direct script access.') ?>
 <?php // @todo Set hover on AlbumGrid list items for guest users?>
 <div id="g-info">
   <?= $theme->album_top() ?>
@@ -10,17 +10,17 @@
 <?php if (count($children)): ?>
   <?php foreach ($children as $i => $child): ?>
     <?php if ($child->is_album()): ?>
-      <?php $item_class = "g-album"; ?>
+      <?php $item_class = 'g-album'; ?>
     <?php elseif ($child->is_movie()): ?>
-      <?php $item_class = "g-movie"; ?>
+      <?php $item_class = 'g-movie'; ?>
     <?php else: ?>
-      <?php $item_class = "g-photo"; ?>
+      <?php $item_class = 'g-photo'; ?>
     <?php endif ?>
   <li id="g-item-id-<?= $child->id ?>" class="g-item <?= $item_class ?>">
     <?= $theme->thumb_top($child) ?>
     <a href="<?= $child->url() ?>">
       <?php if ($child->has_thumb()): ?>
-      <?= $child->thumb_img(array("class" => "g-thumbnail")) ?>
+      <?= $child->thumb_img(array('class' => 'g-thumbnail')) ?>
       <?php endif ?>
     </a>
     <?= $theme->thumb_bottom($child) ?>
@@ -33,11 +33,11 @@
   </li>
   <?php endforeach ?>
 <?php else: ?>
-  <?php if ($user->admin || access::can("add", $item)): ?>
+  <?php if ($user->admin || access::can('add', $item)): ?>
   <?php $addurl = url::site("uploader/index/$item->id") ?>
   <li><?= t(
     "There aren't any photos here yet! <a %attrs>Add some</a>.",
-            array("attrs" => html::mark_clean("href=\"$addurl\" class=\"g-dialog-link\""))
+            array('attrs' => html::mark_clean("href=\"$addurl\" class=\"g-dialog-link\""))
 ) ?></li>
   <?php else: ?>
   <li><?= t("There aren't any photos here yet!") ?></li>

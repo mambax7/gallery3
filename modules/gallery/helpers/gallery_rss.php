@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -22,13 +22,13 @@ class gallery_rss_Core
 {
     public static function available_feeds($item, $tag)
     {
-        $feeds["gallery/latest"] = t("Latest photos and movies");
+        $feeds['gallery/latest'] = t('Latest photos and movies');
 
         if ($item) {
             $feed_item = $item -> is_album() ? $item : $item->parent();
 
             $feeds["gallery/album/{$feed_item->id}"] =
-          t("%title photos and movies", array("title" => $feed_item->title));
+          t('%title photos and movies', array('title' => $feed_item->title));
         }
 
         return $feeds;
@@ -38,40 +38,41 @@ class gallery_rss_Core
     {
         $feed = new stdClass();
         switch ($feed_id) {
-    case "latest":
-      $feed->items = ORM::factory("item")
+    case 'latest':
+      $feed->items = ORM::factory('item')
         ->viewable()
-        ->where("type", "<>", "album")
-        ->order_by("created", "DESC")
+        ->where('type', '<>', 'album')
+        ->order_by('created', 'DESC')
         ->find_all($limit, $offset);
 
-      $all_items = ORM::factory("item")
+      $all_items = ORM::factory('item')
         ->viewable()
-        ->where("type", "<>", "album")
-        ->order_by("created", "DESC");
+        ->where('type', '<>', 'album')
+        ->order_by('created', 'DESC');
 
       $feed->max_pages = ceil($all_items->find_all()->count() / $limit);
-      $feed->title = t("%site_title - Recent updates", array("site_title" => item::root()->title));
-      $feed->description = t("Recent updates");
+      $feed->title = t('%site_title - Recent updates', array('site_title' => item::root()->title));
+      $feed->description = t('Recent updates');
       return $feed;
 
-    case "album":
-      $item = ORM::factory("item", $id);
-      access::required("view", $item);
+    case 'album':
+      $item = ORM::factory('item', $id);
+      access::required('view', $item);
 
       $feed->items = $item
         ->viewable()
-        ->descendants($limit, $offset, array(array("type", "=", "photo")));
+        ->descendants($limit, $offset, array(array('type', '=', 'photo')));
       $feed->max_pages = ceil(
-        $item->viewable()->descendants_count(array(array("type", "=", "photo"))) / $limit
+          $item->viewable()->descendants_count(array(array('type', '=', 'photo'))) / $limit
       );
       if ($item->id == item::root()->id) {
           $feed->title = html::purify($item->title);
       } else {
           $feed->title = t(
-            "%site_title - %item_title",
-                         array("site_title" => item::root()->title,
-                               "item_title" => $item->title)
+              '%site_title - %item_title',
+              array(
+                  'site_title' => item::root()->title,
+                  'item_title' => $item->title)
         );
       }
       $feed->description = nl2br(html::purify($item->description));

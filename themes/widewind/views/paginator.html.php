@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
+<?php defined('SYSPATH') or die('No direct script access.') ?>
 <?php
 // This is a generic paginator for album, photo and movie pages.  Depending on the page type,
 // there are different sets of variables available.  With this data, you can make a paginator
@@ -28,61 +28,61 @@
 
 <ul class="g-paginator ui-helper-clearfix">
   <li class="g-first">
-  <?php if ($page_type == "collection"): ?>
+  <?php if ($page_type == 'collection'): ?>
     <?php if (isset($first_page_url)): ?>
       <a href="<?= $first_page_url ?>" class="g-button ui-icon-left ui-state-default ui-corner-all">
-        <span class="ui-icon ui-icon-seek-first"></span><?= t("First") ?></a>
+        <span class="ui-icon ui-icon-seek-first"></span><?= t('First') ?></a>
     <?php else: ?>
       <a class="g-button ui-icon-left ui-state-disabled ui-corner-all">
-        <span class="ui-icon ui-icon-seek-first"></span><?= t("First") ?></a>
+        <span class="ui-icon ui-icon-seek-first"></span><?= t('First') ?></a>
     <?php endif ?>
   <?php endif ?>
 
   <?php if (isset($previous_page_url)): ?>
     <a href="<?= $previous_page_url ?>" class="g-button ui-icon-left ui-state-default ui-corner-all">
-      <span class="ui-icon ui-icon-seek-prev"></span><?= t("Previous") ?></a>
+      <span class="ui-icon ui-icon-seek-prev"></span><?= t('Previous') ?></a>
   <?php else: ?>
     <a class="g-button ui-icon-left ui-state-disabled ui-corner-all">
-      <span class="ui-icon ui-icon-seek-prev"></span><?= t("Previous") ?></a>
+      <span class="ui-icon ui-icon-seek-prev"></span><?= t('Previous') ?></a>
   <?php endif ?>
   </li>
 
   <li class="g-info">
     <?php if ($total): ?>
-      <?php if ($page_type == "collection"): ?>
+      <?php if ($page_type == 'collection'): ?>
         <?= /* @todo This message isn't easily localizable */
             t2(
-                "Photo %from_number of %count",
-               "Photos %from_number - %to_number of %count",
-               $total,
-               array("from_number" => $first_visible_position,
-                     "to_number" => $last_visible_position,
-                     "count" => $total)
+                'Photo %from_number of %count', 'Photos %from_number - %to_number of %count',
+                $total,
+                array(
+                    'from_number' => $first_visible_position,
+                    'to_number'   => $last_visible_position,
+                    'count'       => $total)
             ) ?>
       <?php else: ?>
-        <?= t("%position of %total", array("position" => $position, "total" => $total)) ?>
+        <?= t('%position of %total', array('position' => $position, 'total' => $total)) ?>
       <?php endif ?>
     <?php else: ?>
-      <?= t("No photos") ?>
+      <?= t('No photos') ?>
     <?php endif ?>
   </li>
 
   <li class="g-text-right">
   <?php if (isset($next_page_url)): ?>
     <a href="<?= $next_page_url ?>" class="g-button ui-icon-right ui-state-default ui-corner-all">
-      <span class="ui-icon ui-icon-seek-next"></span><?= t("Next") ?></a>
+      <span class="ui-icon ui-icon-seek-next"></span><?= t('Next') ?></a>
   <?php else: ?>
     <a class="g-button ui-state-disabled ui-icon-right ui-corner-all">
-      <span class="ui-icon ui-icon-seek-next"></span><?= t("Next") ?></a>
+      <span class="ui-icon ui-icon-seek-next"></span><?= t('Next') ?></a>
   <?php endif ?>
 
-  <?php if ($page_type == "collection"): ?>
+  <?php if ($page_type == 'collection'): ?>
     <?php if (isset($last_page_url)): ?>
       <a href="<?= $last_page_url ?>" class="g-button ui-icon-right ui-state-default ui-corner-all">
-        <span class="ui-icon ui-icon-seek-end"></span><?= t("Last") ?></a>
+        <span class="ui-icon ui-icon-seek-end"></span><?= t('Last') ?></a>
     <?php else: ?>
       <a class="g-button ui-state-disabled ui-icon-right ui-corner-all">
-        <span class="ui-icon ui-icon-seek-end"></span><?= t("Last") ?></a>
+        <span class="ui-icon ui-icon-seek-end"></span><?= t('Last') ?></a>
     <?php endif ?>
   <?php endif ?>
   </li>

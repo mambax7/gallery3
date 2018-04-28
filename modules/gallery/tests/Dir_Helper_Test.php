@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,14 +21,14 @@ class Dir_Helper_Test extends Gallery_Unit_Test_Case
 {
     public function remove_album_test()
     {
-        $dirname = (VARPATH . "albums/testdir");
+        $dirname = (VARPATH . 'albums/testdir');
         mkdir($dirname, 0777, true);
 
-        $filename = tempnam($dirname, "file");
+        $filename = tempnam($dirname, 'file');
         touch($filename);
 
         dir::unlink($dirname);
-        $this->assert_boolean(!file_exists($filename), "File not deleted");
-        $this->assert_boolean(!file_exists($dirname), "Directory not deleted");
+        $this->assert_boolean(!file_exists($filename), 'File not deleted');
+        $this->assert_boolean(!file_exists($dirname), 'Directory not deleted');
     }
 }

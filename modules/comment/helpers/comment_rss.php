@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -22,25 +22,25 @@ class comment_rss_Core
 {
     public static function feed_visible($feed_id)
     {
-        $visible = module::get_var("comment", "rss_visible");
-        if (!in_array($feed_id, array("newest", "per_item"))) {
+        $visible = module::get_var('comment', 'rss_visible');
+        if (!in_array($feed_id, array('newest', 'per_item'))) {
             return false;
         }
 
-        return ($visible == "all" || $visible == $feed_id);
+        return ($visible == 'all' || $visible == $feed_id);
     }
 
     public static function available_feeds($item, $tag)
     {
         $feeds = array();
 
-        if (comment_rss::feed_visible("newest")) {
-            $feeds["comment/newest"] = t("All new comments");
+        if (comment_rss::feed_visible('newest')) {
+            $feeds['comment/newest'] = t('All new comments');
         }
 
-        if ($item && comment_rss::feed_visible("per_item")) {
+        if ($item && comment_rss::feed_visible('per_item')) {
             $feeds["comment/per_item/$item->id"] =
-        t("Comments on %title", array("title" => html::purify($item->title)));
+        t('Comments on %title', array('title' => html::purify($item->title)));
         }
         return $feeds;
     }
@@ -51,51 +51,53 @@ class comment_rss_Core
             return;
         }
 
-        $comments = ORM::factory("comment")
+        $comments = ORM::factory('comment')
       ->viewable()
-      ->where("comments.state", "=", "published")
-      ->order_by("comments.created", "DESC");
+      ->where('comments.state', '=', 'published')
+      ->order_by('comments.created', 'DESC');
 
-        if ($feed_id == "item") {
-            $item = ORM::factory("item", $id);
+        if ($feed_id == 'item') {
+            $item = ORM::factory('item', $id);
             $comments
-        ->where("items.left_ptr", ">=", $item->left_ptr)
-        ->where("items.right_ptr", "<=", $item->right_ptr);
+        ->where('items.left_ptr', '>=', $item->left_ptr)
+        ->where('items.right_ptr', '<=', $item->right_ptr);
         }
 
         $feed = new stdClass();
-        $feed->view = "comment.mrss";
+        $feed->view = 'comment.mrss';
         $feed->comments = array();
         foreach ($comments->find_all($limit, $offset) as $comment) {
             $item = $comment->item();
             $feed->comments[] = new ArrayObject(
-        array("pub_date" => date("D, d M Y H:i:s O", $comment->created),
-              "text" => nl2br(html::purify($comment->text)),
-              "thumb_url" => $item->thumb_url(),
-              "thumb_height" => $item->thumb_height,
-              "thumb_width" => $item->thumb_width,
-              "item_uri" => url::abs_site("{$item->type}s/$item->id"),
-              "title" => (
+        array(
+            'pub_date'     => date('D, d M Y H:i:s O', $comment->created),
+            'text'         => nl2br(html::purify($comment->text)),
+            'thumb_url'    => $item->thumb_url(),
+            'thumb_height' => $item->thumb_height,
+            'thumb_width'  => $item->thumb_width,
+            'item_uri'     => url::abs_site("{$item->type}s/$item->id"),
+            'title'        => (
                 ($item->id == item::root()->id) ?
                 html::purify($item->title) :
                 t(
-                    "%site_title - %item_title",
-                  array("site_title" => item::root()->title,
-                        "item_title" => $item->title)
+                    '%site_title - %item_title',
+                    array(
+                        'site_title' => item::root()->title,
+                        'item_title' => $item->title)
                 )
               ),
-              "author" => html::clean($comment->author_name())),
+            'author'       => html::clean($comment->author_name())),
         ArrayObject::ARRAY_AS_PROPS
       );
         }
 
         $feed->max_pages = ceil($comments->count_all() / $limit);
         $feed->title = html::purify(t(
-        "%site_title - Recent Comments",
-                                 array("site_title" => item::root()->title)
+                                        '%site_title - Recent Comments',
+                                        array('site_title' => item::root()->title)
     ));
-        $feed->uri = url::abs_site("albums/" . (empty($id) ? "1" : $id));
-        $feed->description = t("Recent comments");
+        $feed->uri = url::abs_site('albums/' . (empty($id) ? '1' : $id));
+        $feed->description = t('Recent comments');
 
         return $feed;
     }

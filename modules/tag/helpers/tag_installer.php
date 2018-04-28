@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -22,42 +22,42 @@ class tag_installer
     public static function install()
     {
         $db = Database::instance();
-        $db->query("CREATE TABLE IF NOT EXISTS {tags} (
+        $db->query('CREATE TABLE IF NOT EXISTS {tags} (
                  `id` int(9) NOT NULL auto_increment,
                  `name` varchar(128) NOT NULL,
                  `count` int(10) unsigned NOT NULL DEFAULT 0,
                  PRIMARY KEY (`id`),
                  UNIQUE KEY(`name`))
-               DEFAULT CHARSET=utf8;");
+               DEFAULT CHARSET=utf8;');
 
-        $db->query("CREATE TABLE IF NOT EXISTS {items_tags} (
+        $db->query('CREATE TABLE IF NOT EXISTS {items_tags} (
                  `id` int(9) NOT NULL auto_increment,
                  `item_id` int(9) NOT NULL,
                  `tag_id` int(9) NOT NULL,
                  PRIMARY KEY (`id`),
                  KEY(`tag_id`, `id`),
                  KEY(`item_id`, `id`))
-               DEFAULT CHARSET=utf8;");
-        module::set_var("tag", "tag_cloud_size", 30);
+               DEFAULT CHARSET=utf8;');
+        module::set_var('tag', 'tag_cloud_size', 30);
     }
 
     public static function upgrade($version)
     {
         $db = Database::instance();
         if ($version == 1) {
-            $db->query("ALTER TABLE {tags} MODIFY COLUMN `name` VARCHAR(128)");
-            module::set_version("tag", $version = 2);
+            $db->query('ALTER TABLE {tags} MODIFY COLUMN `name` VARCHAR(128)');
+            module::set_version('tag', $version = 2);
         }
         if ($version == 2) {
-            module::set_var("tag", "tag_cloud_size", 30);
-            module::set_version("tag", $version = 3);
+            module::set_var('tag', 'tag_cloud_size', 30);
+            module::set_version('tag', $version = 3);
         }
     }
 
     public static function uninstall()
     {
         $db = Database::instance();
-        $db->query("DROP TABLE IF EXISTS {tags};");
-        $db->query("DROP TABLE IF EXISTS {items_tags};");
+        $db->query('DROP TABLE IF EXISTS {tags};');
+        $db->query('DROP TABLE IF EXISTS {items_tags};');
     }
 }

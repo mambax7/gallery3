@@ -1,8 +1,8 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
+<?php defined('SYSPATH') or die('No direct script access.') ?>
 <li class="ui-icon-left">
   <span class="ui-icon ui-icon-folder-open"></span>
   <span class="g-directory" ref="">
-    <?= t("All") ?>
+    <?= t('All') ?>
   </span>
   <ul>
 
@@ -17,15 +17,15 @@
 
         <?php foreach ($files as $file): ?>
         <li class="ui-icon-left">
-          <span class="ui-icon <?= is_dir($file) ? "ui-icon-folder-collapsed" : "ui-icon-document" ?>"></span>
-          <span class="<?= is_dir($file) ? "g-directory" : "g-file" ?>"
+          <span class="ui-icon <?= is_dir($file) ? 'ui-icon-folder-collapsed' : 'ui-icon-document' ?>"></span>
+          <span class="<?= is_dir($file) ? 'g-directory' : 'g-file' ?>"
                 ref="<?= html::clean_attribute($file) ?>" >
             <?= html::clean(basename($file)) ?>
           </span>
         </li>
         <?php endforeach ?>
         <?php if (!$files): ?>
-        <li> <i> <?= t("empty") ?> </i> </li>
+        <li> <i> <?= t('empty') ?> </i> </li>
         <?php endif ?>
 
         <?php foreach ($parents as $dir): ?>

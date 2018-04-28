@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -28,19 +28,19 @@ class Comment_Helper_Test extends Gallery_Unit_Test_Case
         $this->_user_agent = request::user_agent();
         $this->_save = $_SERVER;
 
-        $_SERVER["HTTP_ACCEPT"] = "HTTP_ACCEPT";
-        $_SERVER["HTTP_ACCEPT_CHARSET"] = "HTTP_ACCEPT_CHARSET";
-        $_SERVER["HTTP_ACCEPT_ENCODING"] = "HTTP_ACCEPT_ENCODING";
-        $_SERVER["HTTP_ACCEPT_LANGUAGE"] = "HTTP_ACCEPT_LANGUAGE";
-        $_SERVER["HTTP_CONNECTION"] = "HTTP_CONNECTION";
-        $_SERVER["HTTP_HOST"] = "HTTP_HOST";
-        $_SERVER["HTTP_REFERER"] = "HTTP_REFERER";
-        $_SERVER["QUERY_STRING"] = "QUERY_STRING";
-        $_SERVER["REMOTE_ADDR"] = "REMOTE_ADDR";
-        $_SERVER["REMOTE_HOST"] = "REMOTE_HOST";
-        $_SERVER["REMOTE_PORT"] = "REMOTE_PORT";
+        $_SERVER['HTTP_ACCEPT']          = 'HTTP_ACCEPT';
+        $_SERVER['HTTP_ACCEPT_CHARSET']  = 'HTTP_ACCEPT_CHARSET';
+        $_SERVER['HTTP_ACCEPT_ENCODING'] = 'HTTP_ACCEPT_ENCODING';
+        $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'HTTP_ACCEPT_LANGUAGE';
+        $_SERVER['HTTP_CONNECTION']      = 'HTTP_CONNECTION';
+        $_SERVER['HTTP_HOST']            = 'HTTP_HOST';
+        $_SERVER['HTTP_REFERER']         = 'HTTP_REFERER';
+        $_SERVER['QUERY_STRING']         = 'QUERY_STRING';
+        $_SERVER['REMOTE_ADDR']          = 'REMOTE_ADDR';
+        $_SERVER['REMOTE_HOST']          = 'REMOTE_HOST';
+        $_SERVER['REMOTE_PORT']          = 'REMOTE_PORT';
 
-        request::set_user_agent("HTTP_USER_AGENT");
+        request::set_user_agent('HTTP_USER_AGENT');
     }
 
     public function teardown()
@@ -52,35 +52,35 @@ class Comment_Helper_Test extends Gallery_Unit_Test_Case
 
     public function create_comment_for_guest_test()
     {
-        $comment = ORM::factory("comment");
+        $comment = ORM::factory('comment');
         $comment->item_id = item::root()->id;
-        $comment->text = "text";
+        $comment->text = 'text';
         $comment->author_id = identity::guest()->id;
-        $comment->guest_name = "name";
-        $comment->guest_email = "email@email.com";
-        $comment->guest_url = "http://url.com";
+        $comment->guest_name = 'name';
+        $comment->guest_email = 'email@email.com';
+        $comment->guest_url = 'http://url.com';
         $comment->save();
 
-        $this->assert_equal("name", $comment->author_name());
-        $this->assert_equal("email@email.com", $comment->author_email());
-        $this->assert_equal("http://url.com", $comment->author_url());
-        $this->assert_equal("text", $comment->text);
+        $this->assert_equal('name', $comment->author_name());
+        $this->assert_equal('email@email.com', $comment->author_email());
+        $this->assert_equal('http://url.com', $comment->author_url());
+        $this->assert_equal('text', $comment->text);
         $this->assert_equal(1, $comment->item_id);
 
-        $this->assert_equal("REMOTE_ADDR", $comment->server_remote_addr);
-        $this->assert_equal("HTTP_USER_AGENT", $comment->server_http_user_agent);
-        $this->assert_equal("HTTP_ACCEPT", $comment->server_http_accept);
-        $this->assert_equal("HTTP_ACCEPT_CHARSET", $comment->server_http_accept_charset);
-        $this->assert_equal("HTTP_ACCEPT_ENCODING", $comment->server_http_accept_encoding);
-        $this->assert_equal("HTTP_ACCEPT_LANGUAGE", $comment->server_http_accept_language);
-        $this->assert_equal("HTTP_CONNECTION", $comment->server_http_connection);
-        $this->assert_equal("HTTP_HOST", $comment->server_http_host);
-        $this->assert_equal("HTTP_REFERER", $comment->server_http_referer);
-        $this->assert_equal("HTTP_USER_AGENT", $comment->server_http_user_agent);
-        $this->assert_equal("QUERY_STRING", $comment->server_query_string);
-        $this->assert_equal("REMOTE_ADDR", $comment->server_remote_addr);
-        $this->assert_equal("REMOTE_HOST", $comment->server_remote_host);
-        $this->assert_equal("REMOTE_PORT", $comment->server_remote_port);
+        $this->assert_equal('REMOTE_ADDR', $comment->server_remote_addr);
+        $this->assert_equal('HTTP_USER_AGENT', $comment->server_http_user_agent);
+        $this->assert_equal('HTTP_ACCEPT', $comment->server_http_accept);
+        $this->assert_equal('HTTP_ACCEPT_CHARSET', $comment->server_http_accept_charset);
+        $this->assert_equal('HTTP_ACCEPT_ENCODING', $comment->server_http_accept_encoding);
+        $this->assert_equal('HTTP_ACCEPT_LANGUAGE', $comment->server_http_accept_language);
+        $this->assert_equal('HTTP_CONNECTION', $comment->server_http_connection);
+        $this->assert_equal('HTTP_HOST', $comment->server_http_host);
+        $this->assert_equal('HTTP_REFERER', $comment->server_http_referer);
+        $this->assert_equal('HTTP_USER_AGENT', $comment->server_http_user_agent);
+        $this->assert_equal('QUERY_STRING', $comment->server_query_string);
+        $this->assert_equal('REMOTE_ADDR', $comment->server_remote_addr);
+        $this->assert_equal('REMOTE_HOST', $comment->server_remote_host);
+        $this->assert_equal('REMOTE_PORT', $comment->server_remote_port);
 
         $this->assert_true(!empty($comment->created));
     }
@@ -89,32 +89,32 @@ class Comment_Helper_Test extends Gallery_Unit_Test_Case
     {
         $admin = identity::admin_user();
 
-        $comment = ORM::factory("comment");
+        $comment = ORM::factory('comment');
         $comment->item_id = item::root()->id;
-        $comment->text = "text";
+        $comment->text = 'text';
         $comment->author_id = $admin->id;
         $comment->save();
 
         $this->assert_equal($admin->full_name, $comment->author_name());
         $this->assert_equal($admin->email, $comment->author_email());
         $this->assert_equal($admin->url, $comment->author_url());
-        $this->assert_equal("text", $comment->text);
+        $this->assert_equal('text', $comment->text);
         $this->assert_equal(1, $comment->item_id);
 
-        $this->assert_equal("REMOTE_ADDR", $comment->server_remote_addr);
-        $this->assert_equal("HTTP_USER_AGENT", $comment->server_http_user_agent);
-        $this->assert_equal("HTTP_ACCEPT", $comment->server_http_accept);
-        $this->assert_equal("HTTP_ACCEPT_CHARSET", $comment->server_http_accept_charset);
-        $this->assert_equal("HTTP_ACCEPT_ENCODING", $comment->server_http_accept_encoding);
-        $this->assert_equal("HTTP_ACCEPT_LANGUAGE", $comment->server_http_accept_language);
-        $this->assert_equal("HTTP_CONNECTION", $comment->server_http_connection);
-        $this->assert_equal("HTTP_HOST", $comment->server_http_host);
-        $this->assert_equal("HTTP_REFERER", $comment->server_http_referer);
-        $this->assert_equal("HTTP_USER_AGENT", $comment->server_http_user_agent);
-        $this->assert_equal("QUERY_STRING", $comment->server_query_string);
-        $this->assert_equal("REMOTE_ADDR", $comment->server_remote_addr);
-        $this->assert_equal("REMOTE_HOST", $comment->server_remote_host);
-        $this->assert_equal("REMOTE_PORT", $comment->server_remote_port);
+        $this->assert_equal('REMOTE_ADDR', $comment->server_remote_addr);
+        $this->assert_equal('HTTP_USER_AGENT', $comment->server_http_user_agent);
+        $this->assert_equal('HTTP_ACCEPT', $comment->server_http_accept);
+        $this->assert_equal('HTTP_ACCEPT_CHARSET', $comment->server_http_accept_charset);
+        $this->assert_equal('HTTP_ACCEPT_ENCODING', $comment->server_http_accept_encoding);
+        $this->assert_equal('HTTP_ACCEPT_LANGUAGE', $comment->server_http_accept_language);
+        $this->assert_equal('HTTP_CONNECTION', $comment->server_http_connection);
+        $this->assert_equal('HTTP_HOST', $comment->server_http_host);
+        $this->assert_equal('HTTP_REFERER', $comment->server_http_referer);
+        $this->assert_equal('HTTP_USER_AGENT', $comment->server_http_user_agent);
+        $this->assert_equal('QUERY_STRING', $comment->server_query_string);
+        $this->assert_equal('REMOTE_ADDR', $comment->server_remote_addr);
+        $this->assert_equal('REMOTE_HOST', $comment->server_remote_host);
+        $this->assert_equal('REMOTE_PORT', $comment->server_remote_port);
 
         $this->assert_true(!empty($comment->created));
     }

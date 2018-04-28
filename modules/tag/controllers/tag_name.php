@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -22,7 +22,7 @@ class Tag_Name_Controller extends Controller
     public function __call($function, $args)
     {
         $tag_name = $function;
-        $tag = ORM::factory("tag")->where("name", "=", $tag_name)->find();
+        $tag = ORM::factory('tag')->where('name', '=', $tag_name)->find();
         if (!$tag->loaded()) {
             // No matching tag was found. If this was an imported tag, this is probably a bug.
             // If the user typed the URL manually, it might just be wrong

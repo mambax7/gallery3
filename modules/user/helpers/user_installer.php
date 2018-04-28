@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,64 +21,64 @@ class user_installer
 {
     public static function can_activate()
     {
-        return array("warn" => array(IdentityProvider::confirmation_message()));
+        return array('warn' => array(IdentityProvider::confirmation_message()));
     }
 
     public static function activate()
     {
-        IdentityProvider::change_provider("user");
+        IdentityProvider::change_provider('user');
         // Set the latest version in initialize() below
     }
 
     public static function upgrade($version)
     {
         if ($version == 1) {
-            module::set_var("user", "mininum_password_length", 5);
-            module::set_version("user", $version = 2);
+            module::set_var('user', 'mininum_password_length', 5);
+            module::set_version('user', $version = 2);
         }
 
         if ($version == 2) {
             db::build()
-        ->update("users")
-        ->set("email", "unknown@unknown.com")
-        ->where("guest", "=", 0)
+        ->update('users')
+        ->set('email', 'unknown@unknown.com')
+        ->where('guest', '=', 0)
         ->and_open()
-        ->where("email", "IS", null)
-        ->or_where("email", "=", "")
+        ->where('email', 'IS', null)
+        ->or_where('email', '=', '')
         ->close()
         ->execute();
-            module::set_version("user", $version = 3);
+            module::set_version('user', $version = 3);
         }
 
         if ($version == 3) {
-            $password_length = module::get_var("user", "mininum_password_length", 5);
-            module::set_var("user", "minimum_password_length", $password_length);
-            module::clear_var("user", "mininum_password_length");
-            module::set_version("user", $version = 4);
+            $password_length = module::get_var('user', 'mininum_password_length', 5);
+            module::set_var('user', 'minimum_password_length', $password_length);
+            module::clear_var('user', 'mininum_password_length');
+            module::set_version('user', $version = 4);
         }
     }
 
     public static function uninstall()
     {
         // Delete all users and groups so that we give other modules an opportunity to clean up
-        foreach (ORM::factory("user")->find_all() as $user) {
+        foreach (ORM::factory('user')->find_all() as $user) {
             $user->delete();
         }
 
-        foreach (ORM::factory("group")->find_all() as $group) {
+        foreach (ORM::factory('group')->find_all() as $group) {
             $group->delete();
         }
 
         $db = Database::instance();
-        $db->query("DROP TABLE IF EXISTS {users};");
-        $db->query("DROP TABLE IF EXISTS {groups};");
-        $db->query("DROP TABLE IF EXISTS {groups_users};");
+        $db->query('DROP TABLE IF EXISTS {users};');
+        $db->query('DROP TABLE IF EXISTS {groups};');
+        $db->query('DROP TABLE IF EXISTS {groups_users};');
     }
 
     public static function initialize()
     {
         $db = Database::instance();
-        $db->query("CREATE TABLE IF NOT EXISTS {users} (
+        $db->query('CREATE TABLE IF NOT EXISTS {users} (
                  `id` int(9) NOT NULL auto_increment,
                  `name` varchar(32) NOT NULL,
                  `full_name` varchar(255) NOT NULL,
@@ -94,55 +94,55 @@ class user_installer
                  PRIMARY KEY (`id`),
                  UNIQUE KEY(`hash`),
                  UNIQUE KEY(`name`))
-               DEFAULT CHARSET=utf8;");
+               DEFAULT CHARSET=utf8;');
 
-        $db->query("CREATE TABLE IF NOT EXISTS {groups} (
+        $db->query('CREATE TABLE IF NOT EXISTS {groups} (
                  `id` int(9) NOT NULL auto_increment,
                  `name` char(64) default NULL,
                  `special` BOOLEAN default 0,
                  PRIMARY KEY (`id`),
                  UNIQUE KEY(`name`))
-               DEFAULT CHARSET=utf8;");
+               DEFAULT CHARSET=utf8;');
 
-        $db->query("CREATE TABLE IF NOT EXISTS {groups_users} (
+        $db->query('CREATE TABLE IF NOT EXISTS {groups_users} (
                  `group_id` int(9) NOT NULL,
                  `user_id` int(9) NOT NULL,
                  PRIMARY KEY (`group_id`, `user_id`),
                  UNIQUE KEY(`user_id`, `group_id`))
-               DEFAULT CHARSET=utf8;");
+               DEFAULT CHARSET=utf8;');
 
-        $everybody = ORM::factory("group");
-        $everybody->name = "Everybody";
+        $everybody = ORM::factory('group');
+        $everybody->name = 'Everybody';
         $everybody->special = true;
         $everybody->save();
 
-        $registered = ORM::factory("group");
-        $registered->name = "Registered Users";
+        $registered = ORM::factory('group');
+        $registered->name = 'Registered Users';
         $registered->special = true;
         $registered->save();
 
-        $guest = ORM::factory("user");
-        $guest->name = "guest";
-        $guest->full_name = "Guest User";
-        $guest->password = "";
+        $guest = ORM::factory('user');
+        $guest->name = 'guest';
+        $guest->full_name = 'Guest User';
+        $guest->password = '';
         $guest->guest = true;
         $guest->save();
 
-        $admin = ORM::factory("user");
-        $admin->name = "admin";
-        $admin->full_name = "Gallery Administrator";
-        $admin->password = "admin";
-        $admin->email = "unknown@unknown.com";
+        $admin = ORM::factory('user');
+        $admin->name = 'admin';
+        $admin->full_name = 'Gallery Administrator';
+        $admin->password = 'admin';
+        $admin->email = 'unknown@unknown.com';
         $admin->admin = true;
         $admin->save();
 
-        $root = ORM::factory("item", 1);
-        access::allow($everybody, "view", $root);
-        access::allow($everybody, "view_full", $root);
+        $root = ORM::factory('item', 1);
+        access::allow($everybody, 'view', $root);
+        access::allow($everybody, 'view_full', $root);
 
-        access::allow($registered, "view", $root);
-        access::allow($registered, "view_full", $root);
+        access::allow($registered, 'view', $root);
+        access::allow($registered, 'view_full', $root);
 
-        module::set_var("user", "minimum_password_length", 5);
+        module::set_var('user', 'minimum_password_length', 5);
     }
 }

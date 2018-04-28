@@ -336,7 +336,7 @@ class Input_Core
             //remove any style attributes, IE allows too much stupid things in them, eg.
             //<span style="width: expression(alert('Ping!'));"></span>
             // and in general you really don't want style declarations in your UGC
-            $data = preg_replace('#(<[^>]+[\x00-\x20\"\'\/])style[^>]*>#iUu', "$1>", $data);
+            $data = preg_replace('#(<[^>]+[\x00-\x20\"\'\/])style[^>]*>#iUu', '$1>', $data);
 
             // Remove namespaced elements (we do not need them)
             $data = preg_replace('#</*\w+:\w[^>]*+>#i', '', $data);

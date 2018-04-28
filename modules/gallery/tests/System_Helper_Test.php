@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,8 +21,8 @@ class System_Helper_Test extends Gallery_Unit_Test_Case
 {
     public function temp_filename_test()
     {
-        $filename = system::temp_filename("file", "ext");
-        $this->assert_true(file_exists($filename), "File not created");
+        $filename = system::temp_filename('file', 'ext');
+        $this->assert_true(file_exists($filename), 'File not created');
         unlink($filename);
         $this->assert_pattern($filename, "|/file.*\\.ext$|");
     }

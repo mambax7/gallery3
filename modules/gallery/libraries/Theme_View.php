@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -33,9 +33,9 @@ class Theme_View_Core extends Gallery_View
     {
         parent::__construct($name);
 
-        $this->theme_name = module::get_var("gallery", "active_site_theme");
+        $this->theme_name = module::get_var('gallery', 'active_site_theme');
         if (identity::active_user()->admin) {
-            $theme_name = Input::instance()->get("theme");
+            $theme_name = Input::instance()->get('theme');
             if ($theme_name &&
           file_exists(THEMEPATH . $theme_name) &&
           strpos(realpath(THEMEPATH . $theme_name), THEMEPATH) == 0) {
@@ -44,18 +44,19 @@ class Theme_View_Core extends Gallery_View
         }
         $this->item = null;
         $this->tag = null;
-        $this->set_global(array("theme" => $this,
-                            "theme_info" => theme::get_info($this->theme_name),
-                            "user" => identity::active_user(),
-                            "page_type" => $page_type,
-                            "page_subtype" => $page_subtype,
-                            "page_title" => null));
+        $this->set_global(array(
+                              'theme'        => $this,
+                              'theme_info'   => theme::get_info($this->theme_name),
+                              'user'         => identity::active_user(),
+                              'page_type'    => $page_type,
+                              'page_subtype' => $page_subtype,
+                              'page_title'   => null));
 
-        if (module::get_var("gallery", "maintenance_mode", 0)) {
+        if (module::get_var('gallery', 'maintenance_mode', 0)) {
             if (identity::active_user()->admin) {
-                message::warning(t("This site is currently in maintenance mode.  Visit the <a href=\"%maintenance_url\">maintenance page</a>", array("maintenance_url" => url::site("admin/maintenance"))));
+                message::warning(t('This site is currently in maintenance mode.  Visit the <a href="%maintenance_url">maintenance page</a>', array('maintenance_url' => url::site('admin/maintenance'))));
             } else {
-                message::warning(t("This site is currently in maintenance mode."));
+                message::warning(t('This site is currently in maintenance mode.'));
             }
         }
     }
@@ -74,7 +75,7 @@ class Theme_View_Core extends Gallery_View
      */
     public function thumb_proportion($item=null, $minimum_size=0, $dimension=null)
     {
-        if (!in_array($dimension, array("height", "width"))) {
+        if (!in_array($dimension, array('height', 'width'))) {
             $dimension = null;
         }
 
@@ -83,7 +84,7 @@ class Theme_View_Core extends Gallery_View
         // album itself.
         if ($item && $item->is_album() && $item->children_count()) {
             $orderBy = (is_null($dimension)) ? array()
-                                       : array("thumb_".$dimension => "desc");
+                                       : array('thumb_' . $dimension => 'desc');
 
             $item = $item->children(1, null, array(), $orderBy)->current();
         }
@@ -96,7 +97,7 @@ class Theme_View_Core extends Gallery_View
         } else {
             // @TODO change the 200 to a theme supplied value when and if we come up with an
             // API to allow the theme to set defaults.
-            return module::get_var("gallery", "thumb_size", 200) / 200;
+            return module::get_var('gallery', 'thumb_size', 200) / 200;
         }
     }
 
@@ -130,65 +131,65 @@ class Theme_View_Core extends Gallery_View
 
     public function user_menu()
     {
-        $menu = Menu::factory("root")
-      ->css_id("g-login-menu")
-      ->css_class("g-inline ui-helper-clear-fix");
-        module::event("user_menu", $menu, $this);
+        $menu = Menu::factory('root')
+      ->css_id('g-login-menu')
+      ->css_class('g-inline ui-helper-clear-fix');
+        module::event('user_menu', $menu, $this);
         return $menu->render();
     }
 
     public function site_menu($item_css_selector)
     {
-        $menu = Menu::factory("root");
-        module::event("site_menu", $menu, $this, $item_css_selector);
+        $menu = Menu::factory('root');
+        module::event('site_menu', $menu, $this, $item_css_selector);
         return $menu->render();
     }
 
     public function album_menu()
     {
-        $menu = Menu::factory("root");
-        module::event("album_menu", $menu, $this);
+        $menu = Menu::factory('root');
+        module::event('album_menu', $menu, $this);
         return $menu->render();
     }
 
     public function tag_menu()
     {
-        $menu = Menu::factory("root");
-        module::event("tag_menu", $menu, $this);
+        $menu = Menu::factory('root');
+        module::event('tag_menu', $menu, $this);
         return $menu->render();
     }
 
     public function photo_menu()
     {
-        $menu = Menu::factory("root");
-        if (access::can("view_full", $this->item())) {
-            $menu->append(Menu::factory("link")
-                    ->id("fullsize")
-                    ->label(t("View full size"))
+        $menu = Menu::factory('root');
+        if (access::can('view_full', $this->item())) {
+            $menu->append(Menu::factory('link')
+                    ->id('fullsize')
+                    ->label(t('View full size'))
                     ->url($this->item()->file_url())
-                    ->css_class("g-fullsize-link"));
+                    ->css_class('g-fullsize-link'));
         }
 
-        module::event("photo_menu", $menu, $this);
+        module::event('photo_menu', $menu, $this);
         return $menu->render();
     }
 
     public function movie_menu()
     {
-        $menu = Menu::factory("root");
-        module::event("movie_menu", $menu, $this);
+        $menu = Menu::factory('root');
+        module::event('movie_menu', $menu, $this);
         return $menu->render();
     }
 
     public function context_menu($item, $thumbnail_css_selector)
     {
-        $menu = Menu::factory("root")
-      ->append(Menu::factory("submenu")
-               ->id("context_menu")
-               ->label(t("Options")))
-      ->css_class("g-context-menu");
+        $menu = Menu::factory('root')
+      ->append(Menu::factory('submenu')
+               ->id('context_menu')
+               ->label(t('Options')))
+      ->css_class('g-context-menu');
 
-        module::event("context_menu", $menu, $this, $item, $thumbnail_css_selector);
+        module::event('context_menu', $menu, $this, $item, $thumbnail_css_selector);
         return $menu->render();
     }
 
@@ -213,9 +214,9 @@ class Theme_View_Core extends Gallery_View
      */
     public function sidebar_blocks()
     {
-        $sidebar = block_manager::get_html("site_sidebar", $this);
+        $sidebar = block_manager::get_html('site_sidebar', $this);
         if (empty($sidebar) && identity::active_user()->admin) {
-            $sidebar = new View("no_sidebar.html");
+            $sidebar = new View('no_sidebar.html');
         }
         return $sidebar;
     }
@@ -226,32 +227,32 @@ class Theme_View_Core extends Gallery_View
     public function __call($function, $args)
     {
         switch ($function) {
-    case "album_blocks":
-    case "album_bottom":
-    case "album_top":
-    case "body_attributes":
-    case "credits":
-    case "dynamic_bottom":
-    case "dynamic_top":
-    case "footer":
-    case "head":
-    case "header_bottom":
-    case "header_top":
-    case "html_attributes":
-    case "page_bottom":
-    case "page_top":
-    case "photo_blocks":
-    case "photo_bottom":
-    case "photo_top":
-    case "resize_bottom":
-    case "resize_top":
-    case "sidebar_bottom":
-    case "sidebar_top":
-    case "thumb_bottom":
-    case "thumb_info":
-    case "thumb_top":
+    case 'album_blocks':
+    case 'album_bottom':
+    case 'album_top':
+    case 'body_attributes':
+    case 'credits':
+    case 'dynamic_bottom':
+    case 'dynamic_top':
+    case 'footer':
+    case 'head':
+    case 'header_bottom':
+    case 'header_top':
+    case 'html_attributes':
+    case 'page_bottom':
+    case 'page_top':
+    case 'photo_blocks':
+    case 'photo_bottom':
+    case 'photo_top':
+    case 'resize_bottom':
+    case 'resize_top':
+    case 'sidebar_bottom':
+    case 'sidebar_top':
+    case 'thumb_bottom':
+    case 'thumb_info':
+    case 'thumb_top':
       $blocks = array();
-      if (method_exists("gallery_theme", $function)) {
+      if (method_exists('gallery_theme', $function)) {
           switch (count($args)) {
         case 0:
           $blocks[] = gallery_theme::$function($this);
@@ -264,14 +265,14 @@ class Theme_View_Core extends Gallery_View
           break;
         default:
           $blocks[] = call_user_func_array(
-            array("gallery_theme", $function),
+            array('gallery_theme', $function),
             array_merge(array($this), $args)
           );
         }
       }
 
       foreach (module::active() as $module) {
-          if ($module->name == "gallery") {
+          if ($module->name == 'gallery') {
               continue;
           }
           $helper_class = "{$module->name}_theme";
@@ -283,7 +284,7 @@ class Theme_View_Core extends Gallery_View
           }
       }
 
-      $helper_class = theme::$site_theme_name . "_theme";
+      $helper_class = theme::$site_theme_name . '_theme';
       if (class_exists($helper_class) && method_exists($helper_class, $function)) {
           $blocks[] = call_user_func_array(
           array($helper_class, $function),
@@ -291,14 +292,14 @@ class Theme_View_Core extends Gallery_View
         );
       }
 
-      if (Session::instance()->get("debug")) {
-          if ($function != "head" && $function != "body_attributes") {
+      if (Session::instance()->get('debug')) {
+          if ($function != 'head' && $function != 'body_attributes') {
               array_unshift(
             $blocks,
             "<div class=\"g-annotated-theme-block g-annotated-theme-block_$function g-clear-fix\">" .
             "<div class=\"title\">$function</div>"
           );
-              $blocks[] = "</div>";
+              $blocks[] = '</div>';
           }
       }
       return implode("\n", $blocks);

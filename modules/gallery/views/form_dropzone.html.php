@@ -1,5 +1,5 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
-<script type="text/javascript" src="<?= url::file("lib/dropzone.js") ?>"></script>
+<?php defined('SYSPATH') or die('No direct script access.') ?>
+<script type="text/javascript" src="<?= url::file('lib/dropzone.js') ?>"></script>
 <link rel="stylesheet" href="<?= url::file('lib/dropzone.css') ?>">
 <script type="text/javascript">
   var myDropzone;
@@ -16,7 +16,7 @@
 	previewTemplate: document.querySelector('#imageStatusTemplate').innerHTML,
 	paramName: "Filedata", // The name that will be used to transfer the file
 	parallelUploads: <?= $simultaneous_upload_limit ?>,
-	acceptedFiles: "<?= implode(",", $extensions) ?>",
+	acceptedFiles: "<?= implode(',', $extensions) ?>",
 	maxFilesize: <?= $size_limit_megs ?>
   };
 
@@ -34,16 +34,18 @@
     <?php if ($suhosin_session_encrypt): ?>
     <p class="g-error">
       <?= t(
-    "Error: your server is configured to use the <a href=\"%encrypt_url\"><code>suhosin.session.encrypt</code></a> setting from <a href=\"%suhosin_url\">Suhosin</a>.  You must disable this setting to upload photos.",
-          array("encrypt_url" => "http://www.hardened-php.net/suhosin/configuration.html#suhosin.session.encrypt",
-      "suhosin_url" => "http://www.hardened-php.net/suhosin/")
+          'Error: your server is configured to use the <a href="%encrypt_url"><code>suhosin.session.encrypt</code></a> setting from <a href="%suhosin_url">Suhosin</a>.  You must disable this setting to upload photos.',
+          array(
+              'encrypt_url' => 'http://www.hardened-php.net/suhosin/configuration.html#suhosin.session.encrypt',
+              'suhosin_url' => 'http://www.hardened-php.net/suhosin/'
+          )
 ) ?>
     </p>
     <?php endif ?>
 
     <?php if (identity::active_user()->admin && !$movies_allowed): ?>
     <p class="g-warning">
-      <?= t("Movie uploading is disabled on your system. <a href=\"%help_url\">Help!</a>", array("help_url" => url::site("admin/movies"))) ?>
+      <?= t('Movie uploading is disabled on your system. <a href="%help_url">Help!</a>', array('help_url' => url::site('admin/movies'))) ?>
     </p>
     <?php endif ?>
   </div>
@@ -53,7 +55,7 @@
     <ul class="g-breadcrumbs">
       <?php foreach ($album->parents() as $i => $parent): ?>
       <li<?php if ($i == 0) {
-    print " class=\"g-first\"";
+    print ' class="g-first"';
 } ?>> <?= html::clean($parent->title) ?> </li>
       <?php endforeach ?>
       <li class="g-active"> <?= html::purify($album->title) ?> </li>

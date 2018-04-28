@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -57,7 +57,7 @@ class IdentityProvider_Core
     public static function reset()
     {
         self::$instance = null;
-        Kohana_Config::instance()->clear("identity");
+        Kohana_Config::instance()->clear('identity');
     }
 
     /**
@@ -65,17 +65,17 @@ class IdentityProvider_Core
      */
     public static function confirmation_message()
     {
-        return t("Are you sure you want to change your Identity Provider? Continuing will delete all existing users.");
+        return t('Are you sure you want to change your Identity Provider? Continuing will delete all existing users.');
     }
 
     public static function change_provider($new_provider)
     {
-        if (!identity::active_user()->admin && PHP_SAPI != "cli") {
+        if (!identity::active_user()->admin && PHP_SAPI != 'cli') {
             // Below, the active user is set to the primary admin.
             access::forbidden();
         }
 
-        $current_provider = module::get_var("gallery", "identity_provider");
+        $current_provider = module::get_var('gallery', 'identity_provider');
         if (!empty($current_provider)) {
             module::uninstall($current_provider);
         }
@@ -84,10 +84,10 @@ class IdentityProvider_Core
             IdentityProvider::reset();
             $provider = new IdentityProvider($new_provider);
 
-            module::set_var("gallery", "identity_provider", $new_provider);
+            module::set_var('gallery', 'identity_provider', $new_provider);
 
             if (class_exists("{$new_provider}_installer") &&
-          method_exists("{$new_provider}_installer", "initialize")) {
+          method_exists("{$new_provider}_installer", 'initialize')) {
                 call_user_func("{$new_provider}_installer::initialize");
             }
 
@@ -95,7 +95,7 @@ class IdentityProvider_Core
                 throw new Exception("IdentityProvider $new_provider: Couldn't find the admin user!");
             }
 
-            module::event("identity_provider_changed", $current_provider, $new_provider);
+            module::event('identity_provider_changed', $current_provider, $new_provider);
 
             identity::set_active_user($provider->admin_user());
             Session::instance()->regenerate();
@@ -111,25 +111,25 @@ class IdentityProvider_Core
                 try {
                     module::uninstall($new_provider);
                 } catch (Exception $e2) {
-                    Kohana_Log::add("error", "Error uninstalling failed new provider\n" .
-                          $e2->getMessage() . "\n" . $e2->getTraceAsString());
+                    Kohana_Log::add('error', "Error uninstalling failed new provider\n" .
+                                             $e2->getMessage() . "\n" . $e2->getTraceAsString());
                 }
 
                 try {
                     // Lets reset to the current provider so that the gallery installation is still
                     // working.
-                    module::set_var("gallery", "identity_provider", null);
+                    module::set_var('gallery', 'identity_provider', null);
                     IdentityProvider::change_provider($current_provider);
                     module::activate($current_provider);
                 } catch (Exception $e2) {
-                    Kohana_Log::add("error", "Error restoring original identity provider\n" .
-                          $e2->getMessage() . "\n" . $e2->getTraceAsString());
+                    Kohana_Log::add('error', "Error restoring original identity provider\n" .
+                                             $e2->getMessage() . "\n" . $e2->getTraceAsString());
                 }
 
                 message::error(
           t(
-              "Error attempting to enable \"%new_provider\" identity provider, reverted to \"%old_provider\" identity provider",
-            array("new_provider" => $new_provider, "old_provider" => $current_provider)
+              'Error attempting to enable "%new_provider" identity provider, reverted to "%old_provider" identity provider',
+              array('new_provider' => $new_provider, 'old_provider' => $current_provider)
           )
         );
 
@@ -147,40 +147,39 @@ class IdentityProvider_Core
     public function __construct($config=null)
     {
         if (empty($config)) {
-            $config = module::get_var("gallery", "identity_provider", "user");
+            $config = module::get_var('gallery', 'identity_provider', 'user');
         }
 
         // Test the config group name
-        if (($this->config = Kohana::config("identity." . $config)) === null) {
+        if (($this->config = Kohana::config('identity.' . $config)) === null) {
             throw new Exception("@todo NO_USER_LIBRARY_CONFIGURATION_FOR: $config");
         }
 
         // Set driver name
-        $driver = "IdentityProvider_" . ucfirst($this->config["driver"])  ."_Driver";
+        $driver = 'IdentityProvider_' . ucfirst($this->config['driver']) . '_Driver';
 
         // Load the driver
         if (! Kohana::auto_load($driver)) {
             throw new Kohana_Exception(
-          "core.driver_not_found",
-          $this->config["driver"],
-                                 get_class($this)
+                'core.driver_not_found',
+                $this->config['driver'],
+                get_class($this)
       );
         }
 
         // Initialize the driver
-        $this->driver = new $driver($this->config["params"]);
+        $this->driver = new $driver($this->config['params']);
 
         // Validate the driver
         if (!($this->driver instanceof IdentityProvider_Driver)) {
             throw new Kohana_Exception(
-          "core.driver_implements",
-          $this->config["driver"],
-                                 get_class($this),
-          "IdentityProvider_Driver"
+                'core.driver_implements',
+                $this->config['driver'],
+                get_class($this), 'IdentityProvider_Driver'
       );
         }
 
-        Kohana_Log::add("debug", "Identity Library initialized");
+        Kohana_Log::add('debug', 'Identity Library initialized');
     }
 
     /**
@@ -190,7 +189,7 @@ class IdentityProvider_Core
      */
     public function is_writable()
     {
-        return !empty($this->config["allow_updates"]);
+        return !empty($this->config['allow_updates']);
     }
 
     /**

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -69,11 +69,11 @@ class Task_Model_Core extends ORM
         }
 
         // Save for 30 days.
-        $log .= !empty($log) ? "\n" : "";
+        $log .= !empty($log) ? "\n" : '';
         Cache::instance()->set(
         $key,
         "$log{$msg}",
-                           array("task", "log", "import"),
+                           array('task', 'log', 'import'),
         2592000
     );
     }

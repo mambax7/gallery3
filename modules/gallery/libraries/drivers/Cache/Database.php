@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -37,7 +37,7 @@ class Cache_Database_Driver extends Cache_Driver
     {
         if (!empty($tags)) {
             // Escape the tags, adding brackets so the tag can be explicitly matched
-            $tags = "<" . implode(">,<", $tags) . ">";
+            $tags = '<' . implode('>,<', $tags) . '>';
         } else {
             $tags = null;
         }
@@ -70,9 +70,9 @@ class Cache_Database_Driver extends Cache_Driver
     {
         $db = db::build()
       ->select()
-      ->from("caches");
+      ->from('caches');
         foreach ($tags as $tag) {
-            $db->where("tags", "LIKE", "%" . Database::escape_for_like("<$tag>") . "%");
+            $db->where('tags', 'LIKE', '%' . Database::escape_for_like("<$tag>") . '%');
         }
         $db_result = $db->execute();
 
@@ -104,8 +104,8 @@ class Cache_Database_Driver extends Cache_Driver
         $data = null;
         $result = db::build()
       ->select()
-      ->from("caches")
-      ->where("key", "IN", $keys)
+      ->from('caches')
+      ->where('key', 'IN', $keys)
       ->execute();
 
         if (count($result) > 0) {
@@ -139,15 +139,15 @@ class Cache_Database_Driver extends Cache_Driver
     public function delete($keys, $is_tag=false)
     {
         $db = db::build()
-      ->delete("caches");
+      ->delete('caches');
         if ($keys === true) {
             // Delete all caches
         } elseif ($is_tag === true) {
             foreach ($keys as $tag) {
-                $db->where("tags", "LIKE", "%" . Database::escape_for_like("<$tag>") . "%");
+                $db->where('tags', 'LIKE', '%' . Database::escape_for_like("<$tag>") . '%');
             }
         } else {
-            $db->where("key", "IN", $keys);
+            $db->where('key', 'IN', $keys);
         }
 
         $status = $db->execute();
@@ -168,6 +168,6 @@ class Cache_Database_Driver extends Cache_Driver
      */
     public function delete_all()
     {
-        Database::instance()->query("TRUNCATE {caches}");
+        Database::instance()->query('TRUNCATE {caches}');
     }
 }

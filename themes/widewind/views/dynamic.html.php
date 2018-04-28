@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
+<?php defined('SYSPATH') or die('No direct script access.') ?>
 <div id="g-album-header">
   <div id="g-album-header-buttons">
     <?= $theme->dynamic_top() ?>
@@ -8,7 +8,7 @@
 
 <ul id="g-album-grid" class="ui-helper-clearfix">
   <?php foreach ($children as $i => $child): ?>
-  <li class="g-item <?= $child->is_album() ? "g-album" : "" ?>">
+  <li class="g-item <?= $child->is_album() ? 'g-album' : '' ?>">
     <?= $theme->thumb_top($child) ?>
     <a href="<?= $child->url() ?>">
       <img id="g-photo-id-<?= $child->id ?>" class="g-thumbnail"

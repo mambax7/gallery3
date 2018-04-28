@@ -290,7 +290,7 @@ class Kohana_Exception_Core extends Exception
             } elseif (isset($var[$marker])) {
                 $output[] = "(\n$space$s*RECURSION*\n$space)";
             } elseif ($level <= $max_level) {
-                $output[] = "<span>(";
+                $output[] = '<span>(';
 
                 $var[$marker] = true;
                 foreach ($var as $key => & $val) {
@@ -331,7 +331,7 @@ class Kohana_Exception_Core extends Exception
             } elseif (isset($objects[$hash])) {
                 $output[] = "{\n$space$s*RECURSION*\n$space}";
             } elseif ($level <= $max_level) {
-                $output[] = "<code>{";
+                $output[] = '<code>{';
 
                 $objects[$hash] = true;
                 foreach ($array as $key => & $val) {

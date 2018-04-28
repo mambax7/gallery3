@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -26,21 +26,21 @@ class Admin_Upgrade_Checker_Controller extends Admin_Controller
         $message = upgrade_checker::get_upgrade_message();
         if ($message) {
             $message .= t(
-        " <a href=\"%hide-url\"><i>(remind me later)</i></a>",
-        array("hide-url" => url::site("admin/upgrade_checker/remind_me_later?csrf=__CSRF__"))
+                ' <a href="%hide-url"><i>(remind me later)</i></a>',
+                array('hide-url' => url::site('admin/upgrade_checker/remind_me_later?csrf=__CSRF__'))
       );
-            site_status::info($message, "upgrade_checker");
+            site_status::info($message, 'upgrade_checker');
         } else {
-            site_status::clear("upgrade_checker");
+            site_status::clear('upgrade_checker');
         }
-        url::redirect("admin/dashboard");
+        url::redirect('admin/dashboard');
     }
 
     public function remind_me_later()
     {
         access::verify_csrf();
-        site_status::clear("upgrade_checker");
-        if ($referer = Input::instance()->server("HTTP_REFERER")) {
+        site_status::clear('upgrade_checker');
+        if ($referer = Input::instance()->server('HTTP_REFERER')) {
             url::redirect($referer);
         } else {
             url::redirect(item::root()->abs_url());
@@ -50,13 +50,13 @@ class Admin_Upgrade_Checker_Controller extends Admin_Controller
     public function set_auto($val)
     {
         access::verify_csrf();
-        module::set_var("gallery", "upgrade_checker_auto_enabled", (bool)$val);
+        module::set_var('gallery', 'upgrade_checker_auto_enabled', (bool)$val);
 
         if ((bool)$val) {
-            message::success(t("Automatic upgrade checking is enabled."));
+            message::success(t('Automatic upgrade checking is enabled.'));
         } else {
-            message::success(t("Automatic upgrade checking is disabled."));
+            message::success(t('Automatic upgrade checking is disabled.'));
         }
-        url::redirect("admin/dashboard");
+        url::redirect('admin/dashboard');
     }
 }

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,10 +21,10 @@ class item_Core
 {
     public static function move($source, $target)
     {
-        access::required("view", $source);
-        access::required("view", $target);
-        access::required("edit", $source);
-        access::required("edit", $target);
+        access::required('view', $source);
+        access::required('view', $target);
+        access::required('edit', $source);
+        access::required('edit', $target);
 
         $parent = $source->parent();
         if ($parent->album_cover_item_id == $source->id) {
@@ -46,29 +46,29 @@ class item_Core
         $source->save();
         if ($orig_name != $source->name) {
             switch ($source->type) {
-      case "album":
+      case 'album':
         message::info(
           t(
-              "Album <b>%old_name</b> renamed to <b>%new_name</b> to avoid a conflict",
-            array("old_name" => $orig_name, "new_name" => $source->name)
+              'Album <b>%old_name</b> renamed to <b>%new_name</b> to avoid a conflict',
+              array('old_name' => $orig_name, 'new_name' => $source->name)
           )
         );
         break;
 
-      case "photo":
+      case 'photo':
         message::info(
           t(
-              "Photo <b>%old_name</b> renamed to <b>%new_name</b> to avoid a conflict",
-            array("old_name" => $orig_name, "new_name" => $source->name)
+              'Photo <b>%old_name</b> renamed to <b>%new_name</b> to avoid a conflict',
+              array('old_name' => $orig_name, 'new_name' => $source->name)
           )
         );
         break;
 
-      case "movie":
+      case 'movie':
         message::info(
           t(
-              "Movie <b>%old_name</b> renamed to <b>%new_name</b> to avoid a conflict",
-            array("old_name" => $orig_name, "new_name" => $source->name)
+              'Movie <b>%old_name</b> renamed to <b>%new_name</b> to avoid a conflict',
+              array('old_name' => $orig_name, 'new_name' => $source->name)
           )
         );
         break;
@@ -79,9 +79,9 @@ class item_Core
     public static function make_album_cover($item)
     {
         $parent = $item->parent();
-        access::required("view", $item);
-        access::required("view", $parent);
-        access::required("edit", $parent);
+        access::required('view', $item);
+        access::required('view', $parent);
+        access::required('edit', $parent);
 
         $old_album_cover_id = $parent->album_cover_item_id;
 
@@ -92,7 +92,7 @@ class item_Core
 
         // Walk up the parent hierarchy and set album covers if necessary
         $grand_parent = $parent->parent();
-        if ($grand_parent && access::can("edit", $grand_parent) &&
+        if ($grand_parent && access::can('edit', $grand_parent) &&
         $grand_parent->album_cover_item_id == null) {
             item::make_album_cover($parent);
         }
@@ -102,9 +102,9 @@ class item_Core
         // album cover.  So find any parent albums that had the old item as their album cover and
         // switch them over to the new item.
         if ($old_album_cover_id) {
-            foreach ($item->parents(array(array("album_cover_item_id", "=", $old_album_cover_id)))
+            foreach ($item->parents(array(array('album_cover_item_id', '=', $old_album_cover_id)))
                as $ancestor) {
-                if (access::can("edit", $ancestor)) {
+                if (access::can('edit', $ancestor)) {
                     $ancestor->album_cover_item_id = $parent->album_cover_item_id;
                     $ancestor->save();
                     graphics::generate($ancestor);
@@ -115,8 +115,8 @@ class item_Core
 
     public static function remove_album_cover($album)
     {
-        access::required("view", $album);
-        access::required("edit", $album);
+        access::required('view', $album);
+        access::required('edit', $album);
 
         model_cache::clear();
         $album->album_cover_item_id = null;
@@ -131,9 +131,9 @@ class item_Core
      */
     public static function convert_filename_to_title($filename)
     {
-        $title = strtr($filename, "_", " ");
-        $title = preg_replace("/\..{3,4}$/", "", $title);
-        $title = preg_replace("/ +/", " ", $title);
+        $title = strtr($filename, '_', ' ');
+        $title = preg_replace("/\..{3,4}$/", '', $title);
+        $title = preg_replace('/ +/', ' ', $title);
         return $title;
     }
 
@@ -144,19 +144,19 @@ class item_Core
      */
     public static function convert_filename_to_slug($filename)
     {
-        $result = str_replace("&", "-and-", $filename);
-        $result = str_replace(" ", "-", $result);
+        $result = str_replace('&', '-and-', $filename);
+        $result = str_replace(' ', '-', $result);
 
         // It's not easy to extend the text helper since it's called by the Input class which is
         // referenced in hooks/init_gallery, so it's
-        if (class_exists("transliterate")) {
+        if (class_exists('transliterate')) {
             $result = transliterate::utf8_to_ascii($result);
         } else {
             $result = text::transliterate_to_ascii($result);
         }
-        $result = preg_replace("/[^A-Za-z0-9-_]+/", "-", $result);
-        $result = preg_replace("/-+/", "-", $result);
-        return trim($result, "-");
+        $result = preg_replace('/[^A-Za-z0-9-_]+/', '-', $result);
+        $result = preg_replace('/-+/', '-', $result);
+        return trim($result, '-');
     }
 
     /**
@@ -166,18 +166,16 @@ class item_Core
      */
     public static function get_delete_form($item)
     {
-        $page_type = Input::instance()->get("page_type");
-        $from_id = Input::instance()->get("from_id");
+        $page_type = Input::instance()->get('page_type');
+        $from_id = Input::instance()->get('from_id');
         $form = new Forge(
-      "quick/delete/$item->id?page_type=$page_type&from_id=$from_id",
-        "",
-      "post",
-        array("id" => "g-confirm-delete")
+      "quick/delete/$item->id?page_type=$page_type&from_id=$from_id", '', 'post',
+        array('id' => 'g-confirm-delete')
     );
-        $group = $form->group("confirm_delete")->label(t("Confirm Deletion"));
-        $group->submit("")->value(t("Delete"));
-        $form->script("")
-      ->url(url::abs_file("modules/gallery/js/item_form_delete.js"));
+        $group = $form->group('confirm_delete')->label(t('Confirm Deletion'));
+        $group->submit('')->value(t('Delete'));
+        $form->script('')
+      ->url(url::abs_file('modules/gallery/js/item_form_delete.js'));
         return $form;
     }
 
@@ -190,9 +188,9 @@ class item_Core
         // have to check this every time.
         // @todo: figure out a better way to bootstrap the weight.
         $result = db::build()
-      ->select("weight")->from("items")
-      ->order_by("weight", "desc")->limit(1)
-      ->execute()->current();
+                    ->select('weight')->from('items')
+                    ->order_by('weight', 'desc')->limit(1)
+                    ->execute()->current();
         return ($result ? $result->weight : 0) + 1;
     }
 
@@ -206,7 +204,7 @@ class item_Core
         $view_restrictions = array();
         if (!identity::active_user()->admin) {
             foreach (identity::group_ids_for_active_user() as $id) {
-                $view_restrictions[] = array("items.view_$id", "=", access::ALLOW);
+                $view_restrictions[] = array("items.view_$id", '=', access::ALLOW);
             }
         }
 
@@ -231,22 +229,22 @@ class item_Core
      * @param string $var_subdir
      * @return object Item_Model
      */
-    public static function find_by_path($path, $var_subdir="albums")
+    public static function find_by_path($path, $var_subdir= 'albums')
     {
-        $path = trim($path, "/");
+        $path = trim($path, '/');
 
         // The root path name is NULL not "", hence this workaround.
-        if ($path == "") {
+        if ($path == '') {
             return item::root();
         }
 
         $search_full_name = true;
         $album_thumb = false;
-        if (($var_subdir == "thumbs") && preg_match("|^(.*)/\.album\.jpg$|", $path, $matches)) {
+        if (($var_subdir == 'thumbs') && preg_match("|^(.*)/\.album\.jpg$|", $path, $matches)) {
             // It's an album thumb - remove "/.album.jpg" from the path.
             $path = $matches[1];
             $album_thumb = true;
-        } elseif (($var_subdir != "albums") && preg_match("/^(.*)\.jpg$/", $path, $matches)) {
+        } elseif (($var_subdir != 'albums') && preg_match("/^(.*)\.jpg$/", $path, $matches)) {
             // Item itself could be non-jpg (e.g. movies) - remove .jpg from path, don't search full name.
             $path = $matches[1];
             $search_full_name = false;
@@ -254,28 +252,28 @@ class item_Core
 
         // Check to see if there's an item in the database with a matching relative_path_cache value.
         // Since that field is urlencoded, we must urlencode the components of the path.
-        foreach (explode("/", $path) as $part) {
+        foreach (explode('/', $path) as $part) {
             $encoded_array[] = rawurlencode($part);
         }
-        $encoded_path = join("/", $encoded_array);
+        $encoded_path = join('/', $encoded_array);
         if ($search_full_name) {
-            $item = ORM::factory("item")
-        ->where("relative_path_cache", "=", $encoded_path)
+            $item = ORM::factory('item')
+        ->where('relative_path_cache', '=', $encoded_path)
         ->find();
             // See if the item was found and if it should have been found.
             if ($item->loaded() &&
-          (($var_subdir == "albums") || $item->is_photo() || $album_thumb)) {
+          (($var_subdir == 'albums') || $item->is_photo() || $album_thumb)) {
                 return $item;
             }
         } else {
             // Note that the below query uses LIKE with wildcard % at end, which is still sargable and
             // therefore still takes advantage of the indexed relative_path_cache (i.e. still quick).
-            $item = ORM::factory("item")
-        ->where("relative_path_cache", "LIKE", Database::escape_for_like($encoded_path) . ".%")
+            $item = ORM::factory('item')
+        ->where('relative_path_cache', 'LIKE', Database::escape_for_like($encoded_path) . '.%')
         ->find();
             // See if the item was found and should be a jpg.
             if ($item->loaded() &&
-          (($item->is_movie() && ($var_subdir == "thumbs")) ||
+          (($item->is_movie() && ($var_subdir == 'thumbs')) ||
            ($item->is_photo() && (preg_match("/^(.*)\.jpg$/", $item->name))))) {
                 return $item;
             }
@@ -283,28 +281,28 @@ class item_Core
 
         // Since the relative_path_cache field is a cache, it can be unavailable.  If we don't find
         // anything, fall back to checking the path the hard way.
-        $paths = explode("/", $path);
+        $paths = explode('/', $path);
         if ($search_full_name) {
-            foreach (ORM::factory("item")
-               ->where("name", "=", end($paths))
-               ->where("level", "=", count($paths) + 1)
+            foreach (ORM::factory('item')
+               ->where('name', '=', end($paths))
+               ->where('level', '=', count($paths) + 1)
                ->find_all() as $item) {
                 // See if the item was found and if it should have been found.
                 if ((urldecode($item->relative_path()) == $path) &&
-            (($var_subdir == "albums") || $item->is_photo() || $album_thumb)) {
+            (($var_subdir == 'albums') || $item->is_photo() || $album_thumb)) {
                     return $item;
                 }
             }
         } else {
-            foreach (ORM::factory("item")
-               ->where("name", "LIKE", Database::escape_for_like(end($paths)) . ".%")
-               ->where("level", "=", count($paths) + 1)
+            foreach (ORM::factory('item')
+               ->where('name', 'LIKE', Database::escape_for_like(end($paths)) . '.%')
+               ->where('level', '=', count($paths) + 1)
                ->find_all() as $item) {
                 // Compare relative_path without extension (regexp same as legal_file::change_extension),
                 // see if it should be a jpg.
-                if ((preg_replace("/\.[^\.\/]*?$/", "", urldecode($item->relative_path())) == $path) &&
-            (($item->is_movie() && ($var_subdir == "thumbs")) ||
-             ($item->is_photo() && (preg_match("/^(.*)\.jpg$/", $item->name))))) {
+                if ((preg_replace("/\.[^\.\/]*?$/", '', urldecode($item->relative_path())) == $path) &&
+                    (($item->is_movie() && ($var_subdir == 'thumbs')) ||
+                     ($item->is_photo() && (preg_match("/^(.*)\.jpg$/", $item->name))))) {
                     return $item;
                 }
             }
@@ -326,12 +324,12 @@ class item_Core
         // In most cases, we'll have an exact match in the relative_url_cache item field.
         // but failing that, walk down the tree until we find it.  The fallback code will fix caches
         // as it goes, so it'll never be run frequently.
-        $item = ORM::factory("item")->where("relative_url_cache", "=", $relative_url)->find();
+        $item = ORM::factory('item')->where('relative_url_cache', '=', $relative_url)->find();
         if (!$item->loaded()) {
-            $segments = explode("/", $relative_url);
-            foreach (ORM::factory("item")
-               ->where("slug", "=", end($segments))
-               ->where("level", "=", count($segments) + 1)
+            $segments = explode('/', $relative_url);
+            foreach (ORM::factory('item')
+               ->where('slug', '=', end($segments))
+               ->where('level', '=', count($segments) + 1)
                ->find_all() as $match) {
                 if ($match->relative_url() == $relative_url) {
                     $item = $match;
@@ -347,7 +345,7 @@ class item_Core
      */
     public static function root()
     {
-        return model_cache::get("item", 1);
+        return model_cache::get('item', 1);
     }
 
     /**
@@ -364,10 +362,10 @@ class item_Core
         // Pick a random number and find the item that's got nearest smaller number.
         // This approach works best when the random numbers in the system are roughly evenly
         // distributed so this is going to be more efficient with larger data sets.
-        return ORM::factory("item")
+        return ORM::factory('item')
       ->viewable()
-      ->where("rand_key", "<", random::percent())
-      ->order_by("rand_key", "DESC");
+      ->where('rand_key', '<', random::percent())
+      ->order_by('rand_key', 'DESC');
     }
 
     /**
@@ -382,18 +380,18 @@ class item_Core
     {
         $album = $item->parent();
 
-        if (!strcasecmp($album->sort_order, "DESC")) {
-            $comp = ">";
+        if (!strcasecmp($album->sort_order, 'DESC')) {
+            $comp = '>';
         } else {
-            $comp = "<";
+            $comp = '<';
         }
-        $query_model = ORM::factory("item");
+        $query_model = ORM::factory('item');
 
         // If the comparison column has NULLs in it, we can't use comparators on it
         // and will have to deal with it the hard way.
         $count = $query_model->viewable()
-      ->where("parent_id", "=", $album->id)
-      ->where($album->sort_column, "IS", null)
+      ->where('parent_id', '=', $album->id)
+      ->where($album->sort_column, 'IS', null)
       ->merge_where($where)
       ->count_all();
 
@@ -402,7 +400,7 @@ class item_Core
             $sort_column = $album->sort_column;
 
             $position = $query_model->viewable()
-        ->where("parent_id", "=", $album->id)
+        ->where('parent_id', '=', $album->id)
         ->where($sort_column, $comp, $item->$sort_column)
         ->merge_where($where)
         ->count_all();
@@ -417,11 +415,11 @@ class item_Core
             // Fix this by doing a 2nd query where we iterate over the equivalent
             // columns and add them to our position count.
             foreach ($query_model->viewable()
-               ->select("id")
-               ->where("parent_id", "=", $album->id)
-               ->where($sort_column, "=", $item->$sort_column)
+               ->select('id')
+               ->where('parent_id', '=', $album->id)
+               ->where($sort_column, '=', $item->$sort_column)
                ->merge_where($where)
-               ->order_by(array("id" => "ASC"))
+               ->order_by(array('id' => 'ASC'))
                ->find_all() as $row) {
                 $position++;
                 if ($row->id == $item->id) {
@@ -439,14 +437,14 @@ class item_Core
             // avoid loading the whole ORM for each row.
             $order_by = array($album->sort_column => $album->sort_order);
             // Use id as a tie breaker
-            if ($album->sort_column != "id") {
-                $order_by["id"] = "ASC";
+            if ($album->sort_column != 'id') {
+                $order_by['id'] = 'ASC';
             }
 
             $position = 0;
             foreach ($query_model->viewable()
-               ->select("id")
-               ->where("parent_id", "=", $album->id)
+               ->select('id')
+               ->where('parent_id', '=', $album->id)
                ->merge_where($where)
                ->order_by($order_by)
                ->find_all() as $row) {
@@ -465,12 +463,12 @@ class item_Core
      */
     public static function set_display_context_callback()
     {
-        if (!request::user_agent("robot")) {
+        if (!request::user_agent('robot')) {
             $args = func_get_args();
             Cache::instance()->set(
-          "display_context_" . $sid = Session::instance()->id(),
-          $args,
-                             array("display_context")
+                'display_context_' . $sid = Session::instance()->id(),
+                $args,
+                array('display_context')
       );
         }
     }
@@ -480,7 +478,7 @@ class item_Core
      */
     public static function clear_display_context_callback()
     {
-        Cache::instance()->delete("display_context_" . $sid = Session::instance()->id());
+        Cache::instance()->delete('display_context_' . $sid = Session::instance()->id());
     }
 
     /**
@@ -488,14 +486,14 @@ class item_Core
      */
     public static function get_display_context($item)
     {
-        if (!request::user_agent("robot")) {
-            $args = Cache::instance()->get("display_context_" . $sid = Session::instance()->id());
+        if (!request::user_agent('robot')) {
+            $args = Cache::instance()->get('display_context_' . $sid = Session::instance()->id());
             $callback = $args[0];
             $args[0] = $item;
         }
 
         if (empty($callback)) {
-            $callback = "Albums_Controller::get_display_context";
+            $callback = 'Albums_Controller::get_display_context';
             $args = array($item);
         }
         return call_user_func_array($callback, $args);

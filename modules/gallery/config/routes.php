@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -19,14 +19,14 @@
  */
 
 // Admin controllers are not available, except via /admin
-$config["^admin_.*"] = null;
+$config['^admin_.*'] = null;
 
 // Redirect /form/add/admin/controller and /form/edit/admin/controller to
 // admin/controller/form_(add|edit)/parms. provides the same as below for admin pages
-$config["^form/(edit|add)/admin/(\w+)/(.*)$"] = "admin/$2/form_$1/$3";
+$config["^form/(edit|add)/admin/(\w+)/(.*)$"] = 'admin/$2/form_$1/$3';
 
 // Redirect /form/add and /form/edit to the module/form_(add|edit)/parms.
-$config["^form/(edit|add)/(\w+)/(.*)$"] = "$2/form_$1/$3";
+$config["^form/(edit|add)/(\w+)/(.*)$"] = '$2/form_$1/$3';
 
 // Default page is the root album
-$config["_default"] = "albums";
+$config['_default'] = 'albums';

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,27 +21,27 @@ class slideshow_installer
 {
     public static function install()
     {
-        module::set_var("slideshow", "max_scale", 0);
+        module::set_var('slideshow', 'max_scale', 0);
     }
 
     public static function upgrade($version)
     {
         if ($version == 1) {
-            module::set_var("slideshow", "max_scale", 0);
-            module::set_version("slideshow", $version = 2);
+            module::set_var('slideshow', 'max_scale', 0);
+            module::set_version('slideshow', $version = 2);
         }
     }
 
     public static function deactivate()
     {
-        site_status::clear("slideshow_needs_rss");
+        site_status::clear('slideshow_needs_rss');
     }
 
     public static function can_activate()
     {
         $messages = array();
-        if (!module::is_active("rss")) {
-            $messages["warn"][] = t("The Slideshow module requires the RSS module.");
+        if (!module::is_active('rss')) {
+            $messages['warn'][] = t('The Slideshow module requires the RSS module.');
         }
         return $messages;
     }

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -22,7 +22,7 @@ class watermark_installer
     public static function install()
     {
         $db = Database::instance();
-        $db->query("CREATE TABLE IF NOT EXISTS {watermarks} (
+        $db->query('CREATE TABLE IF NOT EXISTS {watermarks} (
                  `id` int(9) NOT NULL auto_increment,
                  `name` varchar(32) NOT NULL,
                  `width` int(9) NOT NULL,
@@ -32,14 +32,14 @@ class watermark_installer
                  `mime_type` varchar(64) default NULL,
                  PRIMARY KEY (`id`),
                  UNIQUE KEY(`name`))
-               DEFAULT CHARSET=utf8;");
+               DEFAULT CHARSET=utf8;');
 
-        @mkdir(VARPATH . "modules/watermark");
+        @mkdir(VARPATH . 'modules/watermark');
     }
 
     public static function uninstall()
     {
-        Database::instance()->query("DROP TABLE {watermarks}");
-        dir::unlink(VARPATH . "modules/watermark");
+        Database::instance()->query('DROP TABLE {watermarks}');
+        dir::unlink(VARPATH . 'modules/watermark');
     }
 }

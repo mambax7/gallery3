@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -32,10 +32,10 @@ class tag_Core
     public static function add($item, $tag_name)
     {
         if (empty($tag_name)) {
-            throw new exception("@todo MISSING_TAG_NAME");
+            throw new exception('@todo MISSING_TAG_NAME');
         }
 
-        $tag = ORM::factory("tag")->where("name", "=", $tag_name)->find();
+        $tag = ORM::factory('tag')->where('name', '=', $tag_name)->find();
         if (!$tag->loaded()) {
             $tag->name = $tag_name;
         }
@@ -52,8 +52,8 @@ class tag_Core
     public static function popular_tags($count)
     {
         $count = max($count, 1);
-        return ORM::factory("tag")
-      ->order_by("count", "DESC")
+        return ORM::factory('tag')
+      ->order_by('count', 'DESC')
       ->limit($count)
       ->find_all();
     }
@@ -68,12 +68,12 @@ class tag_Core
     {
         $tags = tag::popular_tags($count)->as_array();
         if ($tags) {
-            $cloud = new View("tag_cloud.html");
+            $cloud = new View('tag_cloud.html');
             $cloud->max_count = $tags[0]->count;
             if (!$cloud->max_count) {
                 return;
             }
-            usort($tags, array("tag", "sort_by_name"));
+            usort($tags, array('tag', 'sort_by_name'));
             $cloud->tags = $tags;
             return $cloud;
         }
@@ -90,9 +90,9 @@ class tag_Core
      */
     public static function item_tags($item)
     {
-        return ORM::factory("tag")
-      ->join("items_tags", "tags.id", "items_tags.tag_id", "left")
-      ->where("items_tags.item_id", "=", $item->id)
+        return ORM::factory('tag')
+      ->join('items_tags', 'tags.id', 'items_tags.tag_id', 'left')
+      ->where('items_tags.item_id', '=', $item->id)
       ->find_all();
     }
 
@@ -102,32 +102,32 @@ class tag_Core
      */
     public static function tag_items($tag)
     {
-        return ORM::factory("item")
-      ->join("items_tags", "items_tags.item_id", "items.id", "left")
-      ->where("items_tags.tag_id", "=", $tag->id)
+        return ORM::factory('item')
+      ->join('items_tags', 'items_tags.item_id', 'items.id', 'left')
+      ->where('items_tags.tag_id', '=', $tag->id)
       ->find_all();
     }
 
     public static function get_add_form($item)
     {
-        $form = new Forge("tags/create/{$item->id}", "", "post", array("id" => "g-add-tag-form", "class" => "g-short-form"));
+        $form = new Forge("tags/create/{$item->id}", '', 'post', array('id' => 'g-add-tag-form', 'class' => 'g-short-form'));
         $label = $item->is_album() ?
-      t("Add tag to album") :
-      ($item->is_photo() ? t("Add tag to photo") : t("Add tag to movie"));
+      t('Add tag to album') :
+      ($item->is_photo() ? t('Add tag to photo') : t('Add tag to movie'));
 
-        $group = $form->group("add_tag")->label("Add Tag");
-        $group->input("name")->label($label)->rules("required")->id("name");
-        $group->hidden("item_id")->value($item->id);
-        $group->submit("")->value(t("Add Tag"));
+        $group = $form->group('add_tag')->label('Add Tag');
+        $group->input('name')->label($label)->rules('required')->id('name');
+        $group->hidden('item_id')->value($item->id);
+        $group->submit('')->value(t('Add Tag'));
         return $form;
     }
 
     public static function get_delete_form($tag)
     {
-        $form = new Forge("admin/tags/delete/$tag->id", "", "post", array("id" => "g-delete-tag-form"));
-        $group = $form->group("delete_tag")
-      ->label(t("Really delete tag %tag_name?", array("tag_name" => $tag->name)));
-        $group->submit("")->value(t("Delete Tag"));
+        $form = new Forge("admin/tags/delete/$tag->id", '', 'post', array('id' => 'g-delete-tag-form'));
+        $group = $form->group('delete_tag')
+      ->label(t('Really delete tag %tag_name?', array('tag_name' => $tag->name)));
+        $group->submit('')->value(t('Delete Tag'));
         return $form;
     }
 
@@ -137,14 +137,14 @@ class tag_Core
     public static function clear_all($item)
     {
         db::build()
-      ->update("tags")
-      ->set("count", db::expr("`count` - 1"))
-      ->where("count", ">", 0)
-      ->where("id", "IN", db::build()->select("tag_id")->from("items_tags")->where("item_id", "=", $item->id))
+      ->update('tags')
+      ->set('count', db::expr('`count` - 1'))
+      ->where('count', '>', 0)
+      ->where('id', 'IN', db::build()->select('tag_id')->from('items_tags')->where('item_id', '=', $item->id))
       ->execute();
         db::build()
-      ->delete("items_tags")
-      ->where("item_id", "=", $item->id)
+      ->delete('items_tags')
+      ->where('item_id', '=', $item->id)
       ->execute();
     }
 
@@ -154,8 +154,8 @@ class tag_Core
     public static function remove_items($tag)
     {
         db::build()
-      ->delete("items_tags")
-      ->where("tag_id", "=", $tag->id)
+      ->delete('items_tags')
+      ->where('tag_id', '=', $tag->id)
       ->execute();
         $tag->count = 0;
         $tag->save();
@@ -169,7 +169,7 @@ class tag_Core
         // @todo There's a potential race condition here which we can solve by adding a lock around
         // this and all the cases where we create/update tags.  I'm loathe to do that since it's an
         // extremely rare case.
-        db::build()->delete("tags")->where("count", "=", 0)->execute();
+        db::build()->delete('tags')->where('count', '=', 0)->execute();
     }
 
     /**
@@ -183,13 +183,13 @@ class tag_Core
      */
     public static function get_position($tag, $item, $where=array())
     {
-        return ORM::factory("item")
+        return ORM::factory('item')
       ->viewable()
-      ->join("items_tags", "items.id", "items_tags.item_id")
-      ->where("items_tags.tag_id", "=", $tag->id)
-      ->where("items.id", "<=", $item->id)
+      ->join('items_tags', 'items.id', 'items_tags.item_id')
+      ->where('items_tags.tag_id', '=', $tag->id)
+      ->where('items.id', '<=', $item->id)
       ->merge_where($where)
-      ->order_by("items.id")
+      ->order_by('items.id')
       ->count_all();
     }
 }

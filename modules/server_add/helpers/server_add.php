@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -22,18 +22,17 @@ class server_add_Core
     public static function check_config($paths=null)
     {
         if ($paths === null) {
-            $paths = unserialize(module::get_var("server_add", "authorized_paths"));
+            $paths = unserialize(module::get_var('server_add', 'authorized_paths'));
         }
         if (empty($paths)) {
             site_status::warning(
         t(
-            "Server Add needs configuration. <a href=\"%url\">Configure it now!</a>",
-          array("url" => html::mark_clean(url::site("admin/server_add")))
-        ),
-        "server_add_configuration"
+            'Server Add needs configuration. <a href="%url">Configure it now!</a>',
+            array('url' => html::mark_clean(url::site('admin/server_add')))
+        ), 'server_add_configuration'
       );
         } else {
-            site_status::clear("server_add_configuration");
+            site_status::clear('server_add_configuration');
         }
     }
 
@@ -43,7 +42,7 @@ class server_add_Core
             return false;
         }
 
-        $authorized_paths = unserialize(module::get_var("server_add", "authorized_paths"));
+        $authorized_paths = unserialize(module::get_var('server_add', 'authorized_paths'));
         foreach (array_keys($authorized_paths) as $valid_path) {
             if (strpos($path, $valid_path) === 0) {
                 return true;

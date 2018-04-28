@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -32,26 +32,26 @@ class File_Proxy_Controller_Test extends Gallery_Unit_Test_Case
 
     public function basic_test()
     {
-        $photo = test::random_photo();
-        $_SERVER["REQUEST_URI"] = url::file("var/albums/{$photo->name}");
-        $controller = new File_Proxy_Controller();
-        $this->assert_same($photo->file_path(), $controller->__call("", array()));
+        $photo                  = test::random_photo();
+        $_SERVER['REQUEST_URI'] = url::file("var/albums/{$photo->name}");
+        $controller             = new File_Proxy_Controller();
+        $this->assert_same($photo->file_path(), $controller->__call('', array()));
     }
 
     public function query_params_are_ignored_test()
     {
-        $photo = test::random_photo();
-        $_SERVER["REQUEST_URI"] = url::file("var/albums/{$photo->name}?a=1&b=2");
-        $controller = new File_Proxy_Controller();
-        $this->assert_same($photo->file_path(), $controller->__call("", array()));
+        $photo                  = test::random_photo();
+        $_SERVER['REQUEST_URI'] = url::file("var/albums/{$photo->name}?a=1&b=2");
+        $controller             = new File_Proxy_Controller();
+        $this->assert_same($photo->file_path(), $controller->__call('', array()));
     }
 
     public function file_must_be_in_var_test()
     {
-        $_SERVER["REQUEST_URI"] = url::file("index.php");
-        $controller = new File_Proxy_Controller();
+        $_SERVER['REQUEST_URI'] = url::file('index.php');
+        $controller             = new File_Proxy_Controller();
         try {
-            $controller->__call("", array());
+            $controller->__call('', array());
             $this->assert_true(false);
         } catch (Kohana_404_Exception $e) {
             $this->assert_same(1, $e->test_fail_code);
@@ -60,10 +60,10 @@ class File_Proxy_Controller_Test extends Gallery_Unit_Test_Case
 
     public function file_must_be_in_albums_thumbs_or_resizes_test()
     {
-        $_SERVER["REQUEST_URI"] = url::file("var/test/var/uploads/.htaccess");
-        $controller = new File_Proxy_Controller();
+        $_SERVER['REQUEST_URI'] = url::file('var/test/var/uploads/.htaccess');
+        $controller             = new File_Proxy_Controller();
         try {
-            $controller->__call("", array());
+            $controller->__call('', array());
             $this->assert_true(false);
         } catch (Kohana_404_Exception $e) {
             $this->assert_same(2, $e->test_fail_code);
@@ -72,20 +72,20 @@ class File_Proxy_Controller_Test extends Gallery_Unit_Test_Case
 
     public function movie_thumbnails_are_jpgs_test()
     {
-        $movie = test::random_movie();
-        $name = legal_file::change_extension($movie->name, "jpg");
-        $_SERVER["REQUEST_URI"] = url::file("var/thumbs/$name");
-        $controller = new File_Proxy_Controller();
-        $this->assert_same($movie->thumb_path(), $controller->__call("", array()));
+        $movie                  = test::random_movie();
+        $name                   = legal_file::change_extension($movie->name, 'jpg');
+        $_SERVER['REQUEST_URI'] = url::file("var/thumbs/$name");
+        $controller             = new File_Proxy_Controller();
+        $this->assert_same($movie->thumb_path(), $controller->__call('', array()));
     }
 
     public function invalid_item_test()
     {
-        $photo = test::random_photo();
-        $_SERVER["REQUEST_URI"] = url::file("var/albums/x_{$photo->name}");
-        $controller = new File_Proxy_Controller();
+        $photo                  = test::random_photo();
+        $_SERVER['REQUEST_URI'] = url::file("var/albums/x_{$photo->name}");
+        $controller             = new File_Proxy_Controller();
         try {
-            $controller->__call("", array());
+            $controller->__call('', array());
             $this->assert_true(false);
         } catch (Kohana_404_Exception $e) {
             $this->assert_same(3, $e->test_fail_code);
@@ -94,17 +94,17 @@ class File_Proxy_Controller_Test extends Gallery_Unit_Test_Case
 
     public function need_view_full_permission_to_view_original_test()
     {
-        $album = test::random_album();
-        $photo = test::random_photo($album);
-        $album = $album->reload(); // adding the photo changed the album in the db
-        $_SERVER["REQUEST_URI"] = url::file("var/albums/{$album->name}/{$photo->name}");
-        $controller = new File_Proxy_Controller();
+        $album                  = test::random_album();
+        $photo                  = test::random_photo($album);
+        $album                  = $album->reload(); // adding the photo changed the album in the db
+        $_SERVER['REQUEST_URI'] = url::file("var/albums/{$album->name}/{$photo->name}");
+        $controller             = new File_Proxy_Controller();
 
-        access::deny(identity::everybody(), "view_full", $album);
+        access::deny(identity::everybody(), 'view_full', $album);
         identity::set_active_user(identity::guest());
 
         try {
-            $controller->__call("", array());
+            $controller->__call('', array());
             $this->assert_true(false);
         } catch (Kohana_404_Exception $e) {
             $this->assert_same(5, $e->test_fail_code);
@@ -113,12 +113,12 @@ class File_Proxy_Controller_Test extends Gallery_Unit_Test_Case
 
     public function cant_proxy_an_album_test()
     {
-        $album = test::random_album();
-        $_SERVER["REQUEST_URI"] = url::file("var/albums/{$album->name}");
-        $controller = new File_Proxy_Controller();
+        $album                  = test::random_album();
+        $_SERVER['REQUEST_URI'] = url::file("var/albums/{$album->name}");
+        $controller             = new File_Proxy_Controller();
 
         try {
-            $controller->__call("", array());
+            $controller->__call('', array());
             $this->assert_true(false);
         } catch (Kohana_404_Exception $e) {
             $this->assert_same(6, $e->test_fail_code);
@@ -127,13 +127,13 @@ class File_Proxy_Controller_Test extends Gallery_Unit_Test_Case
 
     public function missing_file_test()
     {
-        $photo = test::random_photo();
-        $_SERVER["REQUEST_URI"] = url::file("var/albums/{$photo->name}");
+        $photo                  = test::random_photo();
+        $_SERVER['REQUEST_URI'] = url::file("var/albums/{$photo->name}");
         unlink($photo->file_path());
         $controller = new File_Proxy_Controller();
 
         try {
-            $controller->__call("", array());
+            $controller->__call('', array());
             $this->assert_true(false);
         } catch (Kohana_404_Exception $e) {
             $this->assert_same(7, $e->test_fail_code);

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,24 +21,24 @@ class server_add_event_Core
 {
     public static function admin_menu($menu, $theme)
     {
-        $menu->get("settings_menu")
-      ->append(Menu::factory("link")
-               ->id("server_add")
-               ->label(t("Server add"))
-               ->url(url::site("admin/server_add")));
+        $menu->get('settings_menu')
+      ->append(Menu::factory('link')
+               ->id('server_add')
+               ->label(t('Server add'))
+               ->url(url::site('admin/server_add')));
     }
 
     public static function site_menu($menu, $theme)
     {
         $item = $theme->item();
-        $paths = unserialize(module::get_var("server_add", "authorized_paths"));
+        $paths = unserialize(module::get_var('server_add', 'authorized_paths'));
 
         if ($item && identity::active_user()->admin && $item->is_album() && !empty($paths) &&
         is_writable($item->is_album() ? $item->file_path() : $item->parent()->file_path())) {
-            $menu->get("add_menu")
-        ->append(Menu::factory("dialog")
-                 ->id("server_add")
-                 ->label(t("Server add"))
+            $menu->get('add_menu')
+        ->append(Menu::factory('dialog')
+                 ->id('server_add')
+                 ->label(t('Server add'))
                  ->url(url::site("server_add/browse/$item->id")));
         }
     }

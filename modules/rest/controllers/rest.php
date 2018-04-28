@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -23,17 +23,17 @@ class Rest_Controller extends Controller
 
     public function index()
     {
-        $username = Input::instance()->post("user");
-        $password = Input::instance()->post("password");
+        $username = Input::instance()->post('user');
+        $password = Input::instance()->post('password');
 
         if (empty($username) || auth::too_many_failures($username)) {
-            throw new Rest_Exception("Forbidden", 403);
+            throw new Rest_Exception('Forbidden', 403);
         }
 
         $user = identity::lookup_user_by_name($username);
         if (empty($user) || !identity::is_correct_password($user, $password)) {
-            module::event("user_login_failed", $username);
-            throw new Rest_Exception("Forbidden", 403);
+            module::event('user_login_failed', $username);
+            throw new Rest_Exception('Forbidden', 403);
         }
 
         auth::login($user);
@@ -43,10 +43,10 @@ class Rest_Controller extends Controller
 
     public function reset_api_key_confirm()
     {
-        $form = new Forge("rest/reset_api_key", "", "post", array("id" => "g-reset-api-key"));
-        $group = $form->group("confirm_reset")->label(t("Confirm resetting your REST API key"));
-        $group->submit("")->value(t("Reset"));
-        $v = new View("reset_api_key_confirm.html");
+        $form = new Forge('rest/reset_api_key', '', 'post', array('id' => 'g-reset-api-key'));
+        $group = $form->group('confirm_reset')->label(t('Confirm resetting your REST API key'));
+        $group->submit('')->value(t('Reset'));
+        $v = new View('reset_api_key_confirm.html');
         $v->form = $form;
         print $v;
     }
@@ -55,8 +55,8 @@ class Rest_Controller extends Controller
     {
         access::verify_csrf();
         rest::reset_access_key();
-        message::success(t("Your REST API key has been reset."));
-        json::reply(array("result" => "success"));
+        message::success(t('Your REST API key has been reset.'));
+        json::reply(array('result' => 'success'));
     }
 
     public function __call($function, $args)
@@ -65,15 +65,15 @@ class Rest_Controller extends Controller
             $input = Input::instance();
             $request = new stdClass();
 
-            switch ($method = strtolower($input->server("REQUEST_METHOD"))) {
-      case "get":
+            switch ($method = strtolower($input->server('REQUEST_METHOD'))) {
+      case 'get':
         $request->params = (object) $input->get();
         break;
 
       default:
         $request->params = (object) $input->post();
-        if (isset($_FILES["file"])) {
-            $request->file = upload::save("file");
+        if (isset($_FILES['file'])) {
+            $request->file = upload::save('file');
             system::delete_later($request->file);
         }
         break;
@@ -86,8 +86,8 @@ class Rest_Controller extends Controller
                 $request->params->members = json_decode($request->params->members);
             }
 
-            $request->method = strtolower($input->server("HTTP_X_GALLERY_REQUEST_METHOD", $method));
-            $request->access_key = $input->server("HTTP_X_GALLERY_REQUEST_KEY");
+            $request->method = strtolower($input->server('HTTP_X_GALLERY_REQUEST_METHOD', $method));
+            $request->access_key = $input->server('HTTP_X_GALLERY_REQUEST_KEY');
 
             if (empty($request->access_key) && !empty($request->params->access_key)) {
                 $request->access_key = $request->params->access_key;
@@ -104,13 +104,13 @@ class Rest_Controller extends Controller
             $handler_method = $request->method;
 
             if (!class_exists($handler_class) || !method_exists($handler_class, $handler_method)) {
-                throw new Rest_Exception("Bad Request", 400);
+                throw new Rest_Exception('Bad Request', 400);
             }
 
             $response = call_user_func(array($handler_class, $handler_method), $request);
-            if ($handler_method == "post") {
+            if ($handler_method == 'post') {
                 // post methods must return a response containing a URI.
-                header("HTTP/1.1 201 Created");
+                header('HTTP/1.1 201 Created');
                 header("Location: {$response['url']}");
             }
             rest::reply($response);
@@ -118,9 +118,9 @@ class Rest_Controller extends Controller
             // Note: this is totally insufficient because it doesn't take into account localization.  We
             // either need to map the result values to localized strings in the application code, or every
             // client needs its own l10n string set.
-            throw new Rest_Exception("Bad Request", 400, $e->validation->errors());
+            throw new Rest_Exception('Bad Request', 400, $e->validation->errors());
         } catch (Kohana_404_Exception $e) {
-            throw new Rest_Exception("Not Found", 404);
+            throw new Rest_Exception('Not Found', 404);
         }
     }
 }

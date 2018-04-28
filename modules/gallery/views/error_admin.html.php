@@ -1,6 +1,6 @@
-<?php defined("SYSPATH") or die("No direct script access.") ?>
-<?php $error_id = uniqid("error") ?>
-<?php if (!function_exists("t")) {
+<?php defined('SYSPATH') or die('No direct script access.') ?>
+<?php $error_id = uniqid('error') ?>
+<?php if (!function_exists('t')) {
     function t($msg)
     {
         return $msg;
@@ -127,7 +127,7 @@
       }
     </style>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title><?= t("Something went wrong!") ?></title>
+    <title><?= t('Something went wrong!') ?></title>
 
     <script type="text/javascript">
       function koggle(elem) {
@@ -164,7 +164,7 @@
       </div>
       <div class="title">
         <h1>
-          <?= t("Dang...  Something went wrong!") ?>
+          <?= t('Dang...  Something went wrong!') ?>
         </h1>
         <h2>
           <?= t("We tried really hard, but it's broken.") ?>
@@ -184,8 +184,8 @@
         tickets</a> to see if the problem you're seeing has been
         reported.  If you post a request, here's some useful
         information to include:
-        <?=  @gallery_block::get("platform_info") ?>
-        <?=  @gallery_block::get("stats") ?>
+        <?=  @gallery_block::get('platform_info') ?>
+        <?=  @gallery_block::get('stats') ?>
       </p>
       <div id="kohana_error">
         <h3>
@@ -206,7 +206,7 @@
               </p>
 
               <div class="source">
-                <?php if (Kohana_Exception::$source_output and $source_code = Kohana_Exception::debug_source($file, $line)): ?><code><?php foreach ($source_code as $num => $row): ?><span class="line <?= ($num == $line) ? "highlight" : ""?>"><span class="number"><?= $num ?></span><?= htmlspecialchars($row, ENT_NOQUOTES, Kohana::CHARSET) ?></span><?php endforeach ?></code>
+                <?php if (Kohana_Exception::$source_output and $source_code = Kohana_Exception::debug_source($file, $line)): ?><code><?php foreach ($source_code as $num => $row): ?><span class="line <?= ($num == $line) ? 'highlight' : '' ?>"><span class="number"><?= $num ?></span><?= htmlspecialchars($row, ENT_NOQUOTES, Kohana::CHARSET) ?></span><?php endforeach ?></code>
                 <?php endif ?>
               </div>
             </li>
@@ -216,25 +216,25 @@
             <li class="snippet">
               <p>
                 <span class="file">
-                  <?php if ($step["file"]): $source_id = "$error_id.source.$i" ?>
-                  <?php if (Kohana_Exception::$source_output and $step["source"]): ?>
-                  <a href="#<?= $source_id ?>" onclick="return koggle('<?= $source_id ?>')"><?= Kohana_Exception::debug_path($step["file"])?>[ <?= $step["line"]?> ]</a>
+                  <?php if ($step['file']): $source_id = "$error_id.source.$i" ?>
+                  <?php if (Kohana_Exception::$source_output and $step['source']): ?>
+                  <a href="#<?= $source_id ?>" onclick="return koggle('<?= $source_id ?>')"><?= Kohana_Exception::debug_path($step['file'])?>[ <?= $step['line']?> ]</a>
                   <?php else: ?>
-                  <span class="file"><?= Kohana_Exception::debug_path($step["file"])?>[ <?= $step["line"]?> ]</span>
+                  <span class="file"><?= Kohana_Exception::debug_path($step['file'])?>[ <?= $step['line']?> ]</span>
                   <?php endif ?>
                   <?php else: ?>
-                  {<?= t("PHP internal call")?>}
+                  {<?= t('PHP internal call')?>}
                   <?php endif?>
                 </span>
                 &raquo;
-                <?= $step["function"]?>(<?php if ($step["args"]): $args_id = "$error_id.args.$i" ?>
-                <a href="#<?= $args_id ?>" onclick="return koggle('<?= $args_id ?>')"><?= t("arguments")?></a>
+                <?= $step['function']?>(<?php if ($step['args']): $args_id = "$error_id.args.$i" ?>
+                <a href="#<?= $args_id ?>" onclick="return koggle('<?= $args_id ?>')"><?= t('arguments')?></a>
                 <?php endif?>)
               </p>
               <?php if (isset($args_id)): ?>
               <div id="<?= $args_id ?>" class="args collapsed">
                 <table cellspacing="0">
-                  <?php foreach ($step["args"] as $name => $arg): ?>
+                  <?php foreach ($step['args'] as $name => $arg): ?>
                   <tr>
                     <td class="key">
                       <pre><?= $name?></pre>
@@ -247,8 +247,8 @@
                 </table>
               </div>
               <?php endif?>
-              <?php if (Kohana_Exception::$source_output and $step["source"] and isset($source_id)): ?>
-              <pre id="<?= $source_id ?>" class="source collapsed"><code><?php foreach ($step["source"] as $num => $row): ?><span class="line <?= ($num == $step["line"]) ? "highlight" : "" ?>"><span class="number"><?= $num ?></span><?= htmlspecialchars($row, ENT_NOQUOTES, Kohana::CHARSET) ?></span><?php endforeach ?></code></pre>
+              <?php if (Kohana_Exception::$source_output and $step['source'] and isset($source_id)): ?>
+              <pre id="<?= $source_id ?>" class="source collapsed"><code><?php foreach ($step['source'] as $num => $row): ?><span class="line <?= ($num == $step['line']) ? 'highlight' : '' ?>"><span class="number"><?= $num ?></span><?= htmlspecialchars($row, ENT_NOQUOTES, Kohana::CHARSET) ?></span><?php endforeach ?></code></pre>
               <?php endif?>
             </li>
             <?php unset($args_id, $source_id) ?>
@@ -258,11 +258,11 @@
 
         </div>
         <h2>
-          <a href="#<?= $env_id = $error_id."environment" ?>" onclick="return koggle('<?= $env_id ?>')"><?= t("Environment")?></a>
+          <a href="#<?= $env_id = $error_id . 'environment' ?>" onclick="return koggle('<?= $env_id ?>')"><?= t('Environment')?></a>
         </h2>
         <div id="<?= $env_id ?>" class="content collapsed">
           <?php $included = get_included_files()?>
-          <h3><a href="#<?= $env_id = $error_id."environment_included" ?>" onclick="return koggle('<?= $env_id ?>')"><?= t("Included files")?></a>(<?= count($included)?>)</h3>
+          <h3><a href="#<?= $env_id = $error_id . 'environment_included' ?>" onclick="return koggle('<?= $env_id ?>')"><?= t('Included files')?></a>(<?= count($included)?>)</h3>
           <div id="<?= $env_id ?>" class="collapsed">
             <table cellspacing="0">
               <?php foreach ($included as $file): ?>
@@ -275,7 +275,7 @@
             </table>
           </div>
           <?php $included = get_loaded_extensions()?>
-          <h3><a href="#<?= $env_id = $error_id."environment_loaded" ?>" onclick="return koggle('<?= $env_id ?>')"><?= t("Loaded extensions")?></a>(<?= count($included)?>)</h3>
+          <h3><a href="#<?= $env_id = $error_id . 'environment_loaded' ?>" onclick="return koggle('<?= $env_id ?>')"><?= t('Loaded extensions')?></a>(<?= count($included)?>)</h3>
           <div id="<?= $env_id ?>" class="collapsed">
             <table cellspacing="0">
               <?php foreach ($included as $file): ?>
@@ -287,7 +287,7 @@
               <?php endforeach?>
             </table>
           </div>
-          <?php foreach (array("_SESSION", "_GET", "_POST", "_FILES", "_COOKIE", "_SERVER") as $var): ?>
+          <?php foreach (array('_SESSION', '_GET', '_POST', '_FILES', '_COOKIE', '_SERVER') as $var): ?>
           <?php if (empty($GLOBALS[$var]) or ! is_array($GLOBALS[$var])) {
     continue;
 } ?>

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -30,8 +30,8 @@
  *  allow_updates - Flag to indicate that the back end allows updates.
  *  params        - Driver parameters, specific to each driver.
  */
-$config["user"] = array(
-  "driver"        => "gallery",
-  "allow_updates" => true,
-  "params"        => array(),
+$config['user'] = array(
+    'driver'        => 'gallery',
+    'allow_updates' => true,
+    'params'        => array(),
 );

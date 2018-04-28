@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -24,7 +24,7 @@ class tag_rss_Core
     {
         if ($tag) {
             $feeds["tag/tag/{$tag->id}"] =
-        t("Tag feed for %tag_name", array("tag_name" => $tag->name));
+        t('Tag feed for %tag_name', array('tag_name' => $tag->name));
             return $feeds;
         }
         return array();
@@ -32,20 +32,20 @@ class tag_rss_Core
 
     public static function feed($feed_id, $offset, $limit, $id)
     {
-        if ($feed_id == "tag") {
-            $tag = ORM::factory("tag", $id);
+        if ($feed_id == 'tag') {
+            $tag = ORM::factory('tag', $id);
             if (!$tag->loaded()) {
                 throw new Kohana_404_Exception();
             }
 
             $feed = new stdClass();
-            $feed->items = $tag->items($limit, $offset, "photo");
+            $feed->items = $tag->items($limit, $offset, 'photo');
             $feed->max_pages = ceil($tag->count / $limit);
             $feed->title = t(
-          "%site_title - %tag_name",
-                       array("site_title" => item::root()->title, "tag_name" => $tag->name)
+                '%site_title - %tag_name',
+                array('site_title' => item::root()->title, 'tag_name' => $tag->name)
       );
-            $feed->description = t("Photos related to %tag_name", array("tag_name" => $tag->name));
+            $feed->description = t('Photos related to %tag_name', array('tag_name' => $tag->name));
 
             return $feed;
         }

@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -23,23 +23,22 @@ class search_task_Core
     {
         // Delete extra search_records
         db::build()
-      ->delete("search_records")
-      ->where("item_id", "NOT IN", db::build()->select("id")->from("items"))
+      ->delete('search_records')
+      ->where('item_id', 'NOT IN', db::build()->select('id')->from('items'))
       ->execute();
 
         list($remaining, $total, $percent) = search::stats();
         return array(Task_Definition::factory()
-                 ->callback("search_task::update_index")
-                 ->name(t("Update Search Index"))
+                 ->callback('search_task::update_index')
+                 ->name(t('Update Search Index'))
                  ->description(
                    $remaining
                    ? t2(
-                       "1 photo or album needs to be scanned",
-                        "%count (%percent%) of your photos and albums need to be scanned",
-                        $remaining,
-                       array("percent" => (100 - $percent))
+                       '1 photo or album needs to be scanned', '%count (%percent%) of your photos and albums need to be scanned',
+                       $remaining,
+                       array('percent' => (100 - $percent))
                    )
-                   : t("Search data is up-to-date")
+                   : t('Search data is up-to-date')
                  )
                  ->severity($remaining ? log::WARNING : log::SUCCESS));
     }
@@ -47,13 +46,13 @@ class search_task_Core
     public static function update_index($task)
     {
         try {
-            $completed = $task->get("completed", 0);
+            $completed = $task->get('completed', 0);
 
             $start = microtime(true);
-            foreach (ORM::factory("item")
-               ->join("search_records", "items.id", "search_records.item_id", "left")
-               ->where("search_records.item_id", "IS", null)
-               ->or_where("search_records.dirty", "=", 1)
+            foreach (ORM::factory('item')
+               ->join('search_records', 'items.id', 'search_records.item_id', 'left')
+               ->where('search_records.item_id', 'IS', null)
+               ->or_where('search_records.dirty', '=', 1)
                ->find_all(100) as $item) {
                 // The query above can take a long time, so start the timer after its done
                 // to give ourselves a little time to actually process rows.
@@ -70,24 +69,23 @@ class search_task_Core
             }
 
             list($remaining, $total, $percent) = search::stats();
-            $task->set("completed", $completed);
+            $task->set('completed', $completed);
             if ($remaining == 0 || !($remaining + $completed)) {
                 $task->done = true;
-                $task->state = "success";
-                site_status::clear("search_index_out_of_date");
+                $task->state = 'success';
+                site_status::clear('search_index_out_of_date');
                 $task->percent_complete = 100;
             } else {
                 $task->percent_complete = round(100 * $completed / ($remaining + $completed));
             }
             $task->status = t2(
-          "one record updated, index is %percent% up-to-date",
-                         "%count records updated, index is %percent% up-to-date",
-                         $completed,
-          array("percent" => $percent)
+                'one record updated, index is %percent% up-to-date', '%count records updated, index is %percent% up-to-date',
+                $completed,
+                array('percent' => $percent)
       );
         } catch (Exception $e) {
             $task->done = true;
-            $task->state = "error";
+            $task->state = 'error';
             $task->status = $e->getMessage();
         }
     }

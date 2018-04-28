@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -23,10 +23,10 @@ class Controller_Auth_Test extends Gallery_Unit_Test_Case
     {
         $found = array();
         $git_ignores = explode("\n", `git ls-files -o -i --exclude-standard`);
-        $controllers = array_diff(glob("*/*/controllers/*.php"), $git_ignores);
-        $feeds = array_diff(glob("*/*/helpers/*_rss.php"), $git_ignores);
+        $controllers = array_diff(glob('*/*/controllers/*.php'), $git_ignores);
+        $feeds = array_diff(glob('*/*/helpers/*_rss.php'), $git_ignores);
         foreach (array_merge($controllers, $feeds) as $controller) {
-            if (preg_match("{modules/(gallery_)?unit_test/}", $controller)) {
+            if (preg_match('{modules/(gallery_)?unit_test/}', $controller)) {
                 continue;
             }
 
@@ -51,14 +51,14 @@ class Controller_Auth_Test extends Gallery_Unit_Test_Case
                 $token = $tokens[$token_number];
                 if (self::_token_matches(array(T_CURLY_OPEN), $tokens, $token_number)) {
                     // Treat this just like a normal open curly brace
-                    $token = "{";
+                    $token = '{';
                 }
 
                 // Count braces.
                 // 1 open brace  = in class context.
                 // 2 open braces = in function.
                 if (!is_array($token)) {
-                    if ($token == "}") {
+                    if ($token == '}') {
                         $open_braces--;
                         if ($open_braces == 1 && $function) {
                             $found[$controller][] = $function;
@@ -66,19 +66,19 @@ class Controller_Auth_Test extends Gallery_Unit_Test_Case
                         } elseif ($open_braces == 0) {
                             $is_admin_controller = false;
                         }
-                    } elseif ($token == "{") {
+                    } elseif ($token == '{') {
                         $open_braces++;
                     }
                 } else {
                     // An array token
 
                     if ($open_braces == 0 && $token[0] == T_EXTENDS) {
-                        if (self::_token_matches(array(T_STRING, "Admin_Controller"), $tokens, $token_number + 1)) {
+                        if (self::_token_matches(array(T_STRING, 'Admin_Controller'), $tokens, $token_number + 1)) {
                             $is_admin_controller = true;
                         }
                     } elseif ($open_braces == 1 && $token[0] == T_FUNCTION) {
                         $line = $token[2];
-                        $name = "";
+                        $name = '';
                         // Search backwards to check visibility,
                         // "private function", or "private static function"
                         $previous = $tokens[$token_number - 1][0];
@@ -97,7 +97,7 @@ class Controller_Auth_Test extends Gallery_Unit_Test_Case
                             }
                         } while ($token_number < count($tokens));
 
-                        $is_rss_feed = $name == "feed" && strpos(basename($controller), "_rss.php");
+                        $is_rss_feed = $name == 'feed' && strpos(basename($controller), '_rss.php');
 
                         if ((!$is_static || $is_rss_feed) && !$is_private) {
                             $function = self::_function($name, $line, $is_admin_controller);
@@ -113,34 +113,36 @@ class Controller_Auth_Test extends Gallery_Unit_Test_Case
                     //   Require: ->validate() or access::verify_csrf\(
                     if ($function && $open_braces >= 2) {
                         if ($token[0] == T_STRING) {
-                            if ($token[1] == "access" &&
-                  self::_token_matches(array(T_DOUBLE_COLON, "::"), $tokens, $token_number + 1) &&
-                  self::_token_matches(array(T_STRING), $tokens, $token_number + 2) &&
-                  in_array($tokens[$token_number + 2][1], array("forbidden", "required")) &&
-                  self::_token_matches("(", $tokens, $token_number + 3)) {
+                            if ($token[1] == 'access'
+                                &&
+                                self::_token_matches(array(T_DOUBLE_COLON, '::'), $tokens, $token_number + 1) &&
+                                self::_token_matches(array(T_STRING), $tokens, $token_number + 2) &&
+                  in_array($tokens[$token_number + 2][1], array('forbidden', 'required')) &&
+                                self::_token_matches('(', $tokens, $token_number + 3)) {
                                 $token_number += 3;
                                 $function->checks_authorization(true);
-                            } elseif ($token[1] == "access" &&
-                  self::_token_matches(array(T_DOUBLE_COLON, "::"), $tokens, $token_number + 1) &&
-                  self::_token_matches(array(T_STRING, "verify_csrf"), $tokens, $token_number + 2) &&
-                  self::_token_matches("(", $tokens, $token_number + 3)) {
+                            } elseif ($token[1] == 'access'
+                                      &&
+                                      self::_token_matches(array(T_DOUBLE_COLON, '::'), $tokens, $token_number + 1) &&
+                                      self::_token_matches(array(T_STRING, 'verify_csrf'), $tokens, $token_number + 2) &&
+                                      self::_token_matches('(', $tokens, $token_number + 3)) {
                                 $token_number += 3;
                                 $function->checks_csrf(true);
-                            } elseif (in_array($token[1], array("Input", "Forge")) &&
-                         self::_token_matches(array(T_DOUBLE_COLON, "::"), $tokens, $token_number + 1)) {
+                            } elseif (in_array($token[1], array('Input', 'Forge')) &&
+                                      self::_token_matches(array(T_DOUBLE_COLON, '::'), $tokens, $token_number + 1)) {
                                 $token_number++;
                                 $function->uses_input(true);
                             }
                         } elseif ($token[0] == T_VARIABLE) {
                             if ($token[1] == '$this' &&
                   self::_token_matches(array(T_OBJECT_OPERATOR), $tokens, $token_number + 1) &&
-                  self::_token_matches(array(T_STRING, "input"), $tokens, $token_number + 2)) {
+                  self::_token_matches(array(T_STRING, 'input'), $tokens, $token_number + 2)) {
                                 $token_number += 2;
                                 $function->uses_input(true);
                             }
                         } elseif ($token[0] == T_OBJECT_OPERATOR) {
-                            if (self::_token_matches(array(T_STRING, "validate"), $tokens, $token_number + 1) &&
-                  self::_token_matches("(", $tokens, $token_number + 2)) {
+                            if (self::_token_matches(array(T_STRING, 'validate'), $tokens, $token_number + 1) &&
+                                self::_token_matches('(', $tokens, $token_number + 2)) {
                                 $token_number += 2;
                                 $function->checks_csrf(true);
                             }
@@ -151,8 +153,8 @@ class Controller_Auth_Test extends Gallery_Unit_Test_Case
         }
 
         // Generate the report
-        $new = TMPPATH . "controller_auth_data.txt";
-        $fd = fopen($new, "wb");
+        $new = TMPPATH . 'controller_auth_data.txt';
+        $fd = fopen($new, 'wb');
         ksort($found);
         foreach ($found as $controller => $functions) {
             $is_admin_controller = true;
@@ -160,10 +162,10 @@ class Controller_Auth_Test extends Gallery_Unit_Test_Case
                 $is_admin_controller &= $function->is_admin_controller;
                 $flags = array();
                 if ($function->uses_input() && !$function->checks_csrf()) {
-                    $flags[] = "DIRTY_CSRF";
+                    $flags[] = 'DIRTY_CSRF';
                 }
                 if (!$function->is_admin_controller && !$function->checks_authorization()) {
-                    $flags[] = "DIRTY_AUTH";
+                    $flags[] = 'DIRTY_AUTH';
                 }
 
                 if (!$flags) {
@@ -176,24 +178,23 @@ class Controller_Auth_Test extends Gallery_Unit_Test_Case
             "%-60s %-20s %s\n",
                 $controller,
             $function->name,
-            implode("|", $flags)
+            implode('|', $flags)
         );
             }
 
-            if (strpos(basename($controller), "admin_") === 0 && !$is_admin_controller) {
+            if (strpos(basename($controller), 'admin_') === 0 && !$is_admin_controller) {
                 fprintf(
             $fd,
             "%-60s %-20s %s\n",
                 $controller,
-            basename($controller),
-            "NO_ADMIN_CONTROLLER"
+            basename($controller), 'NO_ADMIN_CONTROLLER'
         );
             }
         }
         fclose($fd);
 
         // Compare with the expected report from our golden file.
-        $canonical = MODPATH . "gallery/tests/controller_auth_data.txt";
+        $canonical = MODPATH . 'gallery/tests/controller_auth_data.txt';
         exec("diff $canonical $new", $output, $return_value);
         $this->assert_false(
                         $return_value,

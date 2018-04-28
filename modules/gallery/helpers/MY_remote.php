@@ -1,4 +1,4 @@
-<?php defined("SYSPATH") or die("No direct script access.");
+<?php defined('SYSPATH') or die('No direct script access.');
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -67,8 +67,8 @@ class remote extends remote_Core
      */
     public static function do_request($url, $method='GET', $headers=array(), $body='')
     {
-        if (!array_key_exists("User-Agent", $headers)) {
-            $headers["User-Agent"] = "Gallery3";
+        if (!array_key_exists('User-Agent', $headers)) {
+            $headers['User-Agent'] = 'Gallery3';
         }
         /* Convert illegal characters */
         $url = str_replace(' ', '%20', $url);
