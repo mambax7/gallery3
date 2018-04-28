@@ -179,7 +179,7 @@ class locales_Core
                     } else {
                         // qvalue is expected to be something like "q=0.7"
                         list($ignored, $qvalue) = explode('=', $qvalue . '==');
-                        $qvalue = floatval($qvalue);
+                        $qvalue = (float)$qvalue;
                     }
                     // Group by language to boost inexact same-language matches
                     list($language) = explode('_', $requested_locale . '_');

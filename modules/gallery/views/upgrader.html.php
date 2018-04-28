@@ -149,7 +149,7 @@
           <?= t(
                         "You're not logged in as an administrator, so we have to verify you to make sure it's ok for you to do an upgrade.  To prove you can run an upgrade, create a file called <b> %name </b> in your <b>%tmp_dir_path</b> directory.",
                 array(
-                    'name'         => "$upgrade_token",
+                    'name'         => (string)$upgrade_token,
                     'tmp_dir_path' => 'gallery3/var/tmp'
                 )
                     ) ?>

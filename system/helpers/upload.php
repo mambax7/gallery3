@@ -142,10 +142,10 @@ class upload_Core
 
         // Make the size into a power of 1024
         switch (substr($size, -1)) {
-            case 'G': $size = intval($size) * pow(1024, 3); break;
-            case 'M': $size = intval($size) * pow(1024, 2); break;
-            case 'K': $size = intval($size) * pow(1024, 1); break;
-            default:  $size = intval($size);                break;
+            case 'G': $size = (int)$size * pow(1024, 3); break;
+            case 'M': $size = (int)$size * pow(1024, 2); break;
+            case 'K': $size = (int)$size * pow(1024, 1); break;
+            default:  $size = (int)$size;                break;
         }
 
         // Test that the file is under or equal to the max size
