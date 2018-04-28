@@ -120,7 +120,7 @@ class installer {
 
   static function mysql_version($config) {
     $result = mysql_query("SHOW VARIABLES WHERE variable_name = \"version\"");
-    $row = mysql_fetch_object($result);
+    $row = $config['type'] == 'mysqli' ? mysqli_fetch_object($result) : mysql_fetch_object($result);
     return $row->Value;
   }
 
