@@ -17,13 +17,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class Logout_Controller extends Controller {
-  public function index() {
-    access::verify_csrf();
-    auth::logout();
-    if ($continue_url = Input::instance()->get("continue_url")) {
-      url::redirect($continue_url);
+class Logout_Controller extends Controller
+{
+    public function index()
+    {
+        access::verify_csrf();
+        auth::logout();
+        if ($continue_url = Input::instance()->get("continue_url")) {
+            url::redirect($continue_url);
+        }
+        url::redirect(item::root()->abs_url());
     }
-    url::redirect(item::root()->abs_url());
-  }
 }

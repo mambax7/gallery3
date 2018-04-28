@@ -17,44 +17,49 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class Sendmail_Core {
-  protected $to;
-  protected $subject;
-  protected $message;
-  protected $headers;
-  protected $line_length = 70;
-  protected $header_separator = "\r\n";
+class Sendmail_Core
+{
+    protected $to;
+    protected $subject;
+    protected $message;
+    protected $headers;
+    protected $line_length = 70;
+    protected $header_separator = "\r\n";
 
-  /**
-   * Return an instance of Sendmail
-   * @chainable
-   */
-  static function factory() {
-    return new Sendmail();
-  }
+    /**
+     * Return an instance of Sendmail
+     * @chainable
+     */
+    public static function factory()
+    {
+        return new Sendmail();
+    }
 
-  public function __construct() {
-    $this->headers = array();
-    $this->from(module::get_var("gallery", "email_from", ""));
-    $this->reply_to(module::get_var("gallery", "email_reply_to", ""));
-    $this->line_length(module::get_var("gallery", "email_line_length", 70));
-    $separator = module::get_var("gallery", "email_header_separator", null);
-    $this->header_separator(empty($separator) ? "\n" : unserialize($separator));
-  }
+    public function __construct()
+    {
+        $this->headers = array();
+        $this->from(module::get_var("gallery", "email_from", ""));
+        $this->reply_to(module::get_var("gallery", "email_reply_to", ""));
+        $this->line_length(module::get_var("gallery", "email_line_length", 70));
+        $separator = module::get_var("gallery", "email_header_separator", null);
+        $this->header_separator(empty($separator) ? "\n" : unserialize($separator));
+    }
 
-  public function __get($key) {
-    return null;
-  }
+    public function __get($key)
+    {
+        return null;
+    }
 
-  public function __call($key, $value) {
-    switch ($key) {
+    public function __call($key, $value)
+    {
+        switch ($key) {
     case "to":
       $this->to = is_array($value[0]) ? $value[0] : array($value[0]);
       break;
     case  "header":
       if (count($value) != 2) {
-        Kohana_Log::add("error", wordwrap("Invalid header parameters\n" . Kohana::debug($value)));
-        throw new Exception("@todo INVALID_HEADER_PARAMETERS");
+          Kohana_Log::add("error", wordwrap("Invalid header parameters\n" . Kohana::debug($value)));
+          throw new Exception("@todo INVALID_HEADER_PARAMETERS");
       }
       $this->headers[$value[0]] = $value[1];
       break;
@@ -67,32 +72,34 @@ class Sendmail_Core {
     default:
       $this->$key = $value[0];
     }
-    return $this;
-  }
-
-  public function send() {
-    if (empty($this->to)) {
-      Kohana_Log::add("error", wordwrap("Sending mail failed:\nNo to address specified"));
-      throw new Exception("@todo TO_IS_REQUIRED_FOR_MAIL");
-    }
-    $to = implode(", ", $this->to);
-    $headers = array();
-    foreach ($this->headers as $key => $value) {
-      $key = ucfirst($key);
-      $headers[] = "$key: $value";
+        return $this;
     }
 
-    // The docs say headers should be separated by \r\n, but occasionaly that doesn't work and you
-    // need to use a single \n.  This can be set in config/sendmail.php
-    $headers = implode($this->header_separator, $headers);
-    $message = wordwrap($this->message, $this->line_length, "\n");
-    if (!$this->mail($to, $this->subject, $message, $headers)) {
-      throw new Exception("@todo SEND_MAIL_FAILED");
-    }
-    return $this;
-  }
+    public function send()
+    {
+        if (empty($this->to)) {
+            Kohana_Log::add("error", wordwrap("Sending mail failed:\nNo to address specified"));
+            throw new Exception("@todo TO_IS_REQUIRED_FOR_MAIL");
+        }
+        $to = implode(", ", $this->to);
+        $headers = array();
+        foreach ($this->headers as $key => $value) {
+            $key = ucfirst($key);
+            $headers[] = "$key: $value";
+        }
 
-  public function mail($to, $subject, $message, $headers) {
-    return mail($to, $subject, $message, $headers);
-  }
+        // The docs say headers should be separated by \r\n, but occasionaly that doesn't work and you
+        // need to use a single \n.  This can be set in config/sendmail.php
+        $headers = implode($this->header_separator, $headers);
+        $message = wordwrap($this->message, $this->line_length, "\n");
+        if (!$this->mail($to, $this->subject, $message, $headers)) {
+            throw new Exception("@todo SEND_MAIL_FAILED");
+        }
+        return $this;
+    }
+
+    public function mail($to, $subject, $message, $headers)
+    {
+        return mail($to, $subject, $message, $headers);
+    }
 }

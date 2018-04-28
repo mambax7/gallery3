@@ -17,27 +17,32 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class slideshow_installer {
-  static function install() {
-    module::set_var("slideshow", "max_scale", 0);
-  }
-
-  static function upgrade($version) {
-    if ($version == 1) {
-      module::set_var("slideshow", "max_scale", 0);
-      module::set_version("slideshow", $version = 2);
+class slideshow_installer
+{
+    public static function install()
+    {
+        module::set_var("slideshow", "max_scale", 0);
     }
-  }
 
-  static function deactivate() {
-    site_status::clear("slideshow_needs_rss");
-  }
-
-  static function can_activate() {
-    $messages = array();
-    if (!module::is_active("rss")) {
-      $messages["warn"][] = t("The Slideshow module requires the RSS module.");
+    public static function upgrade($version)
+    {
+        if ($version == 1) {
+            module::set_var("slideshow", "max_scale", 0);
+            module::set_version("slideshow", $version = 2);
+        }
     }
-    return $messages;
-  }
+
+    public static function deactivate()
+    {
+        site_status::clear("slideshow_needs_rss");
+    }
+
+    public static function can_activate()
+    {
+        $messages = array();
+        if (!module::is_active("rss")) {
+            $messages["warn"][] = t("The Slideshow module requires the RSS module.");
+        }
+        return $messages;
+    }
 }

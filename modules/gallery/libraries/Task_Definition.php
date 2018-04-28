@@ -18,33 +18,39 @@
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-class Task_Definition_Core {
-  public $callback;
-  public $description;
-  public $name;
-  public $severity;
+class Task_Definition_Core
+{
+    public $callback;
+    public $description;
+    public $name;
+    public $severity;
 
-  static function factory() {
-    return new Task_Definition();
-  }
+    public static function factory()
+    {
+        return new Task_Definition();
+    }
 
-  function callback($callback) {
-    $this->callback = $callback;
-    return $this;
-  }
+    public function callback($callback)
+    {
+        $this->callback = $callback;
+        return $this;
+    }
 
-  function description($description) {
-    $this->description = $description;
-    return $this;
-  }
+    public function description($description)
+    {
+        $this->description = $description;
+        return $this;
+    }
 
-  function name($name) {
-    $this->name = $name;
-    return $this;
-  }
+    public function name($name)
+    {
+        $this->name = $name;
+        return $this;
+    }
 
-  function severity($severity) {
-    $this->severity = $severity;
-    return $this;
-  }
+    public function severity($severity)
+    {
+        $this->severity = $severity;
+        return $this;
+    }
 }

@@ -17,10 +17,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class exif_installer {
-  static function install() {
-    $db = Database::instance();
-    $db->query("CREATE TABLE IF NOT EXISTS {exif_records} (
+class exif_installer
+{
+    public static function install()
+    {
+        $db = Database::instance();
+        $db->query("CREATE TABLE IF NOT EXISTS {exif_records} (
                  `id` int(9) NOT NULL auto_increment,
                  `item_id` INTEGER(9) NOT NULL,
                  `key_count` INTEGER(9) default 0,
@@ -29,17 +31,20 @@ class exif_installer {
                  PRIMARY KEY (`id`),
                  KEY(`item_id`))
                DEFAULT CHARSET=utf8;");
-  }
+    }
 
-  static function activate() {
-    exif::check_index();
-  }
+    public static function activate()
+    {
+        exif::check_index();
+    }
 
-  static function deactivate() {
-    site_status::clear("exif_index_out_of_date");
-  }
+    public static function deactivate()
+    {
+        site_status::clear("exif_index_out_of_date");
+    }
 
-  static function uninstall() {
-    Database::instance()->query("DROP TABLE IF EXISTS {exif_records};");
-  }
+    public static function uninstall()
+    {
+        Database::instance()->query("DROP TABLE IF EXISTS {exif_records};");
+    }
 }

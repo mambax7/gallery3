@@ -17,12 +17,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class akismet_installer {
-  static function activate() {
-    akismet::check_config();
-  }
+class akismet_installer
+{
+    public static function activate()
+    {
+        akismet::check_config();
+    }
 
-  static function deactivate() {
-    site_status::clear("akismet_config");
-  }
+    public static function deactivate()
+    {
+        site_status::clear("akismet_config");
+    }
 }

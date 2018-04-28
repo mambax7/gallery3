@@ -50,7 +50,6 @@ use \lsolesen\pel\PelDataWindow;
  */
 class PelJpegContent
 {
-
     private $data = null;
 
     /**

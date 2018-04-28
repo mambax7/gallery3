@@ -23,5 +23,5 @@ $config["default"] = array(
   "uri_segment"    => 3,
   "query_string"   => "",
   "items_per_page" => 20,
-  "auto_hide"      => FALSE
+  "auto_hide"      => false
 );

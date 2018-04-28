@@ -17,11 +17,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class server_add_theme_Core {
-  static function head($theme) {
-    if (identity::active_user()->admin) {
-      return $theme->css("server_add.css")
+class server_add_theme_Core
+{
+    public static function head($theme)
+    {
+        if (identity::active_user()->admin) {
+            return $theme->css("server_add.css")
         . $theme->script("server_add.js");
+        }
     }
-  }
 }

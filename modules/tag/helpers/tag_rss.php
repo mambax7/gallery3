@@ -18,31 +18,36 @@
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-class tag_rss_Core {
-  static function available_feeds($item, $tag) {
-    if ($tag) {
-      $feeds["tag/tag/{$tag->id}"] =
+class tag_rss_Core
+{
+    public static function available_feeds($item, $tag)
+    {
+        if ($tag) {
+            $feeds["tag/tag/{$tag->id}"] =
         t("Tag feed for %tag_name", array("tag_name" => $tag->name));
-      return $feeds;
+            return $feeds;
+        }
+        return array();
     }
-    return array();
-  }
 
-  static function feed($feed_id, $offset, $limit, $id) {
-    if ($feed_id == "tag") {
-      $tag = ORM::factory("tag", $id);
-      if (!$tag->loaded()) {
-        throw new Kohana_404_Exception();
-      }
+    public static function feed($feed_id, $offset, $limit, $id)
+    {
+        if ($feed_id == "tag") {
+            $tag = ORM::factory("tag", $id);
+            if (!$tag->loaded()) {
+                throw new Kohana_404_Exception();
+            }
 
-      $feed = new stdClass();
-      $feed->items = $tag->items($limit, $offset, "photo");
-      $feed->max_pages = ceil($tag->count / $limit);
-      $feed->title = t("%site_title - %tag_name",
-                       array("site_title" => item::root()->title, "tag_name" => $tag->name));
-      $feed->description = t("Photos related to %tag_name", array("tag_name" => $tag->name));
+            $feed = new stdClass();
+            $feed->items = $tag->items($limit, $offset, "photo");
+            $feed->max_pages = ceil($tag->count / $limit);
+            $feed->title = t(
+          "%site_title - %tag_name",
+                       array("site_title" => item::root()->title, "tag_name" => $tag->name)
+      );
+            $feed->description = t("Photos related to %tag_name", array("tag_name" => $tag->name));
 
-      return $feed;
+            return $feed;
+        }
     }
-  }
 }

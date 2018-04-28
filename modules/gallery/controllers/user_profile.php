@@ -17,55 +17,58 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class User_Profile_Controller extends Controller {
+class User_Profile_Controller extends Controller
+{
+    public function show($id)
+    {
+        // If we get here, then we should have a user id other than guest.
+        $user = identity::lookup_user($id);
+        if (!$user) {
+            throw new Kohana_404_Exception();
+        }
 
-  public function show($id) {
-    // If we get here, then we should have a user id other than guest.
-    $user = identity::lookup_user($id);
-    if (!$user) {
-      throw new Kohana_404_Exception();
-    }
+        if (!$this->_can_view_profile_pages($user)) {
+            throw new Kohana_404_Exception();
+        }
 
-    if (!$this->_can_view_profile_pages($user)) {
-      throw new Kohana_404_Exception();
-    }
+        $v = new Theme_View("page.html", "other", "profile");
+        $v->page_title = t("%name Profile", array("name" => $user->display_name()));
+        $v->content = new View("user_profile.html");
 
-    $v = new Theme_View("page.html", "other", "profile");
-    $v->page_title = t("%name Profile", array("name" => $user->display_name()));
-    $v->content = new View("user_profile.html");
-
-    $v->content->user = $user;
-    $v->content->contactable =
+        $v->content->user = $user;
+        $v->content->contactable =
       !$user->guest && $user->id != identity::active_user()->id && $user->email;
-    $v->content->editable =
+        $v->content->editable =
       identity::is_writable() && !$user->guest && $user->id == identity::active_user()->id;
 
-    $event_data = (object)array("user" => $user, "content" => array());
-    module::event("show_user_profile", $event_data);
-    $v->content->info_parts = $event_data->content;
+        $event_data = (object)array("user" => $user, "content" => array());
+        module::event("show_user_profile", $event_data);
+        $v->content->info_parts = $event_data->content;
 
-    print $v;
-  }
-
-  public function contact($id) {
-    $user = identity::lookup_user($id);
-    if (!$this->_can_view_profile_pages($user)) {
-      throw new Kohana_404_Exception();
+        print $v;
     }
 
-    print user_profile::get_contact_form($user);
-  }
+    public function contact($id)
+    {
+        $user = identity::lookup_user($id);
+        if (!$this->_can_view_profile_pages($user)) {
+            throw new Kohana_404_Exception();
+        }
 
-  public function send($id) {
-    access::verify_csrf();
-    $user = identity::lookup_user($id);
-    if (!$this->_can_view_profile_pages($user)) {
-      throw new Kohana_404_Exception();
+        print user_profile::get_contact_form($user);
     }
 
-    $form = user_profile::get_contact_form($user);
-    if ($form->validate()) {
-      Sendmail::factory()
+    public function send($id)
+    {
+        access::verify_csrf();
+        $user = identity::lookup_user($id);
+        if (!$this->_can_view_profile_pages($user)) {
+            throw new Kohana_404_Exception();
+        }
+
+        $form = user_profile::get_contact_form($user);
+        if ($form->validate()) {
+            Sendmail::factory()
         ->to($user->email)
         ->subject(html::clean($form->message->subject->value))
         ->header("Mime-Version", "1.0")
@@ -73,24 +76,25 @@ class User_Profile_Controller extends Controller {
         ->reply_to($form->message->reply_to->value)
         ->message(html::purify($form->message->message->value))
         ->send();
-      message::success(t("Sent message to %user_name", array("user_name" => $user->display_name())));
-      json::reply(array("result" => "success"));
-    } else {
-      json::reply(array("result" => "error", "html" => (string)$form));
-    }
-  }
-
-  private function _can_view_profile_pages($user) {
-    if (!$user->loaded()) {
-      return false;
+            message::success(t("Sent message to %user_name", array("user_name" => $user->display_name())));
+            json::reply(array("result" => "success"));
+        } else {
+            json::reply(array("result" => "error", "html" => (string)$form));
+        }
     }
 
-    if ($user->id == identity::active_user()->id) {
-      // You can always view your own profile
-      return true;
-    }
+    private function _can_view_profile_pages($user)
+    {
+        if (!$user->loaded()) {
+            return false;
+        }
 
-    switch (module::get_var("gallery", "show_user_profiles_to")) {
+        if ($user->id == identity::active_user()->id) {
+            // You can always view your own profile
+            return true;
+        }
+
+        switch (module::get_var("gallery", "show_user_profiles_to")) {
     case "admin_users":
       return identity::active_user()->admin;
 
@@ -104,5 +108,5 @@ class User_Profile_Controller extends Controller {
       // Fail in private mode on an invalid setting
       return false;
     }
-  }
+    }
 }

@@ -17,22 +17,24 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class exif_theme_Core {
-  static function sidebar_bottom($theme) {
-    $item = $theme->item();
-    if ($item && $item->is_photo()) {
-      $record = db::build()
+class exif_theme_Core
+{
+    public static function sidebar_bottom($theme)
+    {
+        $item = $theme->item();
+        if ($item && $item->is_photo()) {
+            $record = db::build()
         ->select("key_count")
         ->from("exif_records")
         ->where("item_id", "=", $item->id)
         ->execute()
         ->current();
-      if ($record && $record->key_count) {
-        $view = new View("exif_sidebar.html");
-        $view->item = $item;
-        return $view;
-      }
+            if ($record && $record->key_count) {
+                $view = new View("exif_sidebar.html");
+                $view->item = $item;
+                return $view;
+            }
+        }
+        return null;
     }
-    return null;
-  }
 }

@@ -17,27 +17,30 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class Items_Controller extends Controller {
-  public function __call($function, $args) {
-    $item = ORM::factory("item", (int)$function);
-    if (!$item->loaded()) {
-      throw new Kohana_404_Exception();
+class Items_Controller extends Controller
+{
+    public function __call($function, $args)
+    {
+        $item = ORM::factory("item", (int)$function);
+        if (!$item->loaded()) {
+            throw new Kohana_404_Exception();
+        }
+
+        // Redirect to the more specific resource type, since it will render differently.  We can't
+        // delegate here because we may have gotten to this page via /items/<id> which means that we
+        // don't have a type-specific controller.  Also, we want to drive a single canonical resource
+        // mapping where possible.
+        access::required("view", $item);
+        url::redirect($item->abs_url());
     }
 
-    // Redirect to the more specific resource type, since it will render differently.  We can't
-    // delegate here because we may have gotten to this page via /items/<id> which means that we
-    // don't have a type-specific controller.  Also, we want to drive a single canonical resource
-    // mapping where possible.
-    access::required("view", $item);
-    url::redirect($item->abs_url());
-  }
-
-  // Return the width/height dimensions for the given item
-  public function dimensions($id) {
-    $item = ORM::factory("item", $id);
-    access::required("view", $item);
-    json::reply(array("thumb" => array((int)$item->thumb_width, (int)$item->thumb_height),
+    // Return the width/height dimensions for the given item
+    public function dimensions($id)
+    {
+        $item = ORM::factory("item", $id);
+        access::required("view", $item);
+        json::reply(array("thumb" => array((int)$item->thumb_width, (int)$item->thumb_height),
                       "resize" => array((int)$item->resize_width, (int)$item->resize_height),
                       "full" => array((int)$item->width, (int)$item->height)));
-  }
+    }
 }

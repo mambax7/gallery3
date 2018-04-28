@@ -21,85 +21,88 @@
 /**
  * This is the API for handling exif data.
  */
-class exif_Core {
+class exif_Core
+{
+    protected static $exif_keys;
 
-  protected static $exif_keys;
+    public static function extract($item)
+    {
+        $keys = array();
+        // Only try to extract EXIF from photos
+        if ($item->is_photo() && $item->mime_type == "image/jpeg") {
+            $data = array();
+            require_once(MODPATH . "exif/lib/exif.php");
+            $exif_raw = read_exif_data_raw($item->file_path(), false);
+            if (isset($exif_raw['ValidEXIFData'])) {
+                foreach (self::_keys() as $field => $exifvar) {
+                    if (isset($exif_raw[$exifvar[0]][$exifvar[1]])) {
+                        $value = $exif_raw[$exifvar[0]][$exifvar[1]];
+                        $value = encoding::convert_to_utf8($value);
+                        $keys[$field] = Input::clean($value);
 
-  static function extract($item) {
-    $keys = array();
-    // Only try to extract EXIF from photos
-    if ($item->is_photo() && $item->mime_type == "image/jpeg") {
-      $data = array();
-      require_once(MODPATH . "exif/lib/exif.php");
-      $exif_raw = read_exif_data_raw($item->file_path(), false);
-      if (isset($exif_raw['ValidEXIFData'])) {
-        foreach(self::_keys() as $field => $exifvar) {
-          if (isset($exif_raw[$exifvar[0]][$exifvar[1]])) {
-            $value = $exif_raw[$exifvar[0]][$exifvar[1]];
-            $value = encoding::convert_to_utf8($value);
-            $keys[$field] = Input::clean($value);
-
-            if ($field == "DateTime") {
-              $time = strtotime($value);
-              if ($time > 0) {
-                $item->captured = $time;
-              }
-            } else if ($field == "Caption" && !$item->description) {
-              $item->description = $value;
+                        if ($field == "DateTime") {
+                            $time = strtotime($value);
+                            if ($time > 0) {
+                                $item->captured = $time;
+                            }
+                        } elseif ($field == "Caption" && !$item->description) {
+                            $item->description = $value;
+                        }
+                    }
+                }
             }
-          }
-        }
-      }
 
-      $size = getimagesize($item->file_path(), $info);
-      if (is_array($info) && !empty($info["APP13"])) {
-        $iptc = iptcparse($info["APP13"]);
-        foreach (array("Keywords" => "2#025", "Caption" => "2#120") as $keyword => $iptc_key) {
-          if (!empty($iptc[$iptc_key])) {
-            $value = implode(" ", $iptc[$iptc_key]);
-            $value = encoding::convert_to_utf8($value);
-            $keys[$keyword] = Input::clean($value);
+            $size = getimagesize($item->file_path(), $info);
+            if (is_array($info) && !empty($info["APP13"])) {
+                $iptc = iptcparse($info["APP13"]);
+                foreach (array("Keywords" => "2#025", "Caption" => "2#120") as $keyword => $iptc_key) {
+                    if (!empty($iptc[$iptc_key])) {
+                        $value = implode(" ", $iptc[$iptc_key]);
+                        $value = encoding::convert_to_utf8($value);
+                        $keys[$keyword] = Input::clean($value);
 
-            if ($keyword == "Caption" && !$item->description) {
-              $item->description = $value;
+                        if ($keyword == "Caption" && !$item->description) {
+                            $item->description = $value;
+                        }
+                    }
+                }
             }
-          }
         }
-      }
-    }
-    $item->save();
+        $item->save();
 
-    $record = ORM::factory("exif_record")->where("item_id", "=", $item->id)->find();
-    if (!$record->loaded()) {
-      $record->item_id = $item->id;
+        $record = ORM::factory("exif_record")->where("item_id", "=", $item->id)->find();
+        if (!$record->loaded()) {
+            $record->item_id = $item->id;
+        }
+        $record->data = serialize($keys);
+        $record->key_count = count($keys);
+        $record->dirty = 0;
+        $record->save();
     }
-    $record->data = serialize($keys);
-    $record->key_count = count($keys);
-    $record->dirty = 0;
-    $record->save();
-  }
 
-  static function get($item) {
-    $exif = array();
-    $record = ORM::factory("exif_record")
+    public static function get($item)
+    {
+        $exif = array();
+        $record = ORM::factory("exif_record")
       ->where("item_id", "=", $item->id)
       ->find();
-    if (!$record->loaded()) {
-      return array();
+        if (!$record->loaded()) {
+            return array();
+        }
+
+        $definitions = self::_keys();
+        $keys = unserialize($record->data);
+        foreach ($keys as $key => $value) {
+            $exif[] = array("caption" => $definitions[$key][2], "value" => $value);
+        }
+
+        return $exif;
     }
 
-    $definitions = self::_keys();
-    $keys = unserialize($record->data);
-    foreach ($keys as $key => $value) {
-      $exif[] = array("caption" => $definitions[$key][2], "value" => $value);
-    }
-
-    return $exif;
-  }
-
-  private static function _keys() {
-    if (!isset(self::$exif_keys)) {
-      self::$exif_keys = array(
+    private static function _keys()
+    {
+        if (!isset(self::$exif_keys)) {
+            self::$exif_keys = array(
         "Make"            => array("IFD0",   "Make",              t("Camera Maker"),     ),
         "Model"           => array("IFD0",   "Model",             t("Camera Model"),     ),
         "Aperture"        => array("SubIFD", "FNumber",           t("Aperture"),         ),
@@ -130,12 +133,13 @@ class exif_Core {
         "Caption"         => array("IPTC",   "Caption",           t("Caption"),          ),
         "Keywords"        => array("IPTC",   "Keywords",          t("Keywords"),         )
       );
+        }
+        return self::$exif_keys;
     }
-    return self::$exif_keys;
-  }
 
-  static function stats() {
-    $missing_exif = db::build()
+    public static function stats()
+    {
+        $missing_exif = db::build()
       ->select("items.id")
       ->from("items")
       ->join("exif_records", "items.id", "exif_records.item_id", "left")
@@ -147,21 +151,25 @@ class exif_Core {
       ->execute()
       ->count();
 
-    $total_items = ORM::factory("item")->where("type", "=", "photo")->count_all();
-    if (!$total_items) {
-      return array(0, 0, 0);
-    }
-    return array($missing_exif, $total_items,
+        $total_items = ORM::factory("item")->where("type", "=", "photo")->count_all();
+        if (!$total_items) {
+            return array(0, 0, 0);
+        }
+        return array($missing_exif, $total_items,
                  round(100 * (($total_items - $missing_exif) / $total_items)));
-  }
-
-  static function check_index() {
-    list ($remaining) = exif::stats();
-    if ($remaining) {
-      site_status::warning(
-        t('Your Exif index needs to be updated.  <a href="%url" class="g-dialog-link">Fix this now</a>',
-          array("url" => html::mark_clean(url::site("admin/maintenance/start/exif_task::update_index?csrf=__CSRF__")))),
-        "exif_index_out_of_date");
     }
-  }
+
+    public static function check_index()
+    {
+        list($remaining) = exif::stats();
+        if ($remaining) {
+            site_status::warning(
+        t(
+            'Your Exif index needs to be updated.  <a href="%url" class="g-dialog-link">Fix this now</a>',
+          array("url" => html::mark_clean(url::site("admin/maintenance/start/exif_task::update_index?csrf=__CSRF__")))
+        ),
+        "exif_index_out_of_date"
+      );
+        }
+    }
 }

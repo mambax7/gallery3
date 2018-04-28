@@ -144,7 +144,7 @@ class PelJpeg
     {
         for ($i = 0; $i < 7; $i ++) {
             if ($d->getByte($i) != 0xFF) {
-                 break;
+                break;
             }
         }
         return $i;

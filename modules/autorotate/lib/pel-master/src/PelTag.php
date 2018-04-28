@@ -24,7 +24,7 @@
  */
 namespace lsolesen\pel;
 
-    /**
+/**
      * Namespace for functions operating on Exif tags.
      *
      * @author Martin Geisler <mgeisler@users.sourceforge.net>

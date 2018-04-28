@@ -17,13 +17,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class User_Model_Core extends ORM implements User_Definition {
-  protected $has_and_belongs_to_many = array("groups");
-  protected $password_length = null;
-  protected $groups_cache = null;
+class User_Model_Core extends ORM implements User_Definition
+{
+    protected $has_and_belongs_to_many = array("groups");
+    protected $password_length = null;
+    protected $groups_cache = null;
 
-  public function __set($column, $value) {
-    switch ($column) {
+    public function __set($column, $value)
+    {
+        switch ($column) {
     case "hashed_password":
       $column = "password";
       break;
@@ -33,50 +35,58 @@ class User_Model_Core extends ORM implements User_Definition {
       $value = user::hash_password($value);
       break;
     }
-    parent::__set($column, $value);
-  }
+        parent::__set($column, $value);
+    }
 
-  /**
-   * @see ORM::delete()
-   */
-  public function delete($id=null) {
-    $old = clone $this;
-    module::event("user_before_delete", $this);
-    parent::delete($id);
+    /**
+     * @see ORM::delete()
+     */
+    public function delete($id=null)
+    {
+        $old = clone $this;
+        module::event("user_before_delete", $this);
+        parent::delete($id);
 
-    db::build()
+        db::build()
       ->delete("groups_users")
       ->where("user_id", "=", empty($id) ? $old->id : $id)
       ->execute();
 
-    module::event("user_deleted", $old);
-    $this->groups_cache = null;
-  }
-
-  /**
-   * Return a url to the user's avatar image.
-   * @param integer $size the target size of the image (default 80px)
-   * @return string a url
-   */
-  public function avatar_url($size=80, $default=null) {
-    return sprintf("//www.gravatar.com/avatar/%s.jpg?s=%d&r=pg%s",
-                   md5($this->email), $size, $default ? "&d=" . urlencode($default) : "");
-  }
-
-  public function groups() {
-    if (!$this->groups_cache) {
-      $this->groups_cache = $this->groups->find_all()->as_array();
+        module::event("user_deleted", $old);
+        $this->groups_cache = null;
     }
-    return $this->groups_cache;
-  }
 
-  /**
-   * Specify our rules here so that we have access to the instance of this model.
-   */
-  public function validate(Validation $array=null) {
-    // validate() is recursive, only modify the rules on the outermost call.
-    if (!$array) {
-      $this->rules = array(
+    /**
+     * Return a url to the user's avatar image.
+     * @param integer $size the target size of the image (default 80px)
+     * @return string a url
+     */
+    public function avatar_url($size=80, $default=null)
+    {
+        return sprintf(
+        "//www.gravatar.com/avatar/%s.jpg?s=%d&r=pg%s",
+                   md5($this->email),
+        $size,
+        $default ? "&d=" . urlencode($default) : ""
+    );
+    }
+
+    public function groups()
+    {
+        if (!$this->groups_cache) {
+            $this->groups_cache = $this->groups->find_all()->as_array();
+        }
+        return $this->groups_cache;
+    }
+
+    /**
+     * Specify our rules here so that we have access to the instance of this model.
+     */
+    public function validate(Validation $array=null)
+    {
+        // validate() is recursive, only modify the rules on the outermost call.
+        if (!$array) {
+            $this->rules = array(
         "admin"     => array("callbacks" => array(array($this, "valid_admin"))),
         "email"     => array("rules"     => array("length[1,255]", "valid::email"),
                              "callbacks" => array(array($this, "valid_email"))),
@@ -87,99 +97,105 @@ class User_Model_Core extends ORM implements User_Definition {
         "password"  => array("callbacks" => array(array($this, "valid_password"))),
         "url"       => array("rules"     => array("valid::url")),
       );
+        }
+
+        parent::validate($array);
     }
 
-    parent::validate($array);
-  }
+    /**
+     * Handle any business logic necessary to create or update a user.
+     * @see ORM::save()
+     *
+     * @return ORM User_Model
+     */
+    public function save()
+    {
+        if ($this->full_name === null) {
+            $this->full_name = "";
+        }
 
-  /**
-   * Handle any business logic necessary to create or update a user.
-   * @see ORM::save()
-   *
-   * @return ORM User_Model
-   */
-  public function save() {
-    if ($this->full_name === null) {
-      $this->full_name = "";
+        if (!$this->loaded()) {
+            // New user
+            $this->add(group::everybody());
+            if (!$this->guest) {
+                $this->add(group::registered_users());
+            }
+
+            parent::save();
+            module::event("user_created", $this);
+        } else {
+            // Updated user
+            $original = ORM::factory("user", $this->id);
+            parent::save();
+            module::event("user_updated", $original, $this);
+        }
+
+        $this->groups_cache = null;
+        return $this;
     }
 
-    if (!$this->loaded()) {
-      // New user
-      $this->add(group::everybody());
-      if (!$this->guest) {
-        $this->add(group::registered_users());
-      }
-
-      parent::save();
-      module::event("user_created", $this);
-    } else {
-      // Updated user
-      $original = ORM::factory("user", $this->id);
-      parent::save();
-      module::event("user_updated", $original, $this);
+    /**
+     * Return the best version of the user's name.  Either their specified full name, or fall back
+     * to the user name.
+     * @return string
+     */
+    public function display_name()
+    {
+        return empty($this->full_name) ? $this->name : $this->full_name;
     }
 
-    $this->groups_cache = null;
-    return $this;
-  }
-
-  /**
-   * Return the best version of the user's name.  Either their specified full name, or fall back
-   * to the user name.
-   * @return string
-   */
-  public function display_name() {
-    return empty($this->full_name) ? $this->name : $this->full_name;
-  }
-
-  /**
-   * Validate the user name.  Make sure there are no conflicts.
-   */
-  public function valid_name(Validation $v, $field) {
-    if (db::build()->from("users")
+    /**
+     * Validate the user name.  Make sure there are no conflicts.
+     */
+    public function valid_name(Validation $v, $field)
+    {
+        if (db::build()->from("users")
         ->where("name", "=", $this->name)
         ->merge_where($this->id ? array(array("id", "<>", $this->id)) : null)
         ->count_records() == 1) {
-      $v->add_error("name", "conflict");
-    }
-  }
-
-  /**
-   * Validate the password.
-   */
-  public function valid_password(Validation $v, $field) {
-    if ($this->guest) {
-      return;
+            $v->add_error("name", "conflict");
+        }
     }
 
-    if (!$this->loaded() || isset($this->password_length)) {
-      $minimum_length = module::get_var("user", "minimum_password_length", 5);
-      if ($this->password_length < $minimum_length) {
-        $v->add_error("password", "min_length");
-      }
-    }
-  }
+    /**
+     * Validate the password.
+     */
+    public function valid_password(Validation $v, $field)
+    {
+        if ($this->guest) {
+            return;
+        }
 
-  /**
-   * Validate the admin bit.
-   */
-  public function valid_admin(Validation $v, $field) {
-    $active = identity::active_user();
-    if ($this->id == $active->id && $active->admin && !$this->admin) {
-      $v->add_error("admin", "locked");
-    }
-  }
-
-  /**
-   * Validate the email field.
-   */
-  public function valid_email(Validation $v, $field) {
-    if ($this->guest) {  // guests don't require an email address
-      return;
+        if (!$this->loaded() || isset($this->password_length)) {
+            $minimum_length = module::get_var("user", "minimum_password_length", 5);
+            if ($this->password_length < $minimum_length) {
+                $v->add_error("password", "min_length");
+            }
+        }
     }
 
-    if (empty($this->email)) {
-      $v->add_error("email", "required");
+    /**
+     * Validate the admin bit.
+     */
+    public function valid_admin(Validation $v, $field)
+    {
+        $active = identity::active_user();
+        if ($this->id == $active->id && $active->admin && !$this->admin) {
+            $v->add_error("admin", "locked");
+        }
     }
-  }
+
+    /**
+     * Validate the email field.
+     */
+    public function valid_email(Validation $v, $field)
+    {
+        if ($this->guest) {  // guests don't require an email address
+            return;
+        }
+
+        if (empty($this->email)) {
+            $v->add_error("email", "required");
+        }
+    }
 }

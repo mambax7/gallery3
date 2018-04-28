@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
+<?php defined('SYSPATH') or die('No direct access allowed.');
 /**
  * Log Config
  *
@@ -11,12 +11,11 @@
 /**
  * Different log levels
  */
-$config['log_levels'] = array
-(
-	'error' => 1,
-	'alert' => 2,
-	'info'  => 3,
-	'debug' => 4,
+$config['log_levels'] = array(
+    'error' => 1,
+    'alert' => 2,
+    'info'  => 3,
+    'debug' => 4,
 );
 
 /**

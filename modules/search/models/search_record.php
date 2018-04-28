@@ -17,8 +17,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class Search_Record_Model_Core extends ORM {
-  function item() {
-    return model_cache::get("item", $this->item_id);
-  }
+class Search_Record_Model_Core extends ORM
+{
+    public function item()
+    {
+        return model_cache::get("item", $this->item_id);
+    }
 }

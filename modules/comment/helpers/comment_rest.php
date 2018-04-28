@@ -17,58 +17,65 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class comment_rest_Core {
-  static function get($request) {
-    $comment = rest::resolve($request->url);
-    access::required("view", $comment->item());
+class comment_rest_Core
+{
+    public static function get($request)
+    {
+        $comment = rest::resolve($request->url);
+        access::required("view", $comment->item());
 
-    return array(
+        return array(
       "url" => $request->url,
       "entity" => $comment->as_restful_array(),
       "relationships" => rest::relationships("comment", $comment));
-  }
-
-  static function put($request) {
-    // Only admins can edit comments, for now
-    if (!identity::active_user()->admin) {
-      access::forbidden();
     }
 
-    $comment = rest::resolve($request->url);
-    $comment = ORM::factory("comment");
-    $comment->text = $request->params->text;
-    $comment->save();
-  }
+    public static function put($request)
+    {
+        // Only admins can edit comments, for now
+        if (!identity::active_user()->admin) {
+            access::forbidden();
+        }
 
-  static function delete($request) {
-    if (!identity::active_user()->admin) {
-      access::forbidden();
+        $comment = rest::resolve($request->url);
+        $comment = ORM::factory("comment");
+        $comment->text = $request->params->text;
+        $comment->save();
     }
 
-    $comment = rest::resolve($request->url);
-    access::required("edit", $comment->item());
+    public static function delete($request)
+    {
+        if (!identity::active_user()->admin) {
+            access::forbidden();
+        }
 
-    $comment->delete();
-  }
+        $comment = rest::resolve($request->url);
+        access::required("edit", $comment->item());
 
-  static function relationships($resource_type, $resource) {
-    switch ($resource_type) {
+        $comment->delete();
+    }
+
+    public static function relationships($resource_type, $resource)
+    {
+        switch ($resource_type) {
     case "item":
       return array(
         "comments" => array(
           "url" => rest::url("item_comments", $resource)));
     }
-  }
-
-  static function resolve($id) {
-    $comment = ORM::factory("comment", $id);
-    if (!access::can("view", $comment->item())) {
-      throw new Kohana_404_Exception();
     }
-    return $comment;
-  }
 
-  static function url($comment) {
-    return url::abs_site("rest/comment/{$comment->id}");
-  }
+    public static function resolve($id)
+    {
+        $comment = ORM::factory("comment", $id);
+        if (!access::can("view", $comment->item())) {
+            throw new Kohana_404_Exception();
+        }
+        return $comment;
+    }
+
+    public static function url($comment)
+    {
+        return url::abs_site("rest/comment/{$comment->id}");
+    }
 }

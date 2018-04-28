@@ -22,18 +22,20 @@
  * A wrapper for exceptions to report more details in case
  * it's a ORM validation exception.
  */
-class G2_Import_Exception extends Exception {
-  public function __construct($message, Exception $previous=null, $additional_messages=null) {
-    if ($additional_messages) {
-      $message .= "\n" . implode("\n", $additional_messages);
+class G2_Import_Exception extends Exception
+{
+    public function __construct($message, Exception $previous=null, $additional_messages=null)
+    {
+        if ($additional_messages) {
+            $message .= "\n" . implode("\n", $additional_messages);
+        }
+        if ($previous && $previous instanceof ORM_Validation_Exception) {
+            $message .= "\nORM validation errors: " . print_r($previous->validation->errors(), true);
+        }
+        if ($previous) {
+            $message .= "\n" . (string) $previous;
+        }
+        // The $previous parameter is supported in PHP 5.3.0+.
+        parent::__construct($message);
     }
-    if ($previous && $previous instanceof ORM_Validation_Exception) {
-      $message .= "\nORM validation errors: " . print_r($previous->validation->errors(), true);
-    }
-    if ($previous) {
-      $message .= "\n" . (string) $previous;
-    }
-    // The $previous parameter is supported in PHP 5.3.0+.
-    parent::__construct($message);
-  }
 }

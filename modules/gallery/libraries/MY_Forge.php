@@ -18,28 +18,32 @@
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-class Forge extends Forge_Core {
-  /**
-   * Force a CSRF element into every form.
-   */
-  public function __construct($action=null, $title='', $method=null, $attr=array()) {
-    parent::__construct($action, $title, $method, $attr);
-    $this->hidden("csrf")->value(access::csrf_token());
-  }
+class Forge extends Forge_Core
+{
+    /**
+     * Force a CSRF element into every form.
+     */
+    public function __construct($action=null, $title='', $method=null, $attr=array())
+    {
+        parent::__construct($action, $title, $method, $attr);
+        $this->hidden("csrf")->value(access::csrf_token());
+    }
 
-  /**
-   * Use our own template
-   */
-  public function render($template="form.html", $custom=false) {
-    return parent::render($template, $custom);
-  }
+    /**
+     * Use our own template
+     */
+    public function render($template="form.html", $custom=false)
+    {
+        return parent::render($template, $custom);
+    }
 
-  /**
-   * Validate our CSRF value as a mandatory part of all form validation.
-   */
-  public function validate() {
-    $status = parent::validate();
-    access::verify_csrf();
-    return $status;
-  }
+    /**
+     * Validate our CSRF value as a mandatory part of all form validation.
+     */
+    public function validate()
+    {
+        $status = parent::validate();
+        access::verify_csrf();
+        return $status;
+    }
 }

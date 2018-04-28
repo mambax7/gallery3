@@ -17,97 +17,102 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class gallery_theme_Core {
-  static function head($theme) {
-    $session = Session::instance();
-    $buf = "";
-    $buf .= $theme->css("gallery.css");
-    if ($session->get("debug")) {
-      $buf .= $theme->css("debug.css");
-    }
-
-    if (module::is_active("rss")) {
-      if ($item = $theme->item()) {
-        if ($item->is_album()) {
-          $buf .= rss::feed_link("gallery/album/{$item->id}");
-        } else {
-          $buf .= rss::feed_link("gallery/album/{$item->parent()->id}");
+class gallery_theme_Core
+{
+    public static function head($theme)
+    {
+        $session = Session::instance();
+        $buf = "";
+        $buf .= $theme->css("gallery.css");
+        if ($session->get("debug")) {
+            $buf .= $theme->css("debug.css");
         }
-      } else if ($tag = $theme->tag()) {
-        $buf .= rss::feed_link("tag/tag/{$tag->id}");
-      }
-    }
 
-    if (count(locales::installed())) {
-      // Needed by the languages block
-      $buf .= $theme->script("jquery.cookie.js");
-    }
+        if (module::is_active("rss")) {
+            if ($item = $theme->item()) {
+                if ($item->is_album()) {
+                    $buf .= rss::feed_link("gallery/album/{$item->id}");
+                } else {
+                    $buf .= rss::feed_link("gallery/album/{$item->parent()->id}");
+                }
+            } elseif ($tag = $theme->tag()) {
+                $buf .= rss::feed_link("tag/tag/{$tag->id}");
+            }
+        }
 
-    if ($session->get("l10n_mode", false)) {
-      $buf .= $theme->css("l10n_client.css")
+        if (count(locales::installed())) {
+            // Needed by the languages block
+            $buf .= $theme->script("jquery.cookie.js");
+        }
+
+        if ($session->get("l10n_mode", false)) {
+            $buf .= $theme->css("l10n_client.css")
         . $theme->script("jquery.cookie.js")
         . $theme->script("l10n_client.js");
+        }
+
+        // Add MediaElementJS library
+        $buf .= $theme->script("mediaelementjs/mediaelement.js");
+        $buf .= $theme->script("mediaelementjs/mediaelementplayer.js");
+        $buf .= $theme->css("mediaelementjs/mediaelementplayer.css");
+        $buf .= $theme->css("uploadify/uploadify.css");
+        return $buf;
     }
 
-    // Add MediaElementJS library
-    $buf .= $theme->script("mediaelementjs/mediaelement.js");
-    $buf .= $theme->script("mediaelementjs/mediaelementplayer.js");
-    $buf .= $theme->css("mediaelementjs/mediaelementplayer.css");
-    $buf .= $theme->css("uploadify/uploadify.css");
-    return $buf;
-  }
+    public static function admin_head($theme)
+    {
+        $buf = $theme->css("gallery.css");
+        $buf .= $theme->script("gallery.panel.js");
+        $session = Session::instance();
+        if ($session->get("debug")) {
+            $buf .= $theme->css("debug.css");
+        }
 
-  static function admin_head($theme) {
-    $buf = $theme->css("gallery.css");
-    $buf .= $theme->script("gallery.panel.js");
-    $session = Session::instance();
-    if ($session->get("debug")) {
-      $buf .= $theme->css("debug.css");
+        if ($session->get("l10n_mode", false)) {
+            $buf .= $theme->css("l10n_client.css");
+            $buf .= $theme->script("jquery.cookie.js");
+            $buf .= $theme->script("l10n_client.js");
+        }
+        return $buf;
     }
 
-    if ($session->get("l10n_mode", false)) {
-      $buf .= $theme->css("l10n_client.css");
-      $buf .= $theme->script("jquery.cookie.js");
-      $buf .= $theme->script("l10n_client.js");
-    }
-    return $buf;
-  }
+    public static function page_bottom($theme)
+    {
+        $session = Session::instance();
+        if (gallery::show_profiler()) {
+            Profiler::enable();
+            $profiler = new Profiler();
+            $profiler->render();
+        }
+        $content = "";
+        if ($session->get("l10n_mode", false)) {
+            $content .= L10n_Client_Controller::l10n_form();
+        }
 
-  static function page_bottom($theme) {
-    $session = Session::instance();
-    if (gallery::show_profiler()) {
-      Profiler::enable();
-      $profiler = new Profiler();
-      $profiler->render();
-    }
-    $content = "";
-    if ($session->get("l10n_mode", false)) {
-      $content .= L10n_Client_Controller::l10n_form();
-    }
+        if ($session->get_once("after_install")) {
+            $content .= new View("welcome_message_loader.html");
+        }
 
-    if ($session->get_once("after_install")) {
-      $content .= new View("welcome_message_loader.html");
-    }
-
-    if (identity::active_user()->admin && upgrade_checker::should_auto_check()) {
-      $content .= '<script type="text/javascript">
+        if (identity::active_user()->admin && upgrade_checker::should_auto_check()) {
+            $content .= '<script type="text/javascript">
         $.ajax({url: "' . url::site("admin/upgrade_checker/check_now?csrf=" .
                                     access::csrf_token()) . '"});
         </script>';
-    }
-    return $content;
-  }
-
-  static function admin_page_bottom($theme) {
-    $session = Session::instance();
-    if (gallery::show_profiler()) {
-      Profiler::enable();
-      $profiler = new Profiler();
-      $profiler->render();
+        }
+        return $content;
     }
 
-    // Redirect to the root album when the admin session expires.
-    $content = '<script type="text/javascript">
+    public static function admin_page_bottom($theme)
+    {
+        $session = Session::instance();
+        if (gallery::show_profiler()) {
+            Profiler::enable();
+            $profiler = new Profiler();
+            $profiler->render();
+        }
+
+        // Redirect to the root album when the admin session expires.
+        $content = '<script type="text/javascript">
       var adminReauthCheck = function() {
         $.ajax({url: "' . url::site("admin?reauth_check=1") . '",
                 dataType: "json",
@@ -120,36 +125,42 @@ class gallery_theme_Core {
       setInterval("adminReauthCheck();", 60 * 1000);
       </script>';
 
-    if (upgrade_checker::should_auto_check()) {
-      $content .= '<script type="text/javascript">
+        if (upgrade_checker::should_auto_check()) {
+            $content .= '<script type="text/javascript">
         $.ajax({url: "' . url::site("admin/upgrade_checker/check_now?csrf=" .
                                     access::csrf_token()) . '"});
         </script>';
+        }
+
+        if ($session->get("l10n_mode", false)) {
+            $content .= "\n" . L10n_Client_Controller::l10n_form();
+        }
+        return $content;
     }
 
-    if ($session->get("l10n_mode", false)) {
-      $content .= "\n" . L10n_Client_Controller::l10n_form();
-    }
-    return $content;
-  }
-
-  static function credits() {
-    $version_string = SafeString::of_safe_html(
-      '<bdo dir="ltr">Gallery ' . gallery::version_string() . '</bdo>');
-    return "<li class=\"g-first\">" .
-      t(module::get_var("gallery", "credits"),
+    public static function credits()
+    {
+        $version_string = SafeString::of_safe_html(
+      '<bdo dir="ltr">Gallery ' . gallery::version_string() . '</bdo>'
+    );
+        return "<li class=\"g-first\">" .
+      t(
+          module::get_var("gallery", "credits"),
         array("url" => "http://galleryproject.org",
-              "gallery_version" => $version_string)) .
+              "gallery_version" => $version_string)
+      ) .
       "</li>";
-  }
-
-  static function admin_credits() {
-    return gallery_theme::credits();
-  }
-
-  static function body_attributes() {
-    if (locales::is_rtl()) {
-      return 'class="rtl"';
     }
-  }
+
+    public static function admin_credits()
+    {
+        return gallery_theme::credits();
+    }
+
+    public static function body_attributes()
+    {
+        if (locales::is_rtl()) {
+            return 'class="rtl"';
+        }
+    }
 }

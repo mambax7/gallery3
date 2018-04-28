@@ -41,7 +41,7 @@
  *             caches are deleted. This is commonly referred to as "garbage collection".
  *             Setting this to 0 or a negative number will disable automatic garbage collection.
  */
-$config["default"] = array (
+$config["default"] = array(
   "driver"   => "database",
   "params"   => null,
   "lifetime" => 84600,

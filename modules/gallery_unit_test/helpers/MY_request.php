@@ -17,9 +17,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class request extends request_Core {
-  static function set_user_agent($value) {
-    self::$user_agent = null;
-    $_SERVER["HTTP_USER_AGENT"] = $value;
-  }
+class request extends request_Core
+{
+    public static function set_user_agent($value)
+    {
+        self::$user_agent = null;
+        $_SERVER["HTTP_USER_AGENT"] = $value;
+    }
 }

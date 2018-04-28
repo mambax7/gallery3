@@ -17,24 +17,28 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class batch_Core {
-  static function start() {
-    $session = Session::instance();
-    $session->set("batch_level", $session->get("batch_level", 0) + 1);
-  }
-
-  static function stop() {
-    $session = Session::instance();
-    $batch_level = $session->get("batch_level", 0) - 1;
-    if ($batch_level > 0) {
-      $session->set("batch_level", $batch_level);
-    } else {
-      $session->delete("batch_level");
-      module::event("batch_complete");
+class batch_Core
+{
+    public static function start()
+    {
+        $session = Session::instance();
+        $session->set("batch_level", $session->get("batch_level", 0) + 1);
     }
-  }
 
-  static function in_progress() {
-    return Session::instance()->get("batch_level", 0) > 0;
-  }
+    public static function stop()
+    {
+        $session = Session::instance();
+        $batch_level = $session->get("batch_level", 0) - 1;
+        if ($batch_level > 0) {
+            $session->set("batch_level", $batch_level);
+        } else {
+            $session->delete("batch_level");
+            module::event("batch_complete");
+        }
+    }
+
+    public static function in_progress()
+    {
+        return Session::instance()->get("batch_level", 0) > 0;
+    }
 }

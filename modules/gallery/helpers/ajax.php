@@ -17,15 +17,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class ajax_Core {
-  /**
-   * Encode an Ajax response so that it's UTF-7 safe.
-   *
-   * @param  string $message string to print
-   */
-  static function response($content) {
-    header("Content-Type: text/plain; charset=" . Kohana::CHARSET);
-    print "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\">\n";
-    print $content;
-  }
+class ajax_Core
+{
+    /**
+     * Encode an Ajax response so that it's UTF-7 safe.
+     *
+     * @param  string $message string to print
+     */
+    public static function response($content)
+    {
+        header("Content-Type: text/plain; charset=" . Kohana::CHARSET);
+        print "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\">\n";
+        print $content;
+    }
 }

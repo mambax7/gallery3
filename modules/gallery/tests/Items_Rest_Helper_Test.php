@@ -17,21 +17,23 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class Items_Rest_Helper_Test extends Gallery_Unit_Test_Case {
-  public function get_url_test() {
-    $album1 = test::random_album();
-    $photo1 = test::random_photo($album1);
-    $album2 = test::random_album($album1);
-    $photo2 = test::random_photo($album2);
-    $album1->reload();
-    $album2->reload();
+class Items_Rest_Helper_Test extends Gallery_Unit_Test_Case
+{
+    public function get_url_test()
+    {
+        $album1 = test::random_album();
+        $photo1 = test::random_photo($album1);
+        $album2 = test::random_album($album1);
+        $photo2 = test::random_photo($album2);
+        $album1->reload();
+        $album2->reload();
 
-    $request = new stdClass();
-    $request->params = new stdClass();
-    $request->params->urls = json_encode(array(
+        $request = new stdClass();
+        $request->params = new stdClass();
+        $request->params->urls = json_encode(array(
       rest::url("item", $photo1),
       rest::url("item", $album2)));
-    $this->assert_equal_array(
+        $this->assert_equal_array(
       array(
         array("url" => rest::url("item", $photo1),
               "entity" => $photo1->as_restful_array(),
@@ -51,24 +53,26 @@ class Items_Rest_Helper_Test extends Gallery_Unit_Test_Case {
                    "members" => array())),
                "members" => array(
                  rest::url("item", $photo2)))),
-      items_rest::get($request));
-  }
+      items_rest::get($request)
+    );
+    }
 
-  public function get_url_filter_album_test() {
-    $album1 = test::random_album();
-    $photo1 = test::random_photo($album1);
-    $album2 = test::random_album($album1);
-    $photo2 = test::random_photo($album2);
-    $album1->reload();
-    $album2->reload();
+    public function get_url_filter_album_test()
+    {
+        $album1 = test::random_album();
+        $photo1 = test::random_photo($album1);
+        $album2 = test::random_album($album1);
+        $photo2 = test::random_photo($album2);
+        $album1->reload();
+        $album2->reload();
 
-    $request = new stdClass();
-    $request->params = new stdClass();
-    $request->params->urls = json_encode(array(
+        $request = new stdClass();
+        $request->params = new stdClass();
+        $request->params->urls = json_encode(array(
       rest::url("item", $photo2),
       rest::url("item", $album1)));
-    $request->params->type = "album";
-    $this->assert_equal_array(
+        $request->params->type = "album";
+        $this->assert_equal_array(
       array(
          array("url" => rest::url("item", $album1),
                "entity" => $album1->as_restful_array(),
@@ -80,24 +84,26 @@ class Items_Rest_Helper_Test extends Gallery_Unit_Test_Case {
                    "members" => array())),
                "members" => array(
                  rest::url("item", $album2)))),
-      items_rest::get($request));
-  }
+      items_rest::get($request)
+    );
+    }
 
-  public function get_url_filter_photo_test() {
-    $album1 = test::random_album();
-    $photo1 = test::random_photo($album1);
-    $album2 = test::random_album($album1);
-    $photo2 = test::random_photo($album2);
-    $album1->reload();
-    $album2->reload();
+    public function get_url_filter_photo_test()
+    {
+        $album1 = test::random_album();
+        $photo1 = test::random_photo($album1);
+        $album2 = test::random_album($album1);
+        $photo2 = test::random_photo($album2);
+        $album1->reload();
+        $album2->reload();
 
-    $request = new stdClass();
-    $request->params = new stdClass();
-    $request->params->urls = json_encode(array(
+        $request = new stdClass();
+        $request->params = new stdClass();
+        $request->params->urls = json_encode(array(
       rest::url("item", $photo1),
       rest::url("item", $album2)));
-    $request->params->type = "photo";
-    $this->assert_equal_array(
+        $request->params->type = "photo";
+        $this->assert_equal_array(
       array(
         array("url" => rest::url("item", $photo1),
               "entity" => $photo1->as_restful_array(),
@@ -107,24 +113,26 @@ class Items_Rest_Helper_Test extends Gallery_Unit_Test_Case {
                 "tags" => array(
                   "url" => rest::url("item_tags", $photo1),
                   "members" => array())))),
-      items_rest::get($request));
-  }
+      items_rest::get($request)
+    );
+    }
 
-  public function get_url_filter_albums_photos_test() {
-    $album1 = test::random_album();
-    $photo1 = test::random_photo($album1);
-    $album2 = test::random_album($album1);
-    $photo2 = test::random_photo($album2);
-    $album1->reload();
-    $album2->reload();
+    public function get_url_filter_albums_photos_test()
+    {
+        $album1 = test::random_album();
+        $photo1 = test::random_photo($album1);
+        $album2 = test::random_album($album1);
+        $photo2 = test::random_photo($album2);
+        $album1->reload();
+        $album2->reload();
 
-    $request = new stdClass();
-    $request->params = new stdClass();
-    $request->params->urls = json_encode(array(
+        $request = new stdClass();
+        $request->params = new stdClass();
+        $request->params->urls = json_encode(array(
       rest::url("item", $photo1),
       rest::url("item", $album2)));
-    $request->params->type = "photo,album";
-    $this->assert_equal_array(
+        $request->params->type = "photo,album";
+        $this->assert_equal_array(
       array(
         array("url" => rest::url("item", $photo1),
               "entity" => $photo1->as_restful_array(),
@@ -144,31 +152,33 @@ class Items_Rest_Helper_Test extends Gallery_Unit_Test_Case {
                    "members" => array())),
                "members" => array(
                  rest::url("item", $photo2)))),
-      items_rest::get($request));
-  }
+      items_rest::get($request)
+    );
+    }
 
-  public function get_ancestors_test() {
-    $album1 = test::random_album();
-    $photo1 = test::random_photo($album1);
-    $album2 = test::random_album($album1);
-    $photo2 = test::random_photo($album2);
-    $album1->reload();
-    $album2->reload();
+    public function get_ancestors_test()
+    {
+        $album1 = test::random_album();
+        $photo1 = test::random_photo($album1);
+        $album2 = test::random_album($album1);
+        $photo2 = test::random_photo($album2);
+        $album1->reload();
+        $album2->reload();
 
-    $root = ORM::factory("item", 1);
-    $restful_root = array(
+        $root = ORM::factory("item", 1);
+        $restful_root = array(
       "url" => rest::url("item", $root),
       "entity" => $root->as_restful_array(),
       "relationships" => rest::relationships("item", $root));
-    $restful_root["members"] = array();
-    foreach ($root->children() as $child) {
-      $restful_root["members"][] = rest::url("item", $child);
-    }
+        $restful_root["members"] = array();
+        foreach ($root->children() as $child) {
+            $restful_root["members"][] = rest::url("item", $child);
+        }
 
-    $request = new stdClass();
-    $request->params = new stdClass();
-    $request->params->ancestors_for = rest::url("item", $photo2);
-    $this->assert_equal_array(
+        $request = new stdClass();
+        $request->params = new stdClass();
+        $request->params->ancestors_for = rest::url("item", $photo2);
+        $this->assert_equal_array(
       array(
         $restful_root,
         array("url" => rest::url("item", $album1),
@@ -201,6 +211,7 @@ class Items_Rest_Helper_Test extends Gallery_Unit_Test_Case {
                 "tags" => array(
                   "url" => rest::url("item_tags", $photo2),
                   "members" => array())))),
-      items_rest::get($request));
-  }
+      items_rest::get($request)
+    );
+    }
 }

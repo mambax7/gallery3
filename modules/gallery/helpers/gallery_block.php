@@ -17,9 +17,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class gallery_block_Core {
-  static function get_admin_list() {
-    return array(
+class gallery_block_Core
+{
+    public static function get_admin_list()
+    {
+        return array(
       "welcome" => t("Welcome to Gallery 3!"),
       "photo_stream" => t("Photo stream"),
       "log_entries" => t("Log entries"),
@@ -28,15 +30,17 @@ class gallery_block_Core {
       "project_news" => t("Gallery project news"),
       "upgrade_checker" => t("Check for Gallery upgrades")
     );
-  }
+    }
 
-  static function get_site_list() {
-    return array("language" => t("Language preference"));
-  }
+    public static function get_site_list()
+    {
+        return array("language" => t("Language preference"));
+    }
 
-  static function get($block_id) {
-    $block = new Block();
-    switch ($block_id) {
+    public static function get($block_id)
+    {
+        $block = new Block();
+        switch ($block_id) {
     case "welcome":
       $block->css_id = "g-welcome";
       $block->title = t("Welcome to Gallery 3");
@@ -83,28 +87,28 @@ class gallery_block_Core {
 
     case "block_adder":
       if ($form = gallery_block::get_add_block_form()) {
-        $block->css_id = "g-block-adder";
-        $block->title = t("Dashboard content");
-        $block->content = $form;
+          $block->css_id = "g-block-adder";
+          $block->title = t("Dashboard content");
+          $block->content = $form;
       } else {
-        $block = "";
+          $block = "";
       }
       break;
 
     case "language":
       $locales = locales::installed();
       if (count($locales) > 1) {
-        foreach ($locales as $locale => $display_name) {
-          $locales[$locale] = SafeString::of_safe_html($display_name);
-        }
-        $block = new Block();
-        $block->css_id = "g-user-language-block";
-        $block->title = t("Language preference");
-        $block->content = new View("user_languages_block.html");
-        $block->content->installed_locales = array_merge(array("" => t("« none »")), $locales);
-        $block->content->selected = (string) locales::cookie_locale();
+          foreach ($locales as $locale => $display_name) {
+              $locales[$locale] = SafeString::of_safe_html($display_name);
+          }
+          $block = new Block();
+          $block->css_id = "g-user-language-block";
+          $block->title = t("Language preference");
+          $block->content = new View("user_languages_block.html");
+          $block->content->installed_locales = array_merge(array("" => t("« none »")), $locales);
+          $block->content->selected = (string) locales::cookie_locale();
       } else {
-        $block = "";
+          $block = "";
       }
       break;
 
@@ -118,28 +122,35 @@ class gallery_block_Core {
       $block->content->new_version = upgrade_checker::get_upgrade_message();
       $block->content->build_number = gallery::build_number();
     }
-    return $block;
-  }
-
-  static function get_add_block_form() {
-    $available_blocks = block_manager::get_available_admin_blocks();
-
-    $active = array();
-    foreach (array_merge(block_manager::get_active("dashboard_sidebar"),
-                         block_manager::get_active("dashboard_center")) as $b) {
-      unset($available_blocks[implode(":", $b)]);
+        return $block;
     }
 
-    if (!$available_blocks) {
-      return;
-    }
+    public static function get_add_block_form()
+    {
+        $available_blocks = block_manager::get_available_admin_blocks();
 
-    $form = new Forge("admin/dashboard/add_block", "", "post",
-                      array("id" => "g-add-dashboard-block-form"));
-    $group = $form->group("add_block")->label(t("Add Block"));
-    $group->dropdown("id")->label(t("Available blocks"))->options($available_blocks);
-    $group->submit("center")->value(t("Add to center"));
-    $group->submit("sidebar")->value(t("Add to sidebar"));
-    return $form;
-  }
+        $active = array();
+        foreach (array_merge(
+        block_manager::get_active("dashboard_sidebar"),
+                         block_manager::get_active("dashboard_center")
+    ) as $b) {
+            unset($available_blocks[implode(":", $b)]);
+        }
+
+        if (!$available_blocks) {
+            return;
+        }
+
+        $form = new Forge(
+        "admin/dashboard/add_block",
+        "",
+        "post",
+                      array("id" => "g-add-dashboard-block-form")
+    );
+        $group = $form->group("add_block")->label(t("Add Block"));
+        $group->dropdown("id")->label(t("Available blocks"))->options($available_blocks);
+        $group->submit("center")->value(t("Add to center"));
+        $group->submit("sidebar")->value(t("Add to sidebar"));
+        return $form;
+    }
 }

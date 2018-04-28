@@ -17,24 +17,28 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class g2_import_event_Core {
-  static function item_deleted($item) {
-    db::build()
+class g2_import_event_Core
+{
+    public static function item_deleted($item)
+    {
+        db::build()
       ->delete("g2_maps")
       ->where("g3_id", "=", $item->id)
       ->execute();
-  }
+    }
 
-  static function item_created($item) {
-    g2_import::copy_matching_thumbnails_and_resizes($item);
-  }
+    public static function item_created($item)
+    {
+        g2_import::copy_matching_thumbnails_and_resizes($item);
+    }
 
-  static function admin_menu($menu, $theme) {
-    $menu
+    public static function admin_menu($menu, $theme)
+    {
+        $menu
       ->get("settings_menu")
       ->append(Menu::factory("link")
                ->id("g2_import")
                ->label(t("Gallery 2 import"))
                ->url(url::site("admin/g2_import")));
-  }
+    }
 }

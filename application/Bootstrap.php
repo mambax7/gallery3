@@ -32,10 +32,14 @@ Benchmark::start(SYSTEM_BENCHMARK.'_kohana_loading');
 
 // Load core files
 require SYSPATH.'core/Event'.EXT;
-final class Event extends Event_Core {}
+final class Event extends Event_Core
+{
+}
 
 require SYSPATH.'core/Kohana'.EXT;
-final class Kohana extends Kohana_Core {}
+final class Kohana extends Kohana_Core
+{
+}
 
 require SYSPATH.'core/Kohana_Exception'.EXT;
 require MODPATH.'gallery/libraries/MY_Kohana_Exception'.EXT;
@@ -43,7 +47,9 @@ require MODPATH.'gallery/libraries/MY_Kohana_Exception'.EXT;
 require SYSPATH.'core/Kohana_Config'.EXT;
 require SYSPATH.'libraries/drivers/Config'.EXT;
 require SYSPATH.'libraries/drivers/Config/Array'.EXT;
-final class Kohana_Config extends Kohana_Config_Core {}
+final class Kohana_Config extends Kohana_Config_Core
+{
+}
 
 // Prepare the environment
 Kohana::setup();

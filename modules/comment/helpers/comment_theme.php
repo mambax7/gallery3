@@ -17,30 +17,34 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class comment_theme_Core {
-  static function head($theme) {
-    return $theme->css("comment.css")
+class comment_theme_Core
+{
+    public static function head($theme)
+    {
+        return $theme->css("comment.css")
       . $theme->script("comment.js");
-  }
+    }
 
-  static function admin_head($theme) {
-    return $theme->css("comment.css");
-  }
+    public static function admin_head($theme)
+    {
+        return $theme->css("comment.css");
+    }
 
-  static function photo_bottom($theme) {
-    $block = new Block;
-    $block->css_id = "g-comments";
-    $block->title = t("Comments");
-    $block->anchor = "comments";
+    public static function photo_bottom($theme)
+    {
+        $block = new Block;
+        $block->css_id = "g-comments";
+        $block->title = t("Comments");
+        $block->anchor = "comments";
 
-    $view = new View("comments.html");
-    $view->comments = ORM::factory("comment")
+        $view = new View("comments.html");
+        $view->comments = ORM::factory("comment")
       ->where("item_id", "=", $theme->item()->id)
       ->where("state", "=", "published")
       ->order_by("created", "ASC")
       ->find_all();
 
-    $block->content = $view;
-    return $block;
-  }
+        $block->content = $view;
+        return $block;
+    }
 }

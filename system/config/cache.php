@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
+<?php defined('SYSPATH') or die('No direct access allowed.');
 /**
  * Cache settings, defined as arrays, or "groups". If no group name is
  * used when loading the cache library, the group named "default" will be used.
@@ -28,10 +28,9 @@
  * -  prefix   - Adds a prefix to all keys and tags. This can have a severe performance impact.
  *
  */
-$config['default'] = array
-(
-	'driver'   => 'file',
-	'params'   => array('directory' => APPPATH.'cache', 'gc_probability' => 1000),
-	'lifetime' => 1800,
-	'prefix'   => NULL
+$config['default'] = array(
+    'driver'   => 'file',
+    'params'   => array('directory' => APPPATH.'cache', 'gc_probability' => 1000),
+    'lifetime' => 1800,
+    'prefix'   => null
 );

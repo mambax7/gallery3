@@ -17,14 +17,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class Welcome_Message_Controller extends Controller {
-  public function index() {
-    if (!identity::active_user()->admin) {
-      url::redirect(item::root()->abs_url());
-    }
+class Welcome_Message_Controller extends Controller
+{
+    public function index()
+    {
+        if (!identity::active_user()->admin) {
+            url::redirect(item::root()->abs_url());
+        }
 
-    $v = new View("welcome_message.html");
-    $v->user = identity::active_user();
-    print $v;
-  }
+        $v = new View("welcome_message.html");
+        $v->user = identity::active_user();
+        print $v;
+    }
 }

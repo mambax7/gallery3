@@ -9,75 +9,66 @@
  * @copyright  (c) 2007-2008 Kohana Team
  * @license    http://kohanaphp.com/license.html
  */
-class Form_Checkbox_Core extends Form_Input {
+class Form_Checkbox_Core extends Form_Input
+{
+    protected $data = array(
+        'type' => 'checkbox',
+        'class' => 'checkbox',
+        'value' => '1',
+        'checked' => false,
+    );
 
-	protected $data = array
-	(
-		'type' => 'checkbox',
-		'class' => 'checkbox',
-		'value' => '1',
-		'checked' => FALSE,
-	);
+    protected $protect = array('type');
 
-	protected $protect = array('type');
+    public function __get($key)
+    {
+        if ($key == 'value') {
+            // Return the value if the checkbox is checked
+            return $this->data['checked'] ? $this->data['value'] : null;
+        }
 
-	public function __get($key)
-	{
-		if ($key == 'value')
-		{
-			// Return the value if the checkbox is checked
-			return $this->data['checked'] ? $this->data['value'] : NULL;
-		}
+        return parent::__get($key);
+    }
 
-		return parent::__get($key);
-	}
+    public function label($val = null)
+    {
+        if ($val === null) {
+            // Do not display labels for checkboxes, labels wrap checkboxes
+            return '';
+        } else {
+            $this->data['label'] = ($val === true) ? utf8::ucwords(inflector::humanize($this->name)) : $val;
+            return $this;
+        }
+    }
 
-	public function label($val = NULL)
-	{
-		if ($val === NULL)
-		{
-			// Do not display labels for checkboxes, labels wrap checkboxes
-			return '';
-		}
-		else
-		{
-			$this->data['label'] = ($val === TRUE) ? utf8::ucwords(inflector::humanize($this->name)) : $val;
-			return $this;
-		}
-	}
+    protected function html_element()
+    {
+        // Import the data
+        $data = $this->data;
 
-	protected function html_element()
-	{
-		// Import the data
-		$data = $this->data;
+        if (empty($data['checked'])) {
+            // Not checked
+            unset($data['checked']);
+        } else {
+            // Is checked
+            $data['checked'] = 'checked';
+        }
 
-		if (empty($data['checked']))
-		{
-			// Not checked
-			unset($data['checked']);
-		}
-		else
-		{
-			// Is checked
-			$data['checked'] = 'checked';
-		}
+        if ($label = arr::remove('label', $data)) {
+            // There must be one space before the text
+            $label = ' '.ltrim($label);
+        }
 
-		if ($label = arr::remove('label', $data))
-		{
-			// There must be one space before the text
-			$label = ' '.ltrim($label);
-		}
+        return '<label>'.form::input($data).html::clean($label).'</label>';
+    }
 
-		return '<label>'.form::input($data).html::clean($label).'</label>';
-	}
+    protected function load_value()
+    {
+        if (is_bool($this->valid)) {
+            return;
+        }
 
-	protected function load_value()
-	{
-		if (is_bool($this->valid))
-			return;
-
-		// Makes the box checked if the value from POST is the same as the current value
-		$this->data['checked'] = ($this->input_value($this->name) == $this->data['value']);
-	}
-
+        // Makes the box checked if the value from POST is the same as the current value
+        $this->data['checked'] = ($this->input_value($this->name) == $this->data['value']);
+    }
 } // End Form Checkbox

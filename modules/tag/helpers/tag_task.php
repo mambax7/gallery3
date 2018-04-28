@@ -17,81 +17,85 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class tag_task_Core {
-
-  static function available_tasks() {
-    $tasks[] = Task_Definition::factory()
+class tag_task_Core
+{
+    public static function available_tasks()
+    {
+        $tasks[] = Task_Definition::factory()
       ->callback("tag_task::clean_up_tags")
       ->name(t("Clean up tags"))
       ->description(t("Correct tag counts and remove tags with no items"))
       ->severity(log::SUCCESS);
-    return $tasks;
-  }
+        return $tasks;
+    }
 
-  /**
-   * Fix up tag counts and delete any tags that have no associated items.
-   * @param Task_Model the task
-   */
-  static function clean_up_tags($task) {
-    $errors = array();
-    try {
-      $start = microtime(true);
-      $last_tag_id = $task->get("last_tag_id", null);
-      $current = 0;
-      $total = 0;
+    /**
+     * Fix up tag counts and delete any tags that have no associated items.
+     * @param Task_Model the task
+     */
+    public static function clean_up_tags($task)
+    {
+        $errors = array();
+        try {
+            $start = microtime(true);
+            $last_tag_id = $task->get("last_tag_id", null);
+            $current = 0;
+            $total = 0;
 
-      switch ($task->get("mode", "init")) {
+            switch ($task->get("mode", "init")) {
       case "init":
         $task->set("total", ORM::factory("tag")->count_all());
         $task->set("mode", "clean_up_tags");
         $task->set("completed", 0);
         $task->set("last_tag_id", 0);
 
+        // no break
       case "clean_up_tags":
         $completed = $task->get("completed");
         $total = $task->get("total");
         $last_tag_id = $task->get("last_tag_id");
         $tags = ORM::factory("tag")->where("id", ">", $last_tag_id)->find_all(25);
-        Kohana_Log::add("error",print_r(Database::instance()->last_query(),1));
+        Kohana_Log::add("error", print_r(Database::instance()->last_query(), 1));
         while ($current < $total && microtime(true) - $start < 1 && $tag = $tags->current()) {
-          $last_tag_id = $tag->id;
-          $real_count = $tag->items_count();
-          if ($tag->count != $real_count) {
-            $tag->count = $real_count;
-            if ($tag->count) {
-              $task->log(
-                "Fixing count for tag {$tag->name} (id: {$tag->id}, new count: {$tag->count})");
-              $tag->save();
-            } else {
-              $task->log("Deleting empty tag {$tag->name} ({$tag->id})");
-              $tag->delete();
+            $last_tag_id = $tag->id;
+            $real_count = $tag->items_count();
+            if ($tag->count != $real_count) {
+                $tag->count = $real_count;
+                if ($tag->count) {
+                    $task->log(
+                "Fixing count for tag {$tag->name} (id: {$tag->id}, new count: {$tag->count})"
+              );
+                    $tag->save();
+                } else {
+                    $task->log("Deleting empty tag {$tag->name} ({$tag->id})");
+                    $tag->delete();
+                }
             }
-          }
 
-          $completed++;
-          $tags->next();
+            $completed++;
+            $tags->next();
         }
         $task->percent_complete = $completed / $total * 100;
         $task->set("completed", $completed);
         $task->set("last_tag_id", $last_tag_id);
       }
 
-      $task->status = t2("Examined %count tag", "Examined %count tags", $completed);
+            $task->status = t2("Examined %count tag", "Examined %count tags", $completed);
 
-      if ($completed == $total) {
-        $task->done = true;
-        $task->state = "success";
-        $task->percent_complete = 100;
-      }
-    } catch (Exception $e) {
-      Kohana_Log::add("error",(string)$e);
-      $task->done = true;
-      $task->state = "error";
-      $task->status = $e->getMessage();
-      $errors[] = (string)$e;
+            if ($completed == $total) {
+                $task->done = true;
+                $task->state = "success";
+                $task->percent_complete = 100;
+            }
+        } catch (Exception $e) {
+            Kohana_Log::add("error", (string)$e);
+            $task->done = true;
+            $task->state = "error";
+            $task->status = $e->getMessage();
+            $errors[] = (string)$e;
+        }
+        if ($errors) {
+            $task->log($errors);
+        }
     }
-    if ($errors) {
-      $task->log($errors);
-    }
-  }
 }

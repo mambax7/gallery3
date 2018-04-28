@@ -9,14 +9,12 @@
  * @copyright  (c) 2007-2008 Kohana Team
  * @license    http://kohanaphp.com/license.html
  */
-class Form_Radio_Core extends Form_Checkbox {
-
-	protected $data = array
-	(
-		'type' => 'radio',
-		'class' => 'radio',
-		'value' => '1',
-		'checked' => FALSE,
-	);
-
+class Form_Radio_Core extends Form_Checkbox
+{
+    protected $data = array(
+        'type' => 'radio',
+        'class' => 'radio',
+        'value' => '1',
+        'checked' => false,
+    );
 } // End Form_Radio

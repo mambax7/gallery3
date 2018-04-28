@@ -19,5 +19,5 @@
  */
 
 if (file_exists(VARPATH . "database.php")) {
-  include(VARPATH . "database.php");
+    include(VARPATH . "database.php");
 }

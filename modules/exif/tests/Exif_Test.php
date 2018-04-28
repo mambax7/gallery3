@@ -17,13 +17,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class Exif_Test extends Gallery_Unit_Test_Case {
-  public function exif_extract_test() {
-    $photo = test::random_photo_unsaved()
+class Exif_Test extends Gallery_Unit_Test_Case
+{
+    public function exif_extract_test()
+    {
+        $photo = test::random_photo_unsaved()
       ->set_data_file(MODPATH . "exif/tests/data/image.jpg")
       ->save();
 
-    $expected = array(
+        $expected = array(
       array("caption" => "Camera Maker", "value" => "Pentax Corporation"),
       array("caption" => "Camera Model", "value" => "PENTAX K10D"),
       array("caption" => "Aperture", "value" => "f/2.8"),
@@ -45,6 +47,6 @@ class Exif_Test extends Gallery_Unit_Test_Case {
       array("caption" => "Scene Type", "value" => "0"),
       array("caption" => "Subject Distance", "value" => "0"),
     );
-    $this->assert_equal($expected, exif::get($photo));
-  }
+        $this->assert_equal($expected, exif::get($photo));
+    }
 }

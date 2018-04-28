@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
+<?php defined('SYSPATH') or die('No direct access allowed.');
 /**
  * Cache driver abstract class.
  *
@@ -9,34 +9,35 @@
  * @copyright  (c) 2007-2009 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-abstract class Cache_Driver {
-	/**
-	 * Set cache items  
-	 */
-	abstract public function set($items, $tags = NULL, $lifetime = NULL);
+abstract class Cache_Driver
+{
+    /**
+     * Set cache items
+     */
+    abstract public function set($items, $tags = null, $lifetime = null);
 
-	/**
-	 * Get a cache items by key 
-	 */
-	abstract public function get($keys, $single = FALSE);
+    /**
+     * Get a cache items by key
+     */
+    abstract public function get($keys, $single = false);
 
-	/**
-	 * Get cache items by tag 
-	 */
-	abstract public function get_tag($tags);
+    /**
+     * Get cache items by tag
+     */
+    abstract public function get_tag($tags);
 
-	/**
-	 * Delete cache item by key 
-	 */
-	abstract public function delete($keys);
+    /**
+     * Delete cache item by key
+     */
+    abstract public function delete($keys);
 
-	/**
-	 * Delete cache items by tag 
-	 */
-	abstract public function delete_tag($tags);
+    /**
+     * Delete cache items by tag
+     */
+    abstract public function delete_tag($tags);
 
-	/**
-	 * Empty the cache
-	 */
-	abstract public function delete_all();
+    /**
+     * Empty the cache
+     */
+    abstract public function delete_all();
 } // End Cache Driver

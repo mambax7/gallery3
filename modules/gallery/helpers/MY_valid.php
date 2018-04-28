@@ -17,10 +17,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class valid extends valid_Core {
-  static function url($url) {
-    return valid_Core::url($url) &&
+class valid extends valid_Core
+{
+    public static function url($url)
+    {
+        return valid_Core::url($url) &&
       (!strncasecmp($url, "http://", strlen("http://")) ||
        !strncasecmp($url, "https://", strlen("https://")));
-  }
+    }
 }

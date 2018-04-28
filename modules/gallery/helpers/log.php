@@ -17,81 +17,88 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class log_Core {
-  const SUCCESS = 1;
-  const INFO    = 2;
-  const WARNING = 3;
-  const ERROR   = 4;
+class log_Core
+{
+    const SUCCESS = 1;
+    const INFO    = 2;
+    const WARNING = 3;
+    const ERROR   = 4;
 
-  /**
-   * Report a successful event.
-   * @param string  $category  an arbitrary category we can use to filter log messages
-   * @param string  $message   a detailed log message
-   * @param string  $html      an html snippet presented alongside the log message to aid the admin
-   */
-  static function success($category, $message, $html="") {
-    self::_add($category, $message, $html, log::SUCCESS);
-  }
+    /**
+     * Report a successful event.
+     * @param string  $category  an arbitrary category we can use to filter log messages
+     * @param string  $message   a detailed log message
+     * @param string  $html      an html snippet presented alongside the log message to aid the admin
+     */
+    public static function success($category, $message, $html="")
+    {
+        self::_add($category, $message, $html, log::SUCCESS);
+    }
 
-  /**
-   * Report an informational event.
-   * @param string  $category  an arbitrary category we can use to filter log messages
-   * @param string  $message   a detailed log message
-   * @param string  $html      an html snippet presented alongside the log message to aid the admin
-   */
-  static function info($category, $message, $html="") {
-    self::_add($category, $message, $html, log::INFO);
-  }
+    /**
+     * Report an informational event.
+     * @param string  $category  an arbitrary category we can use to filter log messages
+     * @param string  $message   a detailed log message
+     * @param string  $html      an html snippet presented alongside the log message to aid the admin
+     */
+    public static function info($category, $message, $html="")
+    {
+        self::_add($category, $message, $html, log::INFO);
+    }
 
-  /**
-   * Report that something went wrong, not fatal, but worth investigation.
-   * @param string  $category  an arbitrary category we can use to filter log messages
-   * @param string  $message   a detailed log message
-   * @param string  $html      an html snippet presented alongside the log message to aid the admin
-   */
-  static function warning($category, $message, $html="") {
-    self::_add($category, $message, $html, log::WARNING);
-  }
+    /**
+     * Report that something went wrong, not fatal, but worth investigation.
+     * @param string  $category  an arbitrary category we can use to filter log messages
+     * @param string  $message   a detailed log message
+     * @param string  $html      an html snippet presented alongside the log message to aid the admin
+     */
+    public static function warning($category, $message, $html="")
+    {
+        self::_add($category, $message, $html, log::WARNING);
+    }
 
-  /**
-   * Report that something went wrong that should be fixed.
-   * @param string  $category  an arbitrary category we can use to filter log messages
-   * @param string  $message   a detailed log message
-   * @param string  $html      an html snippet presented alongside the log message to aid the admin
-   */
-  static function error($category, $message, $html="") {
-    self::_add($category, $message, $html, log::ERROR);
-  }
+    /**
+     * Report that something went wrong that should be fixed.
+     * @param string  $category  an arbitrary category we can use to filter log messages
+     * @param string  $message   a detailed log message
+     * @param string  $html      an html snippet presented alongside the log message to aid the admin
+     */
+    public static function error($category, $message, $html="")
+    {
+        self::_add($category, $message, $html, log::ERROR);
+    }
 
-  /**
-   * Add a log entry.
-   *
-   * @param string  $category  an arbitrary category we can use to filter log messages
-   * @param string  $message   a detailed log message
-   * @param integer $severity  INFO, WARNING or ERROR
-   * @param string  $html      an html snippet presented alongside the log message to aid the admin
-   */
-  private static function _add($category, $message, $html, $severity) {
-    $log = ORM::factory("log");
-    $log->category = $category;
-    $log->message = $message;
-    $log->severity = $severity;
-    $log->html = $html;
-    $log->url = substr(url::abs_current(true), 0, 255);
-    $log->referer = request::referrer(null);
-    $log->timestamp = time();
-    $log->user_id = identity::active_user()->id;
-    $log->save();
-  }
+    /**
+     * Add a log entry.
+     *
+     * @param string  $category  an arbitrary category we can use to filter log messages
+     * @param string  $message   a detailed log message
+     * @param integer $severity  INFO, WARNING or ERROR
+     * @param string  $html      an html snippet presented alongside the log message to aid the admin
+     */
+    private static function _add($category, $message, $html, $severity)
+    {
+        $log = ORM::factory("log");
+        $log->category = $category;
+        $log->message = $message;
+        $log->severity = $severity;
+        $log->html = $html;
+        $log->url = substr(url::abs_current(true), 0, 255);
+        $log->referer = request::referrer(null);
+        $log->timestamp = time();
+        $log->user_id = identity::active_user()->id;
+        $log->save();
+    }
 
 
-  /**
-   * Convert a message severity to a CSS class
-   * @param  integer $severity
-   * @return string
-   */
-  static function severity_class($severity) {
-    switch($severity) {
+    /**
+     * Convert a message severity to a CSS class
+     * @param  integer $severity
+     * @return string
+     */
+    public static function severity_class($severity)
+    {
+        switch ($severity) {
     case log::SUCCESS:
       return "g-success";
 
@@ -104,5 +111,5 @@ class log_Core {
     case log::ERROR:
       return "g-error";
     }
-  }
+    }
 }

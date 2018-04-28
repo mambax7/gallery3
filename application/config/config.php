@@ -41,9 +41,14 @@
  * Rawurlencode each of the elements to avoid breaking the page layout.
  */
 $config["site_domain"] =
-  implode("/", array_map("rawurlencode", explode("/",
-      substr($_SERVER["SCRIPT_NAME"], 0,
-             strpos($_SERVER["SCRIPT_NAME"], basename($_SERVER["SCRIPT_FILENAME"]))))));
+  implode("/", array_map("rawurlencode", explode(
+      "/",
+      substr(
+          $_SERVER["SCRIPT_NAME"],
+          0,
+             strpos($_SERVER["SCRIPT_NAME"], basename($_SERVER["SCRIPT_FILENAME"]))
+      )
+  )));
 
 /**
  * Force a default protocol to be used by the site. If no site_protocol is
@@ -69,7 +74,7 @@ $config["url_suffix"] = "";
  * The internal cache stores file paths and config entries across requests and
  * can give significant speed improvements at the expense of delayed updating.
  */
-$config["internal_cache"] = FALSE;
+$config["internal_cache"] = false;
 $config["internal_cache_path"] = VARPATH . "tmp/";
 
 /**
@@ -79,20 +84,20 @@ $config["internal_cache_path"] = VARPATH . "tmp/";
  *
  * Do not enable this option if you are using output compression in php.ini!
  */
-$config["output_compression"] = FALSE;
+$config["output_compression"] = false;
 
 /**
  * Enable or disable global XSS filtering of GET, POST, and SERVER data. This
  * option also accepts a string to specify a specific XSS filtering tool.
  */
-$config["global_xss_filtering"] = TRUE;
+$config["global_xss_filtering"] = true;
 
 /**
  * Enable or disable hooks. Setting this option to TRUE will enable
  * all hooks. By using an array of hook filenames, you can control
  * which hooks are enabled. Setting this option to FALSE disables hooks.
  */
-$config["enable_hooks"] = TRUE;
+$config["enable_hooks"] = true;
 
 /**
  * Log thresholds:
@@ -109,14 +114,14 @@ $config["log_threshold"] = 3;
  */
 $config["log_directory"] = VARPATH . "logs";
 if (@!is_writable($config["log_directory"])) {
-  $config["log_threshold"] = 0;
+    $config["log_threshold"] = 0;
 }
 
 /**
  * Enable or disable displaying of Kohana error pages. This will not affect
  * logging. Turning this off will disable ALL error pages.
  */
-$config["display_errors"] = TRUE;
+$config["display_errors"] = true;
 
 /**
  * Enable or disable statistics in the final output. Stats are replaced via
@@ -124,7 +129,7 @@ $config["display_errors"] = TRUE;
  *
  * @see http://docs.kohanaphp.com/general/configuration
  */
-$config["render_stats"] = TRUE;
+$config["render_stats"] = true;
 
 /**
  * Filename prefixed used to determine extensions. For example, an
@@ -150,7 +155,11 @@ $config["modules"] = array(
 );
 
 if (TEST_MODE) {
-  array_splice($config["modules"], 0, 0,
+    array_splice(
+      $config["modules"],
+      0,
+      0,
                array(MODPATH . "gallery_unit_test",
-                     MODPATH . "unit_test"));
+                     MODPATH . "unit_test")
+  );
 }

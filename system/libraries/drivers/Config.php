@@ -14,244 +14,236 @@
  * @license    http://kohanaphp.com/license
  * @abstract
  */
-abstract class Config_Driver {
+abstract class Config_Driver
+{
 
-	/**
-	 * Internal caching
-	 *
-	 * @var     Cache
-	 */
-	protected $cache;
+    /**
+     * Internal caching
+     *
+     * @var     Cache
+     */
+    protected $cache;
 
-	/**
-	 * The name of the internal cache
-	 *
-	 * @var     string
-	 */
-	protected $cache_name = 'Kohana_Config_Cache';
+    /**
+     * The name of the internal cache
+     *
+     * @var     string
+     */
+    protected $cache_name = 'Kohana_Config_Cache';
 
-	/**
-	 * Cache Lifetime
-	 *
-	 * @var mixed
-	 */
-	protected $cache_lifetime = FALSE;
+    /**
+     * Cache Lifetime
+     *
+     * @var mixed
+     */
+    protected $cache_lifetime = false;
 
-	/**
-	 * The Encryption library
-	 *
-	 * @var     Encrypt
-	 */
-	protected $encrypt;
+    /**
+     * The Encryption library
+     *
+     * @var     Encrypt
+     */
+    protected $encrypt;
 
-	/**
-	 * The config loaded
-	 *
-	 * @var     array
-	 */
-	protected $config = array();
+    /**
+     * The config loaded
+     *
+     * @var     array
+     */
+    protected $config = array();
 
-	/**
-	 * The changed status of configuration values,
-	 * current state versus the stored state.
-	 *
-	 * @var     bool
-	 */
-	protected $changed = FALSE;
+    /**
+     * The changed status of configuration values,
+     * current state versus the stored state.
+     *
+     * @var     bool
+     */
+    protected $changed = false;
 
-	/**
-	 * Determines if any config has been loaded yet
-	 */
-	public $loaded = FALSE;
+    /**
+     * Determines if any config has been loaded yet
+     */
+    public $loaded = false;
 
-	/**
-	 * Array driver constructor. Sets up the PHP array
-	 * driver, including caching and encryption if
-	 * required
-	 *
-	 * @access  public
-	 */
-	public function __construct($config)
-	{
+    /**
+     * Array driver constructor. Sets up the PHP array
+     * driver, including caching and encryption if
+     * required
+     *
+     * @access  public
+     */
+    public function __construct($config)
+    {
+        if (($cache_setting = $config['internal_cache']) !== false) {
+            $this->cache_lifetime = $cache_setting;
+            // Restore the cached configuration
+            $this->config = $this->load_cache();
 
-		if (($cache_setting = $config['internal_cache']) !== FALSE)
-		{
-			$this->cache_lifetime = $cache_setting;
-			// Restore the cached configuration
-			$this->config = $this->load_cache();
+            if (count($this->config) > 0) {
+                $this->loaded = true;
+            }
 
-			if (count($this->config) > 0)
-				$this->loaded = TRUE;
+            // Add the save cache method to system.shutshut event
+            Event::add('system.shutdown', array($this, 'save_cache'));
+        }
+    }
 
-			// Add the save cache method to system.shutshut event
-			Event::add('system.shutdown', array($this, 'save_cache'));
-		}
+    /**
+     * Gets a value from config. If required is TRUE
+     * then get will throw an exception if value cannot
+     * be loaded.
+     *
+     * @param   string       key  the setting to get
+     * @param   bool         slash  remove trailing slashes
+     * @param   bool         required  is setting required?
+     * @return  mixed
+     * @access  public
+     */
+    public function get($key, $slash = false, $required = false)
+    {
+        // Get the group name from the key
+        $group = explode('.', $key, 2);
+        $group = $group[0];
 
-	}
+        // Check for existing value and load it dynamically if required
+        if (! isset($this->config[$group])) {
+            $this->config[$group] = $this->load($group, $required);
+        }
 
-	/**
-	 * Gets a value from config. If required is TRUE
-	 * then get will throw an exception if value cannot
-	 * be loaded.
-	 *
-	 * @param   string       key  the setting to get
-	 * @param   bool         slash  remove trailing slashes
-	 * @param   bool         required  is setting required?
-	 * @return  mixed
-	 * @access  public
-	 */
-	public function get($key, $slash = FALSE, $required = FALSE)
-	{
-		// Get the group name from the key
-		$group = explode('.', $key, 2);
-		$group = $group[0];
+        // Get the value of the key string
+        $value = Kohana::key_string($this->config, $key);
 
-		// Check for existing value and load it dynamically if required
-		if ( ! isset($this->config[$group]))
-			$this->config[$group] = $this->load($group, $required);
+        if ($slash === true and is_string($value) and $value !== '') {
+            // Force the value to end with "/"
+            $value = rtrim($value, '/').'/';
+        }
 
-		// Get the value of the key string
-		$value = Kohana::key_string($this->config, $key);
+        if (($required === true) and ($value === null)) {
+            throw new Kohana_Config_Exception('Value not found in config driver');
+        }
 
-		if ($slash === TRUE AND is_string($value) AND $value !== '')
-		{
-			// Force the value to end with "/"
-			$value = rtrim($value, '/').'/';
-		}
+        $this->loaded = true;
+        return $value;
+    }
 
-		if (($required === TRUE) AND ($value === null))
-			throw new Kohana_Config_Exception('Value not found in config driver');
+    /**
+     * Sets a new value to the configuration
+     *
+     * @param   string       key
+     * @param   mixed        value
+     * @return  bool
+     * @access  public
+     */
+    public function set($key, $value)
+    {
+        // Do this to make sure that the config array is already loaded
+        $this->get($key);
 
-		$this->loaded = TRUE;
-		return $value;
-	}
+        if (substr($key, 0, 7) === 'routes.') {
+            // Routes cannot contain sub keys due to possible dots in regex
+            $keys = explode('.', $key, 2);
+        } else {
+            // Convert dot-noted key string to an array
+            $keys = explode('.', $key);
+        }
 
-	/**
-	 * Sets a new value to the configuration
-	 *
-	 * @param   string       key
-	 * @param   mixed        value
-	 * @return  bool
-	 * @access  public
-	 */
-	public function set($key, $value)
-	{
-		// Do this to make sure that the config array is already loaded
-		$this->get($key);
+        // Used for recursion
+        $conf =& $this->config;
+        $last = count($keys) - 1;
 
-		if (substr($key, 0, 7) === 'routes.')
-		{
-			// Routes cannot contain sub keys due to possible dots in regex
-			$keys = explode('.', $key, 2);
-		}
-		else
-		{
-			// Convert dot-noted key string to an array
-			$keys = explode('.', $key);
-		}
+        foreach ($keys as $i => $k) {
+            if ($i === $last) {
+                $conf[$k] = $value;
+            } else {
+                $conf =& $conf[$k];
+            }
+        }
 
-		// Used for recursion
-		$conf =& $this->config;
-		$last = count($keys) - 1;
+        if (substr($key, 0, 12) === 'core.modules') {
+            // Reprocess the include paths
+            Kohana::include_paths(true);
+        }
 
-		foreach ($keys as $i => $k)
-		{
-			if ($i === $last)
-			{
-				$conf[$k] = $value;
-			}
-			else
-			{
-				$conf =& $conf[$k];
-			}
-		}
+        // Set config to changed
+        return $this->changed = true;
+    }
 
-		if (substr($key,0,12) === 'core.modules')
-		{
-			// Reprocess the include paths
-			Kohana::include_paths(TRUE);
-		}
+    /**
+     * Clear the configuration
+     *
+     * @param   string       group
+     * @return  bool
+     * @access  public
+     */
+    public function clear($group)
+    {
+        // Remove the group from config
+        unset($this->config[$group]);
 
-		// Set config to changed
-		return $this->changed = TRUE;
-	}
+        // Set config to changed
+        return $this->changed = true;
+    }
 
-	/**
-	 * Clear the configuration
-	 *
-	 * @param   string       group
-	 * @return  bool
-	 * @access  public
-	 */
-	public function clear($group)
-	{
-		// Remove the group from config
-		unset($this->config[$group]);
+    /**
+     * Checks whether the setting exists in
+     * config
+     *
+     * @param   string $key
+     * @return  bool
+     * @access  public
+     */
+    public function setting_exists($key)
+    {
+        return $this->get($key) === null;
+    }
 
-		// Set config to changed
-		return $this->changed = TRUE;
-	}
+    /**
+     * Loads a configuration group based on the setting
+     *
+     * @param   string       group
+     * @param   bool         required
+     * @return  array
+     * @access  public
+     * @abstract
+     */
+    abstract public function load($group, $required = false);
 
-	/**
-	 * Checks whether the setting exists in
-	 * config
-	 *
-	 * @param   string $key
-	 * @return  bool
-	 * @access  public
-	 */
-	public function setting_exists($key)
-	{
-		return $this->get($key) === NULL;
-	}
+    /**
+     * Loads the cached version of this configuration driver
+     *
+     * @return  array
+     * @access  public
+     */
+    public function load_cache()
+    {
+        // Load the cache for this configuration
+        $cached_config = Kohana::cache($this->cache_name, $this->cache_lifetime);
 
-	/**
-	 * Loads a configuration group based on the setting
-	 *
-	 * @param   string       group
-	 * @param   bool         required
-	 * @return  array
-	 * @access  public
-	 * @abstract
-	 */
-	abstract public function load($group, $required = FALSE);
+        // If the configuration wasn't loaded from the cache
+        if ($cached_config === null) {
+            $cached_config = array();
+        }
 
-	/**
-	 * Loads the cached version of this configuration driver
-	 *
-	 * @return  array
-	 * @access  public
-	 */
-	public function load_cache()
-	{
-		// Load the cache for this configuration
-		$cached_config = Kohana::cache($this->cache_name, $this->cache_lifetime);
+        // Return the cached config
+        return $cached_config;
+    }
 
-		// If the configuration wasn't loaded from the cache
-		if ($cached_config === NULL)
-			$cached_config = array();
+    /**
+     * Saves a cached version of this configuration driver
+     *
+     * @return  bool
+     * @access  public
+     */
+    public function save_cache()
+    {
+        // If this configuration has changed
+        if ($this->get('core.internal_cache') !== false and $this->changed) {
+            $data = $this->config;
 
-		// Return the cached config
-		return $cached_config;
-	}
+            // Save the cache
+            return Kohana::cache_save($this->cache_name, $data, $this->cache_lifetime);
+        }
 
-	/**
-	 * Saves a cached version of this configuration driver
-	 *
-	 * @return  bool
-	 * @access  public
-	 */
-	public function save_cache()
-	{
-		// If this configuration has changed
-		if ($this->get('core.internal_cache') !== FALSE AND $this->changed)
-		{
-			$data = $this->config;
-
-			// Save the cache
-			return Kohana::cache_save($this->cache_name, $data, $this->cache_lifetime);
-		}
-
-		return TRUE;
-	}
+        return true;
+    }
 } // End Kohana_Config_Driver

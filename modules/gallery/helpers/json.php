@@ -17,15 +17,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class json_Core {
-  /**
-   * JSON Encode a reply to the browser and set the content type to specify that it's a JSON
-   * payload.
-   *
-   * @param  mixed $message string or object to json encode and print
-   */
-  static function reply($message) {
-    header("Content-Type: application/json; charset=" . Kohana::CHARSET);
-    print json_encode($message);
-  }
+class json_Core
+{
+    /**
+     * JSON Encode a reply to the browser and set the content type to specify that it's a JSON
+     * payload.
+     *
+     * @param  mixed $message string or object to json encode and print
+     */
+    public static function reply($message)
+    {
+        header("Content-Type: application/json; charset=" . Kohana::CHARSET);
+        print json_encode($message);
+    }
 }

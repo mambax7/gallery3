@@ -7,17 +7,17 @@
  * @copyright  (c) 2008-2009 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-class Database_Expression_Core {
+class Database_Expression_Core
+{
+    protected $expression;
 
-	protected $expression;
+    public function __construct($expression)
+    {
+        $this->expression = $expression;
+    }
 
-	public function __construct($expression)
-	{
-		$this->expression = $expression;
-	}
-
-	public function __toString()
-	{
-		return $this->expression;
-	}
+    public function __toString()
+    {
+        return $this->expression;
+    }
 }

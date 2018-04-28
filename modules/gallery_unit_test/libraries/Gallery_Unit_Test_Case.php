@@ -17,20 +17,28 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class Gallery_Unit_Test_Case extends Unit_Test_Case {
-  public function assert_equal_array($expected, $actual, $debug=null) {
-    if ($expected !== $actual) {
-      throw new Kohana_Unit_Test_Exception(
-        sprintf("Expected (%s) %s but received (%s) %s\n Diff: %s",
-                gettype($expected), var_export($expected, true),
-                gettype($actual), var_export($actual, true),
-                test::diff(var_export($expected, true), var_export($actual, true))),
-        $debug);
+class Gallery_Unit_Test_Case extends Unit_Test_Case
+{
+    public function assert_equal_array($expected, $actual, $debug=null)
+    {
+        if ($expected !== $actual) {
+            throw new Kohana_Unit_Test_Exception(
+        sprintf(
+            "Expected (%s) %s but received (%s) %s\n Diff: %s",
+                gettype($expected),
+            var_export($expected, true),
+                gettype($actual),
+            var_export($actual, true),
+                test::diff(var_export($expected, true), var_export($actual, true))
+        ),
+        $debug
+      );
+        }
+        return $this;
     }
-    return $this;
-  }
 
-  public function assert_array_equal_to_json($expected_array, $actual_json, $debug=null) {
-    return $this->assert_equal_array($expected_array, json_decode($actual_json, true), $debug);
-  }
+    public function assert_array_equal_to_json($expected_array, $actual_json, $debug=null)
+    {
+        return $this->assert_equal_array($expected_array, json_decode($actual_json, true), $debug);
+    }
 }

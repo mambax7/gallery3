@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
+<?php defined('SYSPATH') or die('No direct access allowed.');
 /**
  * Cookie config settings. These are the default settings used by the [cookie]
  * helper. You can override these settings by passing parameters to the cookie
@@ -36,14 +36,14 @@ $config['expire'] = 0;
  * secure protocol.
  * @default FALSE
  */
-$config['secure'] = FALSE;
+$config['secure'] = false;
 
 /**
  * Enable this option to make the cookie accessible only through the
  * HTTP protocol (e.g. no javascript access). This is not supported by all browsers.
  * @default FALSE
  */
-$config['httponly'] = FALSE;
+$config['httponly'] = false;
 
 /**
  * Cookie salt for signed cookies.

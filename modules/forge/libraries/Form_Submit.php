@@ -9,22 +9,20 @@
  * @copyright  (c) 2007-2008 Kohana Team
  * @license    http://kohanaphp.com/license.html
  */
-class Form_Submit_Core extends Form_Input {
+class Form_Submit_Core extends Form_Input
+{
+    protected $data = array(
+        'type'  => 'submit',
+        'class' => 'submit'
+    );
 
-	protected $data = array
-	(
-		'type'  => 'submit',
-		'class' => 'submit'
-	);
+    protected $protect = array('type');
 
-	protected $protect = array('type');
+    public function render()
+    {
+        $data = $this->data;
+        unset($data['label']);
 
-	public function render()
-	{
-		$data = $this->data;
-		unset($data['label']);
-
-		return form::submit($data);
-	}
-
+        return form::submit($data);
+    }
 } // End Form Submit

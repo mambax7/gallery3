@@ -17,19 +17,23 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class PhpCodeFilterIterator extends FilterIterator {
-  public function accept() {
-    $path_name = $this->getInnerIterator()->getPathName();
-    return substr($path_name, -4) == ".php";
-  }
+class PhpCodeFilterIterator extends FilterIterator
+{
+    public function accept()
+    {
+        $path_name = $this->getInnerIterator()->getPathName();
+        return substr($path_name, -4) == ".php";
+    }
 }
 
-class GalleryCodeFilterIterator extends FilterIterator {
-  public function accept() {
-    // Skip anything that we didn't write
-    $path_name = $this->getInnerIterator()->getPathName();
-    $file_name = $this->getInnerIterator()->getFileName();
-    return !(
+class GalleryCodeFilterIterator extends FilterIterator
+{
+    public function accept()
+    {
+        // Skip anything that we didn't write
+        $path_name = $this->getInnerIterator()->getPathName();
+        $file_name = $this->getInnerIterator()->getFileName();
+        return !(
       $file_name == "." ||
       $file_name == ".." ||
       strpos($path_name, DOCROOT . ".git") !== false ||
@@ -51,6 +55,7 @@ class GalleryCodeFilterIterator extends FilterIterator {
       strpos($path_name, DOCROOT . "lib") !== false ||
       strpos($path_name, DOCROOT . "themes/admin_wind/css/themeroller") !== false ||
       strpos($path_name, DOCROOT . "themes/wind/css/themeroller") !== false ||
-      substr($path_name, -1, 1) == "~");
-  }
+      substr($path_name, -1, 1) == "~"
+    );
+    }
 }

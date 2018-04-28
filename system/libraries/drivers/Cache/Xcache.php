@@ -1,7 +1,7 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
+<?php defined('SYSPATH') or die('No direct access allowed.');
 /**
  * XCache-based Cache driver.
- * 
+ *
  * $Id: Memcache.php 4605 2009-09-14 17:22:21Z kiall $
  *
  * @package    Cache
@@ -10,152 +10,133 @@
  * @license    http://kohanaphp.com/license
  * @TODO       Check if XCache cleans its own keys.
  */
-class Cache_Xcache_Driver extends Cache_Driver {
-	protected $config;
+class Cache_Xcache_Driver extends Cache_Driver
+{
+    protected $config;
 
-	public function __construct($config)
-	{
-		if ( ! extension_loaded('xcache'))
-			throw new Cache_Exception('The xcache PHP extension must be loaded to use this driver.');
+    public function __construct($config)
+    {
+        if (! extension_loaded('xcache')) {
+            throw new Cache_Exception('The xcache PHP extension must be loaded to use this driver.');
+        }
 
-		$this->config = $config;
-	}
+        $this->config = $config;
+    }
 
-	public function set($items, $tags = NULL, $lifetime = NULL)
-	{
-		if ($tags !== NULL)
-		{
-			Kohana_Log::add('debug', __('Cache: XCache driver does not support tags'));
-		}
+    public function set($items, $tags = null, $lifetime = null)
+    {
+        if ($tags !== null) {
+            Kohana_Log::add('debug', __('Cache: XCache driver does not support tags'));
+        }
 
-		foreach ($items as $key => $value)
-		{
-			if (is_resource($value))
-				throw new Cache_Exception('Caching of resources is impossible, because resources cannot be serialised.');
+        foreach ($items as $key => $value) {
+            if (is_resource($value)) {
+                throw new Cache_Exception('Caching of resources is impossible, because resources cannot be serialised.');
+            }
 
-			if ( ! xcache_set($key, $value, $lifetime))
-			{
-				return FALSE;
-			}
-		}
+            if (! xcache_set($key, $value, $lifetime)) {
+                return false;
+            }
+        }
 
-		return TRUE;
-	}
+        return true;
+    }
 
-	public function get($keys, $single = FALSE)
-	{
-		$items = array();
+    public function get($keys, $single = false)
+    {
+        $items = array();
 
-		foreach ($keys as $key)
-		{
-			if (xcache_isset($key))
-			{
-				$items[$key] = xcache_get($key);
-			}
-			else
-			{
-				$items[$key] = NULL;
-			}
-		}
+        foreach ($keys as $key) {
+            if (xcache_isset($key)) {
+                $items[$key] = xcache_get($key);
+            } else {
+                $items[$key] = null;
+            }
+        }
 
-		if ($single)
-		{
-			return ($items === FALSE OR count($items) > 0) ? current($items) : NULL;
-		}
-		else
-		{
-			return ($items === FALSE) ? array() : $items;
-		}
-	}
+        if ($single) {
+            return ($items === false or count($items) > 0) ? current($items) : null;
+        } else {
+            return ($items === false) ? array() : $items;
+        }
+    }
 
-	/**
-	 * Get cache items by tag
-	 */
-	public function get_tag($tags)
-	{
-		Kohana_Log::add('debug', __('Cache: XCache driver does not support tags'));
-		return NULL;
-	}
+    /**
+     * Get cache items by tag
+     */
+    public function get_tag($tags)
+    {
+        Kohana_Log::add('debug', __('Cache: XCache driver does not support tags'));
+        return null;
+    }
 
-	/**
-	 * Delete cache item by key
-	 */
-	public function delete($keys)
-	{
-		foreach ($keys as $key)
-		{
-			if ( ! xcache_unset($key))
-			{
-				return FALSE;
-			}
-		}
+    /**
+     * Delete cache item by key
+     */
+    public function delete($keys)
+    {
+        foreach ($keys as $key) {
+            if (! xcache_unset($key)) {
+                return false;
+            }
+        }
 
-		return TRUE;
-	}
+        return true;
+    }
 
-	/**
-	 * Delete cache items by tag
-	 */
-	public function delete_tag($tags)
-	{
-		Kohana_Log::add('debug', __('Cache: XCache driver does not support tags'));
-		return NULL;
-	}
+    /**
+     * Delete cache items by tag
+     */
+    public function delete_tag($tags)
+    {
+        Kohana_Log::add('debug', __('Cache: XCache driver does not support tags'));
+        return null;
+    }
 
-	/**
-	 * Empty the cache
-	 */
-	public function delete_all()
-	{
-		$this->auth();
-		$result = TRUE;
+    /**
+     * Empty the cache
+     */
+    public function delete_all()
+    {
+        $this->auth();
+        $result = true;
 
-		for ($i = 0, $max = xcache_count(XC_TYPE_VAR); $i < $max; $i++)
-		{
-			if (xcache_clear_cache(XC_TYPE_VAR, $i) !== NULL)
-			{
-				$result = FALSE;
-				break;
-			}
-		}
+        for ($i = 0, $max = xcache_count(XC_TYPE_VAR); $i < $max; $i++) {
+            if (xcache_clear_cache(XC_TYPE_VAR, $i) !== null) {
+                $result = false;
+                break;
+            }
+        }
 
-		// Undo the login
-		$this->auth(TRUE);
+        // Undo the login
+        $this->auth(true);
 
-		return $result;
-	}
+        return $result;
+    }
 
-	private function auth($reverse = FALSE)
-	{
-		static $backup = array();
+    private function auth($reverse = false)
+    {
+        static $backup = array();
 
-		$keys = array('PHP_AUTH_USER', 'PHP_AUTH_PW');
+        $keys = array('PHP_AUTH_USER', 'PHP_AUTH_PW');
 
-		foreach ($keys as $key)
-		{
-			if ($reverse)
-			{
-				if (isset($backup[$key]))
-				{
-					$_SERVER[$key] = $backup[$key];
-					unset($backup[$key]);
-				}
-				else
-				{
-					unset($_SERVER[$key]);
-				}
-			}
-			else
-			{
-				$value = getenv($key);
+        foreach ($keys as $key) {
+            if ($reverse) {
+                if (isset($backup[$key])) {
+                    $_SERVER[$key] = $backup[$key];
+                    unset($backup[$key]);
+                } else {
+                    unset($_SERVER[$key]);
+                }
+            } else {
+                $value = getenv($key);
 
-				if ( ! empty($value))
-				{
-					$backup[$key] = $value;
-				}
+                if (! empty($value)) {
+                    $backup[$key] = $value;
+                }
 
-				$_SERVER[$key] = $this->config->{$key};
-			}
-		}
-	}
+                $_SERVER[$key] = $this->config->{$key};
+            }
+        }
+    }
 } // End Cache XCache Driver

@@ -17,23 +17,27 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class exif_event_Core {
-  static function item_created($item) {
-    if (!$item->is_album()) {
-      exif::extract($item);
+class exif_event_Core
+{
+    public static function item_created($item)
+    {
+        if (!$item->is_album()) {
+            exif::extract($item);
+        }
     }
-  }
 
-  static function item_updated_data_file($item) {
-    if (!$item->is_album()) {
-      exif::extract($item);
+    public static function item_updated_data_file($item)
+    {
+        if (!$item->is_album()) {
+            exif::extract($item);
+        }
     }
-  }
 
-  static function item_deleted($item) {
-    db::build()
+    public static function item_deleted($item)
+    {
+        db::build()
       ->delete("exif_records")
       ->where("item_id", "=", $item->id)
       ->execute();
-  }
+    }
 }

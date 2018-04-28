@@ -17,50 +17,55 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class Akismet_Helper_Test extends Gallery_Unit_Test_Case {
-  private $_comment;
+class Akismet_Helper_Test extends Gallery_Unit_Test_Case
+{
+    private $_comment;
 
-  public function setup() {
-    Input::instance()->ip_address = "1.1.1.1";
-    request::set_user_agent("Akismet_Helper_Test");
-    module::set_var("akismet", "api_key", "TEST_KEY");
-  }
-
-  private function _make_comment() {
-    $comment = ORM::factory("comment");
-    $comment->item_id = item::root()->id;
-    $comment->author_id = identity::guest()->id;
-    $comment->text = "This is a comment";
-    $comment->guest_name = "John Doe";
-    $comment->guest_email = "john@gallery2.org";
-    $comment->guest_url = "http://gallery2.org";
-    $comment->save();
-
-    // Set the server fields to a known placeholder
-    foreach ($comment->list_fields("comments") as $name => $field) {
-      if (strpos($name, "server_") === 0) {
-        $comment->$name = substr($name, strlen("server_"));
-      }
+    public function setup()
+    {
+        Input::instance()->ip_address = "1.1.1.1";
+        request::set_user_agent("Akismet_Helper_Test");
+        module::set_var("akismet", "api_key", "TEST_KEY");
     }
-    return $comment->save();
-  }
 
-  public function build_verify_request_test() {
-    $request = akismet::_build_verify_request("TEST_KEY");
-    $expected =
+    private function _make_comment()
+    {
+        $comment = ORM::factory("comment");
+        $comment->item_id = item::root()->id;
+        $comment->author_id = identity::guest()->id;
+        $comment->text = "This is a comment";
+        $comment->guest_name = "John Doe";
+        $comment->guest_email = "john@gallery2.org";
+        $comment->guest_url = "http://gallery2.org";
+        $comment->save();
+
+        // Set the server fields to a known placeholder
+        foreach ($comment->list_fields("comments") as $name => $field) {
+            if (strpos($name, "server_") === 0) {
+                $comment->$name = substr($name, strlen("server_"));
+            }
+        }
+        return $comment->save();
+    }
+
+    public function build_verify_request_test()
+    {
+        $request = akismet::_build_verify_request("TEST_KEY");
+        $expected =
       "POST /1.1/verify-key HTTP/1.0\r\n" .
       "Host: rest.akismet.com\r\n" .
       "Content-Type: application/x-www-form-urlencoded; charset=UTF-8\r\n" .
       "Content-Length: 27\r\n" .
       "User-Agent: Gallery/3 | Akismet/1\r\n\r\n" .
       "key=TEST_KEY&blog=http://./";
-    $this->assert_equal($expected, $request);
-  }
+        $this->assert_equal($expected, $request);
+    }
 
-  public function build_comment_check_request_test() {
-    $comment = $this->_make_comment();
-    $request = akismet::_build_request("comment-check", $comment);
-    $expected = "POST /1.1/comment-check HTTP/1.0\r\n" .
+    public function build_comment_check_request_test()
+    {
+        $comment = $this->_make_comment();
+        $request = akismet::_build_request("comment-check", $comment);
+        $expected = "POST /1.1/comment-check HTTP/1.0\r\n" .
       "Host: TEST_KEY.rest.akismet.com\r\n" .
       "Content-Type: application/x-www-form-urlencoded; charset=UTF-8\r\n" .
       "Content-Length: 645\r\n" .
@@ -76,13 +81,14 @@ class Akismet_Helper_Test extends Gallery_Unit_Test_Case {
       "comment_type=comment&permalink=http%3A%2F%2F.%2Findex.php%2Fcomments%2F{$comment->id}&" .
       "referrer=http_referer&user_agent=http_user_agent&user_ip=remote_addr";
 
-    $this->assert_equal($expected, $request);
-  }
+        $this->assert_equal($expected, $request);
+    }
 
-  public function build_submit_spam_request_test() {
-    $comment = $this->_make_comment();
-    $request = akismet::_build_request("submit-spam", $comment);
-    $expected =
+    public function build_submit_spam_request_test()
+    {
+        $comment = $this->_make_comment();
+        $request = akismet::_build_request("submit-spam", $comment);
+        $expected =
       "POST /1.1/submit-spam HTTP/1.0\r\n" .
       "Host: TEST_KEY.rest.akismet.com\r\n" .
       "Content-Type: application/x-www-form-urlencoded; charset=UTF-8\r\n" .
@@ -99,13 +105,14 @@ class Akismet_Helper_Test extends Gallery_Unit_Test_Case {
       "comment_type=comment&permalink=http%3A%2F%2F.%2Findex.php%2Fcomments%2F{$comment->id}&" .
       "referrer=http_referer&user_agent=http_user_agent&user_ip=remote_addr";
 
-    $this->assert_equal($expected, $request);
-  }
+        $this->assert_equal($expected, $request);
+    }
 
-  public function build_submit_ham_request_test() {
-    $comment = $this->_make_comment();
-    $request = akismet::_build_request("submit-ham", $comment);
-    $expected =
+    public function build_submit_ham_request_test()
+    {
+        $comment = $this->_make_comment();
+        $request = akismet::_build_request("submit-ham", $comment);
+        $expected =
       "POST /1.1/submit-ham HTTP/1.0\r\n" .
       "Host: TEST_KEY.rest.akismet.com\r\n" .
       "Content-Type: application/x-www-form-urlencoded; charset=UTF-8\r\n" .
@@ -122,7 +129,6 @@ class Akismet_Helper_Test extends Gallery_Unit_Test_Case {
       "comment_type=comment&permalink=http%3A%2F%2F.%2Findex.php%2Fcomments%2F{$comment->id}&" .
       "referrer=http_referer&user_agent=http_user_agent&user_ip=remote_addr";
 
-    $this->assert_equal($expected, $request);
-  }
+        $this->assert_equal($expected, $request);
+    }
 }
-

@@ -199,7 +199,8 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
                 $tag,
                 PelTag::getName($this->type, $tag),
                 $i + 1,
-                $n);
+                $n
+            );
 
             switch ($tag) {
                 case PelTag::EXIF_IFD_POINTER:
@@ -379,6 +380,7 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
                             return new PelEntryUserComment($data->getBytes(8), rtrim($data->getBytes(0, 8)));
                         }
                     // this point can not be reached
+                    // no break
                     case PelTag::XP_TITLE:
                     case PelTag::XP_COMMENT:
                     case PelTag::XP_AUTHOR:
@@ -405,6 +407,7 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
                         return new PelEntryWindowsString($tag, $v);
                 }
             // This point can be reached! Continue with default.
+            // no break
             case self::GPS:
             default:
                 /* Then handle the basic formats. */
@@ -514,7 +517,9 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
                     new PelIfdException(
                         'Thumbnail length %d bytes ' . 'adjusted to %d bytes.',
                         $length,
-                        $d->getSize() - $offset));
+                        $d->getSize() - $offset
+                    )
+                );
                 $length = $d->getSize() - $offset;
             }
 

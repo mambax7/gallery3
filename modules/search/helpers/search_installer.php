@@ -17,10 +17,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class search_installer {
-  static function install() {
-    $db = Database::instance();
-    $db->query("CREATE TABLE {search_records} (
+class search_installer
+{
+    public static function install()
+    {
+        $db = Database::instance();
+        $db->query("CREATE TABLE {search_records} (
                  `id` int(9) NOT NULL auto_increment,
                  `item_id` int(9),
                  `dirty` boolean default 1,
@@ -30,21 +32,24 @@ class search_installer {
                  FULLTEXT INDEX (`data`))
                ENGINE=MyISAM
                DEFAULT CHARSET=utf8;");
-  }
+    }
 
-  static function activate() {
-    // Update the root item.  This is a quick hack because the search module is activated as part
-    // of the official install, so this way we don't start off with a "your index is out of date"
-    // banner.
-    search::update(model_cache::get("item", 1));
-    search::check_index();
-  }
+    public static function activate()
+    {
+        // Update the root item.  This is a quick hack because the search module is activated as part
+        // of the official install, so this way we don't start off with a "your index is out of date"
+        // banner.
+        search::update(model_cache::get("item", 1));
+        search::check_index();
+    }
 
-  static function deactivate() {
-    site_status::clear("search_index_out_of_date");
-  }
+    public static function deactivate()
+    {
+        site_status::clear("search_index_out_of_date");
+    }
 
-  static function uninstall() {
-    Database::instance()->query("DROP TABLE {search_records}");
-  }
+    public static function uninstall()
+    {
+        Database::instance()->query("DROP TABLE {search_records}");
+    }
 }

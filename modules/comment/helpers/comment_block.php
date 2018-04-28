@@ -17,14 +17,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class comment_block_Core {
-  static function get_admin_list() {
-    return array("recent_comments" => t("Recent comments"));
-  }
+class comment_block_Core
+{
+    public static function get_admin_list()
+    {
+        return array("recent_comments" => t("Recent comments"));
+    }
 
-  static function get($block_id) {
-    $block = new Block();
-    switch ($block_id) {
+    public static function get($block_id)
+    {
+        $block = new Block();
+        switch ($block_id) {
     case "recent_comments":
       $block->css_id = "g-recent-comments";
       $block->title = t("Recent comments");
@@ -34,6 +37,6 @@ class comment_block_Core {
       break;
     }
 
-    return $block;
-  }
+        return $block;
+    }
 }

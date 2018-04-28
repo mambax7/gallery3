@@ -17,15 +17,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class Input extends Input_Core {
-  /**
-   * Modified form of Input::clean_input_keys() that replaces malformed values
-   * instead of dying on bad input.
-   *
-   * @param   string  string to clean
-   * @return  string
-   */
-  public function clean_input_keys($str) {
-    return preg_replace('#[^a-zA-Z0-9:_.-]+#', '_', $str);
-  }
+class Input extends Input_Core
+{
+    /**
+     * Modified form of Input::clean_input_keys() that replaces malformed values
+     * instead of dying on bad input.
+     *
+     * @param   string  string to clean
+     * @return  string
+     */
+    public function clean_input_keys($str)
+    {
+        return preg_replace('#[^a-zA-Z0-9:_.-]+#', '_', $str);
+    }
 }

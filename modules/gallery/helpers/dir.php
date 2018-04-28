@@ -17,24 +17,24 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class dir_Core {
-  static function unlink($path) {
-    if (is_dir($path) && is_writable($path)) {
-      foreach (new DirectoryIterator($path) as $resource) {
-        if ($resource->isDot()) {
-          unset($resource);
-          continue;
-        } else if ($resource->isFile()) {
-          unlink($resource->getPathName());
-        } else if ($resource->isDir()) {
-          dir::unlink($resource->getRealPath());
+class dir_Core
+{
+    public static function unlink($path)
+    {
+        if (is_dir($path) && is_writable($path)) {
+            foreach (new DirectoryIterator($path) as $resource) {
+                if ($resource->isDot()) {
+                    unset($resource);
+                    continue;
+                } elseif ($resource->isFile()) {
+                    unlink($resource->getPathName());
+                } elseif ($resource->isDir()) {
+                    dir::unlink($resource->getRealPath());
+                }
+                unset($resource);
+            }
+            return @rmdir($path);
         }
-        unset($resource);
-      }
-      return @rmdir($path);
+        return false;
     }
-    return false;
-  }
-
-
 }

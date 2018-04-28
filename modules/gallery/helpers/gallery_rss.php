@@ -18,23 +18,26 @@
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-class gallery_rss_Core {
-  static function available_feeds($item, $tag) {
-    $feeds["gallery/latest"] = t("Latest photos and movies");
+class gallery_rss_Core
+{
+    public static function available_feeds($item, $tag)
+    {
+        $feeds["gallery/latest"] = t("Latest photos and movies");
 
-    if ($item) {
-      $feed_item = $item -> is_album() ? $item : $item->parent();
+        if ($item) {
+            $feed_item = $item -> is_album() ? $item : $item->parent();
 
-      $feeds["gallery/album/{$feed_item->id}"] =
+            $feeds["gallery/album/{$feed_item->id}"] =
           t("%title photos and movies", array("title" => $feed_item->title));
+        }
+
+        return $feeds;
     }
 
-    return $feeds;
-  }
-
-  static function feed($feed_id, $offset, $limit, $id) {
-    $feed = new stdClass();
-    switch ($feed_id) {
+    public static function feed($feed_id, $offset, $limit, $id)
+    {
+        $feed = new stdClass();
+        switch ($feed_id) {
     case "latest":
       $feed->items = ORM::factory("item")
         ->viewable()
@@ -60,17 +63,20 @@ class gallery_rss_Core {
         ->viewable()
         ->descendants($limit, $offset, array(array("type", "=", "photo")));
       $feed->max_pages = ceil(
-        $item->viewable()->descendants_count(array(array("type", "=", "photo"))) / $limit);
+        $item->viewable()->descendants_count(array(array("type", "=", "photo"))) / $limit
+      );
       if ($item->id == item::root()->id) {
-        $feed->title = html::purify($item->title);
+          $feed->title = html::purify($item->title);
       } else {
-        $feed->title = t("%site_title - %item_title",
+          $feed->title = t(
+            "%site_title - %item_title",
                          array("site_title" => item::root()->title,
-                               "item_title" => $item->title));
+                               "item_title" => $item->title)
+        );
       }
       $feed->description = nl2br(html::purify($item->description));
 
       return $feed;
     }
-  }
+    }
 }

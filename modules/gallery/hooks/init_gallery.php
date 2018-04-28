@@ -21,16 +21,16 @@
 // If var/database.php doesn't exist, then we assume that the Gallery is not properly installed
 // and send users to the installer.
 if (!file_exists(VARPATH . "database.php")) {
-  url::redirect(url::abs_file("installer"));
+    url::redirect(url::abs_file("installer"));
 }
 
 // Simple and cheap test to make sure that the database config is ok.  Do this before we do
 // anything else database related.
 try {
-  Database::instance()->connect();
+    Database::instance()->connect();
 } catch (Kohana_PHP_Exception $e) {
-  print "Database configuration error.  Please check var/database.php";
-  exit;
+    print "Database configuration error.  Please check var/database.php";
+    exit;
 }
 
 Event::add("system.ready", array("Gallery_I18n", "instance"));
@@ -48,9 +48,9 @@ set_error_handler(array("gallery_error", "error_handler"));
 // @todo This should probably be an event callback
 $input = Input::instance();
 if ($g3sid = $input->post("g3sid", $input->get("g3sid"))) {
-  $_COOKIE["g3sid"] = $g3sid;
+    $_COOKIE["g3sid"] = $g3sid;
 }
 
 if ($user_agent = $input->post("user_agent", $input->get("user_agent"))) {
-  $_SERVER["HTTP_USER_AGENT"] = $user_agent;
+    $_SERVER["HTTP_USER_AGENT"] = $user_agent;
 }

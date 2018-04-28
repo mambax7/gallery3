@@ -17,10 +17,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class watermark_installer {
-  static function install() {
-    $db = Database::instance();
-    $db->query("CREATE TABLE IF NOT EXISTS {watermarks} (
+class watermark_installer
+{
+    public static function install()
+    {
+        $db = Database::instance();
+        $db->query("CREATE TABLE IF NOT EXISTS {watermarks} (
                  `id` int(9) NOT NULL auto_increment,
                  `name` varchar(32) NOT NULL,
                  `width` int(9) NOT NULL,
@@ -32,11 +34,12 @@ class watermark_installer {
                  UNIQUE KEY(`name`))
                DEFAULT CHARSET=utf8;");
 
-    @mkdir(VARPATH . "modules/watermark");
-  }
+        @mkdir(VARPATH . "modules/watermark");
+    }
 
-  static function uninstall() {
-    Database::instance()->query("DROP TABLE {watermarks}");
-    dir::unlink(VARPATH . "modules/watermark");
-  }
+    public static function uninstall()
+    {
+        Database::instance()->query("DROP TABLE {watermarks}");
+        dir::unlink(VARPATH . "modules/watermark");
+    }
 }

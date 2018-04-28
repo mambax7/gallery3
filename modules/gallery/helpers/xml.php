@@ -17,19 +17,21 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class xml_Core {
-  static function to_xml($array, $element_names) {
-    $xml = "<$element_names[0]>\n";
-    foreach ($array as $key => $value) {
-      if (is_array($value)) {
-        $xml .= xml::to_xml($value, array_slice($element_names, 1));
-      } else if (is_object($value)) {
-        $xml .= xml::to_xml($value->as_array(), array_slice($element_names, 1));
-      } else {
-        $xml .= "<$key>$value</$key>\n";
-      }
+class xml_Core
+{
+    public static function to_xml($array, $element_names)
+    {
+        $xml = "<$element_names[0]>\n";
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $xml .= xml::to_xml($value, array_slice($element_names, 1));
+            } elseif (is_object($value)) {
+                $xml .= xml::to_xml($value->as_array(), array_slice($element_names, 1));
+            } else {
+                $xml .= "<$key>$value</$key>\n";
+            }
+        }
+        $xml .= "</$element_names[0]>\n";
+        return $xml;
     }
-    $xml .= "</$element_names[0]>\n";
-    return $xml;
-  }
 }

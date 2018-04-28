@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
+<?php defined('SYSPATH') or die('No direct access allowed.');
 /**
  * Provides a driver-based interface for finding, creating, and deleting cached
  * resources. Caches are identified by a unique string. Tagging of caches is
@@ -9,240 +9,220 @@
  * @copyright  (c) 2007-2009 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-class Cache_Core {
+class Cache_Core
+{
+    protected static $instances = array();
 
-	protected static $instances = array();
+    // Configuration
+    protected $config;
 
-	// Configuration
-	protected $config;
+    // Driver object
+    protected $driver;
 
-	// Driver object
-	protected $driver;
+    /**
+     * Returns a singleton instance of Cache.
+     *
+     * @param   string  configuration
+     * @return  Cache_Core
+     */
+    public static function & instance($config = false)
+    {
+        if (! isset(Cache::$instances[$config])) {
+            // Create a new instance
+            Cache::$instances[$config] = new Cache($config);
+        }
 
-	/**
-	 * Returns a singleton instance of Cache.
-	 *
-	 * @param   string  configuration
-	 * @return  Cache_Core
-	 */
-	public static function & instance($config = FALSE)
-	{
-		if ( ! isset(Cache::$instances[$config]))
-		{
-			// Create a new instance
-			Cache::$instances[$config] = new Cache($config);
-		}
+        return Cache::$instances[$config];
+    }
 
-		return Cache::$instances[$config];
-	}
+    /**
+     * Loads the configured driver and validates it.
+     *
+     * @param   array|string  custom configuration or config group name
+     * @return  void
+     */
+    public function __construct($config = false)
+    {
+        if (is_string($config)) {
+            $name = $config;
 
-	/**
-	 * Loads the configured driver and validates it.
-	 *
-	 * @param   array|string  custom configuration or config group name
-	 * @return  void
-	 */
-	public function __construct($config = FALSE)
-	{
-		if (is_string($config))
-		{
-			$name = $config;
+            // Test the config group name
+            if (($config = Kohana::config('cache.'.$config)) === null) {
+                throw new Cache_Exception('The :group: group is not defined in your configuration.', array(':group:' => $name));
+            }
+        }
 
-			// Test the config group name
-			if (($config = Kohana::config('cache.'.$config)) === NULL)
-				throw new Cache_Exception('The :group: group is not defined in your configuration.', array(':group:' => $name));
-		}
+        if (is_array($config)) {
+            // Append the default configuration options
+            $config += Kohana::config('cache.default');
+        } else {
+            // Load the default group
+            $config = Kohana::config('cache.default');
+        }
 
-		if (is_array($config))
-		{
-			// Append the default configuration options
-			$config += Kohana::config('cache.default');
-		}
-		else
-		{
-			// Load the default group
-			$config = Kohana::config('cache.default');
-		}
+        // Cache the config in the object
+        $this->config = $config;
 
-		// Cache the config in the object
-		$this->config = $config;
+        // Set driver name
+        $driver = 'Cache_'.ucfirst($this->config['driver']).'_Driver';
 
-		// Set driver name
-		$driver = 'Cache_'.ucfirst($this->config['driver']).'_Driver';
+        // Load the driver
+        if (! Kohana::auto_load($driver)) {
+            throw new Cache_Exception(
+                'The :driver: driver for the :class: library could not be found',
+                                       array(':driver:' => $this->config['driver'], ':class:' => get_class($this))
+            );
+        }
 
-		// Load the driver
-		if ( ! Kohana::auto_load($driver))
-			throw new Cache_Exception('The :driver: driver for the :class: library could not be found',
-									   array(':driver:' => $this->config['driver'], ':class:' => get_class($this)));
+        // Initialize the driver
+        $this->driver = new $driver($this->config['params']);
 
-		// Initialize the driver
-		$this->driver = new $driver($this->config['params']);
+        // Validate the driver
+        if (! ($this->driver instanceof Cache_Driver)) {
+            throw new Cache_Exception(
+                'The :driver: driver for the :library: library must implement the :interface: interface',
+                                       array(':driver:' => $this->config['driver'], ':library:' => get_class($this), ':interface:' => 'Cache_Driver')
+            );
+        }
 
-		// Validate the driver
-		if ( ! ($this->driver instanceof Cache_Driver))
-			throw new Cache_Exception('The :driver: driver for the :library: library must implement the :interface: interface',
-									   array(':driver:' => $this->config['driver'], ':library:' => get_class($this), ':interface:' => 'Cache_Driver'));
+        Kohana_Log::add('debug', 'Cache Library initialized');
+    }
 
-		Kohana_Log::add('debug', 'Cache Library initialized');
-	}
+    /**
+     * Set cache items
+     */
+    public function set($key, $value = null, $tags = null, $lifetime = null)
+    {
+        if ($lifetime === null) {
+            $lifetime = $this->config['lifetime'];
+        }
 
-	/**
-	 * Set cache items
-	 */
-	public function set($key, $value = NULL, $tags = NULL, $lifetime = NULL)
-	{
-		if ($lifetime === NULL)
-		{
-			$lifetime = $this->config['lifetime'];
-		}
+        if (! is_array($key)) {
+            $key = array($key => $value);
+        }
 
-		if ( ! is_array($key))
-		{
-			$key = array($key => $value);
-		}
+        if ($this->config['prefix'] !== null) {
+            $key = $this->add_prefix($key);
 
-		if ($this->config['prefix'] !== NULL)
-		{
-			$key = $this->add_prefix($key);
+            if ($tags !== null) {
+                $tags = $this->add_prefix($tags, false);
+            }
+        }
 
-			if ($tags !== NULL)
-			{
-				$tags = $this->add_prefix($tags, FALSE);
-			}
-		}
+        return $this->driver->set($key, $tags, $lifetime);
+    }
 
-		return $this->driver->set($key, $tags, $lifetime);
-	}
+    /**
+     * Get a cache items by key
+     */
+    public function get($keys)
+    {
+        $single = false;
 
-	/**
-	 * Get a cache items by key
-	 */
-	public function get($keys)
-	{
-		$single = FALSE;
+        if (! is_array($keys)) {
+            $keys = array($keys);
+            $single = true;
+        }
 
-		if ( ! is_array($keys))
-		{
-			$keys = array($keys);
-			$single = TRUE;
-		}
+        if ($this->config['prefix'] !== null) {
+            $keys = $this->add_prefix($keys, false);
 
-		if ($this->config['prefix'] !== NULL)
-		{
-			$keys = $this->add_prefix($keys, FALSE);
+            if (! $single) {
+                return $this->strip_prefix($this->driver->get($keys, $single));
+            }
+        }
 
-			if ( ! $single)
-			{
-			    return $this->strip_prefix($this->driver->get($keys, $single));
-			}
+        return $this->driver->get($keys, $single);
+    }
 
-		}
+    /**
+     * Get cache items by tags
+     */
+    public function get_tag($tags)
+    {
+        if (! is_array($tags)) {
+            $tags = array($tags);
+        }
 
-		return $this->driver->get($keys, $single);
-	}
+        if ($this->config['prefix'] !== null) {
+            $tags = $this->add_prefix($tags, false);
+            return $this->strip_prefix($this->driver->get_tag($tags));
+        } else {
+            return $this->driver->get_tag($tags);
+        }
+    }
 
-	/**
-	 * Get cache items by tags
-	 */
-	public function get_tag($tags)
-	{
-		if ( ! is_array($tags))
-		{
-			$tags = array($tags);
-		}
+    /**
+     * Delete cache item by key
+     */
+    public function delete($keys)
+    {
+        if (! is_array($keys)) {
+            $keys = array($keys);
+        }
 
-		if ($this->config['prefix'] !== NULL)
-		{
-		    $tags = $this->add_prefix($tags, FALSE);
-		    return $this->strip_prefix($this->driver->get_tag($tags));
-		}
-		else
-		{
-		    return $this->driver->get_tag($tags);
-		}
-	}
+        if ($this->config['prefix'] !== null) {
+            $keys = $this->add_prefix($keys, false);
+        }
 
-	/**
-	 * Delete cache item by key
-	 */
-	public function delete($keys)
-	{
-		if ( ! is_array($keys))
-		{
-			$keys = array($keys);
-		}
+        return $this->driver->delete($keys);
+    }
 
-		if ($this->config['prefix'] !== NULL)
-		{
-			$keys = $this->add_prefix($keys, FALSE);
-		}
+    /**
+     * Delete cache items by tag
+     */
+    public function delete_tag($tags)
+    {
+        if (! is_array($tags)) {
+            $tags = array($tags);
+        }
 
-		return $this->driver->delete($keys);
-	}
+        if ($this->config['prefix'] !== null) {
+            $tags = $this->add_prefix($tags, false);
+        }
 
-	/**
-	 * Delete cache items by tag
-	 */
-	public function delete_tag($tags)
-	{
-		if ( ! is_array($tags))
-		{
-			$tags = array($tags);
-		}
+        return $this->driver->delete_tag($tags);
+    }
 
-		if ($this->config['prefix'] !== NULL)
-		{
-			$tags = $this->add_prefix($tags, FALSE);
-		}
+    /**
+     * Empty the cache
+     */
+    public function delete_all()
+    {
+        return $this->driver->delete_all();
+    }
 
-		return $this->driver->delete_tag($tags);
-	}
+    /**
+     * Add a prefix to keys or tags
+     */
+    protected function add_prefix($array, $to_key = true)
+    {
+        $out = array();
 
-	/**
-	 * Empty the cache
-	 */
-	public function delete_all()
-	{
-		return $this->driver->delete_all();
-	}
+        foreach ($array as $key => $value) {
+            if ($to_key) {
+                $out[$this->config['prefix'].$key] = $value;
+            } else {
+                $out[$key] = $this->config['prefix'].$value;
+            }
+        }
 
-	/**
-	 * Add a prefix to keys or tags
-	 */
-	protected function add_prefix($array, $to_key = TRUE)
-	{
-		$out = array();
+        return $out;
+    }
 
-		foreach($array as $key => $value)
-		{
-			if ($to_key)
-			{
-				$out[$this->config['prefix'].$key] = $value;
-			}
-			else
-			{
-				$out[$key] = $this->config['prefix'].$value;
-			}
-		}
+    /**
+     * Strip a prefix to keys or tags
+     */
+    protected function strip_prefix($array)
+    {
+        $out = array();
 
-		return $out;
-	}
+        $start = strlen($this->config['prefix']);
 
-	/**
-	 * Strip a prefix to keys or tags
-	 */
-	protected function strip_prefix($array)
-	{
-		$out = array();
+        foreach ($array as $key => $value) {
+            $out[substr($key, $start)] = $value;
+        }
 
-		$start = strlen($this->config['prefix']);
-
-		foreach($array as $key => $value)
-		{
-			$out[substr($key, $start)] = $value;
-		}
-
-		return $out;
-	}
-
+        return $out;
+    }
 } // End Cache Library

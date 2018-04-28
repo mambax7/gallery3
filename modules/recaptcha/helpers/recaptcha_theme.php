@@ -17,12 +17,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class recaptcha_theme_Core {
-  static function head($theme) {
-    return $theme->css("recaptcha.css");
-  }
+class recaptcha_theme_Core
+{
+    public static function head($theme)
+    {
+        return $theme->css("recaptcha.css");
+    }
 
-  static function admin_head($theme) {
-    return $theme->css("recaptcha.css");
-  }
+    public static function admin_head($theme)
+    {
+        return $theme->css("recaptcha.css");
+    }
 }

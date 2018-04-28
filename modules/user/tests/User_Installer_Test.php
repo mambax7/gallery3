@@ -22,29 +22,34 @@
  * This test case operates under the assumption that user_installer::install() is called by the
  * test controller before it starts.
  */
-class User_Installer_Test extends Gallery_Unit_Test_Case {
-  public function install_creates_admin_user_test() {
-    $user = ORM::factory("user", 1);
-    $this->assert_equal("guest", $user->name);
-    $this->assert_true($user->guest);
+class User_Installer_Test extends Gallery_Unit_Test_Case
+{
+    public function install_creates_admin_user_test()
+    {
+        $user = ORM::factory("user", 1);
+        $this->assert_equal("guest", $user->name);
+        $this->assert_true($user->guest);
 
-    $user = ORM::factory("user", 2);
-    $this->assert_equal("admin", $user->name);
-    $this->assert_false($user->guest);
+        $user = ORM::factory("user", 2);
+        $this->assert_equal("admin", $user->name);
+        $this->assert_false($user->guest);
 
-    $this->assert_equal(
+        $this->assert_equal(
       array("Everybody", "Registered Users"),
-      array_keys($user->groups->select_list("name")));
-  }
+      array_keys($user->groups->select_list("name"))
+    );
+    }
 
-  public function install_creates_everybody_group_test() {
-    $group = ORM::factory("group", 1);
-    $this->assert_equal("Everybody", $group->name);
-    $this->assert_true($group->special);
-  }
+    public function install_creates_everybody_group_test()
+    {
+        $group = ORM::factory("group", 1);
+        $this->assert_equal("Everybody", $group->name);
+        $this->assert_true($group->special);
+    }
 
-  public function install_creates_registered_group_test() {
-    $group = ORM::factory("group", 2);
-    $this->assert_equal("Registered Users", $group->name);
-  }
+    public function install_creates_registered_group_test()
+    {
+        $group = ORM::factory("group", 2);
+        $this->assert_equal("Registered Users", $group->name);
+    }
 }

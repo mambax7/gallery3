@@ -17,36 +17,41 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class ORM extends ORM_Core {
+class ORM extends ORM_Core
+{
 
   /**
    * Make sure that we're only using integer ids.
    */
-  static function factory($model, $id=null) {
-    if ($id && !is_int($id) && !is_string($id)) {
-      throw new Exception("@todo ORM::factory requires integer ids");
+    public static function factory($model, $id=null)
+    {
+        if ($id && !is_int($id) && !is_string($id)) {
+            throw new Exception("@todo ORM::factory requires integer ids");
+        }
+        return ORM_Core::factory($model, (int) $id);
     }
-    return ORM_Core::factory($model, (int) $id);
-  }
 
-  public function save() {
-    model_cache::clear();
-    return parent::save();
-  }
+    public function save()
+    {
+        model_cache::clear();
+        return parent::save();
+    }
 }
 
 /**
  * Slide this in here for convenience.  We won't ever be overloading ORM_Iterator without ORM.
  */
-class ORM_Iterator extends ORM_Iterator_Core {
-  /**
-   * Cache the result row
-   */
-  public function current() {
-    $row = parent::current();
-    if (is_object($row)) {
-      model_cache::set($row);
+class ORM_Iterator extends ORM_Iterator_Core
+{
+    /**
+     * Cache the result row
+     */
+    public function current()
+    {
+        $row = parent::current();
+        if (is_object($row)) {
+            model_cache::set($row);
+        }
+        return $row;
     }
-    return $row;
-  }
 }

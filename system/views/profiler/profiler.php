@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.'); ?>
+<?php defined('SYSPATH') or die('No direct access allowed.'); ?>
 <style type="text/css">
 #kohana-profiler
 {
@@ -28,9 +28,8 @@
 </style>
 <div id="kohana-profiler">
 <?php
-foreach ($profiles as $profile)
-{
-	echo $profile->render();
+foreach ($profiles as $profile) {
+    echo $profile->render();
 }
 ?>
 <p class="kp-meta"><?php echo __('Profiler executed in :execution_timess', array(':execution_times' => number_format($execution_time, 3))) ?></p>

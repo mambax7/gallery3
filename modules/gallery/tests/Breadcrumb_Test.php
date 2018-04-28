@@ -17,20 +17,24 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class Breadcrumb_Test extends Gallery_Unit_Test_Case {
-  private $album;
-  private $item;
+class Breadcrumb_Test extends Gallery_Unit_Test_Case
+{
+    private $album;
+    private $item;
 
-  public function build_breadcrumbs_for_item_test() {
-    $album = test::random_album();
-    $item = test::random_photo($album);
+    public function build_breadcrumbs_for_item_test()
+    {
+        $album = test::random_album();
+        $item = test::random_photo($album);
 
-    $expected = array();
-    $expected[] = Breadcrumb::instance(
-      item::root()->title, item::root()->url("show={$album->id}"))->set_first();
-    $expected[] =
+        $expected = array();
+        $expected[] = Breadcrumb::instance(
+      item::root()->title,
+        item::root()->url("show={$album->id}")
+    )->set_first();
+        $expected[] =
       Breadcrumb::instance($album->title, $album->url("show={$item->id}"));
-    $expected[] = Breadcrumb::instance($item->title, $item->url())->set_last();
-    $this->assert_equal($expected, Breadcrumb::array_from_item_parents($item));
-  }
+        $expected[] = Breadcrumb::instance($item->title, $item->url())->set_last();
+        $this->assert_equal($expected, Breadcrumb::array_from_item_parents($item));
+    }
 }

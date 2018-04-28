@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
+<?php defined('SYSPATH') or die('No direct access allowed.');
 /**
  * Array of section names to display in the Profiler, TRUE to display all of them.
  * Built in sections are benchmarks, database, session, post and cookies, custom sections can be used too.
@@ -9,7 +9,7 @@
  * @license    http://kohanaphp.com/license
  */
 
-$config['show'] = TRUE;
+$config['show'] = true;
 
 $config['time_decimals'] = 3;
 

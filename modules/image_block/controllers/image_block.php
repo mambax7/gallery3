@@ -17,11 +17,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class Image_Block_Controller extends Controller {
-  public function random($item_id) {
-    $item = ORM::factory("item", $item_id);
-    access::required("view", $item);
-    item::set_display_context_callback("Albums_Controller::get_display_context");
-    url::redirect($item->abs_url());
-  }
+class Image_Block_Controller extends Controller
+{
+    public function random($item_id)
+    {
+        $item = ORM::factory("item", $item_id);
+        access::required("view", $item);
+        item::set_display_context_callback("Albums_Controller::get_display_context");
+        url::redirect($item->abs_url());
+    }
 }

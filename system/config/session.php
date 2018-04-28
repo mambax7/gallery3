@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
+<?php defined('SYSPATH') or die('No direct access allowed.');
 /**
  * Session Config
  *
@@ -34,7 +34,7 @@ $config['validate'] = array('user_agent');
  * Enable or disable session encryption.
  * Note: this has no effect on the native session driver.
  */
-$config['encryption'] = FALSE;
+$config['encryption'] = false;
 
 /**
  * Session lifetime. Number of seconds that each session will last.

@@ -17,10 +17,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class server_add_installer {
-  static function install() {
-    $db = Database::instance();
-    $db->query("CREATE TABLE {server_add_entries} (
+class server_add_installer
+{
+    public static function install()
+    {
+        $db = Database::instance();
+        $db->query("CREATE TABLE {server_add_entries} (
                   `id` int(9) NOT NULL auto_increment,
                   `checked` boolean default 0,
                   `is_directory` boolean default 0,
@@ -30,30 +32,31 @@ class server_add_installer {
                   `task_id` int(9) NOT NULL,
                   PRIMARY KEY (`id`))
                 DEFAULT CHARSET=utf8;");
-    server_add::check_config();
-  }
+        server_add::check_config();
+    }
 
-  static function upgrade($version) {
-    $db = Database::instance();
-    if ($version == 1) {
-      $db->query("CREATE TABLE {server_add_files} (
+    public static function upgrade($version)
+    {
+        $db = Database::instance();
+        if ($version == 1) {
+            $db->query("CREATE TABLE {server_add_files} (
                     `id` int(9) NOT NULL auto_increment,
                     `task_id` int(9) NOT NULL,
                     `file` varchar(255) NOT NULL,
                     PRIMARY KEY (`id`))
                   DEFAULT CHARSET=utf8;");
-      module::set_version("server_add", $version = 2);
-    }
+            module::set_version("server_add", $version = 2);
+        }
 
-    if ($version == 2) {
-      $db->query("ALTER TABLE {server_add_files} ADD COLUMN `item_id` int(9)");
-      $db->query("ALTER TABLE {server_add_files} ADD COLUMN `parent_id` int(9)");
-      module::set_version("server_add", $version = 3);
-    }
+        if ($version == 2) {
+            $db->query("ALTER TABLE {server_add_files} ADD COLUMN `item_id` int(9)");
+            $db->query("ALTER TABLE {server_add_files} ADD COLUMN `parent_id` int(9)");
+            module::set_version("server_add", $version = 3);
+        }
 
-    if ($version == 3) {
-      $db->query("DROP TABLE {server_add_files}");
-      $db->query("CREATE TABLE {server_add_entries} (
+        if ($version == 3) {
+            $db->query("DROP TABLE {server_add_files}");
+            $db->query("CREATE TABLE {server_add_entries} (
                     `id` int(9) NOT NULL auto_increment,
                     `checked` boolean default 0,
                     `is_directory` boolean default 0,
@@ -63,11 +66,12 @@ class server_add_installer {
                     `task_id` int(9) NOT NULL,
                     PRIMARY KEY (`id`))
                   DEFAULT CHARSET=utf8;");
-      module::set_version("server_add", $version = 4);
+            module::set_version("server_add", $version = 4);
+        }
     }
-  }
 
-  static function deactivate() {
-    site_status::clear("server_add_configuration");
-  }
+    public static function deactivate()
+    {
+        site_status::clear("server_add_configuration");
+    }
 }

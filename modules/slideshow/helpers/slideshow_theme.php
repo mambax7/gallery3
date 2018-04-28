@@ -17,10 +17,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class slideshow_theme_Core {
-  static function page_bottom($theme) {
-    $proto = request::protocol();
-    return "<script src=\"$proto://e.cooliris.com/slideshow/v/37732/go.js\" " .
+class slideshow_theme_Core
+{
+    public static function page_bottom($theme)
+    {
+        $proto = request::protocol();
+        return "<script src=\"$proto://e.cooliris.com/slideshow/v/37732/go.js\" " .
       "type=\"text/javascript\"></script>";
-  }
+    }
 }

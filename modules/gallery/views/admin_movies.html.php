@@ -14,28 +14,30 @@
     <?= t("Movies will work without FFmpeg, but their thumbnails will be placeholders.") ?>
   </p>
   <p>
-    <?= t("Can't get FFmpeg configured on your system? <a href=\"%url\">We can help!</a>",
-          array("url" => "http://codex.galleryproject.org/Gallery3:FAQ#Why_does_it_say_I.27m_missing_ffmpeg.3F")) ?>
+    <?= t(
+    "Can't get FFmpeg configured on your system? <a href=\"%url\">We can help!</a>",
+          array("url" => "http://codex.galleryproject.org/Gallery3:FAQ#Why_does_it_say_I.27m_missing_ffmpeg.3F")
+) ?>
   </p>
 
   <div class="g-available">
     <h2> <?= t("Current configuration") ?> </h2>
     <div id="g-ffmpeg" class="g-block">
-      <img class="logo" width="284" height="70" src="<?= url::file("modules/gallery/images/ffmpeg.png") ?>" alt="<? t("Visit the FFmpeg project site") ?>" />
+      <img class="logo" width="284" height="70" src="<?= url::file("modules/gallery/images/ffmpeg.png") ?>" alt="<?php t("Visit the FFmpeg project site") ?>" />
       <p>
         <?= t("FFmpeg is a cross-platform standalone audio/video program.") ?><br/>
         <?= t("Please refer to the <a href=\"%url\">FFmpeg website</a> for more information.", array("url" => "http://ffmpeg.org")) ?>
       </p>
       <div class="g-module-status g-info">
-        <? if ($ffmpeg_dir): ?>
-          <? if ($ffmpeg_version): ?>
+        <?php if ($ffmpeg_dir): ?>
+          <?php if ($ffmpeg_version): ?>
             <p><?= t("FFmpeg version %version was found in %dir", array("version" => $ffmpeg_version, "dir" => $ffmpeg_dir)) ?></p>
-          <? else: ?>
+          <?php else: ?>
             <p><?= t("FFmpeg (of unknown version) was found in %dir", array("dir" => $ffmpeg_dir)) ?></p>
-          <? endif ?>
-        <? else: ?>
+          <?php endif ?>
+        <?php else: ?>
           <p><?= t("We could not locate FFmpeg on your system.") ?></p>
-        <? endif ?>
+        <?php endif ?>
       </div>
     </div>
   </div>

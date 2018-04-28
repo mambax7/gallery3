@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
+<?php defined('SYSPATH') or die('No direct access allowed.');
 /**
  * Set your default language and timezone here. For more information about
  * i18n support see the [i18n] library.
@@ -19,7 +19,7 @@ $config['language'] = array('en_US', 'English_United States');
 
 /**
  * Locale timezone. Defaults to the timezone you have set in your php config
- * 
+ *
  * [!!] This cannot be left empty, a valid timezone is required!
  * @see http://php.net/timezones
  */

@@ -26,13 +26,13 @@ version_compare(PHP_VERSION, "5.2.3", "<") and
 
 // Gallery is not supported on Windows.
 if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-  exit("Gallery is not supported on Windows (PHP reports that you're using: " . PHP_OS . ")");
+    exit("Gallery is not supported on Windows (PHP reports that you're using: " . PHP_OS . ")");
 }
 
 // PHP 5.4 requires a timezone - if one isn't set date functions aren't going to work properly.
 // We'll log this once the logging system is initialized (in the gallery_event::gallery_ready).
 if (!ini_get("date.timezone")) {
-  ini_set("date.timezone", "UTC");
+    ini_set("date.timezone", "UTC");
 }
 
 // Gallery requires short_tags to be on
@@ -56,7 +56,7 @@ header("X-Frame-Options: SAMEORIGIN");
 
 define("EXT", ".php");
 define("DOCROOT", getcwd() . "/");
-define("KOHANA",  "index.php");
+define("KOHANA", "index.php");
 
 // If the front controller is a symlink, change to the real docroot
 is_link(basename(__FILE__)) and chdir(dirname(realpath(__FILE__)));
@@ -69,7 +69,7 @@ define("SYSPATH", realpath("system") . "/");
 
 // We only accept a few controllers on the command line
 if (PHP_SAPI == "cli") {
-  switch ($arg_1 = $_SERVER["argv"][1]) {
+    switch ($arg_1 = $_SERVER["argv"][1]) {
   case "install":
     include("installer/index.php");
     exit(0);
@@ -84,8 +84,8 @@ if (PHP_SAPI == "cli") {
     array_splice($_SERVER["argv"], 1, 1, "gallery_unit_test");
     define("TEST_MODE", 1);
     if (!is_dir("test/var")) {
-      @mkdir("test/var", 0777, true);
-      @mkdir("test/var/logs", 0777, true);
+        @mkdir("test/var", 0777, true);
+        @mkdir("test/var/logs", 0777, true);
     }
     @copy("var/database.php", "test/var/database.php");
     define("VARPATH", realpath("test/var") . "/");
@@ -103,13 +103,13 @@ if (PHP_SAPI == "cli") {
     exit(1);
   }
 } else {
-  define("TEST_MODE", 0);
-  define("VARPATH", realpath("var") . "/");
+    define("TEST_MODE", 0);
+    define("VARPATH", realpath("var") . "/");
 }
 define("TMPPATH", VARPATH . "tmp/");
 
 if (file_exists("local.php")) {
-  include("local.php");
+    include("local.php");
 }
 
 // Initialize.

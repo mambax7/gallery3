@@ -17,13 +17,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class tag_theme_Core {
-  static function head($theme) {
-    return $theme->css("tag.css");
-  }
+class tag_theme_Core
+{
+    public static function head($theme)
+    {
+        return $theme->css("tag.css");
+    }
 
-  static function admin_head($theme) {
-    return $theme->css("tag.css")
+    public static function admin_head($theme)
+    {
+        return $theme->css("tag.css")
       . $theme->script("gallery.in_place_edit.js");
-  }
+    }
 }

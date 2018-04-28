@@ -17,9 +17,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class rest_installer {
-  static function install() {
-    Database::instance()
+class rest_installer
+{
+    public static function install()
+    {
+        Database::instance()
       ->query("CREATE TABLE {user_access_keys} (
                 `id` int(9) NOT NULL auto_increment,
                 `user_id` int(9) NOT NULL,
@@ -28,25 +30,27 @@ class rest_installer {
                 UNIQUE KEY(`access_key`),
                 UNIQUE KEY(`user_id`))
               DEFAULT CHARSET=utf8;");
-    module::set_var("rest", "allow_guest_access", false);
-  }
-
-  static function upgrade($version) {
-    $db = Database::instance();
-    if ($version == 1) {
-      if (in_array("user_access_tokens", Database::instance()->list_tables())) {
-        $db->query("RENAME TABLE {user_access_tokens} TO {user_access_keys}");
-      }
-      module::set_version("rest", $version = 2);
+        module::set_var("rest", "allow_guest_access", false);
     }
 
-    if ($version == 2) {
-      module::set_var("rest", "allow_guest_access", false);
-      module::set_version("rest", $version = 3);
-    }
-  }
+    public static function upgrade($version)
+    {
+        $db = Database::instance();
+        if ($version == 1) {
+            if (in_array("user_access_tokens", Database::instance()->list_tables())) {
+                $db->query("RENAME TABLE {user_access_tokens} TO {user_access_keys}");
+            }
+            module::set_version("rest", $version = 2);
+        }
 
-  static function uninstall() {
-    Database::instance()->query("DROP TABLE IF EXISTS {user_access_keys}");
-  }
+        if ($version == 2) {
+            module::set_var("rest", "allow_guest_access", false);
+            module::set_version("rest", $version = 3);
+        }
+    }
+
+    public static function uninstall()
+    {
+        Database::instance()->query("DROP TABLE IF EXISTS {user_access_keys}");
+    }
 }

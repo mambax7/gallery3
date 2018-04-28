@@ -17,20 +17,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class Comment_Event_Test extends Gallery_Unit_Test_Case {
-  public function deleting_an_item_deletes_its_comments_too_test() {
-    $album = test::random_album();
+class Comment_Event_Test extends Gallery_Unit_Test_Case
+{
+    public function deleting_an_item_deletes_its_comments_too_test()
+    {
+        $album = test::random_album();
 
-    $comment = ORM::factory("comment");
-    $comment->item_id = $album->id;
-    $comment->author_id = identity::guest()->id;
-    $comment->guest_name = "test";
-    $comment->guest_email = "test@test.com";
-    $comment->text = "text";
-    $comment->save();
+        $comment = ORM::factory("comment");
+        $comment->item_id = $album->id;
+        $comment->author_id = identity::guest()->id;
+        $comment->guest_name = "test";
+        $comment->guest_email = "test@test.com";
+        $comment->text = "text";
+        $comment->save();
 
-    $album->delete();
+        $album->delete();
 
-    $this->assert_false(ORM::factory("comment", $comment->id)->loaded());
-  }
+        $this->assert_false(ORM::factory("comment", $comment->id)->loaded());
+    }
 }

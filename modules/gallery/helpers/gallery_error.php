@@ -17,14 +17,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class gallery_error_Core {
-  static function error_handler($severity, $message, $filename, $lineno) {
-    if (error_reporting() == 0) {
-      return;
-    }
+class gallery_error_Core
+{
+    public static function error_handler($severity, $message, $filename, $lineno)
+    {
+        if (error_reporting() == 0) {
+            return;
+        }
 
-    if (error_reporting() & $severity) {
-      throw new ErrorException($message, 0, $severity, $filename, $lineno);
+        if (error_reporting() & $severity) {
+            throw new ErrorException($message, 0, $severity, $filename, $lineno);
+        }
     }
-  }
 }

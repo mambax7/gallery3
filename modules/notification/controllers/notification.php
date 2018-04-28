@@ -17,20 +17,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class Notification_Controller extends Controller {
-  function watch($id) {
-    access::verify_csrf();
+class Notification_Controller extends Controller
+{
+    public function watch($id)
+    {
+        access::verify_csrf();
 
-    $item = ORM::factory("item", $id);
-    access::required("view", $item);
+        $item = ORM::factory("item", $id);
+        access::required("view", $item);
 
-    if (notification::is_watching($item)) {
-      notification::remove_watch($item);
-      message::success(sprintf(t("You are no longer watching %s"), html::purify($item->title)));
-    } else {
-      notification::add_watch($item);
-      message::success(sprintf(t("You are now watching %s"), html::purify($item->title)));
+        if (notification::is_watching($item)) {
+            notification::remove_watch($item);
+            message::success(sprintf(t("You are no longer watching %s"), html::purify($item->title)));
+        } else {
+            notification::add_watch($item);
+            message::success(sprintf(t("You are now watching %s"), html::purify($item->title)));
+        }
+        url::redirect($item->abs_url());
     }
-    url::redirect($item->abs_url());
-  }
 }

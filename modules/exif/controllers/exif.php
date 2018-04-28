@@ -17,17 +17,19 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class Exif_Controller extends Controller {
-  /**
-   * Display the EXIF data for an item.
-   */
-  public function show($item_id) {
-    $item = ORM::factory("item", $item_id);
-    access::required("view", $item);
+class Exif_Controller extends Controller
+{
+    /**
+     * Display the EXIF data for an item.
+     */
+    public function show($item_id)
+    {
+        $item = ORM::factory("item", $item_id);
+        access::required("view", $item);
 
-    $view = new View("exif_dialog.html");
-    $view->details = exif::get($item);
+        $view = new View("exif_dialog.html");
+        $view->details = exif::get($item);
 
-    print $view;
-  }
+        print $view;
+    }
 }

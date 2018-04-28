@@ -17,14 +17,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class image_block_block_Core {
-  static function get_site_list() {
-    return array("random_image" => t("Random image"));
-  }
+class image_block_block_Core
+{
+    public static function get_site_list()
+    {
+        return array("random_image" => t("Random image"));
+    }
 
-  static function get($block_id, $theme) {
-    $block = "";
-    switch ($block_id) {
+    public static function get($block_id, $theme)
+    {
+        $block = "";
+        switch ($block_id) {
     case "random_image":
       // The random_query approach is flawed and doesn't always return a
       // result when there actually is one. Retry a *few* times.
@@ -32,25 +35,25 @@ class image_block_block_Core {
       $image_count = module::get_var("image_block", "image_count");
       $items = array();
       for ($i = 0; $i < $image_count; $i++) {
-        $attempts = 0;
-        $item = null;
-        do {
-          $item = item::random_query()->where("type", "!=", "album")->find_all(1)->current();
-        } while (!$item && $attempts++ < 3);
-        if ($item) {
-          $items[] = $item;
-        }
+          $attempts = 0;
+          $item = null;
+          do {
+              $item = item::random_query()->where("type", "!=", "album")->find_all(1)->current();
+          } while (!$item && $attempts++ < 3);
+          if ($item) {
+              $items[] = $item;
+          }
       }
       if ($items) {
-        $block = new Block();
-        $block->css_id = "g-image-block";
-        $block->title = t2("Random image", "Random images", $image_count);
-        $block->content = new View("image_block_block.html");
-        $block->content->items = $items;
+          $block = new Block();
+          $block->css_id = "g-image-block";
+          $block->title = t2("Random image", "Random images", $image_count);
+          $block->content = new View("image_block_block.html");
+          $block->content->items = $items;
       }
       break;
     }
 
-    return $block;
-  }
+        return $block;
+    }
 }

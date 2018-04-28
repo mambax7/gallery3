@@ -18,13 +18,15 @@
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-class user_event_Core {
-  static function admin_menu($menu, $theme) {
-    $menu->add_after("appearance_menu", Menu::factory("link")
+class user_event_Core
+{
+    public static function admin_menu($menu, $theme)
+    {
+        $menu->add_after("appearance_menu", Menu::factory("link")
                      ->id("users_groups")
                      ->label(t("Users/Groups"))
                      ->url(url::site("admin/users")));
 
-    return $menu;
-  }
+        return $menu;
+    }
 }

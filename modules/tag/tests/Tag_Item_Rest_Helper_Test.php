@@ -17,54 +17,62 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class Tag_Item_Rest_Helper_Test extends Gallery_Unit_Test_Case {
-  public function setup() {
-    try {
-      Database::instance()->query("TRUNCATE {tags}");
-      Database::instance()->query("TRUNCATE {items_tags}");
-    } catch (Exception $e) { }
-  }
+class Tag_Item_Rest_Helper_Test extends Gallery_Unit_Test_Case
+{
+    public function setup()
+    {
+        try {
+            Database::instance()->query("TRUNCATE {tags}");
+            Database::instance()->query("TRUNCATE {items_tags}");
+        } catch (Exception $e) {
+        }
+    }
 
-  public function get_test() {
-    $tag = tag::add(item::root(), "tag1")->reload();
+    public function get_test()
+    {
+        $tag = tag::add(item::root(), "tag1")->reload();
 
-    $request = new stdClass();
-    $request->url = rest::url("tag_item", $tag, item::root());
-    $this->assert_equal_array(
+        $request = new stdClass();
+        $request->url = rest::url("tag_item", $tag, item::root());
+        $this->assert_equal_array(
       array("url" => rest::url("tag_item", $tag, item::root()),
             "entity" => array(
               "tag" => rest::url("tag", $tag),
               "item" => rest::url("item", item::root()))),
-      tag_item_rest::get($request));
-  }
-
-  public function get_with_invalid_url_test() {
-    $request = new stdClass();
-    $request->url = "bogus";
-    try {
-      tag_item_rest::get($request);
-    } catch (Kohana_404_Exception $e) {
-      return;  // pass
+      tag_item_rest::get($request)
+    );
     }
-    $this->assert_true(false, "Shouldn't get here");
-  }
 
-  public function delete_test() {
-    $tag = tag::add(item::root(), "tag1")->reload();
+    public function get_with_invalid_url_test()
+    {
+        $request = new stdClass();
+        $request->url = "bogus";
+        try {
+            tag_item_rest::get($request);
+        } catch (Kohana_404_Exception $e) {
+            return;  // pass
+        }
+        $this->assert_true(false, "Shouldn't get here");
+    }
 
-    $request = new stdClass();
-    $request->url = rest::url("tag_item", $tag, item::root());
-    tag_item_rest::delete($request);
+    public function delete_test()
+    {
+        $tag = tag::add(item::root(), "tag1")->reload();
 
-    $this->assert_false($tag->reload()->has(item::root()));
-  }
+        $request = new stdClass();
+        $request->url = rest::url("tag_item", $tag, item::root());
+        tag_item_rest::delete($request);
 
-  public function resolve_test() {
-    $album = test::random_album();
-    $tag = tag::add($album, "tag1")->reload();
+        $this->assert_false($tag->reload()->has(item::root()));
+    }
 
-    $tuple = rest::resolve(rest::url("tag_item", $tag, $album));
-    $this->assert_equal_array($tag->as_array(), $tuple[0]->as_array());
-    $this->assert_equal_array($album->as_array(), $tuple[1]->as_array());
-  }
+    public function resolve_test()
+    {
+        $album = test::random_album();
+        $tag = tag::add($album, "tag1")->reload();
+
+        $tuple = rest::resolve(rest::url("tag_item", $tag, $album));
+        $this->assert_equal_array($tag->as_array(), $tuple[0]->as_array());
+        $this->assert_equal_array($album->as_array(), $tuple[1]->as_array());
+    }
 }

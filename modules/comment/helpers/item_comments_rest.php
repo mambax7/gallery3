@@ -17,34 +17,38 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class item_comments_rest_Core {
-  static function get($request) {
-    $item = rest::resolve($request->url);
-    access::required("view", $item);
+class item_comments_rest_Core
+{
+    public static function get($request)
+    {
+        $item = rest::resolve($request->url);
+        access::required("view", $item);
 
-    $comments = array();
-    foreach (ORM::factory("comment")
+        $comments = array();
+        foreach (ORM::factory("comment")
              ->viewable()
              ->where("item_id", "=", $item->id)
              ->order_by("created", "DESC")
              ->find_all() as $comment) {
-      $comments[] = rest::url("comment", $comment);
-    }
+            $comments[] = rest::url("comment", $comment);
+        }
 
-    return array(
+        return array(
       "url" => $request->url,
       "members" => $comments);
-  }
-
-  static function resolve($id) {
-    $item = ORM::factory("item", $id);
-    if (!access::can("view", $item)) {
-      throw new Kohana_404_Exception();
     }
-    return $item;
-  }
 
-  static function url($item) {
-    return url::abs_site("rest/item_comments/{$item->id}");
-  }
+    public static function resolve($id)
+    {
+        $item = ORM::factory("item", $id);
+        if (!access::can("view", $item)) {
+            throw new Kohana_404_Exception();
+        }
+        return $item;
+    }
+
+    public static function url($item)
+    {
+        return url::abs_site("rest/item_comments/{$item->id}");
+    }
 }

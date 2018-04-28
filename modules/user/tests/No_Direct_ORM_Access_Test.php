@@ -19,59 +19,71 @@
  */
 require_once(MODPATH . "gallery/tests/Gallery_Filters.php");
 
-class No_Direct_ORM_Access_Test extends Gallery_Unit_Test_Case {
-  public function no_access_to_users_table_test() {
-    $dir = new UserModuleFilterIterator(
+class No_Direct_ORM_Access_Test extends Gallery_Unit_Test_Case
+{
+    public function no_access_to_users_table_test()
+    {
+        $dir = new UserModuleFilterIterator(
       new PhpCodeFilterIterator(
         new GalleryCodeFilterIterator(
           new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator(DOCROOT)))));
-    $errors = array();
-    foreach ($dir as $file) {
-      //if (basename(dirname($file)) == "helpers") {
-      $file_as_string = file_get_contents($file);
-      if (preg_match("/ORM::factory\\(\"user\"/", $file_as_string)) {
-        foreach (explode("\n", $file_as_string) as $l => $line) {
-          if (preg_match('/ORM::factory\\(\"user\"/', $line)) {
-            $errors[] = "$file($l) => $line";
-          }
+            new RecursiveDirectoryIterator(DOCROOT)
+          )
+        )
+      )
+    );
+        $errors = array();
+        foreach ($dir as $file) {
+            //if (basename(dirname($file)) == "helpers") {
+            $file_as_string = file_get_contents($file);
+            if (preg_match("/ORM::factory\\(\"user\"/", $file_as_string)) {
+                foreach (explode("\n", $file_as_string) as $l => $line) {
+                    if (preg_match('/ORM::factory\\(\"user\"/', $line)) {
+                        $errors[] = "$file($l) => $line";
+                    }
+                }
+            }
+            $file_as_string = null;
         }
-      }
-      $file_as_string = null;
+        if ($errors) {
+            $this->assert_false(true, "Direct access to the users table found:\n" . join("\n", $errors));
+        }
     }
-    if ($errors) {
-      $this->assert_false(true, "Direct access to the users table found:\n" . join("\n", $errors));
-    }
-  }
 
-  public function no_access_to_groups_table_test() {
-    $dir = new UserModuleFilterIterator(
+    public function no_access_to_groups_table_test()
+    {
+        $dir = new UserModuleFilterIterator(
       new PhpCodeFilterIterator(
         new GalleryCodeFilterIterator(
           new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator(DOCROOT)))));
-    $errors = array();
-    foreach ($dir as $file) {
-      $file_as_string = file_get_contents($file);
-      if (preg_match("/ORM::factory\\(\"group\"/", $file_as_string)) {
-        foreach (explode("\n", $file_as_string) as $l => $line) {
-          if (preg_match('/ORM::factory\\(\"group\"/', $line)) {
-            $errors[] = "$file($l) => $line";
-          }
+            new RecursiveDirectoryIterator(DOCROOT)
+          )
+        )
+      )
+    );
+        $errors = array();
+        foreach ($dir as $file) {
+            $file_as_string = file_get_contents($file);
+            if (preg_match("/ORM::factory\\(\"group\"/", $file_as_string)) {
+                foreach (explode("\n", $file_as_string) as $l => $line) {
+                    if (preg_match('/ORM::factory\\(\"group\"/', $line)) {
+                        $errors[] = "$file($l) => $line";
+                    }
+                }
+            }
+            $file_as_string = null;
         }
-      }
-      $file_as_string = null;
+        if ($errors) {
+            $this->assert_false(true, "Direct access to the groups table found:\n" . join("\n", $errors));
+        }
     }
-    if ($errors) {
-      $this->assert_false(true, "Direct access to the groups table found:\n" . join("\n", $errors));
-    }
-  }
-
 }
 
-class UserModuleFilterIterator extends FilterIterator {
-  public function accept() {
-    $path_name = $this->getInnerIterator()->getPathName();
-    return strpos($path_name, "/modules/user") === false;
-  }
+class UserModuleFilterIterator extends FilterIterator
+{
+    public function accept()
+    {
+        $path_name = $this->getInnerIterator()->getPathName();
+        return strpos($path_name, "/modules/user") === false;
+    }
 }

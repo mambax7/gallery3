@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
+<?php defined('SYSPATH') or die('No direct access allowed.');
 /**
  * Encrypt configuration is defined in groups which allows you to easily switch
  * between different encryption settings for different uses.
@@ -31,9 +31,8 @@
  *
  * 	For more information about mcrypt modes and cipers see the [mcrypt php docs](http://php.net/mcrypt).
  */
-$config['default'] = array
-(
-	'key'    => 'K0H@NA+PHP_7hE-SW!FtFraM3w0R|<',
-	'mode'   => MCRYPT_MODE_NOFB,
-	'cipher' => MCRYPT_RIJNDAEL_128
+$config['default'] = array(
+    'key'    => 'K0H@NA+PHP_7hE-SW!FtFraM3w0R|<',
+    'mode'   => MCRYPT_MODE_NOFB,
+    'cipher' => MCRYPT_RIJNDAEL_128
 );

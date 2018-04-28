@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
+<?php defined('SYSPATH') or die('No direct access allowed.');
 /**
  * View Config
  *
@@ -12,14 +12,13 @@
  * Allowed non-php view types. Most file extensions are supported.
  * Do not forget to add a valid MIME type in mimes.php
  */
-$config['allowed_filetypes'] = array
-(
-	'gif',
-	'jpg', 'jpeg',
-	'png',
-	'tif', 'tiff',
-	'swf',
-	'htm', 'html',
-	'css',
-	'js'
+$config['allowed_filetypes'] = array(
+    'gif',
+    'jpg', 'jpeg',
+    'png',
+    'tif', 'tiff',
+    'swf',
+    'htm', 'html',
+    'css',
+    'js'
 );

@@ -28,9 +28,9 @@ $config['directory'] = VARPATH.'uploads';
 /**
  * Enable or disable directory creation.
  */
-$config['create_directories'] = FALSE;
+$config['create_directories'] = false;
 
 /**
  * Remove spaces from uploaded filenames.
  */
-$config['remove_spaces'] = FALSE;
+$config['remove_spaces'] = false;

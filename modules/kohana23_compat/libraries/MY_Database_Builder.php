@@ -17,34 +17,38 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class Database_Builder extends Database_Builder_Core {
-  /**
-   * Merge in a series of where clause tuples and call where() on each one.
-   * @chainable
-   */
-  public function merge_where($tuples) {
-    if ($tuples) {
-      foreach ($tuples as $tuple) {
-        $this->where($tuple[0], $tuple[1], $tuple[2]);
-      }
+class Database_Builder extends Database_Builder_Core
+{
+    /**
+     * Merge in a series of where clause tuples and call where() on each one.
+     * @chainable
+     */
+    public function merge_where($tuples)
+    {
+        if ($tuples) {
+            foreach ($tuples as $tuple) {
+                $this->where($tuple[0], $tuple[1], $tuple[2]);
+            }
+        }
+        return $this;
     }
-    return $this;
-  }
 
-  /**
-   * Merge in a series of where clause tuples and call or_where() on each one.
-   * @chainable
-   */
-  public function merge_or_where($tuples) {
-    if ($tuples) {
-      foreach ($tuples as $tuple) {
-        $this->or_where($tuple[0], $tuple[1], $tuple[2]);
-      }
+    /**
+     * Merge in a series of where clause tuples and call or_where() on each one.
+     * @chainable
+     */
+    public function merge_or_where($tuples)
+    {
+        if ($tuples) {
+            foreach ($tuples as $tuple) {
+                $this->or_where($tuple[0], $tuple[1], $tuple[2]);
+            }
+        }
+        return $this;
     }
-    return $this;
-  }
 
-  public function compile() {
-    return parent::compile();
-  }
+    public function compile()
+    {
+        return parent::compile();
+    }
 }

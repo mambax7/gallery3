@@ -26,66 +26,68 @@
  * -x     Table prefix           (default: )
  */
 if (installer::already_installed()) {
-  print "Gallery 3 is already installed.\n";
-  return;
+    print "Gallery 3 is already installed.\n";
+    return;
 }
 
 $errors = installer::check_environment();
 if ($errors) {
-  oops(implode($errors, "\n"));
+    oops(implode($errors, "\n"));
 }
 
 $config = parse_cli_params();
 if (!installer::connect($config)) {
-  oops("Unable to connect to the database.\n" . mysql_error() . "\n");
-} else if (!installer::select_db($config)) {
-  oops("Database {$config['dbname']} doesn't exist and can't be created.  " .
+    oops("Unable to connect to the database.\n" . mysql_error() . "\n");
+} elseif (!installer::select_db($config)) {
+    oops("Database {$config['dbname']} doesn't exist and can't be created.  " .
        "Please create the database by hand.");
-} else if (is_string($count = installer::db_empty($config)) || !$count) {
-  if (is_string($count)) {
-    oops($count);
-  } else {
-    oops("Database {$config['dbname']} already has Gallery 3 tables in it. \n" .
+} elseif (is_string($count = installer::db_empty($config)) || !$count) {
+    if (is_string($count)) {
+        oops($count);
+    } else {
+        oops("Database {$config['dbname']} already has Gallery 3 tables in it. \n" .
          "    Please remove the Gallery 3 tables, change your prefix,\n" .
          "    or specify an empty database.\n");
-  }
-} else if (!installer::unpack_var()) {
-  oops("Unable to create files inside the 'var' directory");
-} else if (!installer::unpack_sql($config)) {
-  oops("Failed to create database tables\n" . mysql_error());
-} else if (!installer::create_database_config($config)) {
-  oops("Couldn't create var/database.php");
+    }
+} elseif (!installer::unpack_var()) {
+    oops("Unable to create files inside the 'var' directory");
+} elseif (!installer::unpack_sql($config)) {
+    oops("Failed to create database tables\n" . mysql_error());
+} elseif (!installer::create_database_config($config)) {
+    oops("Couldn't create var/database.php");
 } else {
-  system("chmod -R 777 " . VARPATH);
-  try {
-    list ($user, $password) = installer::create_admin($config);
-    print "Your Gallery has been successfully installed!\n";
-    print "We've created an account for you to use:\n";
-    print "  username: $user\n";
-    print "  password: $password\n";
+    system("chmod -R 777 " . VARPATH);
+    try {
+        list($user, $password) = installer::create_admin($config);
+        print "Your Gallery has been successfully installed!\n";
+        print "We've created an account for you to use:\n";
+        print "  username: $user\n";
+        print "  password: $password\n";
+        print "\n";
+
+        installer::create_private_key($config);
+        exit(0);
+    } catch (Exception $e) {
+        oops($e->getMessage());
+    }
+}
+
+function oops($message)
+{
+    print "Oops! Something went wrong during the installation:\n\n";
+
+    print "==> " . $message;
     print "\n";
-
-    installer::create_private_key($config);
-    exit(0);
-  } catch (Exception $e) {
-    oops($e->getMessage());
-  }
+    print "For help you can try:\n";
+    print "  * The Gallery 3 FAQ   - http://codex.galleryproject.org/Gallery3:FAQ\n";
+    print "  * The Gallery Forums - http://galleryproject.org/forum\n";
+    print "\n\n** INSTALLATION FAILED **\n";
+    exit(1);
 }
 
-function oops($message) {
-  print "Oops! Something went wrong during the installation:\n\n";
-
-  print "==> " . $message;
-  print "\n";
-  print "For help you can try:\n";
-  print "  * The Gallery 3 FAQ   - http://codex.galleryproject.org/Gallery3:FAQ\n";
-  print "  * The Gallery Forums - http://galleryproject.org/forum\n";
-  print "\n\n** INSTALLATION FAILED **\n";
-  exit(1);
-}
-
-function parse_cli_params() {
-  $config = array("host" => "localhost",
+function parse_cli_params()
+{
+    $config = array("host" => "localhost",
                   "user" => "root",
                   "password" => "",
                   "dbname" => "gallery3",
@@ -93,14 +95,14 @@ function parse_cli_params() {
                   "g3_password" => "",
                   "type" => function_exists("mysqli_set_charset") ? "mysqli" : "mysql");
 
-  $argv = $_SERVER["argv"];
-  for ($i = 1; $i < count($argv); $i++) {
-    switch (strtolower($argv[$i])) {
+    $argv = $_SERVER["argv"];
+    for ($i = 1; $i < count($argv); $i++) {
+        switch (strtolower($argv[$i])) {
     case "-d":
       $config["dbname"] = $argv[++$i];
       break;
     case "-h":
-      list ($config["host"], $config["port"]) = explode(":", $argv[++$i]);
+      list($config["host"], $config["port"]) = explode(":", $argv[++$i]);
       break;
     case "-u":
       $config["user"] = $argv[++$i];
@@ -115,7 +117,7 @@ function parse_cli_params() {
       $config["g3_password"] = $argv[++$i];
       break;
     }
-  }
+    }
 
-  return $config;
+    return $config;
 }

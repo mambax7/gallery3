@@ -174,7 +174,7 @@ class PelEntryTime extends PelEntryAscii
                 }
                 break;
             case self::EXIF_STRING:
-                list ($year, $month, $day) = $this->convertJdToGregorian($this->day_count);
+                list($year, $month, $day) = $this->convertJdToGregorian($this->day_count);
                 $hours = (int) ($this->seconds / 3600);
                 $minutes = (int) ($this->seconds % 3600 / 60);
                 $seconds = $this->seconds % 60;
@@ -188,7 +188,8 @@ class PelEntryTime extends PelEntryAscii
                         self::UNIX_TIMESTAMP,
                         self::EXIF_STRING,
                         self::JULIAN_DAY_COUNT,
-                        $type);
+                        $type
+                );
         }
     }
 
@@ -243,7 +244,8 @@ class PelEntryTime extends PelEntryAscii
                         self::UNIX_TIMESTAMP,
                         self::EXIF_STRING,
                         self::JULIAN_DAY_COUNT,
-                        $type);
+                        $type
+                );
         }
 
         /*

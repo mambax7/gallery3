@@ -22,8 +22,8 @@ define("VARPATH", DOCROOT . "var/");
 define("SYSPATH", "DEFINED_TO_SOMETHING_SO_THAT_WE_CAN_KEEP_CONSISTENT_PREAMBLES_IN_THE_INSTALLER");
 
 if (version_compare(PHP_VERSION, "5.2.3", "<")) {
-  print "Gallery 3 requires PHP 5.2.3 or newer.\n";
-  exit;
+    print "Gallery 3 requires PHP 5.2.3 or newer.\n";
+    exit;
 }
 
 // Turn off session.use_trans_sid -- that feature attempts to inject session ids
@@ -33,8 +33,7 @@ ini_set("session.use_trans_sid", false);
 
 require(DOCROOT . "installer/installer.php");
 if (PHP_SAPI == "cli") {
-  include("cli.php");
+    include("cli.php");
 } else {
-  include("web.php");
+    include("web.php");
 }
-

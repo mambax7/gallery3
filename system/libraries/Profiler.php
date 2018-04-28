@@ -1,4 +1,4 @@
-<?php defined('SYSPATH') OR die('No direct access allowed.');
+<?php defined('SYSPATH') or die('No direct access allowed.');
 /**
  * Adds useful information to the bottom of the current page for debugging and optimization purposes.
  *
@@ -13,294 +13,295 @@
  * @copyright  (c) 2007-2009 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-class Profiler_Core {
+class Profiler_Core
+{
+    protected static $profiles = array();
+    protected static $show;
 
-	protected static $profiles = array();
-	protected static $show;
+    /**
+     * Enable the profiler.
+     *
+     * @return  void
+     */
+    public static function enable()
+    {
+        // Add all built in profiles to event
+        Event::add('profiler.run', array('Profiler', 'benchmarks'));
+        Event::add('profiler.run', array('Profiler', 'database'));
+        Event::add('profiler.run', array('Profiler', 'session'));
+        Event::add('profiler.run', array('Profiler', 'post'));
+        Event::add('profiler.run', array('Profiler', 'cookies'));
 
-	/**
-	 * Enable the profiler.
-	 *
-	 * @return  void
-	 */
-	public static function enable()
-	{
-		// Add all built in profiles to event
-		Event::add('profiler.run', array('Profiler', 'benchmarks'));
-		Event::add('profiler.run', array('Profiler', 'database'));
-		Event::add('profiler.run', array('Profiler', 'session'));
-		Event::add('profiler.run', array('Profiler', 'post'));
-		Event::add('profiler.run', array('Profiler', 'cookies'));
+        // Add profiler to page output automatically
+        Event::add('system.display', array('Profiler', 'render'));
 
-		// Add profiler to page output automatically
-		Event::add('system.display', array('Profiler', 'render'));
+        Kohana_Log::add('debug', 'Profiler library enabled');
+    }
 
-		Kohana_Log::add('debug', 'Profiler library enabled');
+    /**
+     * Disables the profiler for this page only.
+     * Best used when profiler is autoloaded.
+     *
+     * @return  void
+     */
+    public static function disable()
+    {
+        // Removes itself from the event queue
+        Event::clear('system.display', array('Profiler', 'render'));
+    }
 
-	}
+    /**
+     * Return whether a profile should be shown.
+     * Determined by the config setting or GET parameter.
+     *
+     * @param   string  profile name
+     * @return  boolean
+     */
+    public static function show($name)
+    {
+        return (Profiler::$show === true or (is_array(Profiler::$show) and in_array($name, Profiler::$show))) ? true : false;
+    }
 
-	/**
-	 * Disables the profiler for this page only.
-	 * Best used when profiler is autoloaded.
-	 *
-	 * @return  void
-	 */
-	public static function disable()
-	{
-		// Removes itself from the event queue
-		Event::clear('system.display', array('Profiler', 'render'));
-	}
+    /**
+     * Add a new profile.
+     *
+     * @param   object   profile object
+     * @return  boolean
+     * @throws  Kohana_Exception
+     */
+    public static function add($profile)
+    {
+        if (is_object($profile)) {
+            Profiler::$profiles[] = $profile;
+            return true;
+        }
 
-	/**
-	 * Return whether a profile should be shown.
-	 * Determined by the config setting or GET parameter.
-	 *
-	 * @param   string  profile name
-	 * @return  boolean
-	 */
-	public static function show($name)
-	{
-		return (Profiler::$show === TRUE OR (is_array(Profiler::$show) AND in_array($name, Profiler::$show))) ? TRUE : FALSE;
-	}
+        throw new Kohana_Exception('The profile must be an object');
+    }
 
-	/**
-	 * Add a new profile.
-	 *
-	 * @param   object   profile object
-	 * @return  boolean
-	 * @throws  Kohana_Exception
-	 */
-	public static function add($profile)
-	{
-		if (is_object($profile))
-		{
-			Profiler::$profiles[] = $profile;
-			return TRUE;
-		}
+    /**
+     * Render the profiler.
+     *
+     * @param   boolean  return the output instead of adding it to bottom of page
+     * @return  void|string
+     */
+    public static function render($return = false)
+    {
+        $start = microtime(true);
 
-		throw new Kohana_Exception('The profile must be an object');
-	}
+        // Determine the profiles that should be shown
+        $get = isset($_GET['profiler']) ? explode(',', $_GET['profiler']) : array();
+        Profiler::$show = empty($get) ? Kohana::config('profiler.show') : $get;
 
-	/**
-	 * Render the profiler.
-	 *
-	 * @param   boolean  return the output instead of adding it to bottom of page
-	 * @return  void|string
-	 */
-	public static function render($return = FALSE)
-	{
-		$start = microtime(TRUE);
+        Event::run('profiler.run');
 
-		// Determine the profiles that should be shown
-		$get = isset($_GET['profiler']) ? explode(',', $_GET['profiler']) : array();
-		Profiler::$show = empty($get) ? Kohana::config('profiler.show') : $get;
+        // Don't display if there's no profiles
+        if (empty(Profiler::$profiles)) {
+            return Kohana::$output;
+        }
 
-		Event::run('profiler.run');
+        $styles = '';
+        foreach (Profiler::$profiles as $profile) {
+            $styles .= $profile->styles();
+        }
 
-		// Don't display if there's no profiles
-		if (empty(Profiler::$profiles))
-			return Kohana::$output;
+        // Load the profiler view
+        $data = array(
+            'profiles'       => Profiler::$profiles,
+            'styles'         => $styles,
+            'execution_time' => microtime(true) - $start
+        );
+        $view = new View('profiler/profiler', $data);
 
-		$styles = '';
-		foreach (Profiler::$profiles as $profile)
-		{
-			$styles .= $profile->styles();
-		}
+        // Return rendered view if $return is TRUE
+        if ($return === true) {
+            return $view->render();
+        }
 
-		// Load the profiler view
-		$data = array
-		(
-			'profiles'       => Profiler::$profiles,
-			'styles'         => $styles,
-			'execution_time' => microtime(TRUE) - $start
-		);
-		$view = new View('profiler/profiler', $data);
+        // Add profiler data to the output
+        if (stripos(Kohana::$output, '</body>') !== false) {
+            // Closing body tag was found, insert the profiler data before it
+            Kohana::$output = str_ireplace('</body>', $view->render().'</body>', Kohana::$output);
+        } else {
+            // Append the profiler data to the output
+            Kohana::$output .= $view->render();
+        }
+    }
 
-		// Return rendered view if $return is TRUE
-		if ($return === TRUE)
-			return $view->render();
+    /**
+     * Benchmark times and memory usage from the Benchmark library.
+     *
+     * @return  void
+     */
+    public static function benchmarks()
+    {
+        if (! Profiler::show('benchmarks')) {
+            return;
+        }
 
-		// Add profiler data to the output
-		if (stripos(Kohana::$output, '</body>') !== FALSE)
-		{
-			// Closing body tag was found, insert the profiler data before it
-			Kohana::$output = str_ireplace('</body>', $view->render().'</body>', Kohana::$output);
-		}
-		else
-		{
-			// Append the profiler data to the output
-			Kohana::$output .= $view->render();
-		}
-	}
+        $table = new Profiler_Table();
+        $table->add_column();
+        $table->add_column('kp-column kp-data');
+        $table->add_column('kp-column kp-data');
+        $table->add_column('kp-column kp-data');
+        $table->add_row(array(__('Benchmarks'), __('Count'), __('Time'), __('Memory')), 'kp-title', 'background-color: #FFE0E0');
 
-	/**
-	 * Benchmark times and memory usage from the Benchmark library.
-	 *
-	 * @return  void
-	 */
-	public static function benchmarks()
-	{
-		if ( ! Profiler::show('benchmarks'))
-			return;
+        $benchmarks = Benchmark::get(true);
 
-		$table = new Profiler_Table();
-		$table->add_column();
-		$table->add_column('kp-column kp-data');
-		$table->add_column('kp-column kp-data');
-		$table->add_column('kp-column kp-data');
-		$table->add_row(array(__('Benchmarks'), __('Count'), __('Time'), __('Memory')), 'kp-title', 'background-color: #FFE0E0');
+        // Moves the first benchmark (total execution time) to the end of the array
+        $benchmarks = array_slice($benchmarks, 1) + array_slice($benchmarks, 0, 1);
 
-		$benchmarks = Benchmark::get(TRUE);
+        text::alternate();
+        foreach ($benchmarks as $name => $benchmark) {
+            // Clean unique id from system benchmark names
+            $name = ucwords(str_replace(array('_', '-'), ' ', str_replace(SYSTEM_BENCHMARK.'_', '', $name)));
 
-		// Moves the first benchmark (total execution time) to the end of the array
-		$benchmarks = array_slice($benchmarks, 1) + array_slice($benchmarks, 0, 1);
+            $data = array(__($name), $benchmark['count'], number_format($benchmark['time'], Kohana::config('profiler.time_decimals')), number_format($benchmark['memory'] / 1024 / 1024, Kohana::config('profiler.memory_decimals')).'MB');
+            $class = text::alternate('', 'kp-altrow');
 
-		text::alternate();
-		foreach ($benchmarks as $name => $benchmark)
-		{
-			// Clean unique id from system benchmark names
-			$name = ucwords(str_replace(array('_', '-'), ' ', str_replace(SYSTEM_BENCHMARK.'_', '', $name)));
+            if ($name == 'Total Execution') {
+                // Clear the count column
+                $data[1] = '';
+                $class = 'kp-totalrow';
+            }
 
-			$data = array(__($name), $benchmark['count'], number_format($benchmark['time'], Kohana::config('profiler.time_decimals')), number_format($benchmark['memory'] / 1024 / 1024, Kohana::config('profiler.memory_decimals')).'MB');
-			$class = text::alternate('', 'kp-altrow');
+            $table->add_row($data, $class);
+        }
 
-			if ($name == 'Total Execution')
-			{
-				// Clear the count column
-				$data[1] = '';
-				$class = 'kp-totalrow';
-			}
+        Profiler::add($table);
+    }
 
-			$table->add_row($data, $class);
-		}
+    /**
+     * Database query benchmarks.
+     *
+     * @return  void
+     */
+    public static function database()
+    {
+        if (! Profiler::show('database')) {
+            return;
+        }
 
-		Profiler::add($table);
-	}
+        $queries = Database::$benchmarks;
 
-	/**
-	 * Database query benchmarks.
-	 *
-	 * @return  void
-	 */
-	public static function database()
-	{
-		if ( ! Profiler::show('database'))
-			return;
+        // Don't show if there are no queries
+        if (empty($queries)) {
+            return;
+        }
 
-		$queries = Database::$benchmarks;
+        $table = new Profiler_Table();
+        $table->add_column();
+        $table->add_column('kp-column kp-data');
+        $table->add_column('kp-column kp-data');
+        $table->add_row(array(__('Queries'), __('Time'), __('Rows')), 'kp-title', 'background-color: #E0FFE0');
 
-		// Don't show if there are no queries
-		if (empty($queries)) return;
+        text::alternate();
+        $total_time = $total_rows = 0;
+        foreach ($queries as $query) {
+            $data = array($query['query'], number_format($query['time'], Kohana::config('profiler.time_decimals')), $query['rows']);
+            $class = text::alternate('', 'kp-altrow');
+            $table->add_row($data, $class);
+            $total_time += $query['time'];
+            $total_rows += $query['rows'];
+        }
 
-		$table = new Profiler_Table();
-		$table->add_column();
-		$table->add_column('kp-column kp-data');
-		$table->add_column('kp-column kp-data');
-		$table->add_row(array(__('Queries'), __('Time'), __('Rows')), 'kp-title', 'background-color: #E0FFE0');
+        $data = array(__('Total: ') . count($queries), number_format($total_time, Kohana::config('profiler.time_decimals')), $total_rows);
+        $table->add_row($data, 'kp-totalrow');
 
-		text::alternate();
-		$total_time = $total_rows = 0;
-		foreach ($queries as $query)
-		{
-			$data = array($query['query'], number_format($query['time'], Kohana::config('profiler.time_decimals')), $query['rows']);
-			$class = text::alternate('', 'kp-altrow');
-			$table->add_row($data, $class);
-			$total_time += $query['time'];
-			$total_rows += $query['rows'];
-		}
+        Profiler::add($table);
+    }
 
-		$data = array(__('Total: ') . count($queries), number_format($total_time, Kohana::config('profiler.time_decimals')), $total_rows);
-		$table->add_row($data, 'kp-totalrow');
+    /**
+     * Session data.
+     *
+     * @return  void
+     */
+    public static function session()
+    {
+        if (empty($_SESSION)) {
+            return;
+        }
 
-		Profiler::add($table);
-	}
+        if (! Profiler::show('session')) {
+            return;
+        }
 
-	/**
-	 * Session data.
-	 *
-	 * @return  void
-	 */
-	public static function session()
-	{
-		if (empty($_SESSION)) return;
+        $table = new Profiler_Table();
+        $table->add_column('kp-name');
+        $table->add_column();
+        $table->add_row(array(__('Session'), __('Value')), 'kp-title', 'background-color: #CCE8FB');
 
-		if ( ! Profiler::show('session'))
-			return;
+        text::alternate();
+        foreach ($_SESSION as $name => $value) {
+            if (is_object($value)) {
+                $value = get_class($value).' [object]';
+            }
 
-		$table = new Profiler_Table();
-		$table->add_column('kp-name');
-		$table->add_column();
-		$table->add_row(array(__('Session'), __('Value')), 'kp-title', 'background-color: #CCE8FB');
+            $data = array($name, $value);
+            $class = text::alternate('', 'kp-altrow');
+            $table->add_row($data, $class);
+        }
 
-		text::alternate();
-		foreach($_SESSION as $name => $value)
-		{
-			if (is_object($value))
-			{
-				$value = get_class($value).' [object]';
-			}
+        Profiler::add($table);
+    }
 
-			$data = array($name, $value);
-			$class = text::alternate('', 'kp-altrow');
-			$table->add_row($data, $class);
-		}
+    /**
+     * POST data.
+     *
+     * @return  void
+     */
+    public static function post()
+    {
+        if (empty($_POST)) {
+            return;
+        }
 
-		Profiler::add($table);
-	}
+        if (! Profiler::show('post')) {
+            return;
+        }
 
-	/**
-	 * POST data.
-	 *
-	 * @return  void
-	 */
-	public static function post()
-	{
-		if (empty($_POST)) return;
+        $table = new Profiler_Table();
+        $table->add_column('kp-name');
+        $table->add_column();
+        $table->add_row(array(__('POST'), __('Value')), 'kp-title', 'background-color: #E0E0FF');
 
-		if ( ! Profiler::show('post'))
-			return;
+        text::alternate();
+        foreach ($_POST as $name => $value) {
+            $data = array($name, $value);
+            $class = text::alternate('', 'kp-altrow');
+            $table->add_row($data, $class);
+        }
 
-		$table = new Profiler_Table();
-		$table->add_column('kp-name');
-		$table->add_column();
-		$table->add_row(array(__('POST'), __('Value')), 'kp-title', 'background-color: #E0E0FF');
+        Profiler::add($table);
+    }
 
-		text::alternate();
-		foreach($_POST as $name => $value)
-		{
-			$data = array($name, $value);
-			$class = text::alternate('', 'kp-altrow');
-			$table->add_row($data, $class);
-		}
+    /**
+     * Cookie data.
+     *
+     * @return  void
+     */
+    public static function cookies()
+    {
+        if (empty($_COOKIE)) {
+            return;
+        }
 
-		Profiler::add($table);
-	}
+        if (! Profiler::show('cookies')) {
+            return;
+        }
 
-	/**
-	 * Cookie data.
-	 *
-	 * @return  void
-	 */
-	public static function cookies()
-	{
-		if (empty($_COOKIE)) return;
+        $table = new Profiler_Table();
+        $table->add_column('kp-name');
+        $table->add_column();
+        $table->add_row(array(__('Cookies'), __('Value')), 'kp-title', 'background-color: #FFF4D7');
 
-		if ( ! Profiler::show('cookies'))
-			return;
+        text::alternate();
+        foreach ($_COOKIE as $name => $value) {
+            $data = array($name, $value);
+            $class = text::alternate('', 'kp-altrow');
+            $table->add_row($data, $class);
+        }
 
-		$table = new Profiler_Table();
-		$table->add_column('kp-name');
-		$table->add_column();
-		$table->add_row(array(__('Cookies'), __('Value')), 'kp-title', 'background-color: #FFF4D7');
-
-		text::alternate();
-		foreach($_COOKIE as $name => $value)
-		{
-			$data = array($name, $value);
-			$class = text::alternate('', 'kp-altrow');
-			$table->add_row($data, $class);
-		}
-
-		Profiler::add($table);
-	}
+        Profiler::add($table);
+    }
 }

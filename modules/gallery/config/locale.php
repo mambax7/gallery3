@@ -33,10 +33,10 @@ $config['language'] = array('en_US', 'English_United States');
  * @see http://php.net/timezones
  */
 if (file_exists(VARPATH . "database.php")) {
-  $config['timezone'] = module::get_var("gallery", "timezone", date_default_timezone_get());
+    $config['timezone'] = module::get_var("gallery", "timezone", date_default_timezone_get());
 } else {
-  // Gallery3 is not installed yet -- don't make module::get_var() calls.
-  $config['timezone'] = date_default_timezone_get();
+    // Gallery3 is not installed yet -- don't make module::get_var() calls.
+    $config['timezone'] = date_default_timezone_get();
 }
 
 // i18n settings

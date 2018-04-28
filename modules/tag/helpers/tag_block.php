@@ -17,14 +17,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-class tag_block_Core {
-  static function get_site_list() {
-    return array("tag" => t("Popular tags"));
-  }
+class tag_block_Core
+{
+    public static function get_site_list()
+    {
+        return array("tag" => t("Popular tags"));
+    }
 
-  static function get($block_id, $theme) {
-    $block = "";
-    switch ($block_id) {
+    public static function get($block_id, $theme)
+    {
+        $block = "";
+        switch ($block_id) {
     case "tag":
       $block = new Block();
       $block->css_id = "g-tag";
@@ -33,13 +36,13 @@ class tag_block_Core {
       $block->content->cloud = tag::cloud(module::get_var("tag", "tag_cloud_size", 30));
 
       if ($theme->item() && $theme->page_subtype() != "tag" && access::can("edit", $theme->item())) {
-        $controller = new Tags_Controller();
-        $block->content->form = tag::get_add_form($theme->item());
+          $controller = new Tags_Controller();
+          $block->content->form = tag::get_add_form($theme->item());
       } else {
-        $block->content->form = "";
+          $block->content->form = "";
       }
       break;
     }
-    return $block;
-  }
+        return $block;
+    }
 }

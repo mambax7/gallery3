@@ -18,14 +18,16 @@
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-class User_Groups_Test extends Gallery_Unit_Test_Case {
-  public function add_user_to_group_test() {
-    $user = test::random_user();
-    $group = test::random_group();
+class User_Groups_Test extends Gallery_Unit_Test_Case
+{
+    public function add_user_to_group_test()
+    {
+        $user = test::random_user();
+        $group = test::random_group();
 
-    $group->add($user);
-    $group->save();
+        $group->add($user);
+        $group->save();
 
-    $this->assert_true($user->has($group));
-  }
+        $this->assert_true($user->has($group));
+    }
 }
