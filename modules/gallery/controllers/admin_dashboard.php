@@ -78,7 +78,7 @@ class Admin_Dashboard_Controller extends Admin_Controller
 
         if (!empty($deleted)) {
             $available = block_manager::get_available_admin_blocks();
-            $title = $available[join(':', $deleted)];
+            $title = $available[implode(':', $deleted)];
             message::success(t('Removed <b>%title</b> block', array('title' => $title)));
         }
 

@@ -59,7 +59,7 @@ class locales_Core
       ? $locales
       : array_merge($locales, array($default));
 
-        module::set_var('gallery', 'installed_locales', join('|', $locales));
+        module::set_var('gallery', 'installed_locales', implode('|', $locales));
 
         // Clear the cache
         self::$locales = null;

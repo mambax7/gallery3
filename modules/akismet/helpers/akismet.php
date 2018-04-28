@@ -162,7 +162,7 @@ class akismet_Core
         foreach ($comment_data as $key => $data) {
             $query_string[] = "$key=" . urlencode($data);
         }
-        $query_string = join('&', $query_string);
+        $query_string = implode('&', $query_string);
 
         $version = module::get_version('akismet');
         $http_request  = "POST /1.1/$function HTTP/1.0\r\n";

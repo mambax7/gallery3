@@ -493,7 +493,7 @@ class gallery_task_Core
         $stack = array();
         foreach (self::find_dupe_slugs() as $row) {
             list($parent_id, $slug) = explode(':', $row->parent_slug, 2);
-            $stack[] = join(':', array($parent_id, $slug));
+            $stack[] = implode(':', array($parent_id, $slug));
         }
         if ($stack) {
             $task->set('stack', implode(' ', $stack));
@@ -540,7 +540,7 @@ class gallery_task_Core
         $stack = array();
         foreach (self::find_dupe_names() as $row) {
             list($parent_id, $name) = explode(':', $row->parent_name, 2);
-            $stack[] = join(':', array($parent_id, $name));
+            $stack[] = implode(':', array($parent_id, $name));
         }
         if ($stack) {
             $task->set('stack', implode(' ', $stack));
@@ -595,7 +595,7 @@ class gallery_task_Core
         $stack = array();
         foreach (self::find_dupe_base_names() as $row) {
             list($parent_id, $base_name) = explode(':', $row->parent_base_name, 2);
-            $stack[] = join(':', array($parent_id, $base_name));
+            $stack[] = implode(':', array($parent_id, $base_name));
         }
         if ($stack) {
             $task->set('stack', implode(' ', $stack));

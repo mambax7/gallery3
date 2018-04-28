@@ -63,7 +63,7 @@ class search_Core
             foreach (identity::group_ids_for_active_user() as $id) {
                 $fields[] = "`view_$id` = TRUE"; // access::ALLOW
             }
-            $access_sql = ' AND (' . join(' OR ', $fields) . ')';
+            $access_sql = ' AND (' . implode(' OR ', $fields) . ')';
         } else {
             $access_sql = '';
         }
@@ -80,7 +80,7 @@ class search_Core
             "  MATCH({search_records}.`data`) AGAINST ('$q') AS `score` " . 'FROM {items} JOIN {search_records} ON ({items}.`id` = {search_records}.`item_id`) ' .
             "WHERE MATCH({search_records}.`data`) AGAINST ('$q' IN BOOLEAN MODE)" .
             $album_sql .
-            (empty($where) ? '' : ' AND ' . join(' AND ', $where)) .
+            (empty($where) ? '' : ' AND ' . implode(' AND ', $where)) .
             $access_sql;
     }
 
@@ -110,7 +110,7 @@ class search_Core
 
         $item = $record->item();
         module::event('item_index_data', $item, $data);
-        $record->data = join(' ', (array)$data);
+        $record->data = implode(' ', (array)$data);
         $record->dirty = 0;
         $record->save();
     }

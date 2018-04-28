@@ -1029,7 +1029,7 @@ class g2_import_Core
             return;
         }
 
-        $text = join("\n", array($g2_comment->getSubject(), $g2_comment->getComment()));
+        $text = implode("\n", array($g2_comment->getSubject(), $g2_comment->getComment()));
         $text = html_entity_decode($text);
 
         // Just import the fields we know about.  Do this outside of the comment API for now so that

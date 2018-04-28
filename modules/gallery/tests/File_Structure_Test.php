@@ -165,8 +165,8 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
       );
         }
         if ($expected != $actual && $expected_2 != $actual && $expected_3 != $actual && $expected_4 != $actual) {
-            $errors[] = "$path:1\n  expected\n\t" . join("\n\t", $expected) .
-        "\n  actual:\n\t" . join("\n\t", $actual);
+            $errors[] = "$path:1\n  expected\n\t" . implode("\n\t", $expected) .
+                        "\n  actual:\n\t" . implode("\n\t", $actual);
         }
     }
 
@@ -211,7 +211,7 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
         }
 
         if ($errors) {
-            $this->assert_false(true, "Preamble errors:\n" . join("\n", $errors));
+            $this->assert_false(true, "Preamble errors:\n" . implode("\n", $errors));
         }
     }
 
@@ -237,7 +237,7 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
             $file_as_string = null;
         }
         if ($errors) {
-            $this->assert_false(true, "tab(s) found:\n" . join("\n", $errors));
+            $this->assert_false(true, "tab(s) found:\n" . implode("\n", $errors));
         }
     }
 

@@ -112,7 +112,7 @@ class Upgrader_Controller extends Controller
             }
         } else {
             if ($failed) {
-                url::redirect('upgrader?failed=' . join(',', $failed));
+                url::redirect('upgrader?failed=' . implode(',', $failed));
             } else {
                 url::redirect('upgrader');
             }

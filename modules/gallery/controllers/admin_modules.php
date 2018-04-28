@@ -116,10 +116,10 @@ class Admin_Modules_Controller extends Admin_Controller
 
         // @todo this type of collation is questionable from an i18n perspective
         if ($activated_names) {
-            message::success(t('Activated: %names', array('names' => join(', ', $activated_names))));
+            message::success(t('Activated: %names', array('names' => implode(', ', $activated_names))));
         }
         if ($deactivated_names) {
-            message::success(t('Deactivated: %names', array('names' => join(', ', $deactivated_names))));
+            message::success(t('Deactivated: %names', array('names' => implode(', ', $deactivated_names))));
         }
     }
 }

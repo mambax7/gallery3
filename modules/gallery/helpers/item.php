@@ -255,7 +255,7 @@ class item_Core
         foreach (explode('/', $path) as $part) {
             $encoded_array[] = rawurlencode($part);
         }
-        $encoded_path = join('/', $encoded_array);
+        $encoded_path = implode('/', $encoded_array);
         if ($search_full_name) {
             $item = ORM::factory('item')
         ->where('relative_path_cache', '=', $encoded_path)

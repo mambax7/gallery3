@@ -46,7 +46,7 @@ class No_Direct_ORM_Access_Test extends Gallery_Unit_Test_Case
             $file_as_string = null;
         }
         if ($errors) {
-            $this->assert_false(true, "Direct access to the users table found:\n" . join("\n", $errors));
+            $this->assert_false(true, "Direct access to the users table found:\n" . implode("\n", $errors));
         }
     }
 
@@ -74,7 +74,7 @@ class No_Direct_ORM_Access_Test extends Gallery_Unit_Test_Case
             $file_as_string = null;
         }
         if ($errors) {
-            $this->assert_false(true, "Direct access to the groups table found:\n" . join("\n", $errors));
+            $this->assert_false(true, "Direct access to the groups table found:\n" . implode("\n", $errors));
         }
     }
 }
