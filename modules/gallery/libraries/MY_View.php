@@ -28,16 +28,16 @@ class View extends View_Core
     {
         if (is_array($key)) {
             foreach ($key as $key2 => $value) {
-                View::$global_data[$key2] = $value;
+                self::$global_data[$key2] = $value;
             }
         } else {
-            View::$global_data[$key] = $value;
+            self::$global_data[$key] = $value;
         }
     }
 
     public function is_set($key=null)
     {
-        return parent::is_set($key) ? true : array_key_exists($key, View::$global_data);
+        return parent::is_set($key) ? true : array_key_exists($key, self::$global_data);
     }
 
     /**
@@ -48,8 +48,8 @@ class View extends View_Core
     {
         if (isset($this->kohana_local_data[$key])) {
             return $this->kohana_local_data[$key];
-        } elseif (isset(View::$global_data[$key])) {
-            return View::$global_data[$key];
+        } elseif (isset(self::$global_data[$key])) {
+            return self::$global_data[$key];
         } elseif (isset($this->$key)) {
             return $this->$key;
         } else {
@@ -77,7 +77,7 @@ class View extends View_Core
     public function render($print=false, $renderer=false, $modifier=false)
     {
         try {
-            $this->kohana_local_data = array_merge(View::$global_data, $this->kohana_local_data);
+            $this->kohana_local_data = array_merge(self::$global_data, $this->kohana_local_data);
             return parent::render($print, $renderer, $modifier);
         } catch (ORM_Validation_Exception $e) {
             Kohana_Log::add("error", $e->getMessage() . "\n" . $e->getTraceAsString());

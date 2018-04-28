@@ -154,8 +154,8 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
      */
     public function __construct($type)
     {
-        if ($type != PelIfd::IFD0 && $type != PelIfd::IFD1 && $type != PelIfd::EXIF && $type != PelIfd::GPS &&
-             $type != PelIfd::INTEROPERABILITY) {
+        if ($type != self::IFD0 && $type != self::IFD1 && $type != self::EXIF && $type != self::GPS &&
+            $type != self::INTEROPERABILITY) {
             throw new PelIfdException('Unknown IFD type: %d', $type);
         }
 
@@ -211,11 +211,11 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
 
                     /* Map tag to IFD type. */
                     if ($tag == PelTag::EXIF_IFD_POINTER) {
-                        $type = PelIfd::EXIF;
+                        $type = self::EXIF;
                     } elseif ($tag == PelTag::GPS_INFO_IFD_POINTER) {
-                        $type = PelIfd::GPS;
+                        $type = self::GPS;
                     } elseif ($tag == PelTag::INTEROPERABILITY_IFD_POINTER) {
-                        $type = PelIfd::INTEROPERABILITY;
+                        $type = self::INTEROPERABILITY;
                     }
 
                     $this->sub[$type] = new PelIfd($type);
@@ -278,11 +278,11 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
             if ($o > $d->getSize() - 6) {
                 Pel::maybeThrow(new PelIfdException('Bogus offset to next IFD: ' . '%d > %d!', $o, $d->getSize() - 6));
             } else {
-                if ($this->type == PelIfd::IFD1) {
+                if ($this->type == self::IFD1) {
                     // IFD1 shouldn't link further...
                     Pel::maybeThrow(new PelIfdException('IFD1 links to another IFD!'));
                 }
-                $this->next = new PelIfd(PelIfd::IFD1);
+                $this->next = new PelIfd(self::IFD1);
                 $this->next->load($d, $o);
             }
         } else {
@@ -599,8 +599,8 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
     public function getValidTags()
     {
         switch ($this->type) {
-            case PelIfd::IFD0:
-            case PelIfd::IFD1:
+            case self::IFD0:
+            case self::IFD1:
                 return array(
                     PelTag::IMAGE_WIDTH,
                     PelTag::IMAGE_LENGTH,
@@ -645,7 +645,7 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
                     PelTag::RATING_PERCENT
                 );
 
-            case PelIfd::EXIF:
+            case self::EXIF:
                 return array(
                     PelTag::EXPOSURE_TIME,
                     PelTag::FNUMBER,
@@ -709,7 +709,7 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
                     PelTag::GAMMA
                 );
 
-            case PelIfd::GPS:
+            case self::GPS:
                 return array(
                     PelTag::GPS_VERSION_ID,
                     PelTag::GPS_LATITUDE_REF,
@@ -744,7 +744,7 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
                     PelTag::GPS_DIFFERENTIAL
                 );
 
-            case PelIfd::INTEROPERABILITY:
+            case self::INTEROPERABILITY:
                 return array(
                     PelTag::INTEROPERABILITY_INDEX,
                     PelTag::INTEROPERABILITY_VERSION,
@@ -1161,11 +1161,11 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
         /* Find bytes from sub IFDs. */
         $sub_bytes = '';
         foreach ($this->sub as $type => $sub) {
-            if ($type == PelIfd::EXIF) {
+            if ($type == self::EXIF) {
                 $tag = PelTag::EXIF_IFD_POINTER;
-            } elseif ($type == PelIfd::GPS) {
+            } elseif ($type == self::GPS) {
                 $tag = PelTag::GPS_INFO_IFD_POINTER;
-            } elseif ($type == PelIfd::INTEROPERABILITY) {
+            } elseif ($type == self::INTEROPERABILITY) {
                 $tag = PelTag::INTEROPERABILITY_IFD_POINTER;
             } else {
                 // PelConvert::BIG_ENDIAN is the default used by PelConvert

@@ -47,7 +47,7 @@ class url extends url_Core
      */
     public static function abs_file($path)
     {
-        return url::base(false, request::protocol()) . $path;
+        return self::base(false, request::protocol()) . $path;
     }
 
     /**
@@ -56,7 +56,7 @@ class url extends url_Core
      */
     public static function abs_site($path)
     {
-        return url::site($path, request::protocol());
+        return self::site($path, request::protocol());
     }
 
     /**
@@ -64,7 +64,7 @@ class url extends url_Core
      */
     public static function abs_current($qs=false)
     {
-        return self::abs_site(url::current($qs));
+        return self::abs_site(self::current($qs));
     }
 
     /**

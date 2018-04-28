@@ -130,7 +130,7 @@ class installer
 
     public static function verify_mysql_version($config)
     {
-        return version_compare(installer::mysql_version($config), "5.0.0", ">=");
+        return version_compare(self::mysql_version($config), "5.0.0", ">=");
     }
 
     public static function mysql_version($config)

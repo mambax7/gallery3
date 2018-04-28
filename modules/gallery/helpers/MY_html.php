@@ -92,6 +92,6 @@ class html extends html_Core
      */
     public static function clean_attribute($string)
     {
-        return html::clean($string)->for_html_attr();
+        return self::clean($string)->for_html_attr();
     }
 }
