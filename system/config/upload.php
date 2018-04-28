@@ -2,16 +2,16 @@
 /**
  * Upload config
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 
 /**
  * This path is relative to your index file. Absolute paths are also supported.
  */
-$config['directory'] = DOCROOT.'upload';
+$config['directory'] = DOCROOT . 'upload';
 
 /**
  * Enable or disable directory creation.

@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -24,20 +25,19 @@ class Admin_Modules_Controller extends Admin_Controller
         // If modules need upgrading, this will get recreated in module::available()
         site_status::clear('upgrade_now');
 
-        $view = new Admin_View('admin.html');
-        $view->page_title = t('Modules');
-        $view->content = new View('admin_modules.html');
-        $view->content->available = module::available();
+        $view                                    = new Admin_View('admin.html');
+        $view->page_title                        = t('Modules');
+        $view->content                           = new View('admin_modules.html');
+        $view->content->available                = module::available();
         $view->content->obsolete_modules_message = module::get_obsolete_modules_message();
         print $view;
     }
-
 
     public function confirm()
     {
         access::verify_csrf();
 
-        $messages = ['error' => [], 'warn' => []];
+        $messages     = ['error' => [], 'warn' => []];
         $desired_list = [];
         foreach (module::available() as $module_name => $info) {
             if ($info->locked) {
@@ -77,11 +77,11 @@ class Admin_Modules_Controller extends Admin_Controller
 
     private function _do_save()
     {
-        $changes = new stdClass();
-        $changes->activate = [];
+        $changes             = new stdClass();
+        $changes->activate   = [];
         $changes->deactivate = [];
-        $activated_names = [];
-        $deactivated_names = [];
+        $activated_names     = [];
+        $deactivated_names   = [];
         foreach (module::available() as $module_name => $info) {
             if ($info->locked) {
                 continue;
@@ -92,7 +92,7 @@ class Admin_Modules_Controller extends Admin_Controller
                 if ($info->active && !$desired && module::is_active($module_name)) {
                     module::deactivate($module_name);
                     $changes->deactivate[] = $module_name;
-                    $deactivated_names[] = t($info->name);
+                    $deactivated_names[]   = t($info->name);
                 } elseif (!$info->active && $desired && !module::is_active($module_name)) {
                     if (module::is_installed($module_name)) {
                         module::upgrade($module_name);
@@ -101,13 +101,10 @@ class Admin_Modules_Controller extends Admin_Controller
                     }
                     module::activate($module_name);
                     $changes->activate[] = $module_name;
-                    $activated_names[] = t($info->name);
+                    $activated_names[]   = t($info->name);
                 }
             } catch (Exception $e) {
-                message::warning(t(
-                                     'An error occurred while installing the <b>%module_name</b> module',
-                                     ['module_name' => $info->name]
-        ));
+                message::warning(t('An error occurred while installing the <b>%module_name</b> module', ['module_name' => $info->name]));
                 Kohana_Log::add('error', (string)$e);
             }
         }

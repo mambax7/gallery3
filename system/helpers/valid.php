@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * The Valid Helper provides functions to help validate data. They can be used as standalone static functions or
  * as rules for the Validation Library.
@@ -30,10 +31,10 @@
  *         echo 'Not valid';
  *     }
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class valid_Core
 {
@@ -57,7 +58,7 @@ class valid_Core
      */
     public static function email($email)
     {
-        return (bool) preg_match('/^[-_a-z0-9\'+*$^&%=~!?{}]++(?:\.[-_a-z0-9\'+*$^&%=~!?{}]+)*+@(?:(?![-.])[-a-z0-9.]+(?<![-.])\.[a-z]{2,6}|\d{1,3}(?:\.\d{1,3}){3})(?::\d++)?$/iD', (string) $email);
+        return (bool)preg_match('/^[-_a-z0-9\'+*$^&%=~!?{}]++(?:\.[-_a-z0-9\'+*$^&%=~!?{}]+)*+@(?:(?![-.])[-a-z0-9.]+(?<![-.])\.[a-z]{2,6}|\d{1,3}(?:\.\d{1,3}){3})(?::\d++)?$/iD', (string)$email);
     }
 
     /**
@@ -73,12 +74,12 @@ class valid_Core
     {
         // If we can't prove the domain is invalid, consider it valid
         // Note: checkdnsrr() is not implemented on Windows platforms
-        if (! function_exists('checkdnsrr')) {
+        if (!function_exists('checkdnsrr')) {
             return true;
         }
 
         // Check if the email domain has a valid MX record
-        return (bool) checkdnsrr(preg_replace('/^[^@]+@/', '', $email), 'MX');
+        return (bool)checkdnsrr(preg_replace('/^[^@]+@/', '', $email), 'MX');
     }
 
     /**
@@ -106,7 +107,7 @@ class valid_Core
         $local_part     = "$word(\\x2e$word)*";
         $addr_spec      = "$local_part\\x40$domain";
 
-        return (bool) preg_match('/^'.$addr_spec.'$/D', (string) $email);
+        return (bool)preg_match('/^' . $addr_spec . '$/D', (string)$email);
     }
 
     /**
@@ -128,7 +129,7 @@ class valid_Core
      */
     public static function url($url)
     {
-        return (bool) filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED);
+        return (bool)filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED);
     }
 
     /**
@@ -146,14 +147,14 @@ class valid_Core
         // By default do not allow private and reserved range IPs
         $flags = FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE;
         if (true === $allow_private) {
-            $flags =  FILTER_FLAG_NO_RES_RANGE;
+            $flags = FILTER_FLAG_NO_RES_RANGE;
         }
 
         if (true === $ipv6) {
-            return (bool) filter_var($ip, FILTER_VALIDATE_IP, $flags);
+            return (bool)filter_var($ip, FILTER_VALIDATE_IP, $flags);
         }
 
-        return (bool) filter_var($ip, FILTER_VALIDATE_IP, $flags | FILTER_FLAG_IPV4);
+        return (bool)filter_var($ip, FILTER_VALIDATE_IP, $flags | FILTER_FLAG_IPV4);
     }
 
     /**
@@ -201,7 +202,7 @@ class valid_Core
         // Check card type
         $type = strtolower($type);
 
-        if (! isset($cards[$type])) {
+        if (!isset($cards[$type])) {
             return false;
         }
 
@@ -209,12 +210,12 @@ class valid_Core
         $length = strlen($number);
 
         // Validate the card length by the card type
-        if (! in_array($length, preg_split('/\D+/', $cards[$type]['length']))) {
+        if (!in_array($length, preg_split('/\D+/', $cards[$type]['length']))) {
             return false;
         }
 
         // Check card number prefix
-        if (! preg_match('/^'.$cards[$type]['prefix'].'/', $number)) {
+        if (!preg_match('/^' . $cards[$type]['prefix'] . '/', $number)) {
             return false;
         }
 
@@ -263,7 +264,7 @@ class valid_Core
      */
     public static function phone($number, $lengths = null)
     {
-        if (! is_array($lengths)) {
+        if (!is_array($lengths)) {
             $lengths = [7, 10, 11];
         }
 
@@ -295,9 +296,7 @@ class valid_Core
      */
     public static function alpha($str, $utf8 = false)
     {
-        return (true === $utf8)
-            ? (bool) preg_match('/^\pL++$/uD', (string) $str)
-            : ctype_alpha((string) $str);
+        return (true === $utf8) ? (bool)preg_match('/^\pL++$/uD', (string)$str) : ctype_alpha((string)$str);
     }
 
     /**
@@ -309,9 +308,7 @@ class valid_Core
      */
     public static function alpha_numeric($str, $utf8 = false)
     {
-        return (true === $utf8)
-            ? (bool) preg_match('/^[\pL\pN]++$/uD', (string) $str)
-            : ctype_alnum((string) $str);
+        return (true === $utf8) ? (bool)preg_match('/^[\pL\pN]++$/uD', (string)$str) : ctype_alnum((string)$str);
     }
 
     /**
@@ -323,9 +320,7 @@ class valid_Core
      */
     public static function alpha_dash($str, $utf8 = false)
     {
-        return (true === $utf8)
-            ? (bool) preg_match('/^[-\pL\pN_]++$/uD', (string) $str)
-            : (bool) preg_match('/^[-a-z0-9_]++$/iD', (string) $str);
+        return (true === $utf8) ? (bool)preg_match('/^[-\pL\pN_]++$/uD', (string)$str) : (bool)preg_match('/^[-a-z0-9_]++$/iD', (string)$str);
     }
 
     /**
@@ -337,9 +332,7 @@ class valid_Core
      */
     public static function digit($str, $utf8 = false)
     {
-        return (true === $utf8)
-            ? (bool) preg_match('/^\pN++$/uD', (string) $str)
-            : ctype_digit((string) $str);
+        return (true === $utf8) ? (bool)preg_match('/^\pN++$/uD', (string)$str) : ctype_digit((string)$str);
     }
 
     /**
@@ -354,7 +347,7 @@ class valid_Core
     {
         // Use localeconv to set the decimal_point value: Usually a comma or period.
         $locale = localeconv();
-        return (bool) preg_match('/^-?[0-9'.$locale['decimal_point'].']++$/D', (string) $str);
+        return (bool)preg_match('/^-?[0-9' . $locale['decimal_point'] . ']++$/D', (string)$str);
     }
 
     /**
@@ -412,20 +405,20 @@ class valid_Core
         // Create the pattern
         $pattern = '/^[0-9]%s\.[0-9]%s$/';
 
-        if (! empty($format)) {
+        if (!empty($format)) {
             if (count($format) > 1) {
                 // Use the format for number and decimal length
-                $pattern = sprintf($pattern, '{'.$format[0].'}', '{'.$format[1].'}');
+                $pattern = sprintf($pattern, '{' . $format[0] . '}', '{' . $format[1] . '}');
             } elseif (count($format) > 0) {
                 // Use the format as decimal length
-                $pattern = sprintf($pattern, '+', '{'.$format[0].'}');
+                $pattern = sprintf($pattern, '+', '{' . $format[0] . '}');
             }
         } else {
             // No format
             $pattern = sprintf($pattern, '+', '+');
         }
 
-        return (bool) preg_match($pattern, (string) $str);
+        return (bool)preg_match($pattern, (string)$str);
     }
 
     /**
@@ -439,6 +432,6 @@ class valid_Core
      */
     public static function color($str)
     {
-        return (bool) preg_match('/^#?+[0-9a-f]{3}(?:[0-9a-f]{3})?$/iD', $str);
+        return (bool)preg_match('/^#?+[0-9a-f]{3}(?:[0-9a-f]{3})?$/iD', $str);
     }
 } // End valid

@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -43,10 +44,10 @@ class Rest_Controller extends Controller
 
     public function reset_api_key_confirm()
     {
-        $form = new Forge('rest/reset_api_key', '', 'post', ['id' => 'g-reset-api-key']);
+        $form  = new Forge('rest/reset_api_key', '', 'post', ['id' => 'g-reset-api-key']);
         $group = $form->group('confirm_reset')->label(t('Confirm resetting your REST API key'));
         $group->submit('')->value(t('Reset'));
-        $v = new View('reset_api_key_confirm.html');
+        $v       = new View('reset_api_key_confirm.html');
         $v->form = $form;
         print $v;
     }
@@ -62,22 +63,22 @@ class Rest_Controller extends Controller
     public function __call($function, $args)
     {
         try {
-            $input = Input::instance();
+            $input   = Input::instance();
             $request = new stdClass();
 
             switch ($method = strtolower($input->server('REQUEST_METHOD'))) {
-      case 'get':
-        $request->params = (object) $input->get();
-        break;
+                case 'get':
+                    $request->params = (object)$input->get();
+                    break;
 
-      default:
-        $request->params = (object) $input->post();
-        if (isset($_FILES['file'])) {
-            $request->file = upload::save('file');
-            system::delete_later($request->file);
-        }
-        break;
-      }
+                default:
+                    $request->params = (object)$input->post();
+                    if (isset($_FILES['file'])) {
+                        $request->file = upload::save('file');
+                        system::delete_later($request->file);
+                    }
+                    break;
+            }
 
             if (isset($request->params->entity)) {
                 $request->params->entity = json_decode($request->params->entity);
@@ -86,7 +87,7 @@ class Rest_Controller extends Controller
                 $request->params->members = json_decode($request->params->members);
             }
 
-            $request->method = strtolower($input->server('HTTP_X_GALLERY_REQUEST_METHOD', $method));
+            $request->method     = strtolower($input->server('HTTP_X_GALLERY_REQUEST_METHOD', $method));
             $request->access_key = $input->server('HTTP_X_GALLERY_REQUEST_KEY');
 
             if (empty($request->access_key) && !empty($request->params->access_key)) {
@@ -100,7 +101,7 @@ class Rest_Controller extends Controller
 
             rest::set_active_user($request->access_key);
 
-            $handler_class = "{$function}_rest";
+            $handler_class  = "{$function}_rest";
             $handler_method = $request->method;
 
             if (!class_exists($handler_class) || !method_exists($handler_class, $handler_method)) {

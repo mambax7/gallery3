@@ -1,11 +1,12 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Number helper class.
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class num_Core
 {

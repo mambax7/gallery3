@@ -1,28 +1,29 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Validation library.
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class Validation_Core extends ArrayObject
 {
 
     // Filters
-    protected $pre_filters = [];
+    protected $pre_filters  = [];
     protected $post_filters = [];
 
     // Rules and callbacks
-    protected $rules = [];
+    protected $rules     = [];
     protected $callbacks = [];
 
     // Rules that are allowed to run on empty fields
     protected $empty_rules = ['required', 'matches'];
 
     // Errors
-    protected $errors = [];
+    protected $errors   = [];
     protected $messages = [];
 
     // Field labels
@@ -61,7 +62,7 @@ class Validation_Core extends ArrayObject
      */
     public function __clone()
     {
-        $this->errors = [];
+        $this->errors   = [];
         $this->messages = [];
     }
 
@@ -89,12 +90,7 @@ class Validation_Core extends ArrayObject
     public function field_names()
     {
         // All the fields that are being validated
-        $fields = array_keys(array_merge(
-            $this->pre_filters,
-            $this->rules,
-            $this->callbacks,
-            $this->post_filters
-        ));
+        $fields = array_keys(array_merge($this->pre_filters, $this->rules, $this->callbacks, $this->post_filters));
 
         // Remove wildcard fields
         $fields = array_diff($fields, ['*']);
@@ -171,15 +167,15 @@ class Validation_Core extends ArrayObject
     }
 
     /**
-    * Sets or overwrites the label name for a field.
-    *
-    * @param string field name
-    * @param string label
-    * @return $this
-    */
+     * Sets or overwrites the label name for a field.
+     *
+     * @param string field name
+     * @param string label
+     * @return $this
+     */
     public function label($field, $label = null)
     {
-        if (null === $label && (true !== $field or '*' !== $field) && ! isset($this->labels[$field])) {
+        if (null === $label && (true !== $field or '*' !== $field) && !isset($this->labels[$field])) {
             // Set the field label to the field name
             $this->labels[$field] = ucfirst(preg_replace('/[^\pL]+/u', ' ', $field));
         } elseif (null !== $label) {
@@ -191,11 +187,11 @@ class Validation_Core extends ArrayObject
     }
 
     /**
-    * Sets labels using an array.
-    *
-    * @param array list of field => label names
-    * @return $this
-    */
+     * Sets labels using an array.
+     *
+     * @param array list of field => label names
+     * @return $this
+     */
     public function labels(array $labels)
     {
         $this->labels = $labels + $this->labels;
@@ -225,14 +221,14 @@ class Validation_Core extends ArrayObject
             }
         }
 
-        if (! is_callable($callback, false)) {
+        if (!is_callable($callback, false)) {
             if (is_array($callback)) {
                 if (is_object($callback[0])) {
                     // Object instance syntax
-                    $name = get_class($callback[0]).'->'.$callback[1];
+                    $name = get_class($callback[0]) . '->' . $callback[1];
                 } else {
                     // Static class syntax
-                    $name = $callback[0].'::'.$callback[1];
+                    $name = $callback[0] . '::' . $callback[1];
                 }
             } else {
                 // Function syntax
@@ -463,7 +459,7 @@ class Validation_Core extends ArrayObject
                             continue;
                         }
 
-                        if (empty($array[$f]) && ! in_array($rule, $this->empty_rules)) {
+                        if (empty($array[$f]) && !in_array($rule, $this->empty_rules)) {
                             // This rule does not need to be processed on empty fields
                             continue;
                         }
@@ -483,7 +479,7 @@ class Validation_Core extends ArrayObject
                         break;
                     }
 
-                    if (! in_array($rule, $this->empty_rules) && ! $this->required($array[$field])) {
+                    if (!in_array($rule, $this->empty_rules) && !$this->required($array[$field])) {
                         // This rule does not need to be processed on empty fields
                         continue;
                     }
@@ -492,7 +488,7 @@ class Validation_Core extends ArrayObject
                     $result = (null === $args) ? call_user_func($callback, $array[$field]) : call_user_func($callback, $array[$field], $args);
 
                     if (($result == $is_false)) {
-                        $rule = $is_false ? '!'.$rule : $rule;
+                        $rule = $is_false ? '!' . $rule : $rule;
                         $this->add_error($field, $rule, $args);
 
                         // Stop validating this field when an error is found
@@ -601,10 +597,10 @@ class Validation_Core extends ArrayObject
                 // Start the translation values list
                 $values = [':field' => __($this->labels[$input])];
 
-                if (! empty($error[1])) {
+                if (!empty($error[1])) {
                     foreach ($error[1] as $key => $value) {
                         // Add each parameter as a numbered value, starting from 1
-                        $values[':param'.($key + 1)] = __($value);
+                        $values[':param' . ($key + 1)] = __($value);
                     }
                 }
 
@@ -630,9 +626,9 @@ class Validation_Core extends ArrayObject
         }
 
         if (is_array($str)) {
-            return ! empty($str);
+            return !empty($str);
         } else {
-            return ! ('' === $str or null === $str or false === $str);
+            return !('' === $str or null === $str or false === $str);
         }
     }
 
@@ -664,11 +660,11 @@ class Validation_Core extends ArrayObject
      */
     public function length($str, array $length)
     {
-        if (! is_string($str)) {
+        if (!is_string($str)) {
             return false;
         }
 
-        $size = mb_strlen($str);
+        $size   = mb_strlen($str);
         $status = false;
 
         if (count($length) > 1) {
@@ -678,7 +674,7 @@ class Validation_Core extends ArrayObject
                 $status = true;
             }
         } else {
-            $status = ($size === (int) $length[0]);
+            $status = ($size === (int)$length[0]);
         }
 
         return $status;
@@ -695,7 +691,7 @@ class Validation_Core extends ArrayObject
     public function depends_on($field, array $fields)
     {
         foreach ($fields as $depends_on) {
-            if (! isset($this[$depends_on]) || null == $this[$depends_on]) {
+            if (!isset($this[$depends_on]) || null == $this[$depends_on]) {
                 return false;
             }
         }
@@ -712,6 +708,6 @@ class Validation_Core extends ArrayObject
      */
     public function chars($value, array $chars)
     {
-        return ! preg_match('![^'.implode('', $chars).']!u', $value);
+        return !preg_match('![^' . implode('', $chars) . ']!u', $value);
     }
 } // End Validation

@@ -41,8 +41,8 @@ class locales_Core
     public static function installed()
     {
         $available = self::available();
-        $default = module::get_var('gallery', 'default_locale');
-        $codes = explode('|', module::get_var('gallery', 'installed_locales', $default));
+        $default   = module::get_var('gallery', 'default_locale');
+        $codes     = explode('|', module::get_var('gallery', 'installed_locales', $default));
         foreach ($codes as $code) {
             if (isset($available[$code])) {
                 $installed[$code] = $available[$code];
@@ -55,9 +55,7 @@ class locales_Core
     {
         // Ensure that the default is included...
         $default = module::get_var('gallery', 'default_locale');
-        $locales = in_array($default, $locales)
-      ? $locales
-      : array_merge($locales, [$default]);
+        $locales = in_array($default, $locales) ? $locales : array_merge($locales, [$default]);
 
         module::set_var('gallery', 'installed_locales', implode('|', $locales));
 
@@ -122,7 +120,7 @@ class locales_Core
         $l['vi_VN'] = 'Tiếng Việt';               // Vietnamese
         $l['zh_CN'] = '简体中文';                  // Chinese (CN)
         $l['zh_TW'] = '繁體中文';                  // Chinese (TW)
-    asort($l, SORT_LOCALE_STRING);
+        asort($l, SORT_LOCALE_STRING);
         self::$locales = $l;
 
         // Language subtag to (default) locale mapping
@@ -136,7 +134,7 @@ class locales_Core
         self::$language_subtag_to_locale = $d;
     }
 
-    public static function display_name($locale=null)
+    public static function display_name($locale = null)
     {
         if (empty(self::$locales)) {
             self::_init_language_data();
@@ -146,7 +144,7 @@ class locales_Core
         return self::$locales[$locale];
     }
 
-    public static function is_rtl($locale=null)
+    public static function is_rtl($locale = null)
     {
         return Gallery_I18n::instance()->is_rtl($locale);
     }
@@ -166,7 +164,7 @@ class locales_Core
             foreach (explode(',', $http_accept_language) as $code) {
                 list($requested_locale, $qvalue) = explode(';', $code . ';');
                 $requested_locale = trim($requested_locale);
-                $qvalue = trim($qvalue);
+                $qvalue           = trim($qvalue);
                 if (preg_match('/^([a-z]{2,3})(?:[_-]([a-zA-Z]{2}))?/', $requested_locale, $matches)) {
                     $requested_locale = strtolower($matches[1]);
                     if (!empty($matches[2])) {
@@ -203,11 +201,10 @@ class locales_Core
                     $fallback_adjustment_factor *= $qvalues[1];
                 }
                 foreach ($requested_locales as $requested_locale => $qvalue) {
-                    list($matched_locale, $match_score) =
-              self::_locale_match_score($requested_locale, $qvalue, $fallback_adjustment_factor);
-                    if ($matched_locale &&
-              (!isset($scored_locales[$matched_locale]) ||
-               $match_score > $scored_locales[$matched_locale])) {
+                    list($matched_locale, $match_score) = self::_locale_match_score($requested_locale, $qvalue, $fallback_adjustment_factor);
+                    if ($matched_locale
+                        && (!isset($scored_locales[$matched_locale])
+                            || $match_score > $scored_locales[$matched_locale])) {
                         $scored_locales[$matched_locale] = $match_score;
                     }
                 }
@@ -229,8 +226,8 @@ class locales_Core
             return [$requested_locale, $qvalue];
         }
         list($language) = explode('_', $requested_locale . '_');
-        if (isset(self::$language_subtag_to_locale[$language]) &&
-        isset($installed[self::$language_subtag_to_locale[$language]])) {
+        if (isset(self::$language_subtag_to_locale[$language])
+            && isset($installed[self::$language_subtag_to_locale[$language]])) {
             $score = $adjustment_factor * $qvalue;
             return [self::$language_subtag_to_locale[$language], $score];
         }
@@ -260,10 +257,10 @@ class locales_Core
         // Can't use Input framework for client side cookies since
         // they're not signed.
         $cookie_data = isset($_COOKIE['g_locale']) ? $_COOKIE['g_locale'] : null;
-        $locale = null;
+        $locale      = null;
         if ($cookie_data) {
             if (preg_match('/^([a-z]{2,3}(?:_[A-Z]{2})?)$/', trim($cookie_data), $matches)) {
-                $requested_locale = $matches[1];
+                $requested_locale  = $matches[1];
                 $installed_locales = locales::installed();
                 if (isset($installed_locales[$requested_locale])) {
                     $locale = $requested_locale;

@@ -1,13 +1,14 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Database result wrapper.
  *
  * $Id: Database_Result.php 4679 2009-11-10 01:45:52Z isaiah $
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2008-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 abstract class Database_Result_Core implements Countable, Iterator, SeekableIterator, ArrayAccess
 {
@@ -23,7 +24,7 @@ abstract class Database_Result_Core implements Countable, Iterator, SeekableIter
     /**
      * Sets the total number of rows and stores the result locally.
      *
-     * @param   mixed   $result query result
+     * @param   mixed   $result         query result
      * @param   boolean $return_objects True for results as objects, false for arrays
      * @return  void
      */
@@ -37,7 +38,7 @@ abstract class Database_Result_Core implements Countable, Iterator, SeekableIter
     /**
      * Return arrays for reach result, or the entire set of results
      *
-     * @param  boolean $return  True to return entire result array
+     * @param  boolean $return True to return entire result array
      * @return Database_Result|array
      */
     abstract public function as_array($return = false);
@@ -45,7 +46,7 @@ abstract class Database_Result_Core implements Countable, Iterator, SeekableIter
     /**
      * Returns objects for each result
      *
-     * @param  string $class  Class name to return objects as or NULL for stdClass
+     * @param  string $class Class name to return objects as or NULL for stdClass
      * @return Database_Result
      */
     abstract public function as_object($class = null, $return = false);
@@ -71,7 +72,7 @@ abstract class Database_Result_Core implements Countable, Iterator, SeekableIter
         // Get the current row
         $row = $this->current();
 
-        if (! $this->return_objects) {
+        if (!$this->return_objects) {
             return $row[$name];
         }
 
@@ -99,7 +100,7 @@ abstract class Database_Result_Core implements Countable, Iterator, SeekableIter
      */
     public function offsetGet($offset)
     {
-        if (! $this->seek($offset)) {
+        if (!$this->seek($offset)) {
             return null;
         }
 

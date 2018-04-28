@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -29,8 +30,8 @@ class Packager_Controller extends Controller
 
         try {
             $this->_reset();                // empty and reinstall the standard modules
-      $this->_dump_database();        // Dump the database
-      $this->_dump_var();             // Dump the var directory
+            $this->_dump_database();        // Dump the database
+            $this->_dump_var();             // Dump the var directory
         } catch (Exception $e) {
             print $e->getMessage() . "\n" . $e->getTraceAsString();
             return;
@@ -56,7 +57,7 @@ class Packager_Controller extends Controller
 
         Database::instance()->clear_cache();
         module::$modules = [];
-        module::$active = [];
+        module::$active  = [];
 
         // Use a known random seed so that subsequent packaging runs will reuse the same random
         // numbers, keeping our install.sql file more stable.
@@ -94,25 +95,16 @@ class Packager_Controller extends Controller
         Database::instance()->query('TRUNCATE {caches}');
         Database::instance()->query('TRUNCATE {sessions}');
         Database::instance()->query('TRUNCATE {logs}');
-        db::build()->update('users')
-      ->set(['password' => ''])
-      ->where('id', 'in', [1, 2])
-      ->execute();
+        db::build()->update('users')->set(['password' => ''])->where('id', 'in', [1, 2])->execute();
 
         $dbconfig = Kohana::config('database.default');
-        $conn = $dbconfig['connection'];
+        $conn     = $dbconfig['connection'];
         $sql_file = DOCROOT . 'installer/install.sql';
         if (!is_writable($sql_file)) {
             print "$sql_file is not writeable";
             return;
         }
-        $command = sprintf(
-      "mysqldump --compact --skip-extended-insert --add-drop-table %s %s %s %s > $sql_file",
-      escapeshellarg("-h{$conn['host']}"),
-      escapeshellarg("-u{$conn['user']}"),
-      $conn['pass'] ? escapeshellarg("-p{$conn['pass']}") : '',
-      escapeshellarg($conn['database'])
-    );
+        $command = sprintf("mysqldump --compact --skip-extended-insert --add-drop-table %s %s %s %s > $sql_file", escapeshellarg("-h{$conn['host']}"), escapeshellarg("-u{$conn['user']}"), $conn['pass'] ? escapeshellarg("-p{$conn['pass']}") : '', escapeshellarg($conn['database']));
         exec($command, $output, $status);
         if ($status) {
             print '<pre>';
@@ -123,18 +115,14 @@ class Packager_Controller extends Controller
         }
 
         // Post-process the sql file
-        $buf = '';
-        $root = ORM::factory('item', 1);
+        $buf                    = '';
+        $root                   = ORM::factory('item', 1);
         $root_created_timestamp = $root->created;
         $root_updated_timestamp = $root->updated;
-        $table_name = '';
+        $table_name             = '';
         foreach (file($sql_file) as $line) {
             // Prefix tables
-            $line = preg_replace(
-        "/(CREATE TABLE|IF EXISTS|INSERT INTO) `{$dbconfig['table_prefix']}(\w+)`/",
-          "\\1 {\\2}",
-        $line
-      );
+            $line = preg_replace("/(CREATE TABLE|IF EXISTS|INSERT INTO) `{$dbconfig['table_prefix']}(\w+)`/", "\\1 {\\2}", $line);
 
             if (preg_match("/CREATE TABLE {(\w+)}/", $line, $matches)) {
                 $table_name = $matches[1];
@@ -150,10 +138,7 @@ class Packager_Controller extends Controller
 
             // Null out ids in the vars table since it's an auto_increment table and this will result in
             // more stable values so we'll have less churn in install.sql.
-            $line = preg_replace(
-        "/^INSERT INTO {vars} VALUES \(\d+/", 'INSERT INTO {vars} VALUES (NULL',
-          $line
-      );
+            $line = preg_replace("/^INSERT INTO {vars} VALUES \(\d+/", 'INSERT INTO {vars} VALUES (NULL', $line);
 
             $buf .= $line;
         }
@@ -164,10 +149,7 @@ class Packager_Controller extends Controller
 
     private function _dump_var()
     {
-        $objects = new RecursiveIteratorIterator(
-      new RecursiveDirectoryIterator(VARPATH),
-      RecursiveIteratorIterator::SELF_FIRST
-    );
+        $objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(VARPATH), RecursiveIteratorIterator::SELF_FIRST);
 
         $var_file = DOCROOT . 'installer/init_var.php';
         if (!is_writable($var_file)) {
@@ -177,7 +159,7 @@ class Packager_Controller extends Controller
 
         $paths = [];
         foreach ($objects as $name => $file) {
-            $path = $file->getPath();
+            $path     = $file->getPath();
             $basename = $file->getBasename();
             if ('database.php' == $basename || '.' == $basename || '..' == $basename) {
                 continue;
@@ -189,8 +171,7 @@ class Packager_Controller extends Controller
                 $paths[] = 'VARPATH . "' . substr($name, strlen(VARPATH)) . '"';
             } else {
                 // @todo: serialize non-directories
-                $files['VARPATH . "' . substr($name, strlen(VARPATH)) . '"'] =
-          base64_encode(file_get_contents($name));
+                $files['VARPATH . "' . substr($name, strlen(VARPATH)) . '"'] = base64_encode(file_get_contents($name));
             }
         }
         // Sort the paths so that the var file is stable

@@ -22,12 +22,13 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301 USA
  */
+
 namespace lsolesen\pel;
 
 /**
  * Classes used to hold shorts, both signed and unsigned.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public
  *          License (GPL)
  * @package PEL
@@ -51,7 +52,7 @@ namespace lsolesen\pel;
  * Here the width and height is updated to 50% of their original
  * values.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @package PEL
  */
 class PelEntryShort extends PelEntryNumber
@@ -74,24 +75,24 @@ class PelEntryShort extends PelEntryNumber
      * have to be extracted.
      *
      * @param int $tag
-     *            the tag which this entry represents. This should be
-     *            one of the constants defined in {@link PelTag}, e.g., {@link
-     *            PelTag::IMAGE_WIDTH}, {@link PelTag::ISO_SPEED_RATINGS},
-     *            or any other tag with format {@link PelFormat::SHORT}.
+     *                   the tag which this entry represents. This should be
+     *                   one of the constants defined in {@link PelTag}, e.g., {@link
+     *                   PelTag::IMAGE_WIDTH}, {@link PelTag::ISO_SPEED_RATINGS},
+     *                   or any other tag with format {@link PelFormat::SHORT}.
      *
-     * @param int $value...
-     *            the short(s) that this entry will
-     *            represent. The argument passed must obey the same rules as the
-     *            argument to {@link setValue}, namely that it should be within
-     *            range of an unsigned short, that is between 0 and 65535
-     *            (inclusive). If not, then a {@link PelOverFlowException} will be
-     *            thrown.
+     * @param int $value ...
+     *                   the short(s) that this entry will
+     *                   represent. The argument passed must obey the same rules as the
+     *                   argument to {@link setValue}, namely that it should be within
+     *                   range of an unsigned short, that is between 0 and 65535
+     *                   (inclusive). If not, then a {@link PelOverFlowException} will be
+     *                   thrown.
      */
     public function __construct($tag, $value = null)
     {
-        $this->tag = $tag;
-        $this->min = 0;
-        $this->max = 65535;
+        $this->tag    = $tag;
+        $this->min    = 0;
+        $this->max    = 65535;
         $this->format = PelFormat::SHORT;
 
         $value = func_get_args();
@@ -102,7 +103,7 @@ class PelEntryShort extends PelEntryNumber
     /**
      * Convert a number into bytes.
      *
-     * @param int $number
+     * @param int          $number
      *            the number that should be converted.
      *
      * @param PelByteOrder $order

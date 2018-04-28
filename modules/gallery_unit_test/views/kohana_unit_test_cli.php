@@ -39,40 +39,18 @@ foreach ($results as $class => $methods) {
                 continue;
             }
             if (true === $result) {
-                printf(
-            "| %s%-85.85s%s | %sPASS%s     |\n",
-               green_start(),
-            $method,
-            color_end(),
-               green_start(),
-            color_end()
-        );
+                printf("| %s%-85.85s%s | %sPASS%s     |\n", green_start(), $method, color_end(), green_start(), color_end());
             } elseif ($result instanceof Kohana_Unit_Test_Exception) {
-                printf(
-            "| %s%-85.85s%s | %sFAIL%s     |\n",
-               red_start(),
-            $method,
-            color_end(),
-               red_start(),
-            color_end()
-        );
+                printf("| %s%-85.85s%s | %sFAIL%s     |\n", red_start(), $method, color_end(), red_start(), color_end());
                 echo '  ', $result->getMessage(), "\n";
                 echo '  ', $result->getFile();
                 echo ' ', '(line ' . $result->getLine(), ")\n";
                 if (null !== $result->getDebug()) {
-                    echo '  ', '(', gettype($result->getDebug()), ') ',
-            var_export($result->getDebug(), true), "\n";
+                    echo '  ', '(', gettype($result->getDebug()), ') ', var_export($result->getDebug(), true), "\n";
                 }
                 echo "\n";
             } elseif ($result instanceof Exception) {
-                printf(
-            "| %s%-85.85s%s | %sERROR%s    |\n",
-               magenta_start(),
-            $method,
-            color_end(),
-               magenta_start(),
-            color_end()
-        );
+                printf("| %s%-85.85s%s | %sERROR%s    |\n", magenta_start(), $method, color_end(), magenta_start(), color_end());
                 if ($result->getMessage()) {
                     echo '  ', $result->getMessage(), "\n";
                 }
@@ -90,23 +68,8 @@ foreach ($results as $class => $methods) {
     }
 
     echo '+', str_repeat('=', 87), '+', str_repeat('=', 10), "+\n";
-    printf(
-      "| %-40.40s %-10.10s %-10.10s %-10.10s %-10.10s %-10.10s  |\n",
-         $class,
-         "Score: {$stats[$class]['score']}",
-         "Total: {$stats[$class]['total']}",
-         "PASS: {$stats[$class]['passed']}",
-         "FAIL: {$stats[$class]['failed']}",
-         "ERROR: {$stats[$class]['errors']}"
-  );
+    printf("| %-40.40s %-10.10s %-10.10s %-10.10s %-10.10s %-10.10s  |\n", $class, "Score: {$stats[$class]['score']}", "Total: {$stats[$class]['total']}", "PASS: {$stats[$class]['passed']}", "FAIL: {$stats[$class]['failed']}", "ERROR: {$stats[$class]['errors']}");
     echo '+', str_repeat('=', 98), "+\n\n\n";
 }
 
-printf(
-    "  %-40.40s %-10.10s %-10.10s %-10.10s %-10.10s %-10.10s\n", 'TOTAL',
-    'Score: ' . ($totals['total'] ? 100 * ($totals['passed'] / $totals['total']) : 0),
-    "Total: {$totals['total']}",
-    "PASS: {$totals['passed']}",
-    "FAIL: {$totals['failed']}",
-    "ERROR: {$totals['errors']}"
-);
+printf("  %-40.40s %-10.10s %-10.10s %-10.10s %-10.10s %-10.10s\n", 'TOTAL', 'Score: ' . ($totals['total'] ? 100 * ($totals['passed'] / $totals['total']) : 0), "Total: {$totals['total']}", "PASS: {$totals['passed']}", "FAIL: {$totals['failed']}", "ERROR: {$totals['errors']}");

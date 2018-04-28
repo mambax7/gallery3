@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -30,10 +31,10 @@ class gallery_Core
      */
     public static function maintenance_mode()
     {
-        if (module::get_var('gallery', 'maintenance_mode', 0) &&
-            !identity::active_user()->admin) {
+        if (module::get_var('gallery', 'maintenance_mode', 0)
+            && !identity::active_user()->admin) {
             try {
-                $class = new ReflectionClass(ucfirst(Router::$controller).'_Controller');
+                $class   = new ReflectionClass(ucfirst(Router::$controller) . '_Controller');
                 $allowed = true === $class->getConstant('ALLOW_MAINTENANCE_MODE');
             } catch (ReflectionClass $e) {
                 $allowed = false;
@@ -46,9 +47,9 @@ class gallery_Core
                     url::redirect(item::root()->abs_url());
                 } else {
                     Session::instance()->set('continue_url', url::abs_site('admin/maintenance'));
-                    Router::$controller = 'login';
+                    Router::$controller      = 'login';
                     Router::$controller_path = MODPATH . 'gallery/controllers/login.php';
-                    Router::$method = 'html';
+                    Router::$method          = 'html';
                 }
             }
         }
@@ -60,11 +61,11 @@ class gallery_Core
      */
     public static function private_gallery()
     {
-        if (identity::active_user()->guest &&
-        !access::user_can(identity::guest(), 'view', item::root()) &&
-            'cli' != php_sapi_name()) {
+        if (identity::active_user()->guest
+            && !access::user_can(identity::guest(), 'view', item::root())
+            && 'cli' != php_sapi_name()) {
             try {
-                $class = new ReflectionClass(ucfirst(Router::$controller).'_Controller');
+                $class   = new ReflectionClass(ucfirst(Router::$controller) . '_Controller');
                 $allowed = true === $class->getConstant('ALLOW_PRIVATE_GALLERY');
             } catch (ReflectionClass $e) {
                 $allowed = false;
@@ -77,9 +78,9 @@ class gallery_Core
                     url::redirect(item::root()->abs_url());
                 } else {
                     Session::instance()->set('continue_url', url::abs_current());
-                    Router::$controller = 'login';
+                    Router::$controller      = 'login';
                     Router::$controller_path = MODPATH . 'gallery/controllers/login.php';
-                    Router::$method = 'html';
+                    Router::$method          = 'html';
                 }
             }
         }
@@ -150,7 +151,7 @@ class gallery_Core
      * @return  string   if the file is found (relative to the DOCROOT)
      * @return  false    if the file is not found
      */
-    public static function find_file($directory, $file, $required=false)
+    public static function find_file($directory, $file, $required = false)
     {
         $file_name = substr($file, 0, -strlen($ext = strrchr($file, '.')));
         $file_name = Kohana::find_file($directory, $file_name, $required, substr($ext, 1));
@@ -171,9 +172,9 @@ class gallery_Core
                 // is the target directory, and if it is then we're done.  This check makes
                 // sure that if Gallery is installed in a directory called "modules" or "themes"
                 // We don't parse the directory structure incorrectly.
-                if (in_array($part, ['modules', 'themes']) &&
-            $idx + 2 < $count &&
-            $parts[$idx + 2] == $directory) {
+                if (in_array($part, ['modules', 'themes'])
+                    && $idx + 2 < $count
+                    && $parts[$idx + 2] == $directory) {
                     break;
                 }
                 unset($parts[$idx]);
@@ -205,12 +206,7 @@ class gallery_Core
     {
         if ('git' == gallery::RELEASE_CHANNEL) {
             $build_number = gallery::build_number();
-            return sprintf(
-                '%s (branch %s, %s)',
-                gallery::VERSION,
-                gallery::RELEASE_BRANCH,
-                $build_number ? " build $build_number" : 'unknown build number'
-      );
+            return sprintf('%s (branch %s, %s)', gallery::VERSION, gallery::RELEASE_BRANCH, $build_number ? " build $build_number" : 'unknown build number');
         } else {
             return sprintf('%s (%s)', gallery::VERSION, gallery::CODE_NAME);
         }

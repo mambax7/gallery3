@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -28,17 +29,17 @@ class url extends url_Core
         // Work around problems with the CGI sapi by enforcing our default path
         if ($_SERVER['SCRIPT_NAME'] && '/' . Router::$current_uri == $_SERVER['SCRIPT_NAME']) {
             Router::$controller_path = MODPATH . 'gallery/controllers/albums.php';
-            Router::$controller = 'albums';
-            Router::$method = 1;
+            Router::$controller      = 'albums';
+            Router::$method          = 1;
             return;
         }
 
         $item = item::find_by_relative_url(html_entity_decode(Router::$current_uri, ENT_QUOTES));
         if ($item && $item->loaded()) {
-            Router::$controller = "{$item->type}s";
+            Router::$controller      = "{$item->type}s";
             Router::$controller_path = MODPATH . "gallery/controllers/{$item->type}s.php";
-            Router::$method = 'show';
-            Router::$arguments = [$item];
+            Router::$method          = 'show';
+            Router::$arguments       = [$item];
         }
     }
 
@@ -62,7 +63,7 @@ class url extends url_Core
     /**
      * Just like url::current except that it returns an absolute URI
      */
-    public static function abs_current($qs=false)
+    public static function abs_current($qs = false)
     {
         return self::abs_site(self::current($qs));
     }
@@ -78,7 +79,7 @@ class url extends url_Core
     /**
      * Just like url::current except that it escapes any XSS in the path.
      */
-    public static function current($qs=false, $suffix=false)
+    public static function current($qs = false, $suffix = false)
     {
         return htmlspecialchars(parent::current($qs, $suffix));
     }

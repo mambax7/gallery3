@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,7 +22,7 @@ class Admin_Controller extends Controller
 {
     private $theme;
 
-    public function __construct($theme=null)
+    public function __construct($theme = null)
     {
         if (!identity::active_user()->admin) {
             if (identity::active_user()->guest) {
@@ -67,15 +68,14 @@ class Admin_Controller extends Controller
 
     private static function _reauth_check()
     {
-        $session = Session::instance();
-        $last_active_auth = $session->get('active_auth_timestamp', 0);
+        $session                  = Session::instance();
+        $last_active_auth         = $session->get('active_auth_timestamp', 0);
         $last_admin_area_activity = $session->get('admin_area_activity_timestamp', 0);
-        $admin_area_timeout = module::get_var('gallery', 'admin_area_timeout');
+        $admin_area_timeout       = module::get_var('gallery', 'admin_area_timeout');
 
-        $time_remaining = max($last_active_auth, $last_admin_area_activity) +
-      $admin_area_timeout - time();
+        $time_remaining = max($last_active_auth, $last_admin_area_activity) + $admin_area_timeout - time();
 
-        $result = new stdClass();
+        $result         = new stdClass();
         $result->result = 'success';
         if ($time_remaining < 30) {
             message::success(t('Automatically logged out of the admin area for your security'));

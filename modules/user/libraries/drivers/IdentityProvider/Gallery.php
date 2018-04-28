@@ -20,6 +20,7 @@
 /*
  * Based on the Cache_Sqlite_Driver developed by the Kohana Team
  */
+
 class IdentityProvider_Gallery_Driver implements IdentityProvider_Driver
 {
     /**
@@ -43,11 +44,11 @@ class IdentityProvider_Gallery_Driver implements IdentityProvider_Driver
      */
     public function create_user($name, $full_name, $password, $email)
     {
-        $user = ORM::factory('user');
-        $user->name = $name;
+        $user            = ORM::factory('user');
+        $user->name      = $name;
         $user->full_name = $full_name;
-        $user->password = $password;
-        $user->email = $email;
+        $user->password  = $password;
+        $user->email     = $email;
         return $user->save();
     }
 
@@ -74,8 +75,7 @@ class IdentityProvider_Gallery_Driver implements IdentityProvider_Driver
 
         // Passwords with <&"> created by G2 prior to 2.1 were hashed with entities
         $sanitizedPassword = html::chars($password, false);
-        $guess = (32 == strlen($valid)) ? md5($sanitizedPassword)
-          : ($salt . md5($salt . $sanitizedPassword));
+        $guess             = (32 == strlen($valid)) ? md5($sanitizedPassword) : ($salt . md5($salt . $sanitizedPassword));
         if (!strcmp($guess, $valid)) {
             return true;
         }
@@ -104,7 +104,7 @@ class IdentityProvider_Gallery_Driver implements IdentityProvider_Driver
      */
     public function create_group($name)
     {
-        $group = ORM::factory('group');
+        $group       = ORM::factory('group');
         $group->name = $name;
         return $group->save();
     }
@@ -146,9 +146,7 @@ class IdentityProvider_Gallery_Driver implements IdentityProvider_Driver
      */
     public function get_user_list($ids)
     {
-        return ORM::factory('user')
-      ->where('id', 'IN', $ids)
-      ->find_all();
+        return ORM::factory('user')->where('id', 'IN', $ids)->find_all();
     }
 
     /**

@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -52,11 +53,11 @@ class Movies_Controller extends Items_Controller
 
         $form = movie::get_edit_form($movie);
         try {
-            $valid = $form->validate();
-            $movie->title = $form->edit_item->title->value;
+            $valid              = $form->validate();
+            $movie->title       = $form->edit_item->title->value;
             $movie->description = $form->edit_item->description->value;
-            $movie->slug = $form->edit_item->slug->value;
-            $movie->name = $form->edit_item->inputs['name']->value;
+            $movie->slug        = $form->edit_item->slug->value;
+            $movie->name        = $form->edit_item->inputs['name']->value;
             $movie->validate();
         } catch (ORM_Validation_Exception $e) {
             // Translate ORM validation errors into form error messages
@@ -71,9 +72,7 @@ class Movies_Controller extends Items_Controller
             module::event('item_edit_form_completed', $movie, $form);
 
             log::success('content', 'Updated movie', "<a href=\"{$movie->url()}\">view</a>");
-            message::success(
-        t('Saved movie %movie_title', ['movie_title' => html::purify($movie->title)])
-      );
+            message::success(t('Saved movie %movie_title', ['movie_title' => html::purify($movie->title)]));
 
             if ($form->from_id->value == $movie->id) {
                 // Use the new url; it might have changed.
@@ -83,7 +82,7 @@ class Movies_Controller extends Items_Controller
                 json::reply(['result' => 'success']);
             }
         } else {
-            json::reply(['result' => 'error', 'html' => (string) $form]);
+            json::reply(['result' => 'error', 'html' => (string)$form]);
         }
     }
 

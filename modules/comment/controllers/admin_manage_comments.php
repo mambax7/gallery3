@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -30,8 +31,8 @@ class Admin_Manage_Comments_Controller extends Admin_Controller
       ->where('updated', '<', db::expr('UNIX_TIMESTAMP() - 86400 * 7'))
       ->execute();
 
-        $view = new Admin_View('admin.html');
-        $view->content = new View('admin_manage_comments.html');
+        $view                = new Admin_View('admin.html');
+        $view->content       = new View('admin_manage_comments.html');
         $view->content->menu = $this->_menu($this->_counts());
         print $view;
     }
@@ -40,10 +41,10 @@ class Admin_Manage_Comments_Controller extends Admin_Controller
     {
         $menu = $this->_menu($this->_counts());
         json::reply([
-                        (string) $menu->get('unpublished')->label,
-                        (string) $menu->get('published')->label,
-                        (string) $menu->get('spam')->label,
-                        (string) $menu->get('deleted')->label
+                        (string)$menu->get('unpublished')->label,
+                        (string)$menu->get('published')->label,
+                        (string)$menu->get('spam')->label,
+                        (string)$menu->get('deleted')->label
                     ]);
     }
 
@@ -51,10 +52,10 @@ class Admin_Manage_Comments_Controller extends Admin_Controller
     {
         $page = max(Input::instance()->get('page'), 1);
 
-        $view = new Gallery_View('admin_manage_comments_queue.html');
-        $view->counts = $this->_counts();
-        $view->menu = $this->_menu($view->counts);
-        $view->state = $state;
+        $view           = new Gallery_View('admin_manage_comments_queue.html');
+        $view->counts   = $this->_counts();
+        $view->menu     = $this->_menu($view->counts);
+        $view->state    = $state;
         $view->comments = ORM::factory('comment')
       ->order_by('created', 'DESC')
       ->order_by('id', 'DESC')
@@ -65,15 +66,15 @@ class Admin_Manage_Comments_Controller extends Admin_Controller
 
         // This view is not themed so we can't use $theme->url() in the view and have to
         // reproduce Gallery_View::url() logic here.
-        $atn = theme::$admin_theme_name;
+        $atn                       = theme::$admin_theme_name;
         $view->fallback_avatar_url = url::abs_file("themes/$atn/images/avatar.jpg");
 
-        $view->page = $page;
-        $view->page_type = 'collection';
-        $view->page_subtype = 'admin_comments';
-        $view->page_size = self::$items_per_page;
+        $view->page           = $page;
+        $view->page_type      = 'collection';
+        $view->page_subtype   = 'admin_comments';
+        $view->page_size      = self::$items_per_page;
         $view->children_count = $this->_counts()->$state;
-        $view->max_pages = ceil($view->children_count / $view->page_size);
+        $view->max_pages      = ceil($view->children_count / $view->page_size);
 
         // Also we want to use $theme->paginator() so we need a dummy theme
         $view->theme = $view;
@@ -88,39 +89,39 @@ class Admin_Manage_Comments_Controller extends Admin_Controller
                ->id('unpublished')
                ->label(t2(
                            'Awaiting Moderation (%count)', 'Awaiting Moderation (%count)',
-                           $counts->unpublished
+                                                                                                $counts->unpublished
                ))
                ->url(url::site('admin/manage_comments/queue/unpublished')))
       ->append(Menu::factory('link')
                ->id('published')
                ->label(t2(
                            'Approved (%count)', 'Approved (%count)',
-                           $counts->published
+                                                                                                                                                                                                                                            $counts->published
                ))
                ->url(url::site('admin/manage_comments/queue/published')))
       ->append(Menu::factory('link')
                ->id('spam')
                ->label(t2(
                            'Spam (%count)', 'Spam (%count)',
-                           $counts->spam
+                                                                                                                                                                                                                                                                                                                                                                               $counts->spam
                ))
                ->url(url::site('admin/manage_comments/queue/spam')))
       ->append(Menu::factory('link')
                ->id('deleted')
                ->label(t2(
                            'Recently Deleted (%count)', 'Recently Deleted (%count)',
-                           $counts->deleted
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           $counts->deleted
                ))
                ->url(url::site('admin/manage_comments/queue/deleted')));
     }
 
     private function _counts()
     {
-        $counts = new stdClass();
+        $counts              = new stdClass();
         $counts->unpublished = 0;
-        $counts->published = 0;
-        $counts->spam = 0;
-        $counts->deleted = 0;
+        $counts->published   = 0;
+        $counts->spam        = 0;
+        $counts->deleted     = 0;
         foreach (db::build()
              ->select('state')
              ->select(['c' => 'COUNT("*")'])
@@ -137,7 +138,7 @@ class Admin_Manage_Comments_Controller extends Admin_Controller
         access::verify_csrf();
 
         $comment = ORM::factory('comment', $id);
-        $orig = clone $comment;
+        $orig    = clone $comment;
         if ($comment->loaded()) {
             $comment->state = $state;
             $comment->save();

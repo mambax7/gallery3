@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,7 +22,7 @@ class model_cache_Core
 {
     private static $cache = [];
 
-    public static function get($model_name, $id, $field_name= 'id')
+    public static function get($model_name, $id, $field_name = 'id')
     {
         if (TEST_MODE || empty(self::$cache[$model_name][$field_name][$id])) {
             $model = ORM::factory($model_name)->where($field_name, '=', $id)->find();

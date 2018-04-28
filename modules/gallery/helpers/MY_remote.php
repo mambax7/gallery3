@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -19,13 +20,12 @@
  */
 class remote extends remote_Core
 {
-    public static function post($url, $post_data_array, $extra_headers= [])
+    public static function post($url, $post_data_array, $extra_headers = [])
     {
         $post_data_raw = self::_encode_post_data($post_data_array, $extra_headers);
 
         /* Read the web page into a buffer */
-        list($response_status, $response_headers, $response_body) =
-      self::do_request($url, 'POST', $extra_headers, $post_data_raw);
+        list($response_status, $response_headers, $response_body) = self::do_request($url, 'POST', $extra_headers, $post_data_raw);
 
         return [$response_body, $response_status, $response_headers];
     }
@@ -40,7 +40,7 @@ class remote extends remote_Core
      * concatenate together.  As per the specification, each key/value pair is separated with an
      * ampersand (&)
      * @param array $post_data_array the key/value post data
-     * @param array $extra_headers extra headers to pass to the server
+     * @param array $extra_headers   extra headers to pass to the server
      * @return string the encoded post data
      */
     private static function _encode_post_data($post_data_array, &$extra_headers)
@@ -53,7 +53,7 @@ class remote extends remote_Core
             $post_data_raw .= urlencode($key) . '=' . urlencode($value);
         }
 
-        $extra_headers['Content-Type'] = 'application/x-www-form-urlencoded';
+        $extra_headers['Content-Type']   = 'application/x-www-form-urlencoded';
         $extra_headers['Content-Length'] = strlen($post_data_raw);
 
         return $post_data_raw;
@@ -65,7 +65,7 @@ class remote extends remote_Core
      * @todo: Handle redirects? If so, only for GET (i.e. not for POST), and use G2's
      * WebHelper_simple::_parseLocation logic.
      */
-    public static function do_request($url, $method='GET', $headers= [], $body='')
+    public static function do_request($url, $method = 'GET', $headers = [], $body = '')
     {
         if (!array_key_exists('User-Agent', $headers)) {
             $headers['User-Agent'] = 'Gallery3';
@@ -74,13 +74,7 @@ class remote extends remote_Core
         $url = str_replace(' ', '%20', $url);
 
         $url_components = self::_parse_url_for_fsockopen($url);
-        $handle = fsockopen(
-      $url_components['fsockhost'],
-        $url_components['port'],
-        $errno,
-        $errstr,
-        5
-    );
+        $handle         = fsockopen($url_components['fsockhost'], $url_components['port'], $errno, $errstr, 5);
         if (empty($handle)) {
             // log "Error $errno: '$errstr' requesting $url";
             return [null, null, null];
@@ -91,13 +85,7 @@ class remote extends remote_Core
             $header_lines[] = $key . ': ' . $value;
         }
 
-        $success = fwrite($handle, sprintf(
-        "%s %s HTTP/1.0\r\n%s\r\n\r\n%s",
-                                       $method,
-                                       $url_components['uri'],
-                                       implode("\r\n", $header_lines),
-                                       $body
-    ));
+        $success = fwrite($handle, sprintf("%s %s HTTP/1.0\r\n%s\r\n\r\n%s", $method, $url_components['uri'], implode("\r\n", $header_lines), $body));
         if (!$success) {
             // Zero bytes written or false was returned
             // log "fwrite failed in requestWebPage($url)" . ($success === false ? ' - false' : ''
@@ -158,10 +146,10 @@ class remote extends remote_Core
         $url_components = parse_url($url);
         if ('https' == strtolower($url_components['scheme'])) {
             $url_components['fsockhost'] = 'ssl://' . $url_components['host'];
-            $default_port = 443;
+            $default_port                = 443;
         } else {
             $url_components['fsockhost'] = $url_components['host'];
-            $default_port = 80;
+            $default_port                = 80;
         }
         if (empty($url_components['port'])) {
             $url_components['port'] = $default_port;
@@ -169,8 +157,7 @@ class remote extends remote_Core
         if (empty($url_components['path'])) {
             $url_components['path'] = '/';
         }
-        $uri = $url_components['path']
-      . (empty($url_components['query']) ? '' : '?' . $url_components['query']);
+        $uri = $url_components['path'] . (empty($url_components['query']) ? '' : '?' . $url_components['query']);
         /* Unescape ampersands, since if the url comes from form input it will be escaped */
         $url_components['uri'] = str_replace('&amp;', '&', $uri);
         return $url_components;

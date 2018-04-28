@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -31,15 +32,13 @@ class User_Profile_Controller extends Controller
             throw new Kohana_404_Exception();
         }
 
-        $v = new Theme_View('page.html', 'other', 'profile');
+        $v             = new Theme_View('page.html', 'other', 'profile');
         $v->page_title = t('%name Profile', ['name' => $user->display_name()]);
-        $v->content = new View('user_profile.html');
+        $v->content    = new View('user_profile.html');
 
-        $v->content->user = $user;
-        $v->content->contactable =
-      !$user->guest && $user->id != identity::active_user()->id && $user->email;
-        $v->content->editable =
-      identity::is_writable() && !$user->guest && $user->id == identity::active_user()->id;
+        $v->content->user        = $user;
+        $v->content->contactable = !$user->guest && $user->id != identity::active_user()->id && $user->email;
+        $v->content->editable    = identity::is_writable() && !$user->guest && $user->id == identity::active_user()->id;
 
         $event_data = (object)['user' => $user, 'content' => []];
         module::event('show_user_profile', $event_data);
@@ -68,14 +67,7 @@ class User_Profile_Controller extends Controller
 
         $form = user_profile::get_contact_form($user);
         if ($form->validate()) {
-            Sendmail::factory()
-        ->to($user->email)
-        ->subject(html::clean($form->message->subject->value))
-        ->header('Mime-Version', '1.0')
-        ->header('Content-type', 'text/html; charset=UTF-8')
-        ->reply_to($form->message->reply_to->value)
-        ->message(html::purify($form->message->message->value))
-        ->send();
+            Sendmail::factory()->to($user->email)->subject(html::clean($form->message->subject->value))->header('Mime-Version', '1.0')->header('Content-type', 'text/html; charset=UTF-8')->reply_to($form->message->reply_to->value)->message(html::purify($form->message->message->value))->send();
             message::success(t('Sent message to %user_name', ['user_name' => $user->display_name()]));
             json::reply(['result' => 'success']);
         } else {
@@ -95,18 +87,18 @@ class User_Profile_Controller extends Controller
         }
 
         switch (module::get_var('gallery', 'show_user_profiles_to')) {
-    case 'admin_users':
-      return identity::active_user()->admin;
+            case 'admin_users':
+                return identity::active_user()->admin;
 
-    case 'registered_users':
-      return !identity::active_user()->guest;
+            case 'registered_users':
+                return !identity::active_user()->guest;
 
-    case 'everybody':
-      return true;
+            case 'everybody':
+                return true;
 
-    default:
-      // Fail in private mode on an invalid setting
-      return false;
-    }
+            default:
+                // Fail in private mode on an invalid setting
+                return false;
+        }
     }
 }

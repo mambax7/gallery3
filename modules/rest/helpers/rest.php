@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,59 +22,47 @@ class rest_Core
 {
     const API_VERSION = '3.0';
 
-    public static function reply($data= [])
+    public static function reply($data = [])
     {
         Session::instance()->abort_save();
 
         header('X-Gallery-API-Version: ' . rest::API_VERSION);
         switch (Input::instance()->get('output', 'json')) {
-    case 'json':
-      json::reply($data);
-      break;
+            case 'json':
+                json::reply($data);
+                break;
 
-    case 'jsonp':
-      if (!($callback = Input::instance()->get('callback', ''))) {
-          throw new Rest_Exception(
-              'Bad Request',
-              400,
-              ['errors' => ['callback' => 'missing']]
-        );
-      }
+            case 'jsonp':
+                if (!($callback = Input::instance()->get('callback', ''))) {
+                    throw new Rest_Exception('Bad Request', 400, ['errors' => ['callback' => 'missing']]);
+                }
 
-      if (1 == preg_match('/^[$A-Za-z_][0-9A-Za-z_]*$/', $callback)) {
-          header('Content-type: application/javascript; charset=UTF-8');
-          print "$callback(" . json_encode($data) . ')';
-      } else {
-          throw new Rest_Exception(
-              'Bad Request',
-              400,
-              ['errors' => ['callback' => 'invalid']]
-        );
-      }
-      break;
+                if (1 == preg_match('/^[$A-Za-z_][0-9A-Za-z_]*$/', $callback)) {
+                    header('Content-type: application/javascript; charset=UTF-8');
+                    print "$callback(" . json_encode($data) . ')';
+                } else {
+                    throw new Rest_Exception('Bad Request', 400, ['errors' => ['callback' => 'invalid']]);
+                }
+                break;
 
-    case 'html':
-      header('Content-type: text/html; charset=UTF-8');
-      if ($data) {
-          $html = preg_replace(
-          "#([\w]+?://[\w]+[^ \'\"\n\r\t<]*)#ise",
-            "'<a href=\"\\1\" >\\1</a>'",
-          var_export($data, 1)
-        );
-      } else {
-          $html = t('Empty response');
-      }
-      print "<pre>$html</pre>";
-      if (gallery::show_profiler()) {
-          Profiler::enable();
-          $profiler = new Profiler();
-          $profiler->render();
-      }
-      break;
+            case 'html':
+                header('Content-type: text/html; charset=UTF-8');
+                if ($data) {
+                    $html = preg_replace("#([\w]+?://[\w]+[^ \'\"\n\r\t<]*)#ise", "'<a href=\"\\1\" >\\1</a>'", var_export($data, 1));
+                } else {
+                    $html = t('Empty response');
+                }
+                print "<pre>$html</pre>";
+                if (gallery::show_profiler()) {
+                    Profiler::enable();
+                    $profiler = new Profiler();
+                    $profiler->render();
+                }
+                break;
 
-    default:
-      throw new Rest_Exception('Bad Request', 400);
-    }
+            default:
+                throw new Rest_Exception('Bad Request', 400);
+        }
     }
 
     public static function set_active_user($access_key)
@@ -87,9 +76,7 @@ class rest_Core
             }
         }
 
-        $key = ORM::factory('user_access_key')
-      ->where('access_key', '=', $access_key)
-      ->find();
+        $key = ORM::factory('user_access_key')->where('access_key', '=', $access_key)->find();
 
         if (!$key->loaded()) {
             throw new Rest_Exception('Forbidden', 403);
@@ -105,9 +92,7 @@ class rest_Core
 
     public static function reset_access_key()
     {
-        $key = ORM::factory('user_access_key')
-      ->where('user_id', '=', identity::active_user()->id)
-      ->find();
+        $key = ORM::factory('user_access_key')->where('user_id', '=', identity::active_user()->id)->find();
         if ($key->loaded()) {
             $key->delete();
         }
@@ -116,12 +101,10 @@ class rest_Core
 
     public static function access_key()
     {
-        $key = ORM::factory('user_access_key')
-      ->where('user_id', '=', identity::active_user()->id)
-      ->find();
+        $key = ORM::factory('user_access_key')->where('user_id', '=', identity::active_user()->id)->find();
 
         if (!$key->loaded()) {
-            $key->user_id = identity::active_user()->id;
+            $key->user_id    = identity::active_user()->id;
             $key->access_key = md5(random::hash() . access::private_key());
             $key->save();
         }
@@ -147,7 +130,7 @@ class rest_Core
             $relative_url = substr($url, strlen(url::abs_site('rest')));
         }
 
-        $path = parse_url($relative_url, PHP_URL_PATH);
+        $path       = parse_url($relative_url, PHP_URL_PATH);
         $components = explode('/', $path, 3);
 
         if (3 != count($components)) {
@@ -170,7 +153,7 @@ class rest_Core
      */
     public static function url()
     {
-        $args = func_get_args();
+        $args          = func_get_args();
         $resource_type = array_shift($args);
 
         $class = "{$resource_type}_rest";

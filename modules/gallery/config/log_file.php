@@ -21,7 +21,7 @@
 /**
  * Message logging directory.
  */
-$config['log_directory'] = VARPATH.'logs';
+$config['log_directory'] = VARPATH . 'logs';
 
 /**
  * Permissions of the log file

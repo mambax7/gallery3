@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -53,19 +54,19 @@ class Admin_Akismet_Controller extends Admin_Controller
         }
 
         akismet::check_config();
-        $view = new Admin_View('admin.html');
-        $view->page_title = t('Akismet spam filtering');
-        $view->content = new View('admin_akismet.html');
+        $view                     = new Admin_View('admin.html');
+        $view->page_title         = t('Akismet spam filtering');
+        $view->content            = new View('admin_akismet.html');
         $view->content->valid_key = $valid_key;
-        $view->content->form = $form;
+        $view->content->form      = $form;
         print $view;
     }
 
     public function stats()
     {
-        $view = new Admin_View('admin.html');
-        $view->content = new View('admin_akismet_stats.html');
-        $view->content->api_key = module::get_var('akismet', 'api_key');
+        $view                    = new Admin_View('admin.html');
+        $view->content           = new View('admin_akismet_stats.html');
+        $view->content->api_key  = module::get_var('akismet', 'api_key');
         $view->content->blog_url = url::base(false, 'http');
         print $view;
     }

@@ -1,13 +1,14 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * URI library.
  *
  * $Id: URI.php 4729 2009-12-29 20:35:19Z isaiah $
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class URI_Core extends Router
 {
@@ -46,7 +47,7 @@ class URI_Core extends Router
             $index = $key + 2;
         }
 
-        $index = (int) $index - 1;
+        $index = (int)$index - 1;
 
         return isset(URI::$segments[$index]) ? URI::$segments[$index] : $default;
     }
@@ -68,7 +69,7 @@ class URI_Core extends Router
             $index = $key + 2;
         }
 
-        $index = (int) $index - 1;
+        $index = (int)$index - 1;
 
         return isset(URI::$rsegments[$index]) ? URI::$rsegments[$index] : $default;
     }
@@ -91,7 +92,7 @@ class URI_Core extends Router
             $index = $key + 2;
         }
 
-        $index = (int) $index - 1;
+        $index = (int)$index - 1;
 
         return isset(URI::$arguments[$index]) ? URI::$arguments[$index] : $default;
     }
@@ -264,7 +265,7 @@ class URI_Core extends Router
      */
     public function controller($full = true)
     {
-        return ($full) ? url::site(URI::$controller_path.URI::$controller) : URI::$controller;
+        return ($full) ? url::site(URI::$controller_path . URI::$controller) : URI::$controller;
     }
 
     /**
@@ -275,6 +276,6 @@ class URI_Core extends Router
      */
     public function method($full = true)
     {
-        return ($full) ? url::site(URI::$controller_path.URI::$controller.'/'.URI::$method) : URI::$method;
+        return ($full) ? url::site(URI::$controller_path . URI::$controller . '/' . URI::$method) : URI::$method;
     }
 } // End URI Class

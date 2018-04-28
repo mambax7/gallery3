@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -22,8 +23,7 @@ class server_add_theme_Core
     public static function head($theme)
     {
         if (identity::active_user()->admin) {
-            return $theme->css('server_add.css')
-        . $theme->script('server_add.js');
+            return $theme->css('server_add.css') . $theme->script('server_add.js');
         }
     }
 }

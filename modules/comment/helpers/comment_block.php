@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -28,14 +29,13 @@ class comment_block_Core
     {
         $block = new Block();
         switch ($block_id) {
-    case 'recent_comments':
-      $block->css_id = 'g-recent-comments';
-      $block->title = t('Recent comments');
-      $block->content = new View('admin_block_recent_comments.html');
-      $block->content->comments =
-        ORM::factory('comment')->order_by('created', 'DESC')->limit(5)->find_all();
-      break;
-    }
+            case 'recent_comments':
+                $block->css_id            = 'g-recent-comments';
+                $block->title             = t('Recent comments');
+                $block->content           = new View('admin_block_recent_comments.html');
+                $block->content->comments = ORM::factory('comment')->order_by('created', 'DESC')->limit(5)->find_all();
+                break;
+        }
 
         return $block;
     }

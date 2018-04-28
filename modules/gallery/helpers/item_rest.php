@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -126,26 +127,26 @@ class item_rest_Core
                          'width'
                      ] as $key) {
                 switch ($key) {
-        case 'album_cover':
-          if (property_exists($entity, 'album_cover')) {
-              $album_cover_item = rest::resolve($entity->album_cover);
-              access::required('view', $album_cover_item);
-              $item->album_cover_item_id = $album_cover_item->id;
-          }
-          break;
+                    case 'album_cover':
+                        if (property_exists($entity, 'album_cover')) {
+                            $album_cover_item = rest::resolve($entity->album_cover);
+                            access::required('view', $album_cover_item);
+                            $item->album_cover_item_id = $album_cover_item->id;
+                        }
+                        break;
 
-        case 'parent':
-          if (property_exists($entity, 'parent')) {
-              $parent = rest::resolve($entity->parent);
-              access::required('edit', $parent);
-              $item->parent_id = $parent->id;
-          }
-          break;
-        default:
-          if (property_exists($entity, $key)) {
-              $item->$key = $entity->$key;
-          }
-        }
+                    case 'parent':
+                        if (property_exists($entity, 'parent')) {
+                            $parent = rest::resolve($entity->parent);
+                            access::required('edit', $parent);
+                            $item->parent_id = $parent->id;
+                        }
+                        break;
+                    default:
+                        if (property_exists($entity, $key)) {
+                            $item->$key = $entity->$key;
+                        }
+                }
             }
         }
 
@@ -175,44 +176,36 @@ class item_rest_Core
         access::required('add', $parent);
 
         $entity = $request->params->entity;
-        $item = ORM::factory('item');
+        $item   = ORM::factory('item');
         switch ($entity->type) {
-    case 'album':
-      $item->type = 'album';
-      $item->parent_id = $parent->id;
-      $item->name = $entity->name;
-      $item->title = isset($entity->title) ? $entity->title : $entity->name;
-      $item->description = isset($entity->description) ? $entity->description : null;
-      $item->slug = isset($entity->slug) ? $entity->slug : null;
-      $item->save();
-      break;
+            case 'album':
+                $item->type        = 'album';
+                $item->parent_id   = $parent->id;
+                $item->name        = $entity->name;
+                $item->title       = isset($entity->title) ? $entity->title : $entity->name;
+                $item->description = isset($entity->description) ? $entity->description : null;
+                $item->slug        = isset($entity->slug) ? $entity->slug : null;
+                $item->save();
+                break;
 
-    case 'photo':
-    case 'movie':
-      if (empty($request->file)) {
-          throw new Rest_Exception(
-              'Bad Request',
-              400,
-              ['errors' => ['file' => t('Upload failed')]]
-        );
-      }
-    $item->type = $entity->type;
-    $item->parent_id = $parent->id;
-    $item->set_data_file($request->file);
-    $item->name = $entity->name;
-    $item->title = isset($entity->title) ? $entity->title : $entity->name;
-    $item->description = isset($entity->description) ? $entity->description : null;
-    $item->slug = isset($entity->slug) ? $entity->slug : null;
-    $item->save();
-    break;
+            case 'photo':
+            case 'movie':
+                if (empty($request->file)) {
+                    throw new Rest_Exception('Bad Request', 400, ['errors' => ['file' => t('Upload failed')]]);
+                }
+                $item->type      = $entity->type;
+                $item->parent_id = $parent->id;
+                $item->set_data_file($request->file);
+                $item->name        = $entity->name;
+                $item->title       = isset($entity->title) ? $entity->title : $entity->name;
+                $item->description = isset($entity->description) ? $entity->description : null;
+                $item->slug        = isset($entity->slug) ? $entity->slug : null;
+                $item->save();
+                break;
 
-    default:
-      throw new Rest_Exception(
-          'Bad Request',
-          400,
-          ['errors' => ['type' => 'invalid']]
-      );
-    }
+            default:
+                throw new Rest_Exception('Bad Request', 400, ['errors' => ['type' => 'invalid']]);
+        }
 
         return ['url' => rest::url('item', $item)];
     }

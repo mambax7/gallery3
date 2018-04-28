@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Adds useful information to the bottom of the current page for debugging and optimization purposes.
  *
@@ -8,10 +9,10 @@
  * POST Data    - The name and values of any POST data submitted to the current page.
  * Cookie Data  - All cookies sent for the current request.
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class Profiler_Core
 {
@@ -90,7 +91,7 @@ class Profiler_Core
         $start = microtime(true);
 
         // Determine the profiles that should be shown
-        $get = isset($_GET['profiler']) ? explode(',', $_GET['profiler']) : [];
+        $get            = isset($_GET['profiler']) ? explode(',', $_GET['profiler']) : [];
         Profiler::$show = empty($get) ? Kohana::config('profiler.show') : $get;
 
         Event::run('profiler.run');
@@ -121,7 +122,7 @@ class Profiler_Core
         // Add profiler data to the output
         if (false !== stripos(Kohana::$output, '</body>')) {
             // Closing body tag was found, insert the profiler data before it
-            Kohana::$output = str_ireplace('</body>', $view->render().'</body>', Kohana::$output);
+            Kohana::$output = str_ireplace('</body>', $view->render() . '</body>', Kohana::$output);
         } else {
             // Append the profiler data to the output
             Kohana::$output .= $view->render();
@@ -135,7 +136,7 @@ class Profiler_Core
      */
     public static function benchmarks()
     {
-        if (! Profiler::show('benchmarks')) {
+        if (!Profiler::show('benchmarks')) {
             return;
         }
 
@@ -156,13 +157,13 @@ class Profiler_Core
             // Clean unique id from system benchmark names
             $name = ucwords(str_replace(['_', '-'], ' ', str_replace(SYSTEM_BENCHMARK . '_', '', $name)));
 
-            $data = [__($name), $benchmark['count'], number_format($benchmark['time'], Kohana::config('profiler.time_decimals')), number_format($benchmark['memory'] / 1024 / 1024, Kohana::config('profiler.memory_decimals')) . 'MB'];
+            $data  = [__($name), $benchmark['count'], number_format($benchmark['time'], Kohana::config('profiler.time_decimals')), number_format($benchmark['memory'] / 1024 / 1024, Kohana::config('profiler.memory_decimals')) . 'MB'];
             $class = text::alternate('', 'kp-altrow');
 
             if ('Total Execution' == $name) {
                 // Clear the count column
                 $data[1] = '';
-                $class = 'kp-totalrow';
+                $class   = 'kp-totalrow';
             }
 
             $table->add_row($data, $class);
@@ -178,7 +179,7 @@ class Profiler_Core
      */
     public static function database()
     {
-        if (! Profiler::show('database')) {
+        if (!Profiler::show('database')) {
             return;
         }
 
@@ -198,7 +199,7 @@ class Profiler_Core
         text::alternate();
         $total_time = $total_rows = 0;
         foreach ($queries as $query) {
-            $data = [$query['query'], number_format($query['time'], Kohana::config('profiler.time_decimals')), $query['rows']];
+            $data  = [$query['query'], number_format($query['time'], Kohana::config('profiler.time_decimals')), $query['rows']];
             $class = text::alternate('', 'kp-altrow');
             $table->add_row($data, $class);
             $total_time += $query['time'];
@@ -222,7 +223,7 @@ class Profiler_Core
             return;
         }
 
-        if (! Profiler::show('session')) {
+        if (!Profiler::show('session')) {
             return;
         }
 
@@ -234,10 +235,10 @@ class Profiler_Core
         text::alternate();
         foreach ($_SESSION as $name => $value) {
             if (is_object($value)) {
-                $value = get_class($value).' [object]';
+                $value = get_class($value) . ' [object]';
             }
 
-            $data = [$name, $value];
+            $data  = [$name, $value];
             $class = text::alternate('', 'kp-altrow');
             $table->add_row($data, $class);
         }
@@ -256,7 +257,7 @@ class Profiler_Core
             return;
         }
 
-        if (! Profiler::show('post')) {
+        if (!Profiler::show('post')) {
             return;
         }
 
@@ -267,7 +268,7 @@ class Profiler_Core
 
         text::alternate();
         foreach ($_POST as $name => $value) {
-            $data = [$name, $value];
+            $data  = [$name, $value];
             $class = text::alternate('', 'kp-altrow');
             $table->add_row($data, $class);
         }
@@ -286,7 +287,7 @@ class Profiler_Core
             return;
         }
 
-        if (! Profiler::show('cookies')) {
+        if (!Profiler::show('cookies')) {
             return;
         }
 
@@ -297,7 +298,7 @@ class Profiler_Core
 
         text::alternate();
         foreach ($_COOKIE as $name => $value) {
-            $data = [$name, $value];
+            $data  = [$name, $value];
             $class = text::alternate('', 'kp-altrow');
             $table->add_row($data, $class);
         }

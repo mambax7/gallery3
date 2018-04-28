@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -51,14 +52,10 @@ class Tags_Controller extends Controller
 
     public function autocomplete()
     {
-        $tags = [];
+        $tags      = [];
         $tag_parts = explode(',', Input::instance()->get('term'));
-        $tag_part = ltrim(end($tag_parts));
-        $tag_list = ORM::factory('tag')
-      ->where('name', 'LIKE', Database::escape_for_like($tag_part) . '%')
-      ->order_by('name', 'ASC')
-      ->limit(100)
-      ->find_all();
+        $tag_part  = ltrim(end($tag_parts));
+        $tag_list  = ORM::factory('tag')->where('name', 'LIKE', Database::escape_for_like($tag_part) . '%')->order_by('name', 'ASC')->limit(100)->find_all();
         foreach ($tag_list as $tag) {
             $tags[] = (string)html::clean($tag->name);
         }

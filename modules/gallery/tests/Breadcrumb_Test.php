@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -25,15 +26,11 @@ class Breadcrumb_Test extends Gallery_Unit_Test_Case
     public function build_breadcrumbs_for_item_test()
     {
         $album = test::random_album();
-        $item = test::random_photo($album);
+        $item  = test::random_photo($album);
 
-        $expected = [];
-        $expected[] = Breadcrumb::instance(
-      item::root()->title,
-        item::root()->url("show={$album->id}")
-    )->set_first();
-        $expected[] =
-      Breadcrumb::instance($album->title, $album->url("show={$item->id}"));
+        $expected   = [];
+        $expected[] = Breadcrumb::instance(item::root()->title, item::root()->url("show={$album->id}"))->set_first();
+        $expected[] = Breadcrumb::instance($album->title, $album->url("show={$item->id}"));
         $expected[] = Breadcrumb::instance($item->title, $item->url())->set_last();
         $this->assert_equal($expected, Breadcrumb::array_from_item_parents($item));
     }

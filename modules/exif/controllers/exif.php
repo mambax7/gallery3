@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -27,7 +28,7 @@ class Exif_Controller extends Controller
         $item = ORM::factory('item', $item_id);
         access::required('view', $item);
 
-        $view = new View('exif_dialog.html');
+        $view          = new View('exif_dialog.html');
         $view->details = exif::get($item);
 
         print $view;

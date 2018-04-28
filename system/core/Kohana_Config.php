@@ -1,12 +1,13 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Provides a driver-based interface for setting and getting
  * configuration options for the Kohana environment
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class Kohana_Config_Core implements ArrayAccess
 {
@@ -42,10 +43,11 @@ class Kohana_Config_Core implements ArrayAccess
         // If the driver has not been initialised, intialise it
         if (empty(Kohana_Config::$instance)) {
             //call a 1 time non singleton of Kohana_Config to get a list of drivers
-            $config = new Kohana_Config([
-                                            'config_drivers' => [], 'internal_cache' =>false
-                                        ]);
-            $core_config = $config->get('core');
+            $config                  = new Kohana_Config([
+                                                             'config_drivers' => [],
+                                                             'internal_cache' => false
+                                                         ]);
+            $core_config             = $config->get('core');
             Kohana_Config::$instance = new Kohana_Config($core_config);
         }
 
@@ -83,12 +85,13 @@ class Kohana_Config_Core implements ArrayAccess
 
         foreach ($this->drivers as & $driver) {
             // Create the driver name
-            $driver = 'Config_'.ucfirst($driver).'_Driver';
+            $driver = 'Config_' . ucfirst($driver) . '_Driver';
 
             // Ensure the driver loads correctly
             if (!Kohana::auto_load($driver)) {
                 throw new Kohana_Exception('The :driver: driver for the :library: library could not be found.', [
-                    ':driver:' => $driver, ':library:' => get_class($this)
+                    ':driver:'  => $driver,
+                    ':library:' => get_class($this)
                 ]);
             }
 
@@ -98,7 +101,9 @@ class Kohana_Config_Core implements ArrayAccess
             // Ensure the new driver is valid
             if (!$driver instanceof Config_Driver) {
                 throw new Kohana_Exception('The :driver: driver for the :library: library must implement the :interface: interface', [
-                    ':driver:' => $driver, ':library:' => get_class($this), ':interface:' => 'Config_Driver'
+                    ':driver:'    => $driver,
+                    ':library:'   => get_class($this),
+                    ':interface:' => 'Config_Driver'
                 ]);
             }
         }
@@ -212,13 +217,13 @@ class Kohana_Config_Core implements ArrayAccess
      */
 
     /**
-    * Allows access to configuration settings
-    * using the ArrayAccess interface
-    *
-    * @param   string       key
-    * @return  mixed
-    * @access  public
-    */
+     * Allows access to configuration settings
+     * using the ArrayAccess interface
+     *
+     * @param   string       key
+     * @return  mixed
+     * @access  public
+     */
     public function offsetGet($key)
     {
         foreach ($this->drivers as $driver) {

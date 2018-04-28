@@ -1,13 +1,14 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * GD Image Driver.
  *
  * $Id: GD.php 4679 2009-11-10 01:45:52Z isaiah $
  *
- * @package    Image
- * @author     Kohana Team
+ * @package        Image
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class Image_GD_Driver extends Image_Driver
 {
@@ -20,7 +21,7 @@ class Image_GD_Driver extends Image_Driver
     public function __construct()
     {
         // Make sure that GD2 is available
-        if (! function_exists('gd_info')) {
+        if (!function_exists('gd_info')) {
             throw new Kohana_Exception('The Image library requires GD2. Please see http://php.net/gd_info for more information.');
         }
 
@@ -39,13 +40,13 @@ class Image_GD_Driver extends Image_Driver
         switch ($image['type']) {
             case IMAGETYPE_JPEG:
                 $create = 'imagecreatefromjpeg';
-            break;
+                break;
             case IMAGETYPE_GIF:
                 $create = 'imagecreatefromgif';
-            break;
+                break;
             case IMAGETYPE_PNG:
                 $create = 'imagecreatefrompng';
-            break;
+                break;
         }
 
         // Set the "save" function
@@ -53,22 +54,22 @@ class Image_GD_Driver extends Image_Driver
             case 'jpg':
             case 'jpeg':
                 $save = 'imagejpeg';
-            break;
+                break;
             case 'gif':
                 $save = 'imagegif';
-            break;
+                break;
             case 'png':
                 $save = 'imagepng';
-            break;
+                break;
         }
 
         // Make sure the image type is supported for import
-        if (empty($create) || ! function_exists($create)) {
+        if (empty($create) || !function_exists($create)) {
             throw new Kohana_Exception('The specified image, :type:, is not an allowed image type.', [':type:' => $image['file']]);
         }
 
         // Make sure the image type is supported for saving
-        if (empty($save) || ! function_exists($save)) {
+        if (empty($save) || !function_exists($save)) {
             throw new Kohana_Exception('The specified image, :type:, is not an allowed image type.', [':type:' => $dir . $file]);
         }
 
@@ -90,33 +91,33 @@ class Image_GD_Driver extends Image_Driver
                 case 'imagejpeg':
                     // Default the quality to 95
                     (null === $quality) && $quality = 95;
-                break;
+                    break;
                 case 'imagegif':
                     // Remove the quality setting, GIF doesn't use it
                     unset($quality);
-                break;
+                    break;
                 case 'imagepng':
                     // Always use a compression level of 9 for PNGs. This does not
                     // affect quality, it only increases the level of compression!
                     $quality = 9;
-                break;
+                    break;
             }
 
             if (false === $render) {
                 // Set the status to the save return value, saving with the quality requested
-                $status = isset($quality) ? $save($this->tmp_image, $dir.$file, $quality) : $save($this->tmp_image, $dir.$file);
+                $status = isset($quality) ? $save($this->tmp_image, $dir . $file, $quality) : $save($this->tmp_image, $dir . $file);
             } else {
                 // Output the image directly to the browser
                 switch ($save) {
                     case 'imagejpeg':
                         header('Content-Type: image/jpeg');
-                    break;
+                        break;
                     case 'imagegif':
                         header('Content-Type: image/gif');
-                    break;
+                        break;
                     case 'imagepng':
                         header('Content-Type: image/png');
-                    break;
+                        break;
                 }
 
                 $status = isset($quality) ? $save($this->tmp_image, null, $quality) : $save($this->tmp_image);
@@ -132,7 +133,7 @@ class Image_GD_Driver extends Image_Driver
     public function flip($direction)
     {
         // Get the current width and height
-        $width = imagesx($this->tmp_image);
+        $width  = imagesx($this->tmp_image);
         $height = imagesy($this->tmp_image);
 
         // Create the flipped image
@@ -166,7 +167,7 @@ class Image_GD_Driver extends Image_Driver
         $this->sanitize_geometry($properties);
 
         // Get the current width and height
-        $width = imagesx($this->tmp_image);
+        $width  = imagesx($this->tmp_image);
         $height = imagesy($this->tmp_image);
 
         // Create the temporary image to copy to
@@ -185,7 +186,7 @@ class Image_GD_Driver extends Image_Driver
     public function resize($properties)
     {
         // Get the current width and height
-        $width = imagesx($this->tmp_image);
+        $width  = imagesx($this->tmp_image);
         $height = imagesy($this->tmp_image);
 
         if ('%' === substr($properties['width'], -1)) {
@@ -199,7 +200,7 @@ class Image_GD_Driver extends Image_Driver
         }
 
         // Recalculate the width and height, if they are missing
-        empty($properties['width'])  && $properties['width']  = round($width * $properties['height'] / $height);
+        empty($properties['width']) && $properties['width'] = round($width * $properties['height'] / $height);
         empty($properties['height']) && $properties['height'] = round($height * $properties['width'] / $width);
 
         if ($properties['master'] === Image::AUTO) {
@@ -220,16 +221,16 @@ class Image_GD_Driver extends Image_Driver
         // Test if we can do a resize without resampling to speed up the final resize
         if ($properties['width'] > $width / 2 && $properties['height'] > $height / 2) {
             // Presize width and height
-            $pre_width = $width;
+            $pre_width  = $width;
             $pre_height = $height;
 
             // The maximum reduction is 10% greater than the final size
-            $max_reduction_width  = round($properties['width']  * 1.1);
+            $max_reduction_width  = round($properties['width'] * 1.1);
             $max_reduction_height = round($properties['height'] * 1.1);
 
             // Reduce the size using an O(2n) algorithm, until it reaches the maximum reduction
             while ($pre_width / 2 > $max_reduction_width && $pre_height / 2 > $max_reduction_height) {
-                $pre_width /= 2;
+                $pre_width  /= 2;
                 $pre_height /= 2;
             }
 
@@ -291,7 +292,7 @@ class Image_GD_Driver extends Image_Driver
     public function sharpen($amount)
     {
         // Make sure that the sharpening function is available
-        if (! function_exists('imageconvolution')) {
+        if (!function_exists('imageconvolution')) {
             throw new Kohana_Exception('Your configured driver does not support the :method: image transformation.', [':method:' => __FUNCTION__]);
         }
 
@@ -314,15 +315,15 @@ class Image_GD_Driver extends Image_Driver
         switch ($properties['mime']) {
             case 'image/jpeg':
                 $overlay_img = imagecreatefromjpeg($properties['overlay_file']);
-            break;
+                break;
 
             case 'image/gif':
                 $overlay_img = imagecreatefromgif($properties['overlay_file']);
-            break;
+                break;
 
             case 'image/png':
                 $overlay_img = imagecreatefrompng($properties['overlay_file']);
-            break;
+                break;
         }
 
         $this->imagecopymerge_alpha($this->tmp_image, $overlay_img, $properties['x'], $properties['y'], 0, 0, imagesx($overlay_img), imagesy($overlay_img), $properties['transparency']);
@@ -336,15 +337,15 @@ class Image_GD_Driver extends Image_Driver
      * A replacement for php's imagecopymerge() function that supports the alpha channel
      * See php bug #23815:  http://bugs.php.net/bug.php?id=23815
      *
-     * @param  resource		$dst_im		Destination image link resource
-     * @param  resource		$src_im		Source image link resource
-     * @param  integer		$dst_x		x-coordinate of destination point
-     * @param  integer		$dst_y		y-coordinate of destination point
-     * @param  integer		$src_x		x-coordinate of source point
-     * @param  integer		$src_y		y-coordinate of source point
-     * @param  integer		$src_w		Source width
-     * @param  integer		$src_h		Source height
-     * @param  integer		$pct		Transparency percent (0 to 100)
+     * @param  resource $dst_im Destination image link resource
+     * @param  resource $src_im Source image link resource
+     * @param  integer  $dst_x  x-coordinate of destination point
+     * @param  integer  $dst_y  y-coordinate of destination point
+     * @param  integer  $src_x  x-coordinate of source point
+     * @param  integer  $src_y  y-coordinate of source point
+     * @param  integer  $src_w  Source width
+     * @param  integer  $src_h  Source height
+     * @param  integer  $pct    Transparency percent (0 to 100)
      */
     protected function imagecopymerge_alpha($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct)
     {
@@ -384,17 +385,15 @@ class Image_GD_Driver extends Image_Driver
 
         if (null === self::$blank_png) {
             // Decode the blank PNG if it has not been done already
-            self::$blank_png = imagecreatefromstring(base64_decode(
-                'iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29'.
-                'mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAADqSURBVHjaYvz//z/DYAYAAcTEMMgBQAANegcCBN'.
-                'CgdyBAAA16BwIE0KB3IEAADXoHAgTQoHcgQAANegcCBNCgdyBAAA16BwIE0KB3IEAADXoHAgTQoHcgQ'.
-                'AANegcCBNCgdyBAAA16BwIE0KB3IEAADXoHAgTQoHcgQAANegcCBNCgdyBAAA16BwIE0KB3IEAADXoH'.
-                'AgTQoHcgQAANegcCBNCgdyBAAA16BwIE0KB3IEAADXoHAgTQoHcgQAANegcCBNCgdyBAAA16BwIE0KB'.
-                '3IEAADXoHAgTQoHcgQAANegcCBNCgdyBAgAEAMpcDTTQWJVEAAAAASUVORK5CYII='
-            ));
+            self::$blank_png = imagecreatefromstring(base64_decode('iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29'
+                                                                   . 'mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAADqSURBVHjaYvz//z/DYAYAAcTEMMgBQAANegcCBN'
+                                                                   . 'CgdyBAAA16BwIE0KB3IEAADXoHAgTQoHcgQAANegcCBNCgdyBAAA16BwIE0KB3IEAADXoHAgTQoHcgQ'
+                                                                   . 'AANegcCBNCgdyBAAA16BwIE0KB3IEAADXoHAgTQoHcgQAANegcCBNCgdyBAAA16BwIE0KB3IEAADXoH'
+                                                                   . 'AgTQoHcgQAANegcCBNCgdyBAAA16BwIE0KB3IEAADXoHAgTQoHcgQAANegcCBNCgdyBAAA16BwIE0KB'
+                                                                   . '3IEAADXoHAgTQoHcgQAANegcCBNCgdyBAgAEAMpcDTTQWJVEAAAAASUVORK5CYII='));
 
             // Set the blank PNG width and height
-            self::$blank_png_width = imagesx(self::$blank_png);
+            self::$blank_png_width  = imagesx(self::$blank_png);
             self::$blank_png_height = imagesy(self::$blank_png);
         }
 

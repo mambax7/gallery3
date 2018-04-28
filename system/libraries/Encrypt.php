@@ -1,15 +1,16 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * The Encrypt library provides two-way encryption of text and binary strings
  * using the MCrypt extension.
- * @see http://php.net/mcrypt
+ * @see            http://php.net/mcrypt
  *
  * $Id: Encrypt.php 4729 2009-12-29 20:35:19Z isaiah $
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class Encrypt_Core
 {
@@ -31,7 +32,7 @@ class Encrypt_Core
         static $instance;
 
         // Create the singleton
-        empty($instance) && $instance = new Encrypt((array) $config);
+        empty($instance) && $instance = new Encrypt((array)$config);
 
         return $instance;
     }
@@ -44,7 +45,7 @@ class Encrypt_Core
      */
     public function __construct($config = false)
     {
-        if (! defined('MCRYPT_ENCRYPT')) {
+        if (!defined('MCRYPT_ENCRYPT')) {
             throw new Kohana_Exception('To use the Encrypt library, mcrypt must be enabled in your PHP installation');
         }
 
@@ -126,7 +127,7 @@ class Encrypt_Core
         $data = mcrypt_encrypt($this->config['cipher'], $this->config['key'], $data, $this->config['mode'], $iv);
 
         // Use base64 encoding to convert to a string
-        return base64_encode($iv.$data);
+        return base64_encode($iv . $data);
     }
 
     /**
@@ -140,7 +141,7 @@ class Encrypt_Core
         // Convert the data back to binary
         $data = base64_decode($data, true);
 
-        if (! $data) {
+        if (!$data) {
             // Invalid base64 data
             return false;
         }

@@ -1,13 +1,14 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Session database driver.
  *
  * $Id: Database.php 4729 2009-12-29 20:35:19Z isaiah $
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class Session_Database_Driver implements Session_Driver
 {
@@ -23,7 +24,7 @@ class Session_Database_Driver implements Session_Driver
     */
 
     // Database settings
-    protected $db = 'default';
+    protected $db    = 'default';
     protected $table = 'sessions';
 
     // Encryption
@@ -38,18 +39,18 @@ class Session_Database_Driver implements Session_Driver
         // Load configuration
         $config = Kohana::config('session');
 
-        if (! empty($config['encryption'])) {
+        if (!empty($config['encryption'])) {
             // Load encryption
             $this->encrypt = Encrypt::instance();
         }
 
         if (is_array($config['storage'])) {
-            if (! empty($config['storage']['group'])) {
+            if (!empty($config['storage']['group'])) {
                 // Set the group name
                 $this->db = $config['storage']['group'];
             }
 
-            if (! empty($config['storage']['table'])) {
+            if (!empty($config['storage']['table'])) {
                 // Set the table name
                 $this->table = $config['storage']['table'];
             }
@@ -71,11 +72,7 @@ class Session_Database_Driver implements Session_Driver
     public function read($id)
     {
         // Load the session
-        $query = db::select('data')
-            ->from($this->table)
-            ->where('session_id', '=', $id)
-            ->limit(1)
-            ->execute($this->db);
+        $query = db::select('data')->from($this->table)->where('session_id', '=', $id)->limit(1)->execute($this->db);
 
         if (0 === $query->count()) {
             // No current session
@@ -95,49 +92,40 @@ class Session_Database_Driver implements Session_Driver
 
     public function write($id, $data)
     {
-        if (! Session::$should_save) {
+        if (!Session::$should_save) {
             return true;
         }
 
         $data = [
-            'session_id' => $id,
+            'session_id'    => $id,
             'last_activity' => time(),
-            'data' => (null === $this->encrypt) ? base64_encode($data) : $this->encrypt->encode($data)
+            'data'          => (null === $this->encrypt) ? base64_encode($data) : $this->encrypt->encode($data)
         ];
 
         if (null === $this->session_id) {
             // Insert a new session
-            $query = db::insert($this->table, $data)
-                ->execute($this->db);
+            $query = db::insert($this->table, $data)->execute($this->db);
         } elseif ($id === $this->session_id) {
             // Do not update the session_id
             unset($data['session_id']);
 
             // Update the existing session
-            $query = db::update($this->table)
-                ->set($data)
-                ->where('session_id', '=', $id)
-                ->execute($this->db);
+            $query = db::update($this->table)->set($data)->where('session_id', '=', $id)->execute($this->db);
         } else {
             // Update the session and id
-            $query = db::update($this->table)
-                ->set($data)
-                ->where('session_id', '=', $this->session_id)
-                ->execute($this->db);
+            $query = db::update($this->table)->set($data)->where('session_id', '=', $this->session_id)->execute($this->db);
 
             // Set the new session id
             $this->session_id = $id;
         }
 
-        return (bool) $query->count();
+        return (bool)$query->count();
     }
 
     public function destroy($id)
     {
         // Delete the requested session
-        db::delete($this->table)
-            ->where('session_id', '=', $id)
-            ->execute($this->db);
+        db::delete($this->table)->where('session_id', '=', $id)->execute($this->db);
 
         // Session id is no longer valid
         $this->session_id = null;
@@ -157,11 +145,9 @@ class Session_Database_Driver implements Session_Driver
     public function gc($maxlifetime)
     {
         // Delete all expired sessions
-        $query = db::delete($this->table)
-            ->where('last_activity', '<', time() - $maxlifetime)
-            ->execute($this->db);
+        $query = db::delete($this->table)->where('last_activity', '<', time() - $maxlifetime)->execute($this->db);
 
-        Kohana_Log::add('debug', 'Session garbage collected: '.$query->count().' row(s) deleted.');
+        Kohana_Log::add('debug', 'Session garbage collected: ' . $query->count() . ' row(s) deleted.');
 
         return true;
     }

@@ -45,12 +45,11 @@
  * first argument. In the www.example.com/article/22 example, it is as if the URL www.example.com/news/show/22
  * had been visited.
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
-
 
 /**
  * Sets the default route to "welcome"

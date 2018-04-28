@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -31,9 +32,9 @@ class ORM_MPTT_Test extends Gallery_Unit_Test_Case
 
     public function add_hierarchy_test()
     {
-        $album1 = test::random_album();
-        $album1_1 = test::random_album($album1);
-        $album1_2 = test::random_album($album1);
+        $album1     = test::random_album();
+        $album1_1   = test::random_album($album1);
+        $album1_2   = test::random_album($album1);
         $album1_1_1 = test::random_album($album1_1);
         $album1_1_2 = test::random_album($album1_1);
 
@@ -46,9 +47,9 @@ class ORM_MPTT_Test extends Gallery_Unit_Test_Case
 
     public function delete_hierarchy_test()
     {
-        $album1 = test::random_album();
-        $album1_1 = test::random_album($album1);
-        $album1_2 = test::random_album($album1);
+        $album1     = test::random_album();
+        $album1_1   = test::random_album($album1);
+        $album1_2   = test::random_album($album1);
         $album1_1_1 = test::random_album($album1_1);
         $album1_1_2 = test::random_album($album1_1);
 
@@ -61,9 +62,9 @@ class ORM_MPTT_Test extends Gallery_Unit_Test_Case
 
     public function move_to_test()
     {
-        $album1 = test::random_album();
-        $album1_1 = test::random_album($album1);
-        $album1_2 = test::random_album($album1);
+        $album1     = test::random_album();
+        $album1_1   = test::random_album($album1);
+        $album1_2   = test::random_album($album1);
         $album1_1_1 = test::random_album($album1_1);
         $album1_1_2 = test::random_album($album1_1);
 
@@ -79,15 +80,9 @@ class ORM_MPTT_Test extends Gallery_Unit_Test_Case
         $this->assert_equal(3, $album1_1->right_ptr - $album1_1->left_ptr);
         $this->assert_equal(3, $album1_2->right_ptr - $album1_2->left_ptr);
 
-        $this->assert_equal(
-            [$album1_1_2->id => $album1_1_2->name],
-            $album1_1->children()->select_list()
-    );
+        $this->assert_equal([$album1_1_2->id => $album1_1_2->name], $album1_1->children()->select_list());
 
-        $this->assert_equal(
-            [$album1_1_1->id => $album1_1_1->name],
-            $album1_2->children()->select_list()
-    );
+        $this->assert_equal([$album1_1_1->id => $album1_1_1->name], $album1_2->children()->select_list());
     }
 
     public function cant_move_parent_into_own_subtree_test()
@@ -127,7 +122,7 @@ class ORM_MPTT_Test extends Gallery_Unit_Test_Case
 
     public function children_test()
     {
-        $outer = test::random_album();
+        $outer  = test::random_album();
         $inner1 = test::random_album($outer);
         $inner2 = test::random_album($outer);
 
@@ -140,19 +135,16 @@ class ORM_MPTT_Test extends Gallery_Unit_Test_Case
 
     public function children_limit_test()
     {
-        $outer = test::random_album();
+        $outer  = test::random_album();
         $inner1 = test::random_album($outer);
         $inner2 = test::random_album($outer);
 
-        $this->assert_equal(
-            [$inner2->id => $inner2->name],
-            $outer->children(1, 1)->select_list('id')
-    );
+        $this->assert_equal([$inner2->id => $inner2->name], $outer->children(1, 1)->select_list('id'));
     }
 
     public function children_count_test()
     {
-        $outer = test::random_album();
+        $outer  = test::random_album();
         $inner1 = test::random_album($outer);
         $inner2 = test::random_album($outer);
 
@@ -162,7 +154,7 @@ class ORM_MPTT_Test extends Gallery_Unit_Test_Case
     public function descendant_test()
     {
         $parent = test::random_album();
-        $photo = test::random_photo($parent);
+        $photo  = test::random_photo($parent);
         $album1 = test::random_album($parent);
         $photo1 = test::random_photo($album1);
 
@@ -187,7 +179,7 @@ class ORM_MPTT_Test extends Gallery_Unit_Test_Case
     public function descendant_count_test()
     {
         $parent = test::random_album();
-        $photo = test::random_photo($parent);
+        $photo  = test::random_photo($parent);
         $album1 = test::random_album($parent);
         $photo1 = test::random_photo($album1);
         $parent->reload();

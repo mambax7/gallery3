@@ -31,9 +31,9 @@ class SafeString_Core
     {
         if ($string instanceof SafeString) {
             $this->_is_safe_html = $string->_is_safe_html;
-            $string = $string->unescaped();
+            $string              = $string->unescaped();
         }
-        $this->_raw_string = (string) $string;
+        $this->_raw_string = (string)$string;
     }
 
     /**
@@ -66,7 +66,7 @@ class SafeString_Core
      */
     public static function of_safe_html($string)
     {
-        $safe_string = new SafeString($string);
+        $safe_string                = new SafeString($string);
         $safe_string->_is_safe_html = true;
         return $safe_string;
     }
@@ -109,7 +109,7 @@ class SafeString_Core
      */
     public function for_js()
     {
-        return json_encode((string) $this->_raw_string);
+        return json_encode((string)$this->_raw_string);
     }
 
     /**
@@ -126,14 +126,11 @@ class SafeString_Core
      */
     public function for_html_attr()
     {
-        $string = (string) $this->for_html();
-        return strtr(
-            $string,
-            [
-                "'" => '&#039;',
-                '"' =>'&quot;'
-            ]
-    );
+        $string = (string)$this->for_html();
+        return strtr($string, [
+                                "'" => '&#039;',
+                                '"' => '&quot;'
+                            ]);
     }
 
     /**

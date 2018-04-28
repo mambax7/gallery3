@@ -1,13 +1,14 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Input library.
  *
  * $Id: Input.php 4729 2009-12-29 20:35:19Z isaiah $
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class Input_Core
 {
@@ -60,7 +61,7 @@ class Input_Core
         }
 
         // Use XSS clean?
-        $this->use_xss_clean = (bool) Kohana::config('core.global_xss_filtering');
+        $this->use_xss_clean = (bool)Kohana::config('core.global_xss_filtering');
 
         if (null === Input::$instance) {
             // magic_quotes_runtime is enabled
@@ -182,7 +183,7 @@ class Input_Core
             return $array;
         }
 
-        if (! isset($array[$key])) {
+        if (!isset($array[$key])) {
             return $default;
         }
 
@@ -224,7 +225,7 @@ class Input_Core
             $this->ip_address = substr($this->ip_address, $comma + 1);
         }
 
-        if (! valid::ip($this->ip_address)) {
+        if (!valid::ip($this->ip_address)) {
             // Use an empty IP
             $this->ip_address = '0.0.0.0';
         }
@@ -265,12 +266,12 @@ class Input_Core
 
         if (is_bool($tool)) {
             $tool = 'default';
-        } elseif (! method_exists($this, 'xss_filter_'.$tool)) {
-            Kohana_Log::add('error', 'Unable to use Input::xss_filter_'.$tool.'(), no such method exists');
+        } elseif (!method_exists($this, 'xss_filter_' . $tool)) {
+            Kohana_Log::add('error', 'Unable to use Input::xss_filter_' . $tool . '(), no such method exists');
             $tool = 'default';
         }
 
-        $method = 'xss_filter_'.$tool;
+        $method = 'xss_filter_' . $tool;
 
         return $this->$method($data);
     }
@@ -361,7 +362,7 @@ class Input_Core
         /**
          * @todo License should go here, http://htmlpurifier.org/
          */
-        if (! class_exists('HTMLPurifier_Config', false)) {
+        if (!class_exists('HTMLPurifier_Config', false)) {
             // Load HTMLPurifier
             require Kohana::find_file('vendor', 'htmlpurifier/HTMLPurifier.standalone', true);
         }
@@ -391,7 +392,7 @@ class Input_Core
      */
     public function clean_input_keys($str)
     {
-        if (! preg_match('#^[\pL0-9:_.-]++$#uD', $str)) {
+        if (!preg_match('#^[\pL0-9:_.-]++$#uD', $str)) {
             exit('Disallowed key characters in global data.');
         }
 
@@ -452,12 +453,12 @@ class Input_Core
             // Remove control characters
             $str = text::strip_ascii_ctrl($str);
 
-            if (! text::is_ascii($str)) {
+            if (!text::is_ascii($str)) {
                 // Disable notices
                 $ER = error_reporting(~E_NOTICE);
 
                 // iconv is expensive, so it is only used when needed
-                $str = iconv(Kohana::CHARSET, Kohana::CHARSET.'//IGNORE', $str);
+                $str = iconv(Kohana::CHARSET, Kohana::CHARSET . '//IGNORE', $str);
 
                 // Turn notices back on
                 error_reporting($ER);

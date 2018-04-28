@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,12 +22,6 @@ class watermark_event_Core
 {
     public static function admin_menu($menu, $theme)
     {
-        $menu->get('content_menu')
-      ->append(
-        Menu::factory('link')
-        ->id('watermarks')
-        ->label(t('Watermarks'))
-        ->url(url::site('admin/watermarks'))
-      );
+        $menu->get('content_menu')->append(Menu::factory('link')->id('watermarks')->label(t('Watermarks'))->url(url::site('admin/watermarks')));
     }
 }

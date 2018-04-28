@@ -1,15 +1,15 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Creates a "Page Not Found" exception.
  *
  * $Id: Kohana_404_Exception.php 4729 2009-12-29 20:35:19Z isaiah $
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
-
 class Kohana_404_Exception_Core extends Kohana_Exception
 {
     protected $code = E_PAGE_NOT_FOUND;

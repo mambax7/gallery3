@@ -32,32 +32,34 @@ class movie_Core
         $form = new Forge("movies/update/$movie->id", '', 'post', ['id' => 'g-edit-movie-form']);
         $form->hidden('from_id')->value($movie->id);
         $group = $form->group('edit_item')->label(t('Edit Movie'));
-        $group->input('title')->label(t('Title'))->value($movie->title)
-              ->error_messages('required', t('You must provide a title'))
-              ->error_messages('length', t('Your title is too long'));
+        $group->input('title')->label(t('Title'))->value($movie->title)->error_messages('required', t('You must provide a title'))->error_messages('length', t('Your title is too long'));
         $group->textarea('description')->label(t('Description'))->value($movie->description);
-        $group->input('name')->label(t('Filename'))->value($movie->name)
-              ->error_messages(
-                  'conflict',
-                  t('There is already a movie, photo or album with this name')
-      )
-              ->error_messages('no_slashes', t("The movie name can't contain a \"/\""))
-              ->error_messages('no_backslashes', t("The movie name can't contain a \"\\\""))
-              ->error_messages('no_trailing_period', t("The movie name can't end in \".\""))
-              ->error_messages('illegal_data_file_extension', t('You cannot change the movie file extension'))
-              ->error_messages('required', t('You must provide a movie file name'))
-              ->error_messages('length', t('Your movie file name is too long'));
-        $group->input('slug')->label(t('Internet Address'))->value($movie->slug)
-              ->error_messages(
-                  'conflict',
-                  t('There is already a movie, photo or album with this internet address')
-      )
-              ->error_messages(
-                  'not_url_safe',
-                  t('The internet address should contain only letters, numbers, hyphens and underscores')
-      )
-              ->error_messages('required', t('You must provide an internet address'))
-              ->error_messages('length', t('Your internet address is too long'));
+        $group->input('name')->label(t('Filename'))->value($movie->name)->error_messages('conflict', t('There is already a movie, photo or album with this name'))->error_messages('no_slashes', t("The movie name can't contain a \"/\""))->error_messages(
+            'no_backslashes',
+                                                                                                                                                                                                                                                            t("The movie name can't contain a \"\\\"")
+        )->error_messages(
+                                                                                                                                                                                                                                                                'no_trailing_period',
+                                                                                                                                                                                                                                                                                                                        t("The movie name can't end in \".\"")
+                                                                                                                                                                                                                                                            )->error_messages(
+                                                                                                                                                                                                                                                                                                                            'illegal_data_file_extension',
+                                                                                                                                                                                                                                                                                                                                                                                t('You cannot change the movie file extension')
+                                                                                                                                                                                                                                                                                                                        )->error_messages(
+                                                                                                                                                                                                                                                                                                                                                                                    'required',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                 t('You must provide a movie file name')
+                                                                                                                                                                                                                                                                                                                                                                                )->error_messages(
+                                                                                                                                                                                                                                                                                                                                                                                                                                                     'length',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          t('Your movie file name is too long')
+                                                                                                                                                                                                                                                                                                                                                                                                                                                 );
+        $group->input('slug')->label(t('Internet Address'))->value($movie->slug)->error_messages('conflict', t('There is already a movie, photo or album with this internet address'))->error_messages(
+            'not_url_safe',
+                                                                                                                                                                                                       t('The internet address should contain only letters, numbers, hyphens and underscores')
+        )->error_messages(
+                                                                                                                                                                                                           'required',
+                                                                                                                                                                                                                                                                                                                t('You must provide an internet address')
+                                                                                                                                                                                                       )->error_messages(
+                                                                                                                                                                                                                                                                                                                    'length',
+                                                                                                                                                                                                                                                                                                                                                                           t('Your internet address is too long')
+                                                                                                                                                                                                                                                                                                                );
 
         module::event('item_edit_form', $movie, $form);
 
@@ -72,11 +74,11 @@ class movie_Core
      * input_args (extra ffmpeg input args) and output_args (extra ffmpeg output args).  Extra args
      * are added at the end of the list, so they can override any prior args.
      *
-     * @param string     $input_file
-     * @param string     $output_file
-     * @param array      $movie_options (optional)
+     * @param string $input_file
+     * @param string $output_file
+     * @param array  $movie_options (optional)
      */
-    public static function extract_frame($input_file, $output_file, $movie_options=null)
+    public static function extract_frame($input_file, $output_file, $movie_options = null)
     {
         $ffmpeg = movie::find_ffmpeg();
         if (empty($ffmpeg)) {
@@ -91,26 +93,19 @@ class movie_Core
             $start_time = module::get_var('gallery', 'movie_extract_frame_time', 3); // use default
         }
         // extract frame at start_time, unless movie is too short
-        $start_time_arg = ($duration >= $start_time + 0.1) ?
-            '-ss ' . movie::seconds_to_hhmmssdd($start_time) : '';
+        $start_time_arg = ($duration >= $start_time + 0.1) ? '-ss ' . movie::seconds_to_hhmmssdd($start_time) : '';
 
-        $input_args = isset($movie_options['input_args']) ? $movie_options['input_args'] : '';
+        $input_args  = isset($movie_options['input_args']) ? $movie_options['input_args'] : '';
         $output_args = isset($movie_options['output_args']) ? $movie_options['output_args'] : '';
 
-        $cmd = escapeshellcmd($ffmpeg) . " $input_args -i " . escapeshellarg($input_file) .
-      " -an $start_time_arg -an -r 1 -vframes 1" .
-      " -s {$width}x{$height}" .
-      " -y -f mjpeg $output_args " . escapeshellarg($output_file) . ' 2>&1';
+        $cmd = escapeshellcmd($ffmpeg) . " $input_args -i " . escapeshellarg($input_file) . " -an $start_time_arg -an -r 1 -vframes 1" . " -s {$width}x{$height}" . " -y -f mjpeg $output_args " . escapeshellarg($output_file) . ' 2>&1';
         exec($cmd, $exec_output, $exec_return);
 
         clearstatcache();  // use $filename parameter when PHP_version is 5.3+
         if (0 == filesize($output_file) || $exec_return) {
             // Maybe the movie needs the "-threads 1" argument added
             // (see http://sourceforge.net/apps/trac/gallery/ticket/1924)
-            $cmd = escapeshellcmd($ffmpeg) . " -threads 1 $input_args -i " . escapeshellarg($input_file) .
-        " -an $start_time_arg -an -r 1 -vframes 1" .
-        " -s {$width}x{$height}" .
-        " -y -f mjpeg $output_args " . escapeshellarg($output_file) . ' 2>&1';
+            $cmd = escapeshellcmd($ffmpeg) . " -threads 1 $input_args -i " . escapeshellarg($input_file) . " -an $start_time_arg -an -r 1 -vframes 1" . " -s {$width}x{$height}" . " -y -f mjpeg $output_args " . escapeshellarg($output_file) . ' 2>&1';
             exec($cmd, $exec_output, $exec_return);
 
             clearstatcache();
@@ -130,16 +125,16 @@ class movie_Core
             // Refresh ffmpeg settings
             $ffmpeg = movie::find_ffmpeg();
             switch (module::get_var('gallery', 'movie_allow_uploads', 'autodetect')) {
-        case 'always':
-          self::$allow_uploads = true;
-          break;
-        case 'never':
-          self::$allow_uploads = false;
-          break;
-        default:
-          self::$allow_uploads = !empty($ffmpeg);
-          break;
-      }
+                case 'always':
+                    self::$allow_uploads = true;
+                    break;
+                case 'never':
+                    self::$allow_uploads = false;
+                    break;
+                default:
+                    self::$allow_uploads = !empty($ffmpeg);
+                    break;
+            }
         }
         return self::$allow_uploads;
     }
@@ -149,12 +144,9 @@ class movie_Core
      */
     public static function find_ffmpeg()
     {
-        if (!($ffmpeg_path = module::get_var('gallery', 'ffmpeg_path')) ||
-            !@is_executable($ffmpeg_path)) {
-            $ffmpeg_path = system::find_binary(
-                'ffmpeg',
-                module::get_var('gallery', 'graphics_toolkit_path')
-      );
+        if (!($ffmpeg_path = module::get_var('gallery', 'ffmpeg_path'))
+            || !@is_executable($ffmpeg_path)) {
+            $ffmpeg_path = system::find_binary('ffmpeg', module::get_var('gallery', 'graphics_toolkit_path'));
             module::set_var('gallery', 'ffmpeg_path', $ffmpeg_path);
         }
         return $ffmpeg_path;
@@ -174,7 +166,7 @@ class movie_Core
 
         // Find version using -h argument since -version wasn't available in early versions.
         // To keep the preg_match searches quick, we'll trim the (otherwise long) result.
-        $cmd = escapeshellcmd($ffmpeg) . ' -h 2>&1';
+        $cmd    = escapeshellcmd($ffmpeg) . ' -h 2>&1';
         $result = substr(`$cmd`, 0, 1000);
         if (preg_match("/ffmpeg version (\S+)/i", $result, $matches_version)) {
             // Version number found - see if we can get the build date or copyright year as well.
@@ -217,14 +209,15 @@ class movie_Core
         }
 
         $metadata = new stdClass();
-        $ffmpeg = movie::find_ffmpeg();
+        $ffmpeg   = movie::find_ffmpeg();
         if (!empty($ffmpeg)) {
             // ffmpeg found - use it to get width, height, and duration.
-            $cmd = escapeshellcmd($ffmpeg) . ' -i ' . escapeshellarg($file_path) . ' 2>&1';
+            $cmd    = escapeshellcmd($ffmpeg) . ' -i ' . escapeshellarg($file_path) . ' 2>&1';
             $result = `$cmd`;
             if (preg_match("/Stream.*?Video:.*?, (\d+)x(\d+)/", $result, $matches_res)) {
-                if (preg_match("/Stream.*?Video:.*? \[.*?DAR (\d+):(\d+).*?\]/", $result, $matches_dar) &&
-            $matches_dar[1] >= 1 && $matches_dar[2] >= 1) {
+                if (preg_match("/Stream.*?Video:.*? \[.*?DAR (\d+):(\d+).*?\]/", $result, $matches_dar)
+                    && $matches_dar[1] >= 1
+                    && $matches_dar[2] >= 1) {
                     // DAR is defined - determine width based on height and DAR
                     // (should always be int, but adding round to be sure)
                     $matches_res[1] = round($matches_res[2] * $matches_dar[1] / $matches_dar[2]);
@@ -243,14 +236,14 @@ class movie_Core
             }
         } else {
             // ffmpeg not found - set width, height, and duration to zero.
-            $metadata->width = 0;
-            $metadata->height = 0;
+            $metadata->width    = 0;
+            $metadata->height   = 0;
             $metadata->duration = 0;
         }
 
         $extension = pathinfo($file_path, PATHINFO_EXTENSION);
-        if (!$extension ||
-        (!$metadata->mime_type = legal_file::get_movie_types_by_extension($extension))) {
+        if (!$extension
+            || (!$metadata->mime_type = legal_file::get_movie_types_by_extension($extension))) {
             // Extension is empty or illegal.
             $metadata->extension = null;
             $metadata->mime_type = null;
@@ -264,14 +257,17 @@ class movie_Core
 
         // If the post-events results are invalid, throw an exception.  Note that, unlike photos, having
         // zero width and height isn't considered invalid (as is the case when FFmpeg isn't installed).
-        if (!$metadata->mime_type || !$metadata->extension ||
-        ($metadata->mime_type != legal_file::get_movie_types_by_extension($metadata->extension))) {
+        if (!$metadata->mime_type || !$metadata->extension
+            || ($metadata->mime_type != legal_file::get_movie_types_by_extension($metadata->extension))) {
             throw new Exception('@todo ILLEGAL_OR_UNINDENTIFIABLE_FILE');
         }
 
         return [
-            $metadata->width, $metadata->height, $metadata->mime_type,
-            $metadata->extension, $metadata->duration
+            $metadata->width,
+            $metadata->height,
+            $metadata->mime_type,
+            $metadata->extension,
+            $metadata->duration
         ];
     }
 
@@ -285,12 +281,7 @@ class movie_Core
      */
     public static function seconds_to_hhmmssdd($seconds)
     {
-        return sprintf(
-            '%02d:%02d:%05.2f',
-            floor($seconds / 3600),
-            floor(($seconds % 3600) / 60),
-                   floor(100 * $seconds % 6000) / 100
-    );
+        return sprintf('%02d:%02d:%05.2f', floor($seconds / 3600), floor(($seconds % 3600) / 60), floor(100 * $seconds % 6000) / 100);
     }
 
     /**

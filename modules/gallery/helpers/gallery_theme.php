@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -22,8 +23,8 @@ class gallery_theme_Core
     public static function head($theme)
     {
         $session = Session::instance();
-        $buf = '';
-        $buf .= $theme->css('gallery.css');
+        $buf     = '';
+        $buf     .= $theme->css('gallery.css');
         if ($session->get('debug')) {
             $buf .= $theme->css('debug.css');
         }
@@ -46,9 +47,7 @@ class gallery_theme_Core
         }
 
         if ($session->get('l10n_mode', false)) {
-            $buf .= $theme->css('l10n_client.css')
-        . $theme->script('jquery.cookie.js')
-        . $theme->script('l10n_client.js');
+            $buf .= $theme->css('l10n_client.css') . $theme->script('jquery.cookie.js') . $theme->script('l10n_client.js');
         }
 
         // Add MediaElementJS library
@@ -61,8 +60,8 @@ class gallery_theme_Core
 
     public static function admin_head($theme)
     {
-        $buf = $theme->css('gallery.css');
-        $buf .= $theme->script('gallery.panel.js');
+        $buf     = $theme->css('gallery.css');
+        $buf     .= $theme->script('gallery.panel.js');
         $session = Session::instance();
         if ($session->get('debug')) {
             $buf .= $theme->css('debug.css');
@@ -95,8 +94,7 @@ class gallery_theme_Core
 
         if (identity::active_user()->admin && upgrade_checker::should_auto_check()) {
             $content .= '<script type="text/javascript">
-        $.ajax({url: "' . url::site('admin/upgrade_checker/check_now?csrf=' .
-                                    access::csrf_token()) . '"});
+        $.ajax({url: "' . url::site('admin/upgrade_checker/check_now?csrf=' . access::csrf_token()) . '"});
         </script>';
         }
         return $content;
@@ -127,8 +125,7 @@ class gallery_theme_Core
 
         if (upgrade_checker::should_auto_check()) {
             $content .= '<script type="text/javascript">
-        $.ajax({url: "' . url::site('admin/upgrade_checker/check_now?csrf=' .
-                                    access::csrf_token()) . '"});
+        $.ajax({url: "' . url::site('admin/upgrade_checker/check_now?csrf=' . access::csrf_token()) . '"});
         </script>';
         }
 
@@ -140,17 +137,11 @@ class gallery_theme_Core
 
     public static function credits()
     {
-        $version_string = SafeString::of_safe_html(
-      '<bdo dir="ltr">Gallery ' . gallery::version_string() . '</bdo>'
-    );
-        return '<li class="g-first">' .
-               t(
-                   module::get_var('gallery', 'credits'),
-                   [
-            'url'             => 'http://galleryproject.org',
-            'gallery_version' => $version_string
-                   ]
-      ) . '</li>';
+        $version_string = SafeString::of_safe_html('<bdo dir="ltr">Gallery ' . gallery::version_string() . '</bdo>');
+        return '<li class="g-first">' . t(module::get_var('gallery', 'credits'), [
+                                                                                   'url'             => 'http://galleryproject.org',
+                                                                                   'gallery_version' => $version_string
+                                                                               ]) . '</li>';
     }
 
     public static function admin_credits()

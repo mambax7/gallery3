@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -38,8 +39,8 @@ class comment_rest_Core
             access::forbidden();
         }
 
-        $comment = rest::resolve($request->url);
-        $comment = ORM::factory('comment');
+        $comment       = rest::resolve($request->url);
+        $comment       = ORM::factory('comment');
         $comment->text = $request->params->text;
         $comment->save();
     }
@@ -59,13 +60,13 @@ class comment_rest_Core
     public static function relationships($resource_type, $resource)
     {
         switch ($resource_type) {
-    case 'item':
-      return [
-          'comments' => [
-              'url' => rest::url('item_comments', $resource)
-          ]
-      ];
-    }
+            case 'item':
+                return [
+                    'comments' => [
+                        'url' => rest::url('item_comments', $resource)
+                    ]
+                ];
+        }
     }
 
     public static function resolve($id)

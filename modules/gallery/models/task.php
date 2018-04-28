@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -19,7 +20,7 @@
  */
 class Task_Model_Core extends ORM
 {
-    public function get($key, $default=null)
+    public function get($key, $default = null)
     {
         $context = unserialize($this->context);
         if (array_key_exists($key, $context)) {
@@ -29,9 +30,9 @@ class Task_Model_Core extends ORM
         }
     }
 
-    public function set($key, $value=null)
+    public function set($key, $value = null)
     {
-        $context = unserialize($this->context);
+        $context       = unserialize($this->context);
         $context[$key] = $value;
         $this->context = serialize($context);
     }
@@ -44,7 +45,7 @@ class Task_Model_Core extends ORM
         return parent::save();
     }
 
-    public function delete($ignored_id=null)
+    public function delete($ignored_id = null)
     {
         Cache::instance()->delete($this->_cache_key());
         return parent::delete();
@@ -70,12 +71,7 @@ class Task_Model_Core extends ORM
 
         // Save for 30 days.
         $log .= !empty($log) ? "\n" : '';
-        Cache::instance()->set(
-            $key,
-            "$log{$msg}",
-            ['task', 'log', 'import'],
-            2592000
-    );
+        Cache::instance()->set($key, "$log{$msg}", ['task', 'log', 'import'], 2592000);
     }
 
     /**

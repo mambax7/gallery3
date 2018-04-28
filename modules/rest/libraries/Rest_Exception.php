@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,7 +22,7 @@ class Rest_Exception_Core extends Kohana_Exception
 {
     public $response = [];
 
-    public function __construct($message, $code, $response= [])
+    public function __construct($message, $code, $response = [])
     {
         parent::__construct($message, null, $code);
         $this->response = $response;

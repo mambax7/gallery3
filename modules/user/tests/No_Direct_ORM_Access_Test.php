@@ -23,15 +23,7 @@ class No_Direct_ORM_Access_Test extends Gallery_Unit_Test_Case
 {
     public function no_access_to_users_table_test()
     {
-        $dir = new UserModuleFilterIterator(
-      new PhpCodeFilterIterator(
-        new GalleryCodeFilterIterator(
-          new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator(DOCROOT)
-          )
-        )
-      )
-    );
+        $dir    = new UserModuleFilterIterator(new PhpCodeFilterIterator(new GalleryCodeFilterIterator(new RecursiveIteratorIterator(new RecursiveDirectoryIterator(DOCROOT)))));
         $errors = [];
         foreach ($dir as $file) {
             //if (basename(dirname($file)) == "helpers") {
@@ -52,15 +44,7 @@ class No_Direct_ORM_Access_Test extends Gallery_Unit_Test_Case
 
     public function no_access_to_groups_table_test()
     {
-        $dir = new UserModuleFilterIterator(
-      new PhpCodeFilterIterator(
-        new GalleryCodeFilterIterator(
-          new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator(DOCROOT)
-          )
-        )
-      )
-    );
+        $dir    = new UserModuleFilterIterator(new PhpCodeFilterIterator(new GalleryCodeFilterIterator(new RecursiveIteratorIterator(new RecursiveDirectoryIterator(DOCROOT)))));
         $errors = [];
         foreach ($dir as $file) {
             $file_as_string = file_get_contents($file);

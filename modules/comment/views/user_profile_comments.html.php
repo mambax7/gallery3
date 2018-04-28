@@ -1,24 +1,21 @@
 <?php defined('SYSPATH') || die('No direct script access.') ?>
 <div id="g-comment-detail">
-<ul>
-  <?php foreach ($comments as $comment): ?>
-  <li id="g-comment-<?= $comment->id ?>">
-    <p class="g-author">
-      <?= t(
-          'on %date for %title ',
-          [
-              'date'  => gallery::date_time($comment->created),
-              'title' => $comment->item()->title
-          ]
-); ?>
-      <a href="<?= $comment->item()->url() ?>">
-        <?= $comment->item()->thumb_img([], 50) ?>
-      </a>
-    </p>
-    <div>
-      <?= nl2br(html::purify($comment->text)) ?>
-    </div>
-  </li>
-  <?php endforeach ?>
-</ul>
+    <ul>
+        <?php foreach ($comments as $comment): ?>
+            <li id="g-comment-<?= $comment->id ?>">
+                <p class="g-author">
+                    <?= t('on %date for %title ', [
+                                                    'date'  => gallery::date_time($comment->created),
+                                                    'title' => $comment->item()->title
+                                                ]); ?>
+                    <a href="<?= $comment->item()->url() ?>">
+                        <?= $comment->item()->thumb_img([], 50) ?>
+                    </a>
+                </p>
+                <div>
+                    <?= nl2br(html::purify($comment->text)) ?>
+                </div>
+            </li>
+        <?php endforeach ?>
+    </ul>
 </div>

@@ -1,13 +1,13 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Kohana I18N System
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
-
 class I18n_Core
 {
     protected static $locale;
@@ -22,15 +22,14 @@ class I18n_Core
         I18n::$locale = $locale;
     }
 
-
     /**
      *
      * Returns the locale.
      * If $ext is true, the UTF8 extension gets returned as well, otherwise, just the language code.
      * Defaults to true.
      *
-     * @return 							The locale
-     * @param boolean $ext[optional]	Get the Extension?
+     * @return                            The locale
+     * @param boolean $ext [optional]    Get the Extension?
      */
     public static function get_locale($ext = true)
     {
@@ -41,23 +40,22 @@ class I18n_Core
         }
     }
 
-
     /**
      *
      * Translates $string into language I18n::$locale and caches all found translations on the first call
      *
      * @return                 The translated String
-     * @param string $string   The String to translate
+     * @param string $string The String to translate
      */
     public static function get_text($string)
     {
-        if (! I18n::$translations) {
+        if (!I18n::$translations) {
             $locale = explode('_', I18n::get_locale(false));
 
             // Get the translation files
             $translation_files = Kohana::find_file('i18n', $locale[0]);
 
-            if ($local_translation_files = Kohana::find_file('i18n', $locale[0].'/'.$locale[1])) {
+            if ($local_translation_files = Kohana::find_file('i18n', $locale[0] . '/' . $locale[1])) {
                 $translation_files = array_merge($translation_files, $local_translation_files);
             }
 

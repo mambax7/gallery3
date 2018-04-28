@@ -30,11 +30,7 @@ class l10n_scanner_Core
     public static function process_message($message, &$cache)
     {
         if (empty($cache)) {
-            foreach (db::build()
-               ->select('key')
-               ->from('incoming_translations')
-               ->where('locale', '=', 'root')
-               ->execute() as $row) {
+            foreach (db::build()->select('key')->from('incoming_translations')->where('locale', '=', 'root')->execute() as $row) {
                 $cache[$row->key] = true;
             }
         }
@@ -46,22 +42,22 @@ class l10n_scanner_Core
 
         $entry = ORM::factory('incoming_translation')->where('key', '=', $key)->find();
         if (!$entry->loaded()) {
-            $entry->key = $key;
+            $entry->key     = $key;
             $entry->message = serialize($message);
-            $entry->locale = 'root';
+            $entry->locale  = 'root';
             $entry->save();
         }
     }
 
     public static function scan_php_file($file, &$cache)
     {
-        $code = file_get_contents($file);
+        $code       = file_get_contents($file);
         $raw_tokens = token_get_all($code);
         unset($code);
 
-        $tokens = [];
+        $tokens          = [];
         $func_token_list = ['t' => [], 't2' => []];
-        $token_number = 0;
+        $token_number    = 0;
         // Filter out HTML / whitespace, and build a lookup for global function calls.
         foreach ($raw_tokens as $token) {
             if ((!is_array($token)) || ((T_WHITESPACE != $token[0]) && (T_INLINE_HTML != $token[0]))) {
@@ -79,20 +75,14 @@ class l10n_scanner_Core
         if (!empty($func_token_list['t'])) {
             $errors = l10n_scanner::_parse_t_calls($tokens, $func_token_list['t'], $cache);
             foreach ($errors as $line => $error) {
-                Kohana_Log::add(
-                    'error',
-                    'Translation scanner error.  ' . 'file: ' . substr($file, strlen(DOCROOT)) . ", line: $line, context: $error"
-        );
+                Kohana_Log::add('error', 'Translation scanner error.  ' . 'file: ' . substr($file, strlen(DOCROOT)) . ", line: $line, context: $error");
             }
         }
 
         if (!empty($func_token_list['t2'])) {
             $errors = l10n_scanner::_parse_plural_calls($tokens, $func_token_list['t2'], $cache);
             foreach ($errors as $line => $error) {
-                Kohana_Log::add(
-                    'error',
-                    'Translation scanner error.  ' . 'file: ' . substr($file, strlen(DOCROOT)) . ", line: $line, context: $error"
-        );
+                Kohana_Log::add('error', 'Translation scanner error.  ' . 'file: ' . substr($file, strlen(DOCROOT)) . ", line: $line, context: $error");
             }
         }
     }
@@ -112,20 +102,19 @@ class l10n_scanner_Core
         $errors = [];
         foreach ($call_list as $index) {
             $function_name = $tokens[$index++];
-            $parens = $tokens[$index++];
-            $first_param = $tokens[$index++];
-            $next_token = $tokens[$index];
+            $parens        = $tokens[$index++];
+            $first_param   = $tokens[$index++];
+            $next_token    = $tokens[$index];
 
             if ('(' == $parens) {
                 if (in_array($next_token, [')', ','])
-            && (is_array($first_param) && (T_CONSTANT_ENCAPSED_STRING == $first_param[0]))) {
+                    && (is_array($first_param) && (T_CONSTANT_ENCAPSED_STRING == $first_param[0]))) {
                     $message = self::_escape_quoted_string($first_param[1]);
                     l10n_scanner::process_message($message, $cache);
                 } else {
                     if (is_array($first_param) && (T_CONSTANT_ENCAPSED_STRING == $first_param[0])) {
                         // Malformed string literals; escalate this
-                        $errors[$first_param[2]] =
-              var_export([$function_name, $parens, $first_param, $next_token], 1);
+                        $errors[$first_param[2]] = var_export([$function_name, $parens, $first_param, $next_token], 1);
                     } else {
                         // t() found, but inside is something which is not a string literal.  That's fine.
                     }
@@ -139,29 +128,32 @@ class l10n_scanner_Core
     {
         $errors = [];
         foreach ($call_list as $index) {
-            $function_name = $tokens[$index++];
-            $parens = $tokens[$index++];
-            $first_param = $tokens[$index++];
+            $function_name   = $tokens[$index++];
+            $parens          = $tokens[$index++];
+            $first_param     = $tokens[$index++];
             $first_separator = $tokens[$index++];
-            $second_param = $tokens[$index++];
-            $next_token = $tokens[$index];
+            $second_param    = $tokens[$index++];
+            $next_token      = $tokens[$index];
 
             if ('(' == $parens) {
                 if (',' == $first_separator && ',' == $next_token
-                    && is_array($first_param) && T_CONSTANT_ENCAPSED_STRING == $first_param[0]
-                    && is_array($second_param) && T_CONSTANT_ENCAPSED_STRING == $second_param[0]) {
+                    && is_array($first_param)
+                    && T_CONSTANT_ENCAPSED_STRING == $first_param[0]
+                    && is_array($second_param)
+                    && T_CONSTANT_ENCAPSED_STRING == $second_param[0]) {
                     $singular = self::_escape_quoted_string($first_param[1]);
-                    $plural = self::_escape_quoted_string($second_param[1]);
+                    $plural   = self::_escape_quoted_string($second_param[1]);
                     l10n_scanner::process_message(['one' => $singular, 'other' => $plural], $cache);
                 } else {
                     if (is_array($first_param) && T_CONSTANT_ENCAPSED_STRING == $first_param[0]) {
-                        $errors[$first_param[2]] = var_export(
-                            [
-                                $function_name, $parens, $first_param,
-                                $first_separator, $second_param, $next_token
-                            ],
-                            1
-            );
+                        $errors[$first_param[2]] = var_export([
+                                                                  $function_name,
+                                                                  $parens,
+                                                                  $first_param,
+                                                                  $first_separator,
+                                                                  $second_param,
+                                                                  $next_token
+                                                              ], 1);
                     } else {
                         // t2() found, but inside is something which is not a string literal.  That's fine.
                     }

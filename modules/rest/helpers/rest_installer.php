@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,8 +22,7 @@ class rest_installer
 {
     public static function install()
     {
-        Database::instance()
-      ->query('CREATE TABLE {user_access_keys} (
+        Database::instance()->query('CREATE TABLE {user_access_keys} (
                 `id` int(9) NOT NULL auto_increment,
                 `user_id` int(9) NOT NULL,
                 `access_key` char(32) NOT NULL,

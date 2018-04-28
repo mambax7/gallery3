@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -27,7 +28,7 @@ class gallery_graphics_Core
      * @param array      $options
      * @param Item_Model $item (optional)
      */
-    public static function rotate($input_file, $output_file, $options, $item=null)
+    public static function rotate($input_file, $output_file, $options, $item = null)
     {
         graphics::init_toolkit();
 
@@ -48,10 +49,7 @@ class gallery_graphics_Core
             }
 
             // Rotate the image.  This also implicitly converts its format if needed.
-            Image::factory($input_file)
-        ->quality(module::get_var('gallery', 'image_quality'))
-        ->rotate($options['degrees'])
-        ->save($output_file);
+            Image::factory($input_file)->quality(module::get_var('gallery', 'image_quality'))->rotate($options['degrees'])->save($output_file);
         }
 
         module::event('graphics_rotate_completed', $input_file, $output_file, $options, $item);
@@ -66,7 +64,7 @@ class gallery_graphics_Core
      * @param array      $options
      * @param Item_Model $item (optional)
      */
-    public static function resize($input_file, $output_file, $options, $item=null)
+    public static function resize($input_file, $output_file, $options, $item = null)
     {
         graphics::init_toolkit();
 
@@ -82,11 +80,10 @@ class gallery_graphics_Core
                 throw new Exception('@todo EMPTY_INPUT_FILE');
             }
 
-            list($input_width, $input_height, $input_mime, $input_extension) =
-        photo::get_file_metadata($input_file);
-            if ($input_width && $input_height &&
-          (empty($options['width']) || empty($options['height']) || empty($options['master']) ||
-           (max($input_width, $input_height) <= min($options['width'], $options['height'])))) {
+            list($input_width, $input_height, $input_mime, $input_extension) = photo::get_file_metadata($input_file);
+            if ($input_width && $input_height
+                && (empty($options['width']) || empty($options['height']) || empty($options['master'])
+                    || (max($input_width, $input_height) <= min($options['width'], $options['height'])))) {
                 // Photo dimensions well-defined, but options not well-defined or would upscale the image.
                 // Do not resize.  Check mimes to see if we can copy the file or if we need to convert it.
                 // (checking mimes avoids needlessly converting jpg to jpeg, etc.)
@@ -96,15 +93,11 @@ class gallery_graphics_Core
                     copy($input_file, $output_file);
                 } else {
                     // Mimes not well-defined or not the same - convert input to output
-                    $image = Image::factory($input_file)
-            ->quality(module::get_var('gallery', 'image_quality'))
-            ->save($output_file);
+                    $image = Image::factory($input_file)->quality(module::get_var('gallery', 'image_quality'))->save($output_file);
                 }
             } else {
                 // Resize the image.  This also implicitly converts its format if needed.
-                $image = Image::factory($input_file)
-          ->resize($options['width'], $options['height'], $options['master'])
-          ->quality(module::get_var('gallery', 'image_quality'));
+                $image = Image::factory($input_file)->resize($options['width'], $options['height'], $options['master'])->quality(module::get_var('gallery', 'image_quality'));
                 if (graphics::can('sharpen')) {
                     $image->sharpen(module::get_var('gallery', 'image_sharpen'));
                 }
@@ -131,7 +124,7 @@ class gallery_graphics_Core
      * @param array      $options
      * @param Item_Model $item (optional)
      */
-    public static function composite($input_file, $output_file, $options, $item=null)
+    public static function composite($input_file, $output_file, $options, $item = null)
     {
         try {
             graphics::init_toolkit();
@@ -148,30 +141,54 @@ class gallery_graphics_Core
                 list($width, $height) = photo::get_file_metadata($input_file);
                 list($w_width, $w_height) = photo::get_file_metadata($options['file']);
 
-                $pad = isset($options['padding']) ? $options['padding'] : 10;
-                $top = $pad;
-                $left = $pad;
+                $pad      = isset($options['padding']) ? $options['padding'] : 10;
+                $top      = $pad;
+                $left     = $pad;
                 $y_center = max($height / 2 - $w_height / 2, $pad);
                 $x_center = max($width / 2 - $w_width / 2, $pad);
-                $bottom = max($height - $w_height - $pad, $pad);
-                $right = max($width - $w_width - $pad, $pad);
+                $bottom   = max($height - $w_height - $pad, $pad);
+                $right    = max($width - $w_width - $pad, $pad);
 
                 switch ($options['position']) {
-        case 'northwest': $x = $left;     $y = $top;       break;
-        case 'north':     $x = $x_center; $y = $top;       break;
-        case 'northeast': $x = $right;    $y = $top;       break;
-        case 'west':      $x = $left;     $y = $y_center;  break;
-        case 'center':    $x = $x_center; $y = $y_center;  break;
-        case 'east':      $x = $right;    $y = $y_center;  break;
-        case 'southwest': $x = $left;     $y = $bottom;    break;
-        case 'south':     $x = $x_center; $y = $bottom;    break;
-        case 'southeast': $x = $right;    $y = $bottom;    break;
-        }
+                    case 'northwest':
+                        $x = $left;
+                        $y = $top;
+                        break;
+                    case 'north':
+                        $x = $x_center;
+                        $y = $top;
+                        break;
+                    case 'northeast':
+                        $x = $right;
+                        $y = $top;
+                        break;
+                    case 'west':
+                        $x = $left;
+                        $y = $y_center;
+                        break;
+                    case 'center':
+                        $x = $x_center;
+                        $y = $y_center;
+                        break;
+                    case 'east':
+                        $x = $right;
+                        $y = $y_center;
+                        break;
+                    case 'southwest':
+                        $x = $left;
+                        $y = $bottom;
+                        break;
+                    case 'south':
+                        $x = $x_center;
+                        $y = $bottom;
+                        break;
+                    case 'southeast':
+                        $x = $right;
+                        $y = $bottom;
+                        break;
+                }
 
-                Image::factory($input_file)
-          ->composite($options['file'], $x, $y, $options['transparency'])
-          ->quality(module::get_var('gallery', 'image_quality'))
-          ->save($output_file);
+                Image::factory($input_file)->composite($options['file'], $x, $y, $options['transparency'])->quality(module::get_var('gallery', 'image_quality'))->save($output_file);
             }
 
             module::event('graphics_composite_completed', $input_file, $output_file, $options, $item);

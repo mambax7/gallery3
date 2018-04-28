@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -20,14 +21,14 @@
 class site_status_Core
 {
     const SUCCESS = 1;
-    const INFO    = 2;
+    const INFO = 2;
     const WARNING = 3;
-    const ERROR   = 4;
+    const ERROR = 4;
 
     /**
      * Report a successful event.
-     * @param string  $msg           a detailed message
-     * @param string  $permanent_key make this message permanent and store it under this key
+     * @param string $msg           a detailed message
+     * @param string $permanent_key make this message permanent and store it under this key
      */
     public static function success($msg, $permanent_key)
     {
@@ -36,8 +37,8 @@ class site_status_Core
 
     /**
      * Report an informational event.
-     * @param string  $msg           a detailed message
-     * @param string  $permanent_key make this message permanent and store it under this key
+     * @param string $msg           a detailed message
+     * @param string $permanent_key make this message permanent and store it under this key
      */
     public static function info($msg, $permanent_key)
     {
@@ -46,8 +47,8 @@ class site_status_Core
 
     /**
      * Report that something went wrong, not fatal, but worth investigation.
-     * @param string  $msg           a detailed message
-     * @param string  $permanent_key make this message permanent and store it under this key
+     * @param string $msg           a detailed message
+     * @param string $permanent_key make this message permanent and store it under this key
      */
     public static function warning($msg, $permanent_key)
     {
@@ -56,8 +57,8 @@ class site_status_Core
 
     /**
      * Report that something went wrong that should be fixed.
-     * @param string  $msg           a detailed message
-     * @param string  $permanent_key make this message permanent and store it under this key
+     * @param string $msg           a detailed message
+     * @param string $permanent_key make this message permanent and store it under this key
      */
     public static function error($msg, $permanent_key)
     {
@@ -72,14 +73,12 @@ class site_status_Core
      */
     private static function _add($msg, $severity, $permanent_key)
     {
-        $message = ORM::factory('message')
-      ->where('key', '=', $permanent_key)
-      ->find();
+        $message = ORM::factory('message')->where('key', '=', $permanent_key)->find();
         if (!$message->loaded()) {
             $message->key = $permanent_key;
         }
         $message->severity = $severity;
-        $message->value = $msg;
+        $message->value    = $msg;
         $message->save();
     }
 
@@ -125,17 +124,17 @@ class site_status_Core
     public static function severity_class($severity)
     {
         switch ($severity) {
-    case site_status::SUCCESS:
-      return 'g-success';
+            case site_status::SUCCESS:
+                return 'g-success';
 
-    case site_status::INFO:
-      return 'g-info';
+            case site_status::INFO:
+                return 'g-info';
 
-    case site_status::WARNING:
-      return 'g-warning';
+            case site_status::WARNING:
+                return 'g-warning';
 
-    case site_status::ERROR:
-      return 'g-error';
-    }
+            case site_status::ERROR:
+                return 'g-error';
+        }
     }
 }

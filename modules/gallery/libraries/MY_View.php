@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -35,7 +36,7 @@ class View extends View_Core
         }
     }
 
-    public function is_set($key=null)
+    public function is_set($key = null)
     {
         return parent::is_set($key) ? true : array_key_exists($key, self::$global_data);
     }
@@ -74,7 +75,7 @@ class View extends View_Core
      *
      * @see View_Core::render
      */
-    public function render($print=false, $renderer=false, $modifier=false)
+    public function render($print = false, $renderer = false, $modifier = false)
     {
         try {
             $this->kohana_local_data = array_merge(self::$global_data, $this->kohana_local_data);

@@ -28,13 +28,13 @@ if ($e instanceof Kohana_404_Exception) {
     if ('file_proxy' == Router::$controller) {
         print 'File not found';
     } else {
-        $view = new Theme_View('page.html', 'other', 'error');
-        $view->page_title = t('Dang...  Page not found!');
-        $view->content = new View('error_404.html');
-        $user = identity::active_user();
+        $view                    = new Theme_View('page.html', 'other', 'error');
+        $view->page_title        = t('Dang...  Page not found!');
+        $view->content           = new View('error_404.html');
+        $user                    = identity::active_user();
         $view->content->is_guest = $user && $user->guest;
         if ($view->content->is_guest) {
-            $view->content->login_form = new View('login_ajax.html');
+            $view->content->login_form       = new View('login_ajax.html');
             $view->content->login_form->form = auth::get_login_form('login/auth_html');
         }
         print $view;

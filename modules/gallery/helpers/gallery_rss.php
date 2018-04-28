@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -17,7 +18,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
 class gallery_rss_Core
 {
     public static function available_feeds($item, $tag)
@@ -25,10 +25,9 @@ class gallery_rss_Core
         $feeds['gallery/latest'] = t('Latest photos and movies');
 
         if ($item) {
-            $feed_item = $item -> is_album() ? $item : $item->parent();
+            $feed_item = $item->is_album() ? $item : $item->parent();
 
-            $feeds["gallery/album/{$feed_item->id}"] =
-          t('%title photos and movies', ['title' => $feed_item->title]);
+            $feeds["gallery/album/{$feed_item->id}"] = t('%title photos and movies', ['title' => $feed_item->title]);
         }
 
         return $feeds;
@@ -38,47 +37,33 @@ class gallery_rss_Core
     {
         $feed = new stdClass();
         switch ($feed_id) {
-    case 'latest':
-      $feed->items = ORM::factory('item')
-        ->viewable()
-        ->where('type', '<>', 'album')
-        ->order_by('created', 'DESC')
-        ->find_all($limit, $offset);
+            case 'latest':
+                $feed->items = ORM::factory('item')->viewable()->where('type', '<>', 'album')->order_by('created', 'DESC')->find_all($limit, $offset);
 
-      $all_items = ORM::factory('item')
-        ->viewable()
-        ->where('type', '<>', 'album')
-        ->order_by('created', 'DESC');
+                $all_items = ORM::factory('item')->viewable()->where('type', '<>', 'album')->order_by('created', 'DESC');
 
-      $feed->max_pages = ceil($all_items->find_all()->count() / $limit);
-      $feed->title = t('%site_title - Recent updates', ['site_title' => item::root()->title]);
-      $feed->description = t('Recent updates');
-      return $feed;
+                $feed->max_pages   = ceil($all_items->find_all()->count() / $limit);
+                $feed->title       = t('%site_title - Recent updates', ['site_title' => item::root()->title]);
+                $feed->description = t('Recent updates');
+                return $feed;
 
-    case 'album':
-      $item = ORM::factory('item', $id);
-      access::required('view', $item);
+            case 'album':
+                $item = ORM::factory('item', $id);
+                access::required('view', $item);
 
-      $feed->items = $item
-        ->viewable()
-        ->descendants($limit, $offset, [['type', '=', 'photo']]);
-      $feed->max_pages = ceil(
-          $item->viewable()->descendants_count([['type', '=', 'photo']]) / $limit
-      );
-      if ($item->id == item::root()->id) {
-          $feed->title = html::purify($item->title);
-      } else {
-          $feed->title = t(
-              '%site_title - %item_title',
-              [
-                  'site_title' => item::root()->title,
-                  'item_title' => $item->title
-              ]
-        );
-      }
-      $feed->description = nl2br(html::purify($item->description));
+                $feed->items     = $item->viewable()->descendants($limit, $offset, [['type', '=', 'photo']]);
+                $feed->max_pages = ceil($item->viewable()->descendants_count([['type', '=', 'photo']]) / $limit);
+                if ($item->id == item::root()->id) {
+                    $feed->title = html::purify($item->title);
+                } else {
+                    $feed->title = t('%site_title - %item_title', [
+                                                                    'site_title' => item::root()->title,
+                                                                    'item_title' => $item->title
+                                                                ]);
+                }
+                $feed->description = nl2br(html::purify($item->description));
 
-      return $feed;
-    }
+                return $feed;
+        }
     }
 }

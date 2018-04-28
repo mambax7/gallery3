@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -32,23 +33,29 @@ class Comments_Controller extends Controller
 
         $form = comment::get_add_form($item);
         try {
-            $valid = $form->validate();
-            $comment = ORM::factory('comment');
-            $comment->item_id = $id;
-            $comment->author_id = identity::active_user()->id;
-            $comment->text = $form->add_comment->text->value;
-            $comment->guest_name = $form->add_comment->inputs['name']->value;
+            $valid                = $form->validate();
+            $comment              = ORM::factory('comment');
+            $comment->item_id     = $id;
+            $comment->author_id   = identity::active_user()->id;
+            $comment->text        = $form->add_comment->text->value;
+            $comment->guest_name  = $form->add_comment->inputs['name']->value;
             $comment->guest_email = $form->add_comment->email->value;
-            $comment->guest_url = $form->add_comment->url->value;
+            $comment->guest_url   = $form->add_comment->url->value;
             $comment->validate();
         } catch (ORM_Validation_Exception $e) {
             // Translate ORM validation errors into form error messages
             foreach ($e->validation->errors() as $key => $error) {
                 switch ($key) {
-        case 'guest_name':  $key = 'name';  break;
-        case 'guest_email': $key = 'email'; break;
-        case 'guest_url':   $key = 'url';   break;
-        }
+                    case 'guest_name':
+                        $key = 'name';
+                        break;
+                    case 'guest_email':
+                        $key = 'email';
+                        break;
+                    case 'guest_url':
+                        $key = 'url';
+                        break;
+                }
                 $form->add_comment->inputs[$key]->add_error($error, 1);
             }
             $valid = false;
@@ -56,7 +63,7 @@ class Comments_Controller extends Controller
 
         if ($valid) {
             $comment->save();
-            $view = new Theme_View('comment.html', 'other', 'comment-fragment');
+            $view          = new Theme_View('comment.html', 'other', 'comment-fragment');
             $view->comment = $comment;
 
             json::reply([

@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -22,17 +23,14 @@ class Form_Recaptcha_Core extends Form_Input
     private $_error = null;
 
     protected $data = [
-    'name'  => '',
-    'value' => '',
+        'name'  => '',
+        'value' => '',
     ];
 
     public function __construct($name)
     {
         parent::__construct($name);
-        $this->error_messages(
-            'incorrect-captcha-sol',
-            t('The values supplied to reCAPTCHA are incorrect.')
-    );
+        $this->error_messages('incorrect-captcha-sol', t('The values supplied to reCAPTCHA are incorrect.'));
         $this->error_messages('invalid-site-private-key', t('The site private key is incorrect.'));
     }
 
@@ -43,7 +41,7 @@ class Form_Recaptcha_Core extends Form_Input
             throw new Exception('@todo NEED KEY <a href="http://recaptcha.net/api/getkey">' . 'http://recaptcha.net/api/getkey</a>');
         }
 
-        $view = new View('form_recaptcha.html');
+        $view             = new View('form_recaptcha.html');
         $view->public_key = $public_key;
         return $view;
     }
@@ -55,15 +53,11 @@ class Form_Recaptcha_Core extends Form_Input
      */
     public function validate()
     {
-        $input = Input::instance();
+        $input     = Input::instance();
         $challenge = $input->post('recaptcha_challenge_field', '', true);
-        $response = $input->post('recaptcha_response_field', '', true);
+        $response  = $input->post('recaptcha_response_field', '', true);
         if (!empty($challenge)) {
-            $this->_error = recaptcha::is_recaptcha_valid(
-        $challenge,
-          $response,
-          module::get_var('recaptcha', 'private_key')
-      );
+            $this->_error = recaptcha::is_recaptcha_valid($challenge, $response, module::get_var('recaptcha', 'private_key'));
             if (!empty($this->_error)) {
                 $this->add_error($this->_error, 1);
             }

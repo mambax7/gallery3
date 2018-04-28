@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -17,7 +18,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
 class random_Core
 {
     /**
@@ -25,7 +25,7 @@ class random_Core
      * @param string extra entropy data
      * @return string
      */
-    public static function hash($length=32)
+    public static function hash($length = 32)
     {
         require_once(MODPATH . 'gallery/vendor/joomla/crypt.php');
         return md5(JCrypt::genRandomBytes($length));
@@ -43,7 +43,7 @@ class random_Core
      * Return a random number between $min and $max.  If $min and $max are not specified,
      * return a random number between 0 and mt_getrandmax()
      */
-    public static function int($min=null, $max=null)
+    public static function int($min = null, $max = null)
     {
         if ($min || $max) {
             return mt_rand($min, $max);

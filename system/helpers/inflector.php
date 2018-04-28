@@ -1,11 +1,12 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Inflector helper class.
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class inflector_Core
 {
@@ -54,9 +55,8 @@ class inflector_Core
             $pre .= '_';
         }
 
-        return $pre.$last;
+        return $pre . $last;
     }
-
 
     /**
      * Makes a plural word singular.
@@ -72,7 +72,7 @@ class inflector_Core
 
         if (is_string($count)) {
             // Convert to integer when using a digit string
-            $count = (int) $count;
+            $count = (int)$count;
         }
 
         // Do nothing with a single count
@@ -81,7 +81,7 @@ class inflector_Core
         }
 
         // Cache key name
-        $key = 'singular_'.$str.$count;
+        $key = 'singular_' . $str . $count;
 
         if (isset(inflector::$cache[$key])) {
             return inflector::$cache[$key];
@@ -102,7 +102,7 @@ class inflector_Core
             // Remove "es"
             $str = substr($str, 0, -2);
         } elseif (preg_match('/[^aeiou]ies$/', $str)) {
-            $str = substr($str, 0, -3).'y';
+            $str = substr($str, 0, -3) . 'y';
         } elseif ('s' === substr($str, -1) && 'ss' !== substr($str, -2)) {
             $str = substr($str, 0, -1);
         }
@@ -118,7 +118,7 @@ class inflector_Core
      */
     public static function plural($str, $count = null)
     {
-        if (! $str) {
+        if (!$str) {
             return $str;
         }
 
@@ -131,9 +131,8 @@ class inflector_Core
             $pre .= '_';
         }
 
-        return $pre.$last;
+        return $pre . $last;
     }
-
 
     /**
      * Makes a singular word plural.
@@ -148,7 +147,7 @@ class inflector_Core
 
         if (is_string($count)) {
             // Convert to integer when using a digit string
-            $count = (int) $count;
+            $count = (int)$count;
         }
 
         // Do nothing with singular
@@ -157,7 +156,7 @@ class inflector_Core
         }
 
         // Cache key name
-        $key = 'plural_'.$str.$count;
+        $key = 'plural_' . $str . $count;
 
         if (isset(inflector::$cache[$key])) {
             return inflector::$cache[$key];
@@ -198,10 +197,10 @@ class inflector_Core
         $length = strlen($string);
 
         if ('s' == substr($string, $length - 1, $length)) {
-            return $string.'\'';
+            return $string . '\'';
         }
 
-        return $string.'\'s';
+        return $string . '\'s';
     }
 
     /**
@@ -212,7 +211,7 @@ class inflector_Core
      */
     public static function camelize($str)
     {
-        $str = 'x'.strtolower(trim($str));
+        $str = 'x' . strtolower(trim($str));
         $str = ucwords(preg_replace('/[\s_]+/', ' ', $str));
 
         return substr(str_replace(' ', '', $str), 1);

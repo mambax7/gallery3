@@ -27,7 +27,7 @@ class comment_Core
 {
     public static function get_add_form($item)
     {
-        $form = new Forge("comments/create/{$item->id}", '', 'post', ['id' => 'g-comment-form']);
+        $form  = new Forge("comments/create/{$item->id}", '', 'post', ['id' => 'g-comment-form']);
         $group = $form->group('add_comment')->label(t('Add comment'));
         $group->input('name')
       ->label(t('Name'))
@@ -68,7 +68,7 @@ class comment_Core
 
     public static function can_comment()
     {
-        return !identity::active_user()->guest ||
-               'everybody' == module::get_var('comment', 'access_permissions');
+        return !identity::active_user()->guest
+               || 'everybody' == module::get_var('comment', 'access_permissions');
     }
 }

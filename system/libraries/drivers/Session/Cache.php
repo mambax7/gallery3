@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Session cache driver.
  *
@@ -12,10 +13,10 @@
  *
  * $Id: Cache.php 4729 2009-12-29 20:35:19Z isaiah $
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class Session_Cache_Driver implements Session_Driver
 {
@@ -49,7 +50,7 @@ class Session_Cache_Driver implements Session_Driver
         }
 
         $config['lifetime'] = (0 == Kohana::config('session.expiration')) ? 86400 : Kohana::config('session.expiration');
-        $this->cache = new Cache($config);
+        $this->cache        = new Cache($config);
 
         return is_object($this->cache);
     }
@@ -61,7 +62,7 @@ class Session_Cache_Driver implements Session_Driver
 
     public function read($id)
     {
-        $id = 'session_'.$id;
+        $id = 'session_' . $id;
         if ($data = $this->cache->get($id)) {
             return Kohana::config('session.encryption') ? $this->encrypt->decode($data) : $data;
         }
@@ -72,11 +73,11 @@ class Session_Cache_Driver implements Session_Driver
 
     public function write($id, $data)
     {
-        if (! Session::$should_save) {
+        if (!Session::$should_save) {
             return true;
         }
 
-        $id = 'session_'.$id;
+        $id   = 'session_' . $id;
         $data = Kohana::config('session.encryption') ? $this->encrypt->encode($data) : $data;
 
         return $this->cache->set($id, $data);
@@ -84,7 +85,7 @@ class Session_Cache_Driver implements Session_Driver
 
     public function destroy($id)
     {
-        $id = 'session_'.$id;
+        $id = 'session_' . $id;
         return $this->cache->delete($id);
     }
 

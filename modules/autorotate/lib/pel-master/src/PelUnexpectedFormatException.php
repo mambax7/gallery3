@@ -22,6 +22,7 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301 USA
  */
+
 namespace lsolesen\pel;
 
 /**
@@ -33,7 +34,7 @@ namespace lsolesen\pel;
  * descendants of the {@link PelEntry} class --- the class itself is
  * abstract and so it cannot be instantiated.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public
  *          License (GPL)
  * @package PEL
@@ -45,8 +46,8 @@ namespace lsolesen\pel;
  * The documentation for each tag in {@link PelTag} will detail any
  * constrains.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
- * @package PEL
+ * @author     Martin Geisler <mgeisler@users.sourceforge.net>
+ * @package    PEL
  * @subpackage Exception
  */
 class PelUnexpectedFormatException extends PelEntryException
@@ -69,13 +70,8 @@ class PelUnexpectedFormatException extends PelEntryException
      */
     public function __construct($type, $tag, $found, $expected)
     {
-        parent::__construct(
-            'Unexpected format found for %s tag: PelFormat::%s. Expected PelFormat::%s instead.',
-            PelTag::getName($type, $tag),
-            strtoupper(PelFormat::getName($found)),
-            strtoupper(PelFormat::getName($expected))
-        );
-        $this->tag = $tag;
+        parent::__construct('Unexpected format found for %s tag: PelFormat::%s. Expected PelFormat::%s instead.', PelTag::getName($type, $tag), strtoupper(PelFormat::getName($found)), strtoupper(PelFormat::getName($expected)));
+        $this->tag  = $tag;
         $this->type = $type;
     }
 }

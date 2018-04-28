@@ -1,13 +1,14 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Memcache-based Cache driver.
  *
  * $Id: File.php 4605 2009-09-14 17:22:21Z kiall $
  *
- * @package    Cache
- * @author     Kohana Team
+ * @package        Cache
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class Cache_File_Driver extends Cache_Driver
 {
@@ -16,10 +17,10 @@ class Cache_File_Driver extends Cache_Driver
 
     public function __construct($config)
     {
-        $this->config = $config;
-        $this->config['directory'] = str_replace('\\', '/', realpath($this->config['directory'])).'/';
+        $this->config              = $config;
+        $this->config['directory'] = str_replace('\\', '/', realpath($this->config['directory'])) . '/';
 
-        if (! is_dir($this->config['directory']) || ! is_writable($this->config['directory'])) {
+        if (!is_dir($this->config['directory']) || !is_writable($this->config['directory'])) {
             throw new Cache_Exception('The configured cache directory, :directory:, is not writable.', [':directory:' => $this->config['directory']]);
         }
     }
@@ -35,13 +36,13 @@ class Cache_File_Driver extends Cache_Driver
     {
         if (true === $keys) {
             // Find all the files
-            return glob($this->config['directory'].'*~*~*');
+            return glob($this->config['directory'] . '*~*~*');
         } elseif (true === $tag) {
             // Find all the files that have the tag name
             $paths = [];
 
-            foreach ((array) $keys as $tag) {
-                $paths = array_merge($paths, glob($this->config['directory'].'*~*'.$tag.'*~*'));
+            foreach ((array)$keys as $tag) {
+                $paths = array_merge($paths, glob($this->config['directory'] . '*~*' . $tag . '*~*'));
             }
 
             // Find all tags matching the given tag
@@ -72,9 +73,9 @@ class Cache_File_Driver extends Cache_Driver
         } else {
             $paths = [];
 
-            foreach ((array) $keys as $key) {
+            foreach ((array)$keys as $key) {
                 // Find the file matching the given key
-                $paths = array_merge($paths, glob($this->config['directory'].str_replace(['/', '\\', ' '], '_', $key) . '~*'));
+                $paths = array_merge($paths, glob($this->config['directory'] . str_replace(['/', '\\', ' '], '_', $key) . '~*'));
             }
 
             return $paths;
@@ -88,10 +89,9 @@ class Cache_File_Driver extends Cache_Driver
             $lifetime += time();
         }
 
-
-        if (null !== $tags && ! empty($tags)) {
+        if (null !== $tags && !empty($tags)) {
             // Convert the tags into a string list
-            $tags = implode('+', (array) $tags);
+            $tags = implode('+', (array)$tags);
         }
 
         $success = true;
@@ -104,7 +104,7 @@ class Cache_File_Driver extends Cache_Driver
             // Remove old cache file
             $this->delete($key);
 
-            if (! (bool) file_put_contents($this->config['directory'].str_replace(['/', '\\', ' '], '_', $key) . '~' . $tags . '~' . $lifetime, serialize($value))) {
+            if (!(bool)file_put_contents($this->config['directory'] . str_replace(['/', '\\', ' '], '_', $key) . '~' . $tags . '~' . $lifetime, serialize($value))) {
                 $success = false;
             }
         }
@@ -188,8 +188,8 @@ class Cache_File_Driver extends Cache_Driver
 
         foreach ($paths as $path) {
             // Remove the cache file
-            if (! unlink($path)) {
-                Kohana_Log::add('error', 'Cache: Unable to delete cache file: '.$path);
+            if (!unlink($path)) {
+                Kohana_Log::add('error', 'Cache: Unable to delete cache file: ' . $path);
                 $success = false;
             }
         }
@@ -225,7 +225,7 @@ class Cache_File_Driver extends Cache_Driver
     protected function expired($file)
     {
         // Get the expiration time
-        $expires = (int) substr($file, strrpos($file, '~') + 1);
+        $expires = (int)substr($file, strrpos($file, '~') + 1);
 
         // Expirations of 0 are "never expire"
         return (0 !== $expires && $expires <= time());

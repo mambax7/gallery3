@@ -1,11 +1,12 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Cookie helper class.
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class cookie_Core
 {
@@ -45,7 +46,7 @@ class cookie_Core
             $expire += time();
         }
 
-        $value = cookie::salt($name, $value).'~'.$value;
+        $value = cookie::salt($name, $value) . '~' . $value;
 
         return setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);
     }
@@ -70,7 +71,7 @@ class cookie_Core
             return $cookies;
         }
 
-        if (! isset($_COOKIE[$name])) {
+        if (!isset($_COOKIE[$name])) {
             return $default;
         }
 
@@ -119,9 +120,9 @@ class cookie_Core
     /**
      * Generates a salt string for a cookie based on the name and value.
      *
-     * @param	string $name name of cookie
-     * @param	string $value value of cookie
-     * @return	string sha1 hash
+     * @param    string $name  name of cookie
+     * @param    string $value value of cookie
+     * @return    string sha1 hash
      */
     public static function salt($name, $value)
     {
@@ -131,7 +132,7 @@ class cookie_Core
         // Cookie salt.
         $salt = Kohana::config('cookie.salt');
 
-        return sha1($agent.$name.$value.$salt);
+        return sha1($agent . $name . $value . $salt);
     }
 
     final private function __construct()

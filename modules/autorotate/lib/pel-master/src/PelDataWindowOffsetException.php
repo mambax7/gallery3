@@ -22,12 +22,13 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301 USA
  */
+
 namespace lsolesen\pel;
 
 /**
  * An exception thrown when an invalid offset is encountered.
  *
- * @package PEL
+ * @package    PEL
  * @subpackage Exception
  */
 class PelDataWindowOffsetException extends PelException

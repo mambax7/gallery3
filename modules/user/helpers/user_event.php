@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -17,15 +18,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
 class user_event_Core
 {
     public static function admin_menu($menu, $theme)
     {
-        $menu->add_after('appearance_menu', Menu::factory('link')
-                                                ->id('users_groups')
-                                                ->label(t('Users/Groups'))
-                                                ->url(url::site('admin/users')));
+        $menu->add_after('appearance_menu', Menu::factory('link')->id('users_groups')->label(t('Users/Groups'))->url(url::site('admin/users')));
 
         return $menu;
     }

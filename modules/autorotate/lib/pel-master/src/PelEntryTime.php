@@ -22,6 +22,7 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301 USA
  */
+
 namespace lsolesen\pel;
 
 /**
@@ -36,7 +37,7 @@ namespace lsolesen\pel;
  * convenient instead. Copyright information is handled by the {@link
  * PelEntryCopyright} class.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public
  *          License (GPL)
  * @package PEL
@@ -63,7 +64,7 @@ namespace lsolesen\pel;
  * Count. Please see the Calendar extension in the PHP Manual for more
  * information about the Julian Day Count.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @package PEL
  */
 class PelEntryTime extends PelEntryAscii
@@ -175,21 +176,14 @@ class PelEntryTime extends PelEntryAscii
                 break;
             case self::EXIF_STRING:
                 list($year, $month, $day) = $this->convertJdToGregorian($this->day_count);
-                $hours = (int) ($this->seconds / 3600);
-                $minutes = (int) ($this->seconds % 3600 / 60);
+                $hours   = (int)($this->seconds / 3600);
+                $minutes = (int)($this->seconds % 3600 / 60);
                 $seconds = $this->seconds % 60;
                 return sprintf('%04d:%02d:%02d %02d:%02d:%02d', $year, $month, $day, $hours, $minutes, $seconds);
             case self::JULIAN_DAY_COUNT:
                 return $this->day_count + $this->seconds / 86400;
             default:
-                throw new PelInvalidArgumentException(
-                    'Expected UNIX_TIMESTAMP (%d), ' . 'EXIF_STRING (%d), or ' . 'JULIAN_DAY_COUNT (%d) for $type, ' .
-                         'got %d.',
-                        self::UNIX_TIMESTAMP,
-                        self::EXIF_STRING,
-                        self::JULIAN_DAY_COUNT,
-                        $type
-                );
+                throw new PelInvalidArgumentException('Expected UNIX_TIMESTAMP (%d), ' . 'EXIF_STRING (%d), or ' . 'JULIAN_DAY_COUNT (%d) for $type, ' . 'got %d.', self::UNIX_TIMESTAMP, self::EXIF_STRING, self::JULIAN_DAY_COUNT, $type);
         }
     }
 
@@ -216,36 +210,29 @@ class PelEntryTime extends PelEntryAscii
         switch ($type) {
             case self::UNIX_TIMESTAMP:
                 $this->day_count = $this->convertUnixToJd($timestamp);
-                $this->seconds = $timestamp % 86400;
+                $this->seconds   = $timestamp % 86400;
                 break;
 
             case self::EXIF_STRING:
                 /* Clean the timestamp: some timestamps are broken other
                  * separators than ':' and ' '. */
                 $d = preg_split('/[^0-9]+/', $timestamp);
-                for ($i = 0; $i < 6; $i ++) {
+                for ($i = 0; $i < 6; $i++) {
                     if (empty($d[$i])) {
                         $d[$i] = 0;
                     }
                 }
                 $this->day_count = $this->convertGregorianToJd($d[0], $d[1], $d[2]);
-                $this->seconds = $d[3] * 3600 + $d[4] * 60 + $d[5];
+                $this->seconds   = $d[3] * 3600 + $d[4] * 60 + $d[5];
                 break;
 
             case self::JULIAN_DAY_COUNT:
-                $this->day_count = (int) floor($timestamp);
-                $this->seconds = (int) (86400 * ($timestamp - floor($timestamp)));
+                $this->day_count = (int)floor($timestamp);
+                $this->seconds   = (int)(86400 * ($timestamp - floor($timestamp)));
                 break;
 
             default:
-                throw new PelInvalidArgumentException(
-                    'Expected UNIX_TIMESTAMP (%d), ' . 'EXIF_STRING (%d), or ' . 'JULIAN_DAY_COUNT (%d) for $type, ' .
-                         'got %d.',
-                        self::UNIX_TIMESTAMP,
-                        self::EXIF_STRING,
-                        self::JULIAN_DAY_COUNT,
-                        $type
-                );
+                throw new PelInvalidArgumentException('Expected UNIX_TIMESTAMP (%d), ' . 'EXIF_STRING (%d), or ' . 'JULIAN_DAY_COUNT (%d) for $type, ' . 'got %d.', self::UNIX_TIMESTAMP, self::EXIF_STRING, self::JULIAN_DAY_COUNT, $type);
         }
 
         /*
@@ -280,9 +267,8 @@ class PelEntryTime extends PelEntryAscii
             return 0;
         }
 
-        $m1412 = ($month <= 2) ? - 1 : 0;
-        return floor((1461 * ($year + 4800 + $m1412)) / 4) + floor((367 * ($month - 2 - 12 * $m1412)) / 12) -
-             floor((3 * floor(($year + 4900 + $m1412) / 100)) / 4) + $day - 32075;
+        $m1412 = ($month <= 2) ? -1 : 0;
+        return floor((1461 * ($year + 4800 + $m1412)) / 4) + floor((367 * ($month - 2 - 12 * $m1412)) / 12) - floor((3 * floor(($year + 4900 + $m1412) / 100)) / 4) + $day - 32075;
     }
 
     /**
@@ -329,7 +315,7 @@ class PelEntryTime extends PelEntryAscii
      */
     public function convertUnixToJd($timestamp)
     {
-        return (int) (floor($timestamp / 86400) + 2440588);
+        return (int)(floor($timestamp / 86400) + 2440588);
     }
 
     /**

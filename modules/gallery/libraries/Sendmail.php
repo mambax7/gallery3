@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -23,7 +24,7 @@ class Sendmail_Core
     protected $subject;
     protected $message;
     protected $headers;
-    protected $line_length = 70;
+    protected $line_length      = 70;
     protected $header_separator = "\r\n";
 
     /**
@@ -53,25 +54,25 @@ class Sendmail_Core
     public function __call($key, $value)
     {
         switch ($key) {
-    case 'to':
-      $this->to = is_array($value[0]) ? $value[0] : [$value[0]];
-      break;
-    case  'header':
-      if (2 != count($value)) {
-          Kohana_Log::add('error', wordwrap("Invalid header parameters\n" . Kohana::debug($value)));
-          throw new Exception('@todo INVALID_HEADER_PARAMETERS');
-      }
-      $this->headers[$value[0]] = $value[1];
-      break;
-    case 'from':
-        $this->headers['From'] = $value[0];
-      break;
-    case 'reply_to':
-        $this->headers['Reply-To'] = $value[0];
-      break;
-    default:
-      $this->$key = $value[0];
-    }
+            case 'to':
+                $this->to = is_array($value[0]) ? $value[0] : [$value[0]];
+                break;
+            case  'header':
+                if (2 != count($value)) {
+                    Kohana_Log::add('error', wordwrap("Invalid header parameters\n" . Kohana::debug($value)));
+                    throw new Exception('@todo INVALID_HEADER_PARAMETERS');
+                }
+                $this->headers[$value[0]] = $value[1];
+                break;
+            case 'from':
+                $this->headers['From'] = $value[0];
+                break;
+            case 'reply_to':
+                $this->headers['Reply-To'] = $value[0];
+                break;
+            default:
+                $this->$key = $value[0];
+        }
         return $this;
     }
 
@@ -81,10 +82,10 @@ class Sendmail_Core
             Kohana_Log::add('error', wordwrap("Sending mail failed:\nNo to address specified"));
             throw new Exception('@todo TO_IS_REQUIRED_FOR_MAIL');
         }
-        $to = implode(', ', $this->to);
+        $to      = implode(', ', $this->to);
         $headers = [];
         foreach ($this->headers as $key => $value) {
-            $key = ucfirst($key);
+            $key       = ucfirst($key);
             $headers[] = "$key: $value";
         }
 

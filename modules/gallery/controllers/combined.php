@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -65,11 +66,10 @@ class Combined_Controller extends Controller
             throw new Kohana_404_Exception();
         }
 
-        $cache = Cache::instance();
-        $use_gzip = function_exists('gzencode') &&
-                    false !== stripos($input->server('HTTP_ACCEPT_ENCODING'), 'gzip')
-                    &&
-                    0 === (int) ini_get('zlib.output_compression');
+        $cache    = Cache::instance();
+        $use_gzip = function_exists('gzencode')
+                    && false !== stripos($input->server('HTTP_ACCEPT_ENCODING'), 'gzip')
+                    && 0 === (int)ini_get('zlib.output_compression');
 
         if ($use_gzip && $content = $cache->get("{$key}_gz")) {
             header('Content-Encoding: gzip');

@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -57,10 +58,7 @@ class Movie_Helper_Test extends Gallery_Unit_Test_Case
     public function get_file_metadata_test()
     {
         $movie = test::random_movie();
-        $this->assert_equal(
-            [360, 288, 'video/x-flv', 'flv', 6.00],
-            movie::get_file_metadata($movie->file_path())
-    );
+        $this->assert_equal([360, 288, 'video/x-flv', 'flv', 6.00], movie::get_file_metadata($movie->file_path()));
     }
 
     public function get_file_metadata_with_non_existent_file_test()
@@ -116,10 +114,7 @@ class Movie_Helper_Test extends Gallery_Unit_Test_Case
         // Of course, FFmpeg cannot extract width, height, or duration from the file.  Note that this
         // isn't a really a security problem, since the filename doesn't have a php extension and
         // therefore will never be executed.
-        $this->assert_equal(
-            [0, 0, 'video/x-flv', 'flv', 0],
-            movie::get_file_metadata(TMPPATH . 'test_php_with_flv_extension.flv')
-    );
+        $this->assert_equal([0, 0, 'video/x-flv', 'flv', 0], movie::get_file_metadata(TMPPATH . 'test_php_with_flv_extension.flv'));
         unlink(TMPPATH . 'test_php_with_flv_extension.flv');
     }
 }

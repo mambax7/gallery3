@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -22,11 +23,7 @@ class Menu_Test extends Gallery_Unit_Test_Case
     public function find_menu_item_test()
     {
         $menu = new Menu(true);
-        $menu
-      ->append(Menu::factory('link')->id('element_1'))
-      ->append(Menu::factory('dialog')->id('element_2'))
-      ->append(Menu::factory('submenu')->id('element_3')
-                   ->append(Menu::factory('link')->id('element_3_1')));
+        $menu->append(Menu::factory('link')->id('element_1'))->append(Menu::factory('dialog')->id('element_2'))->append(Menu::factory('submenu')->id('element_3')->append(Menu::factory('link')->id('element_3_1')));
 
         $this->assert_equal('element_2', $menu->get('element_2')->id);
         $this->assert_equal('element_3_1', $menu->get('element_3')->get('element_3_1')->id);

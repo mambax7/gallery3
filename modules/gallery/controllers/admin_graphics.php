@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,10 +22,10 @@ class Admin_Graphics_Controller extends Admin_Controller
 {
     public function index()
     {
-        $view = new Admin_View('admin.html');
-        $view->page_title = t('Graphics settings');
-        $view->content = new View('admin_graphics.html');
-        $view->content->tk = graphics::detect_toolkits();
+        $view                  = new Admin_View('admin.html');
+        $view->page_title      = t('Graphics settings');
+        $view->content         = new View('admin_graphics.html');
+        $view->content->tk     = graphics::detect_toolkits();
         $view->content->active = module::get_var('gallery', 'graphics_toolkit', 'none');
         print $view;
     }

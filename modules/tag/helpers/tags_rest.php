@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -31,11 +32,11 @@ class tags_rest_Core
     {
         $tags = [];
 
-        $num = 10;
+        $num   = 10;
         $start = 0;
         if (isset($request->params)) {
-            $p = $request->params;
-            $num = isset($p->num) ? min((int)$p->num, 100) : 10;
+            $p     = $request->params;
+            $num   = isset($p->num) ? min((int)$p->num, 100) : 10;
             $start = isset($p->start) ? (int)$p->start : 0;
         }
 
@@ -68,7 +69,7 @@ class tags_rest_Core
 
         $tag = ORM::factory('tag')->where('name', '=', $request->params->entity->name)->find();
         if (!$tag->loaded()) {
-            $tag->name = $request->params->entity->name;
+            $tag->name  = $request->params->entity->name;
             $tag->count = 0;
             $tag->save();
         }

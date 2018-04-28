@@ -1,13 +1,14 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Logging class.
  *
  * $Id: Kohana_Log.php 4729 2009-12-29 20:35:19Z isaiah $
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class Kohana_Log_Core
 {
@@ -31,25 +32,25 @@ class Kohana_Log_Core
     public static function add($type, $message)
     {
         // Make sure the drivers and config are loaded
-        if (! is_array(Kohana_Log::$config)) {
+        if (!is_array(Kohana_Log::$config)) {
             Kohana_Log::$config = Kohana::config('log');
         }
 
-        if (! is_array(Kohana_Log::$drivers)) {
-            foreach ((array) Kohana::config('log.drivers') as $driver_name) {
+        if (!is_array(Kohana_Log::$drivers)) {
+            foreach ((array)Kohana::config('log.drivers') as $driver_name) {
                 // Set driver name
-                $driver = 'Log_'.ucfirst($driver_name).'_Driver';
+                $driver = 'Log_' . ucfirst($driver_name) . '_Driver';
 
                 // Load the driver
-                if (! Kohana::auto_load($driver)) {
+                if (!Kohana::auto_load($driver)) {
                     throw new Kohana_Exception('Log Driver Not Found: %driver%', ['%driver%' => $driver]);
                 }
 
                 // Initialize the driver
-                $driver = new $driver(array_merge(Kohana::config('log'), Kohana::config('log_'.$driver_name)));
+                $driver = new $driver(array_merge(Kohana::config('log'), Kohana::config('log_' . $driver_name)));
 
                 // Validate the driver
-                if (! ($driver instanceof Log_Driver)) {
+                if (!($driver instanceof Log_Driver)) {
                     throw new Kohana_Exception('%driver% does not implement the Log_Driver interface', ['%driver%' => $driver]);
                 }
 

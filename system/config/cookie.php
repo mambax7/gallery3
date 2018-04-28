@@ -4,10 +4,10 @@
  * helper. You can override these settings by passing parameters to the cookie
  * helper functions.
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 
 /**

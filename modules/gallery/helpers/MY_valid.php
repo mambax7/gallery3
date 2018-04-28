@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,8 +22,8 @@ class valid extends valid_Core
 {
     public static function url($url)
     {
-        return valid_Core::url($url) &&
-      (!strncasecmp($url, 'http://', strlen('http://')) ||
-       !strncasecmp($url, 'https://', strlen('https://')));
+        return valid_Core::url($url)
+               && (!strncasecmp($url, 'http://', strlen('http://'))
+                   || !strncasecmp($url, 'https://', strlen('https://')));
     }
 }

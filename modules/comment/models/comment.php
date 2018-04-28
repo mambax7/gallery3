@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -62,7 +63,7 @@ class Comment_Model_Core extends ORM
     /**
      * Add some custom per-instance rules.
      */
-    public function validate(Validation $array=null)
+    public function validate(Validation $array = null)
     {
         // validate() is recursive, only modify the rules on the outermost call.
         if (!$array) {
@@ -96,19 +97,19 @@ class Comment_Model_Core extends ORM
             // check each one to see if it already exists before setting it, so just use server_http_host
             // as a semaphore for now (we use that in g2_import.php)
             if (empty($this->server_http_host)) {
-                $input = Input::instance();
-                $this->server_http_accept = substr($input->server('HTTP_ACCEPT'), 0, 128);
-                $this->server_http_accept_charset = substr($input->server('HTTP_ACCEPT_CHARSET'), 0, 64);
+                $input                             = Input::instance();
+                $this->server_http_accept          = substr($input->server('HTTP_ACCEPT'), 0, 128);
+                $this->server_http_accept_charset  = substr($input->server('HTTP_ACCEPT_CHARSET'), 0, 64);
                 $this->server_http_accept_encoding = substr($input->server('HTTP_ACCEPT_ENCODING'), 0, 64);
                 $this->server_http_accept_language = substr($input->server('HTTP_ACCEPT_LANGUAGE'), 0, 64);
-                $this->server_http_connection = substr($input->server('HTTP_CONNECTION'), 0, 64);
-                $this->server_http_host = substr($input->server('HTTP_HOST'), 0, 64);
-                $this->server_http_referer = substr($input->server('HTTP_REFERER'), 0, 255);
-                $this->server_http_user_agent = substr($input->server('HTTP_USER_AGENT'), 0, 128);
-                $this->server_query_string = substr($input->server('QUERY_STRING'), 0, 64);
-                $this->server_remote_addr = substr($input->server('REMOTE_ADDR'), 0, 40);
-                $this->server_remote_host = substr($input->server('REMOTE_HOST'), 0, 255);
-                $this->server_remote_port = substr($input->server('REMOTE_PORT'), 0, 16);
+                $this->server_http_connection      = substr($input->server('HTTP_CONNECTION'), 0, 64);
+                $this->server_http_host            = substr($input->server('HTTP_HOST'), 0, 64);
+                $this->server_http_referer         = substr($input->server('HTTP_REFERER'), 0, 255);
+                $this->server_http_user_agent      = substr($input->server('HTTP_USER_AGENT'), 0, 128);
+                $this->server_query_string         = substr($input->server('QUERY_STRING'), 0, 64);
+                $this->server_remote_addr          = substr($input->server('REMOTE_ADDR'), 0, 40);
+                $this->server_remote_host          = substr($input->server('REMOTE_HOST'), 0, 255);
+                $this->server_remote_port          = substr($input->server('REMOTE_PORT'), 0, 16);
             }
 
             $visible_change = 'published' == $this->state;
@@ -116,7 +117,7 @@ class Comment_Model_Core extends ORM
             module::event('comment_created', $this);
         } else {
             // Updated comment
-            $original = ORM::factory('comment', $this->id);
+            $original       = ORM::factory('comment', $this->id);
             $visible_change = 'published' == $original->state || 'published' == $this->state;
             parent::save();
             module::event('comment_updated', $original, $this);

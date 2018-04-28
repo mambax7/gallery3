@@ -1,16 +1,17 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Provides a table layout for sections in the Profiler library.
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class Profiler_Table_Core
 {
     protected $columns = [];
-    protected $rows = [];
+    protected $rows    = [];
 
     /**
      * Get styles for table.
@@ -21,7 +22,7 @@ class Profiler_Table_Core
     {
         static $styles_output;
 
-        if (! $styles_output) {
+        if (!$styles_output) {
             $styles_output = true;
             return file_get_contents(Kohana::find_file('views', 'profiler/table', false, 'css'));
         }
@@ -59,7 +60,7 @@ class Profiler_Table_Core
      */
     public function render()
     {
-        $data['rows'] = $this->rows;
+        $data['rows']    = $this->rows;
         $data['columns'] = $this->columns;
         return View::factory('profiler/table', $data)->render();
     }

@@ -1,13 +1,14 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Router
  *
  * $Id: Router.php 4729 2009-12-29 20:35:19Z isaiah $
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class Router_Core
 {
@@ -35,9 +36,9 @@ class Router_Core
      */
     public static function setup()
     {
-        if (! empty($_SERVER['QUERY_STRING'])) {
+        if (!empty($_SERVER['QUERY_STRING'])) {
             // Set the query string to the current query string
-            Router::$query_string = '?'.urldecode(trim($_SERVER['QUERY_STRING'], '&'));
+            Router::$query_string = '?' . urldecode(trim($_SERVER['QUERY_STRING'], '&'));
         }
 
         if (null === Router::$routes) {
@@ -69,10 +70,10 @@ class Router_Core
 
         if (true === $default_route) {
             Router::$complete_uri = Router::$query_string;
-            Router::$current_uri = '';
-            Router::$segments = [];
+            Router::$current_uri  = '';
+            Router::$segments     = [];
         } else {
-            Router::$complete_uri = Router::$current_uri.Router::$query_string;
+            Router::$complete_uri = Router::$current_uri . Router::$query_string;
 
             // Explode the segments by slashes
             Router::$segments = explode('/', Router::$current_uri);
@@ -102,13 +103,12 @@ class Router_Core
                 // Search within controllers only
                 $dir .= 'controllers/';
 
-                if (is_dir($dir.$controller_path) || is_file($dir.$controller_path.EXT)) {
+                if (is_dir($dir . $controller_path) || is_file($dir . $controller_path . EXT)) {
                     // Valid path
                     $found = true;
 
                     // The controller must be a file that exists with the search path
-                    if ($c = str_replace('\\', '/', realpath($dir.$controller_path.EXT))
-                        and is_file($c) && 0 === strpos($c, $dir)) {
+                    if ($c = str_replace('\\', '/', realpath($dir . $controller_path . EXT)) and is_file($c) && 0 === strpos($c, $dir)) {
                         // Set controller name
                         Router::$controller = $segment;
 
@@ -199,7 +199,7 @@ class Router_Core
                 // PATH_INFO may be formatted for ISAPI instead of CGI on IIS
                 if (0 === strncmp(Router::$current_uri, $_SERVER['SCRIPT_NAME'], strlen($_SERVER['SCRIPT_NAME']))) {
                     // Remove the front controller from the current uri
-                    Router::$current_uri = (string) substr(Router::$current_uri, strlen($_SERVER['SCRIPT_NAME']));
+                    Router::$current_uri = (string)substr(Router::$current_uri, strlen($_SERVER['SCRIPT_NAME']));
                 }
             }
         }
@@ -210,7 +210,7 @@ class Router_Core
         if ('' !== Router::$current_uri) {
             if ($suffix = Kohana::config('core.url_suffix') && false !== strpos(Router::$current_uri, $suffix)) {
                 // Remove the URL suffix
-                Router::$current_uri = preg_replace('#'.preg_quote($suffix).'$#u', '', Router::$current_uri);
+                Router::$current_uri = preg_replace('#' . preg_quote($suffix) . '$#u', '', Router::$current_uri);
 
                 // Set the URL suffix
                 Router::$url_suffix = $suffix;
@@ -251,10 +251,10 @@ class Router_Core
                 $key = trim($key, '/');
                 $val = trim($val, '/');
 
-                if (preg_match('#^'.$key.'$#u', $uri)) {
+                if (preg_match('#^' . $key . '$#u', $uri)) {
                     if (false !== strpos($val, '$')) {
                         // Use regex routing
-                        $routed_uri = preg_replace('#^'.$key.'$#u', $val, $uri);
+                        $routed_uri = preg_replace('#^' . $key . '$#u', $val, $uri);
                     } else {
                         // Standard routing
                         $routed_uri = $val;

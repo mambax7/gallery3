@@ -1,11 +1,12 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Form helper class.
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class form_Core
 {
@@ -41,7 +42,7 @@ class form_Core
         $attr['action'] = $action;
 
         // Form opening tag
-        $form = '<form'.form::attributes($attr).'>'."\n";
+        $form = '<form' . form::attributes($attr) . '>' . "\n";
 
         // Add hidden fields immediate after opening tag
         empty($hidden) || $form .= form::hidden($hidden);
@@ -75,7 +76,7 @@ class form_Core
      */
     public static function hidden($data, $value = '', $extra = '')
     {
-        if (! is_array($data)) {
+        if (!is_array($data)) {
             $data = ['name' => $data];
         }
 
@@ -94,7 +95,7 @@ class form_Core
      */
     public static function input($data, $value = '', $extra = '')
     {
-        if (! is_array($data)) {
+        if (!is_array($data)) {
             $data = ['name' => $data];
         }
 
@@ -104,7 +105,7 @@ class form_Core
             'value' => $value
         ];
 
-        return '<input'.form::attributes($data).' '.$extra.' />';
+        return '<input' . form::attributes($data) . ' ' . $extra . ' />';
     }
 
     /**
@@ -117,7 +118,7 @@ class form_Core
      */
     public static function password($data, $value = '', $extra = '')
     {
-        if (! is_array($data)) {
+        if (!is_array($data)) {
             $data = ['name' => $data];
         }
 
@@ -136,7 +137,7 @@ class form_Core
      */
     public static function upload($data, $value = '', $extra = '')
     {
-        if (! is_array($data)) {
+        if (!is_array($data)) {
             $data = ['name' => $data];
         }
 
@@ -156,15 +157,15 @@ class form_Core
      */
     public static function textarea($data, $value = '', $extra = '', $double_encode = true)
     {
-        if (! is_array($data)) {
+        if (!is_array($data)) {
             $data = ['name' => $data];
         }
 
-        if (! isset($data['rows'])) {
+        if (!isset($data['rows'])) {
             $data['rows'] = '';
         }
 
-        if (! isset($data['cols'])) {
+        if (!isset($data['cols'])) {
             $data['cols'] = '';
         }
 
@@ -174,7 +175,7 @@ class form_Core
         // Value is not part of the attributes
         unset($data['value']);
 
-        return '<textarea'.form::attributes($data, 'textarea').' '.$extra.'>'.htmlspecialchars($value, ENT_QUOTES, Kohana::CHARSET, $double_encode).'</textarea>';
+        return '<textarea' . form::attributes($data, 'textarea') . ' ' . $extra . '>' . htmlspecialchars($value, ENT_QUOTES, Kohana::CHARSET, $double_encode) . '</textarea>';
     }
 
     /**
@@ -188,7 +189,7 @@ class form_Core
      */
     public static function dropdown($data, $options = null, $selected = null, $extra = '')
     {
-        if (! is_array($data)) {
+        if (!is_array($data)) {
             $data = ['name' => $data];
         } else {
             if (isset($data['options'])) {
@@ -210,24 +211,24 @@ class form_Core
             $selected = [$selected];
         }
 
-        $input = '<select'.form::attributes($data, 'select').' '.$extra.'>'."\n";
-        foreach ((array) $options as $key => $val) {
+        $input = '<select' . form::attributes($data, 'select') . ' ' . $extra . '>' . "\n";
+        foreach ((array)$options as $key => $val) {
             // Key should always be a string
-            $key = (string) $key;
+            $key = (string)$key;
 
             if (is_array($val)) {
-                $input .= '<optgroup label="'.$key.'">'."\n";
+                $input .= '<optgroup label="' . $key . '">' . "\n";
                 foreach ($val as $inner_key => $inner_val) {
                     // Inner key should always be a string
-                    $inner_key = (string) $inner_key;
+                    $inner_key = (string)$inner_key;
 
-                    $sel = in_array($inner_key, $selected) ? ' selected="selected"' : '';
-                    $input .= '<option value="'.$inner_key.'"'.$sel.'>'.htmlspecialchars($inner_val, ENT_QUOTES, Kohana::CHARSET, false).'</option>'."\n";
+                    $sel   = in_array($inner_key, $selected) ? ' selected="selected"' : '';
+                    $input .= '<option value="' . $inner_key . '"' . $sel . '>' . htmlspecialchars($inner_val, ENT_QUOTES, Kohana::CHARSET, false) . '</option>' . "\n";
                 }
-                $input .= '</optgroup>'."\n";
+                $input .= '</optgroup>' . "\n";
             } else {
-                $sel = in_array($key, $selected) ? ' selected="selected"' : '';
-                $input .= '<option value="'.$key.'"'.$sel.'>'.htmlspecialchars($val, ENT_QUOTES, Kohana::CHARSET, false).'</option>'."\n";
+                $sel   = in_array($key, $selected) ? ' selected="selected"' : '';
+                $input .= '<option value="' . $key . '"' . $sel . '>' . htmlspecialchars($val, ENT_QUOTES, Kohana::CHARSET, false) . '</option>' . "\n";
             }
         }
         $input .= '</select>';
@@ -246,7 +247,7 @@ class form_Core
      */
     public static function checkbox($data, $value = '', $checked = false, $extra = '')
     {
-        if (! is_array($data)) {
+        if (!is_array($data)) {
             $data = ['name' => $data];
         }
 
@@ -272,7 +273,7 @@ class form_Core
      */
     public static function radio($data = '', $value = '', $checked = false, $extra = '')
     {
-        if (! is_array($data)) {
+        if (!is_array($data)) {
             $data = ['name' => $data];
         }
 
@@ -297,7 +298,7 @@ class form_Core
      */
     public static function submit($data = '', $value = '', $extra = '')
     {
-        if (! is_array($data)) {
+        if (!is_array($data)) {
             $data = ['name' => $data];
         }
 
@@ -321,7 +322,7 @@ class form_Core
      */
     public static function button($data = '', $value = '', $extra = '')
     {
-        if (! is_array($data)) {
+        if (!is_array($data)) {
             $data = ['name' => $data];
         }
 
@@ -334,7 +335,7 @@ class form_Core
             $value = arr::remove('value', $data);
         }
 
-        return '<button'.form::attributes($data, 'button').' '.$extra.'>'.$value.'</button>';
+        return '<button' . form::attributes($data, 'button') . ' ' . $extra . '>' . $value . '</button>';
     }
 
     /**
@@ -347,7 +348,7 @@ class form_Core
      */
     public static function label($data = '', $text = null, $extra = '')
     {
-        if (! is_array($data)) {
+        if (!is_array($data)) {
             if (is_string($data)) {
                 // Specify the input this label is for
                 $data = ['for' => $data];
@@ -362,7 +363,7 @@ class form_Core
             $text = ucwords(inflector::humanize($data['for']));
         }
 
-        return '<label'.form::attributes($data).' '.$extra.'>'.$text.'</label>';
+        return '<label' . form::attributes($data) . ' ' . $extra . '>' . $text . '</label>';
     }
 
     /**

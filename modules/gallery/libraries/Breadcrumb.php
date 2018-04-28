@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -32,9 +33,9 @@ class Breadcrumb_Core
     public function __construct($title, $url)
     {
         $this->title = $title;
-        $this->url = $url;
+        $this->url   = $url;
         $this->first = false;
-        $this->last = false;
+        $this->last  = false;
     }
 
     /**

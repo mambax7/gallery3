@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -48,17 +49,12 @@ class notification_event_Core
 
     public static function user_deleted($user)
     {
-        db::build()
-      ->delete('subscriptions')
-      ->where('user_id', '=', $user->id)
-      ->execute();
+        db::build()->delete('subscriptions')->where('user_id', '=', $user->id)->execute();
     }
 
     public static function identity_provider_changed($old_provider, $new_provider)
     {
-        db::build()
-      ->delete('subscriptions')
-      ->execute();
+        db::build()->delete('subscriptions')->execute();
     }
 
     public static function comment_created($comment)
@@ -88,10 +84,7 @@ class notification_event_Core
     public static function user_before_delete($user)
     {
         try {
-            db::build()
-        ->delete('subscriptions')
-        ->where('user_id', '=', $user->id)
-        ->execute();
+            db::build()->delete('subscriptions')->where('user_id', '=', $user->id)->execute();
         } catch (Exception $e) {
             Kohana_Log::add('error', '@todo notification_event::user_before_delete() failed');
             Kohana_Log::add('error', $e->getMessage() . "\n" . $e->getTraceAsString());
@@ -118,12 +111,7 @@ class notification_event_Core
 
                 $label = $watching ? t('Remove notifications') : t('Enable notifications');
 
-                $menu->get('options_menu')
-          ->append(Menu::factory('link')
-                   ->id('watch')
-                   ->label($label)
-                   ->css_id('g-notify-link')
-                   ->url(url::site("notification/watch/$item->id?csrf=" . access::csrf_token())));
+                $menu->get('options_menu')->append(Menu::factory('link')->id('watch')->label($label)->css_id('g-notify-link')->url(url::site("notification/watch/$item->id?csrf=" . access::csrf_token())));
             }
         }
     }
@@ -140,18 +128,15 @@ class notification_event_Core
             return;
         }
 
-        $view = new View('user_profile_notification.html');
+        $view                = new View('user_profile_notification.html');
         $view->subscriptions = [];
-        foreach (ORM::factory('subscription')
-            ->where('user_id', '=', $data->user->id)
-            ->find_all() as $subscription) {
-            $item = ORM::factory('item')
-          ->where('id', '=', $subscription->item_id)
-          ->find();
+        foreach (ORM::factory('subscription')->where('user_id', '=', $data->user->id)->find_all() as $subscription) {
+            $item = ORM::factory('item')->where('id', '=', $subscription->item_id)->find();
             if ($item->loaded()) {
                 $view->subscriptions[] = (object)[
-                    'id'  => $subscription->id, 'title' => $item->title,
-                    'url' => $item->url()
+                    'id'    => $subscription->id,
+                    'title' => $item->title,
+                    'url'   => $item->url()
                 ];
             }
         }

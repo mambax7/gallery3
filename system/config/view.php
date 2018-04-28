@@ -2,10 +2,10 @@
 /**
  * View Config
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 
 /**
@@ -14,11 +14,14 @@
  */
 $config['allowed_filetypes'] = [
     'gif',
-    'jpg', 'jpeg',
+    'jpg',
+    'jpeg',
     'png',
-    'tif', 'tiff',
+    'tif',
+    'tiff',
     'swf',
-    'htm', 'html',
+    'htm',
+    'html',
     'css',
     'js'
 ];

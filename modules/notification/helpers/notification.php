@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -19,68 +20,52 @@
  */
 class notification
 {
-    public static function get_subscription($item_id, $user=null)
+    public static function get_subscription($item_id, $user = null)
     {
         if (empty($user)) {
             $user = identity::active_user();
         }
 
-        return ORM::factory('subscription')
-      ->where('item_id', '=', $item_id)
-      ->where('user_id', '=', $user->id)
-      ->find();
+        return ORM::factory('subscription')->where('item_id', '=', $item_id)->where('user_id', '=', $user->id)->find();
     }
 
-    public static function is_watching($item, $user=null)
+    public static function is_watching($item, $user = null)
     {
         if (empty($user)) {
             $user = identity::active_user();
         }
 
-        return ORM::factory('subscription')
-      ->where('item_id', '=', $item->id)
-      ->where('user_id', '=', $user->id)
-      ->find()
-      ->loaded();
+        return ORM::factory('subscription')->where('item_id', '=', $item->id)->where('user_id', '=', $user->id)->find()->loaded();
     }
 
-    public static function add_watch($item, $user=null)
+    public static function add_watch($item, $user = null)
     {
         if ($item->is_album()) {
             if (empty($user)) {
                 $user = identity::active_user();
             }
-            $subscription = ORM::factory('subscription');
+            $subscription          = ORM::factory('subscription');
             $subscription->item_id = $item->id;
             $subscription->user_id = $user->id;
             $subscription->save();
         }
     }
 
-    public static function remove_watch($item, $user=null)
+    public static function remove_watch($item, $user = null)
     {
         if ($item->is_album()) {
             if (empty($user)) {
                 $user = identity::active_user();
             }
 
-            $subscription = ORM::factory('subscription')
-        ->where('item_id', '=', $item->id)
-        ->where('user_id', '=', $user->id)
-        ->find()->delete();
+            $subscription = ORM::factory('subscription')->where('item_id', '=', $item->id)->where('user_id', '=', $user->id)->find()->delete();
         }
     }
 
     public static function get_subscribers($item)
     {
         $subscriber_ids = [];
-        foreach (ORM::factory('subscription')
-             ->select('user_id')
-             ->join('items', 'subscriptions.item_id', 'items.id')
-             ->where('items.left_ptr', '<=', $item->left_ptr)
-             ->where('items.right_ptr', '>', $item->right_ptr)
-             ->find_all()
-             ->as_array() as $subscriber) {
+        foreach (ORM::factory('subscription')->select('user_id')->join('items', 'subscriptions.item_id', 'items.id')->where('items.left_ptr', '<=', $item->left_ptr)->where('items.right_ptr', '>', $item->right_ptr)->find_all()->as_array() as $subscriber) {
             $subscriber_ids[] = $subscriber->user_id;
         }
 
@@ -101,14 +86,13 @@ class notification
     public static function send_item_updated($original, $item)
     {
         foreach (self::get_subscribers($item) as $email => $locale) {
-            $v = new View('item_updated.html');
+            $v           = new View('item_updated.html');
             $v->original = $original;
-            $v->item = $item;
-            $v->subject = $item->is_album() ?
-        t('Album "%title" updated', ['title' => $original->title, 'locale' => $locale]) :
-        ($item->is_photo() ?
-         t('Photo "%title" updated', ['title' => $original->title, 'locale' => $locale])
-         : t('Movie "%title" updated', ['title' => $original->title, 'locale' => $locale]));
+            $v->item     = $item;
+            $v->subject  = $item->is_album() ? t('Album "%title" updated', ['title' => $original->title, 'locale' => $locale]) : ($item->is_photo() ? t('Photo "%title" updated', ['title' => $original->title, 'locale' => $locale]) : t(
+                'Movie "%title" updated',
+                                                                                                                                                                                                                                          ['title' => $original->title, 'locale' => $locale]
+            ));
             self::_notify($email, $locale, $item, $v->render(), $v->subject);
         }
     }
@@ -117,22 +101,17 @@ class notification
     {
         $parent = $item->parent();
         foreach (self::get_subscribers($item) as $email => $locale) {
-            $v = new View('item_added.html');
-            $v->item = $item;
-            $v->subject = $item->is_album() ?
-        t(
-            'Album "%title" added to "%parent_title"',
-            ['title' => $item->title, 'parent_title' => $parent->title, 'locale' => $locale]
-        ) :
-        ($item->is_photo() ?
-         t(
-             'Photo "%title" added to "%parent_title"',
-             ['title' => $item->title, 'parent_title' => $parent->title, 'locale' => $locale]
-         ) :
-         t(
-             'Movie "%title" added to "%parent_title"',
-             ['title' => $item->title, 'parent_title' => $parent->title, 'locale' => $locale]
-         ));
+            $v          = new View('item_added.html');
+            $v->item    = $item;
+            $v->subject = $item->is_album() ? t('Album "%title" added to "%parent_title"', ['title' => $item->title, 'parent_title' => $parent->title, 'locale' => $locale]) : ($item->is_photo() ? t('Photo "%title" added to "%parent_title"', [
+                                                                                                                                                                                                                                                   'title'        => $item->title,
+                                                                                                                                                                                                                                                   'parent_title' => $parent->title,
+                                                                                                                                                                                                                                                   'locale'       => $locale
+                                                                                                                                                                                                                                               ]) : t('Movie "%title" added to "%parent_title"', [
+                                                                                                                                                                                                                                                                                                   'title'        => $item->title,
+                                                                                                                                                                                                                                                                                                   'parent_title' => $parent->title,
+                                                                                                                                                                                                                                                                                                   'locale'       => $locale
+                                                                                                                                                                                                                                                                                               ]));
             self::_notify($email, $locale, $item, $v->render(), $v->subject);
         }
     }
@@ -141,25 +120,20 @@ class notification
     {
         $parent = $item->parent();
         foreach (self::get_subscribers($item) as $email => $locale) {
-            $v = new View('item_deleted.html');
-            $v->item = $item;
-            $v->subject = $item->is_album() ?
-        t(
-            'Album "%title" removed from "%parent_title"',
-            ['title' => $item->title, 'parent_title' => $parent->title, 'locale' => $locale]
-        ) :
-        ($item->is_photo() ?
-         t(
-             'Photo "%title" removed from "%parent_title"',
-             ['title' => $item->title, 'parent_title' => $parent->title, 'locale' => $locale]
-         )
-         : t(
-                'Movie "%title" removed from "%parent_title"',
-                [
-                    'title'  => $item->title, 'parent_title' => $parent->title,
-                    'locale' => $locale
-                ]
-         ));
+            $v          = new View('item_deleted.html');
+            $v->item    = $item;
+            $v->subject = $item->is_album() ? t('Album "%title" removed from "%parent_title"', ['title' => $item->title, 'parent_title' => $parent->title, 'locale' => $locale]) : ($item->is_photo() ? t('Photo "%title" removed from "%parent_title"', [
+                                                                                                                                                                                                                                                           'title'        => $item->title,
+                                                                                                                                                                                                                                                           'parent_title' => $parent->title,
+                                                                                                                                                                                                                                                           'locale'       => $locale
+                                                                                                                                                                                                                                                       ]) : t(
+                                                                                                                                                                                                                                                           'Movie "%title" removed from "%parent_title"',
+                                                                                                                                                                                                                                                              [
+                                                                                                                                                                                                                                                                  'title'        => $item->title,
+                                                                                                                                                                                                                                                                  'parent_title' => $parent->title,
+                                                                                                                                                                                                                                                                  'locale'       => $locale
+                                                                                                                                                                                                                                                              ]
+                                                                                                                                                                                                                                                       ));
             self::_notify($email, $locale, $item, $v->render(), $v->subject);
         }
     }
@@ -168,64 +142,37 @@ class notification
     {
         $item = $comment->item();
         foreach (self::get_subscribers($item) as $email => $locale) {
-            $v = new View('comment_published.html');
+            $v          = new View('comment_published.html');
             $v->comment = $comment;
-            $v->subject = $item->is_album() ?
-        t(
-            'A new comment was published for album "%title"',
-            ['title' => $item->title, 'locale' => $locale]
-        ) :
-      ($item->is_photo() ?
-       t(
-           'A new comment was published for photo "%title"',
-           ['title' => $item->title, 'locale' => $locale]
-       )
-       : t(
-              'A new comment was published for movie "%title"',
-              ['title' => $item->title, 'locale' => $locale]
-       ));
+            $v->subject = $item->is_album() ? t('A new comment was published for album "%title"', ['title' => $item->title, 'locale' => $locale]) : ($item->is_photo() ? t(
+                'A new comment was published for photo "%title"',
+                                                                                                                                                                           ['title' => $item->title, 'locale' => $locale]
+            ) : t(
+                                                                                                                                                                               'A new comment was published for movie "%title"',
+                                                                                                                                                                                                                               ['title' => $item->title, 'locale' => $locale]
+                                                                                                                                                                           ));
             self::_notify($email, $locale, $item, $v->render(), $v->subject);
         }
     }
 
     public static function send_pending_notifications()
     {
-        foreach (db::build()
-             ->select(db::expr('DISTINCT `email`'))
-             ->from('pending_notifications')
-             ->execute() as $row) {
-            $email = $row->email;
-            $result = ORM::factory('pending_notification')
-        ->where('email', '=', $email)
-        ->find_all();
+        foreach (db::build()->select(db::expr('DISTINCT `email`'))->from('pending_notifications')->execute() as $row) {
+            $email  = $row->email;
+            $result = ORM::factory('pending_notification')->where('email', '=', $email)->find_all();
             if (1 == $result->count()) {
                 $pending = $result->current();
-                Sendmail::factory()
-          ->to($email)
-          ->subject($pending->subject)
-          ->header('Mime-Version', '1.0')
-          ->header('Content-Type', 'text/html; charset=UTF-8')
-          ->message($pending->text)
-          ->send();
+                Sendmail::factory()->to($email)->subject($pending->subject)->header('Mime-Version', '1.0')->header('Content-Type', 'text/html; charset=UTF-8')->message($pending->text)->send();
                 $pending->delete();
             } else {
-                $text = '';
+                $text   = '';
                 $locale = null;
                 foreach ($result as $pending) {
-                    $text .= $pending->text;
+                    $text   .= $pending->text;
                     $locale = $pending->locale;
                     $pending->delete();
                 }
-                Sendmail::factory()
-          ->to($email)
-          ->subject(t(
-                        'New activity for %site_name',
-                        ['site_name' => item::root()->title, 'locale' => $locale]
-          ))
-          ->header('Mime-Version', '1.0')
-          ->header('Content-Type', 'text/html; charset=UTF-8')
-          ->message($text)
-          ->send();
+                Sendmail::factory()->to($email)->subject(t('New activity for %site_name', ['site_name' => item::root()->title, 'locale' => $locale]))->header('Mime-Version', '1.0')->header('Content-Type', 'text/html; charset=UTF-8')->message($text)->send();
             }
         }
     }
@@ -233,19 +180,13 @@ class notification
     private static function _notify($email, $locale, $item, $text, $subject)
     {
         if (!batch::in_progress()) {
-            Sendmail::factory()
-        ->to($email)
-        ->subject($subject)
-        ->header('Mime-Version', '1.0')
-        ->header('Content-Type', 'text/html; charset=UTF-8')
-        ->message($text)
-        ->send();
+            Sendmail::factory()->to($email)->subject($subject)->header('Mime-Version', '1.0')->header('Content-Type', 'text/html; charset=UTF-8')->message($text)->send();
         } else {
-            $pending = ORM::factory('pending_notification');
+            $pending          = ORM::factory('pending_notification');
             $pending->subject = $subject;
-            $pending->text = $text;
-            $pending->email = $email;
-            $pending->locale = $locale;
+            $pending->text    = $text;
+            $pending->email   = $email;
+            $pending->locale  = $locale;
             $pending->save();
         }
     }

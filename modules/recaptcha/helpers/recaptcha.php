@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,39 +22,23 @@ class recaptcha_Core
 {
     public static function get_configure_form()
     {
-        $form = new Forge('admin/recaptcha', '', 'post', ['id' => 'g-configure-recaptcha-form']);
-        $group = $form->group('configure_recaptcha')
-      ->label(t('Configure reCAPTCHA'));
-        $group->input('public_key')
-      ->label(t('Public Key'))
-      ->value(module::get_var('recaptcha', 'public_key'))
-      ->rules('required')
-      ->error_messages('required', t('You must enter a public key'))
-      ->error_messages('invalid', t('This public key is invalid'));
-        $group->input('private_key')
-      ->label(t('Private Key'))
-      ->value(module::get_var('recaptcha', 'private_key'))
-      ->callback('recaptcha::verify_key')
-      ->error_messages('required', t('You must enter a private key'))
-      ->error_messages('invalid', t('This private key is invalid'));
+        $form  = new Forge('admin/recaptcha', '', 'post', ['id' => 'g-configure-recaptcha-form']);
+        $group = $form->group('configure_recaptcha')->label(t('Configure reCAPTCHA'));
+        $group->input('public_key')->label(t('Public Key'))->value(module::get_var('recaptcha', 'public_key'))->rules('required')->error_messages('required', t('You must enter a public key'))->error_messages('invalid', t('This public key is invalid'));
+        $group->input('private_key')->label(t('Private Key'))->value(module::get_var('recaptcha', 'private_key'))->callback('recaptcha::verify_key')->error_messages('required', t('You must enter a private key'))->error_messages('invalid', t('This private key is invalid'));
 
         $group->submit('')->value(t('Save'));
-        $site_domain = urlencode(stripslashes($_SERVER['HTTP_HOST']));
+        $site_domain       = urlencode(stripslashes($_SERVER['HTTP_HOST']));
         $form->get_key_url = "http://www.google.com/recaptcha/admin/create?domains=$site_domain&app=Gallery3";
         return $form;
     }
 
     public static function check_config()
     {
-        $public_key = module::get_var('recaptcha', 'public_key');
+        $public_key  = module::get_var('recaptcha', 'public_key');
         $private_key = module::get_var('recaptcha', 'private_key');
         if (empty($public_key) || empty($private_key)) {
-            site_status::warning(
-        t(
-            'reCAPTCHA is not quite ready!  Please configure the <a href="%url">reCAPTCHA Keys</a>',
-            ['url' => html::mark_clean(url::site('admin/recaptcha'))]
-        ), 'recaptcha_config'
-      );
+            site_status::warning(t('reCAPTCHA is not quite ready!  Please configure the <a href="%url">reCAPTCHA Keys</a>', ['url' => html::mark_clean(url::site('admin/recaptcha'))]), 'recaptcha_config');
         } else {
             site_status::clear('recaptcha_config');
         }
@@ -72,15 +57,12 @@ class recaptcha_Core
         }
 
         $remote_ip = Input::instance()->server('REMOTE_ADDR');
-        $response = self::_http_post(
-            'api-verify.recaptcha.net', '/verify',
-            [
-                'privatekey' => $private_key_input->value,
-                'remoteip'   => $remote_ip,
-                'challenge'  => 'right',
-                'response'   => 'wrong'
-            ]
-    );
+        $response  = self::_http_post('api-verify.recaptcha.net', '/verify', [
+                                                                    'privatekey' => $private_key_input->value,
+                                                                    'remoteip'   => $remote_ip,
+                                                                    'challenge'  => 'right',
+                                                                    'response'   => 'wrong'
+                                                                ]);
 
         if ("false\ninvalid-site-private-key" == $response[1]) {
             // This is the only thing I can figure out how to verify.
@@ -96,7 +78,7 @@ class recaptcha_Core
      */
     public static function is_recaptcha_valid($challenge, $response, $private_key)
     {
-        $input = Input::instance();
+        $input     = Input::instance();
         $remote_ip = $input->server('REMOTE_ADDR');
 
         // discard spam submissions
@@ -104,15 +86,12 @@ class recaptcha_Core
             return 'incorrect-captcha-sol';
         }
 
-        $response = self::_http_post(
-            'api-verify.recaptcha.net', '/verify',
-            [
-                'privatekey' => $private_key,
-                'remoteip'   => $remote_ip,
-                'challenge'  => $challenge,
-                'response'   => $response
-            ]
-    );
+        $response = self::_http_post('api-verify.recaptcha.net', '/verify', [
+                                                                   'privatekey' => $private_key,
+                                                                   'remoteip'   => $remote_ip,
+                                                                   'challenge'  => $challenge,
+                                                                   'response'   => $response
+                                                               ]);
 
         $answers = explode("\n", $response [1]);
         if ('true' == trim($answers [0])) {
@@ -140,21 +119,21 @@ class recaptcha_Core
      * Submits an HTTP POST to a reCAPTCHA server
      * @param string $host
      * @param string $path
-     * @param array $data
+     * @param array  $data
      * @param int port
      * @return array response
      */
     private static function _http_post($host, $path, $data, $port = 80)
     {
-        $req = self::_encode($data);
-        $http_request  = "POST $path HTTP/1.0\r\n";
+        $req          = self::_encode($data);
+        $http_request = "POST $path HTTP/1.0\r\n";
         $http_request .= "Host: $host\r\n";
         $http_request .= "Content-Type: application/x-www-form-urlencoded;\r\n";
         $http_request .= 'Content-Length: ' . strlen($req) . "\r\n";
         $http_request .= "User-Agent: reCAPTCHA/PHP\r\n";
         $http_request .= "\r\n";
         $http_request .= $req;
-        $response = '';
+        $response     = '';
         if (false == ($fs = @fsockopen($host, $port, $errno, $errstr, 10))) {
             throw new Exception('@todo COULD NOT OPEN SOCKET');
         }

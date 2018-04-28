@@ -1,12 +1,12 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
-
 class Cache_Exception_Core extends Kohana_Exception
 {
 }

@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -28,13 +29,13 @@ class Users_Controller extends Controller
 
         $form = $this->_get_edit_form($user);
         try {
-            $valid = $form->validate();
+            $valid           = $form->validate();
             $user->full_name = $form->edit_user->full_name->value;
-            $user->url = $form->edit_user->url->value;
+            $user->url       = $form->edit_user->url->value;
 
-            if (count(locales::installed()) > 1 &&
-          $user->locale != $form->edit_user->locale->value) {
-                $user->locale = $form->edit_user->locale->value;
+            if (count(locales::installed()) > 1
+                && $user->locale != $form->edit_user->locale->value) {
+                $user->locale        = $form->edit_user->locale->value;
                 $flush_locale_cookie = true;
             }
 
@@ -74,7 +75,7 @@ class Users_Controller extends Controller
 
         $form = $this->_get_change_password_form($user);
         try {
-            $valid = $form->validate();
+            $valid          = $form->validate();
             $user->password = $form->change_password->password->value;
             $user->validate();
         } catch (ORM_Validation_Exception $e) {
@@ -112,7 +113,7 @@ class Users_Controller extends Controller
 
         $form = $this->_get_change_email_form($user);
         try {
-            $valid = $form->validate();
+            $valid       = $form->validate();
             $user->email = $form->change_email->email->value;
             $user->validate();
         } catch (ORM_Validation_Exception $e) {
@@ -172,28 +173,15 @@ class Users_Controller extends Controller
 
     private function _get_change_password_form($user)
     {
-        $form = new Forge(
-            "users/change_password/$user->id", '', 'post',
-            ['id' => 'g-change-password-user-form']
-    );
+        $form  = new Forge("users/change_password/$user->id", '', 'post', ['id' => 'g-change-password-user-form']);
         $group = $form->group('change_password')->label(t('Change your password'));
-        $group->password('old_password')->label(t('Old password'))->id('g-password')
-              ->callback('auth::validate_too_many_failed_auth_attempts')
-              ->callback('user::valid_password')
-              ->error_messages('invalid_password', t('Incorrect password'))
-              ->error_messages(
-                  'too_many_failed_auth_attempts',
-                  t('Too many incorrect passwords.  Try again later')
-      );
-        $group->password('password')->label(t('New password'))->id('g-password')
-              ->error_messages('min_length', t('Your new password is too short'));
-        $group->script('')
-      ->text(
-        '$("form").ready(function(){$(\'input[name="password"]\').user_password_strength();});'
-      );
-        $group->password('password2')->label(t('Confirm new password'))->id('g-password2')
-              ->matches($group->password)
-              ->error_messages('matches', t('The passwords you entered do not match'));
+        $group->password('old_password')->label(t('Old password'))->id('g-password')->callback('auth::validate_too_many_failed_auth_attempts')->callback('user::valid_password')->error_messages('invalid_password', t('Incorrect password'))->error_messages(
+            'too_many_failed_auth_attempts',
+                                                                                                                                                                                                                                                              t('Too many incorrect passwords.  Try again later')
+        );
+        $group->password('password')->label(t('New password'))->id('g-password')->error_messages('min_length', t('Your new password is too short'));
+        $group->script('')->text('$("form").ready(function(){$(\'input[name="password"]\').user_password_strength();});');
+        $group->password('password2')->label(t('Confirm new password'))->id('g-password2')->matches($group->password)->error_messages('matches', t('The passwords you entered do not match'));
 
         module::event('user_change_password_form', $user, $form);
         $group->submit('')->value(t('Save'));
@@ -202,23 +190,13 @@ class Users_Controller extends Controller
 
     private function _get_change_email_form($user)
     {
-        $form = new Forge(
-            "users/change_email/$user->id", '', 'post',
-            ['id' => 'g-change-email-user-form']
-    );
+        $form  = new Forge("users/change_email/$user->id", '', 'post', ['id' => 'g-change-email-user-form']);
         $group = $form->group('change_email')->label(t('Change your email address'));
-        $group->password('password')->label(t('Current password'))->id('g-password')
-              ->callback('auth::validate_too_many_failed_auth_attempts')
-              ->callback('user::valid_password')
-              ->error_messages('invalid_password', t('Incorrect password'))
-              ->error_messages(
-                  'too_many_failed_auth_attempts',
-                  t('Too many incorrect passwords.  Try again later')
-      );
-        $group->input('email')->label(t('New email address'))->id('g-email')->value($user->email)
-              ->error_messages('email', t('You must enter a valid email address'))
-              ->error_messages('length', t('Your email address is too long'))
-              ->error_messages('required', t('You must enter a valid email address'));
+        $group->password('password')->label(t('Current password'))->id('g-password')->callback('auth::validate_too_many_failed_auth_attempts')->callback('user::valid_password')->error_messages('invalid_password', t('Incorrect password'))->error_messages(
+            'too_many_failed_auth_attempts',
+                                                                                                                                                                                                                                                              t('Too many incorrect passwords.  Try again later')
+        );
+        $group->input('email')->label(t('New email address'))->id('g-email')->value($user->email)->error_messages('email', t('You must enter a valid email address'))->error_messages('length', t('Your email address is too long'))->error_messages('required', t('You must enter a valid email address'));
 
         module::event('user_change_email_form', $user, $form);
         $group->submit('')->value(t('Save'));
@@ -227,13 +205,11 @@ class Users_Controller extends Controller
 
     private function _get_edit_form($user)
     {
-        $form = new Forge("users/update/$user->id", '', 'post', ['id' => 'g-edit-user-form']);
+        $form  = new Forge("users/update/$user->id", '', 'post', ['id' => 'g-edit-user-form']);
         $group = $form->group('edit_user')->label(t('Edit your profile'));
-        $group->input('full_name')->label(t('Full Name'))->id('g-fullname')->value($user->full_name)
-              ->error_messages('length', t('Your name is too long'));
+        $group->input('full_name')->label(t('Full Name'))->id('g-fullname')->value($user->full_name)->error_messages('length', t('Your name is too long'));
         self::_add_locale_dropdown($group, $user);
-        $group->input('url')->label(t('URL'))->id('g-url')->value($user->url)
-              ->error_messages('url', t('You must enter a valid url'));
+        $group->input('url')->label(t('URL'))->id('g-url')->value($user->url)->error_messages('url', t('You must enter a valid url'));
 
         module::event('user_edit_form', $user, $form);
         $group->submit('')->value(t('Save'));
@@ -241,7 +217,7 @@ class Users_Controller extends Controller
     }
 
     /** @todo combine with Admin_Users_Controller::_add_locale_dropdown */
-    private function _add_locale_dropdown(&$form, $user=null)
+    private function _add_locale_dropdown(&$form, $user = null)
     {
         $locales = locales::installed();
         if (count($locales) <= 1) {
@@ -253,11 +229,8 @@ class Users_Controller extends Controller
         }
 
         // Put "none" at the first position in the array
-        $locales = array_merge(['' => t('« none »')], $locales);
+        $locales         = array_merge(['' => t('« none »')], $locales);
         $selected_locale = ($user && $user->locale) ? $user->locale : '';
-        $form->dropdown('locale')
-      ->label(t('Language preference'))
-      ->options($locales)
-      ->selected($selected_locale);
+        $form->dropdown('locale')->label(t('Language preference'))->options($locales)->selected($selected_locale);
     }
 }

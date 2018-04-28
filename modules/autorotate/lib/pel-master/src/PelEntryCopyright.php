@@ -22,6 +22,7 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301 USA
  */
+
 namespace lsolesen\pel;
 
 /**
@@ -36,7 +37,7 @@ namespace lsolesen\pel;
  * convenient instead. Copyright information is handled by the {@link
  * PelEntryCopyright} class.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public
  *          License (GPL)
  * @package PEL
@@ -65,7 +66,7 @@ namespace lsolesen\pel;
  * an editor copyright, then let the first argument be the empty
  * string.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @package PEL
  */
 class PelEntryCopyright extends PelEntryAscii
@@ -116,7 +117,7 @@ class PelEntryCopyright extends PelEntryAscii
     public function setValue($photographer = '', $editor = '')
     {
         $this->photographer = $photographer;
-        $this->editor = $editor;
+        $this->editor       = $editor;
 
         if ('' == $photographer && '' != $editor) {
             $photographer = ' ';

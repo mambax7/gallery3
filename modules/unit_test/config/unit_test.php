@@ -5,7 +5,7 @@
  * Default paths to scan for tests.
  */
 $config['paths'] = [
-    MODPATH.'unit_test/tests',
+    MODPATH . 'unit_test/tests',
 ];
 
 /**

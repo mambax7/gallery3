@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -80,11 +81,7 @@ class Uploader_Controller extends Controller
     {
         if ($error_count) {
             // The "errors" won't be properly pluralized :-/
-            print t2(
-                'Uploaded %count photo (%error errors)', 'Uploaded %count photos (%error errors)',
-                (int)$success_count,
-                ['error' => (int)$error_count]
-      );
+            print t2('Uploaded %count photo (%error errors)', 'Uploaded %count photos (%error errors)', (int)$success_count, ['error' => (int)$error_count]);
         } else {
             print t2('Uploaded %count photo', 'Uploaded %count photos', $success_count);
         }
@@ -99,9 +96,8 @@ class Uploader_Controller extends Controller
 
     private function _get_add_form($album)
     {
-        $form = new Forge('uploader/finish', '', 'post', ['id' => 'gAddPhotosForm', 'class' => 'dropzone']);
-        $group = $form->group('add_photos')
-      ->label(t('Add photos to %album_title', ['album_title' => html::purify($album->title)]));
+        $form  = new Forge('uploader/finish', '', 'post', ['id' => 'gAddPhotosForm', 'class' => 'dropzone']);
+        $group = $form->group('add_photos')->label(t('Add photos to %album_title', ['album_title' => html::purify($album->title)]));
         $group->dropzone('dropzone')->album($album);
 
         $group_actions = $form->group('actions');
@@ -116,9 +112,8 @@ class Uploader_Controller extends Controller
 
     private function _get_add_form_uploadify($album)
     {
-        $form = new Forge('uploader/finish', '', 'post', ['id' => 'g-add-photos-form']);
-        $group = $form->group('add_photos')
-      ->label(t('Add photos to %album_title', ['album_title' => html::purify($album->title)]));
+        $form  = new Forge('uploader/finish', '', 'post', ['id' => 'g-add-photos-form']);
+        $group = $form->group('add_photos')->label(t('Add photos to %album_title', ['album_title' => html::purify($album->title)]));
         $group->uploadify('uploadify')->album($album);
 
         $group_actions = $form->group('actions');
@@ -135,8 +130,7 @@ class Uploader_Controller extends Controller
                 continue;
             }
             $group->uploadify->script_data($input, $group->{$input}->value);
-            $group->script('')
-        ->text("$('input[name=\"$input\"]').change(function (event) {
+            $group->script('')->text("$('input[name=\"$input\"]').change(function (event) {
                   $('#g-uploadify').uploadifySettings('scriptData', {'$input': $(this).val()});
                 });");
         }
@@ -190,9 +184,9 @@ class Uploader_Controller extends Controller
         $extension = pathinfo($name, PATHINFO_EXTENSION);
 
         try {
-            $item = ORM::factory('item');
-            $item->name = $name;
-            $item->title = item::convert_filename_to_title($name);
+            $item            = ORM::factory('item');
+            $item->name      = $name;
+            $item->title     = item::convert_filename_to_title($name);
             $item->parent_id = $album_id;
             $item->set_data_file($tmp_name);
 
@@ -201,19 +195,11 @@ class Uploader_Controller extends Controller
             } elseif (legal_file::get_photo_extensions($extension)) {
                 $item->type = 'photo';
                 $item->save();
-                log::success(
-                    'content',
-                    t('Added a photo'),
-                    html::anchor("photos/$item->id", t('view photo'))
-        );
+                log::success('content', t('Added a photo'), html::anchor("photos/$item->id", t('view photo')));
             } elseif (movie::allow_uploads() && legal_file::get_movie_extensions($extension)) {
                 $item->type = 'movie';
                 $item->save();
-                log::success(
-                    'content',
-                    t('Added a movie'),
-                    html::anchor("movies/$item->id", t('view movie'))
-        );
+                log::success('content', t('Added a movie'), html::anchor("movies/$item->id", t('view movie')));
             } else {
                 throw new Exception(t('Uploaded file has illegal extension'));
             }

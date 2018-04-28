@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -26,7 +27,7 @@ class Comment_Helper_Test extends Gallery_Unit_Test_Case
     {
         $this->_ip_address = Input::instance()->ip_address;
         $this->_user_agent = request::user_agent();
-        $this->_save = $_SERVER;
+        $this->_save       = $_SERVER;
 
         $_SERVER['HTTP_ACCEPT']          = 'HTTP_ACCEPT';
         $_SERVER['HTTP_ACCEPT_CHARSET']  = 'HTTP_ACCEPT_CHARSET';
@@ -52,13 +53,13 @@ class Comment_Helper_Test extends Gallery_Unit_Test_Case
 
     public function create_comment_for_guest_test()
     {
-        $comment = ORM::factory('comment');
-        $comment->item_id = item::root()->id;
-        $comment->text = 'text';
-        $comment->author_id = identity::guest()->id;
-        $comment->guest_name = 'name';
+        $comment              = ORM::factory('comment');
+        $comment->item_id     = item::root()->id;
+        $comment->text        = 'text';
+        $comment->author_id   = identity::guest()->id;
+        $comment->guest_name  = 'name';
         $comment->guest_email = 'email@email.com';
-        $comment->guest_url = 'http://url.com';
+        $comment->guest_url   = 'http://url.com';
         $comment->save();
 
         $this->assert_equal('name', $comment->author_name());
@@ -89,9 +90,9 @@ class Comment_Helper_Test extends Gallery_Unit_Test_Case
     {
         $admin = identity::admin_user();
 
-        $comment = ORM::factory('comment');
-        $comment->item_id = item::root()->id;
-        $comment->text = 'text';
+        $comment            = ORM::factory('comment');
+        $comment->item_id   = item::root()->id;
+        $comment->text      = 'text';
         $comment->author_id = $admin->id;
         $comment->save();
 

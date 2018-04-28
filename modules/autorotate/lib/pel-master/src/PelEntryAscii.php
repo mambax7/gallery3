@@ -22,6 +22,7 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301 USA
  */
+
 namespace lsolesen\pel;
 
 /**
@@ -36,7 +37,7 @@ namespace lsolesen\pel;
  * convenient instead. Copyright information is handled by the {@link
  * PelEntryCopyright} class.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public
  *          License (GPL)
  * @package PEL
@@ -52,7 +53,7 @@ namespace lsolesen\pel;
  * $entry->setValue('This is my image. I like it.');
  * </code>
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @package PEL
  */
 class PelEntryAscii extends PelEntry
@@ -72,7 +73,7 @@ class PelEntryAscii extends PelEntry
     /**
      * Make a new PelEntry that can hold an ASCII string.
      *
-     * @param int $tag
+     * @param int    $tag
      *            the tag which this entry represents. This should be
      *            one of the constants defined in {@link PelTag}, e.g., {@link
      *            PelTag::IMAGE_DESCRIPTION}, {@link PelTag::MODEL}, or any other
@@ -86,7 +87,7 @@ class PelEntryAscii extends PelEntry
      */
     public function __construct($tag, $str = '')
     {
-        $this->tag = $tag;
+        $this->tag    = $tag;
         $this->format = PelFormat::ASCII;
         self::setValue($str);
     }
@@ -107,8 +108,8 @@ class PelEntryAscii extends PelEntry
     public function setValue($str)
     {
         $this->components = strlen($str) + 1;
-        $this->str = $str;
-        $this->bytes = $str . chr(0x00);
+        $this->str        = $str;
+        $this->bytes      = $str . chr(0x00);
     }
 
     /**

@@ -79,8 +79,7 @@ class user_Core
 
         // Passwords with <&"> created by G2 prior to 2.1 were hashed with entities
         $sanitizedPassword = html::chars($password, false);
-        $guess = (32 == strlen($valid)) ? md5($sanitizedPassword)
-          : ($salt . md5($salt . $sanitizedPassword));
+        $guess             = (32 == strlen($valid)) ? md5($sanitizedPassword) : ($salt . md5($salt . $sanitizedPassword));
         if (!strcmp($guess, $valid)) {
             return true;
         }
@@ -116,7 +115,7 @@ class user_Core
 
     /**
      * Look up a user by id.
-     * @param integer      $id the user id
+     * @param integer $id the user id
      * @return User_Model  the user object, or null if the id was invalid.
      */
     public static function lookup($id)
@@ -126,7 +125,7 @@ class user_Core
 
     /**
      * Look up a user by name.
-     * @param integer      $name the user name
+     * @param integer $name the user name
      * @return User_Model  the user object, or null if the name was invalid.
      */
     public static function lookup_by_name($name)
@@ -136,7 +135,7 @@ class user_Core
 
     /**
      * Look up a user by hash.
-     * @param integer      $hash the user hash value
+     * @param integer $hash the user hash value
      * @return User_Model  the user object, or null if the name was invalid.
      */
     public static function lookup_by_hash($hash)
@@ -149,18 +148,18 @@ class user_Core
      * @param mixed      filters (@see Database.php
      * @return array     the user list.
      */
-    public static function get_user_list($filter= [])
+    public static function get_user_list($filter = [])
     {
         $user = ORM::factory('user');
 
         foreach ($filter as $method => $args) {
             switch ($method) {
-      case 'in':
-        $user->in($args[0], $args[1]);
-        break;
-      default:
-        $user->$method($args);
-      }
+                case 'in':
+                    $user->in($args[0], $args[1]);
+                    break;
+                default:
+                    $user->$method($args);
+            }
         }
         return $user->find_all();
     }

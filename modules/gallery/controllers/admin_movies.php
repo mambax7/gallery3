@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -47,32 +48,28 @@ class Admin_Movies_Controller extends Admin_Controller
     {
         list($ffmpeg_version, $ffmpeg_date) = movie::get_ffmpeg_version();
         $ffmpeg_version = $ffmpeg_date ? "{$ffmpeg_version} ({$ffmpeg_date})" : $ffmpeg_version;
-        $ffmpeg_path = movie::find_ffmpeg();
-        $ffmpeg_dir = substr($ffmpeg_path, 0, strrpos($ffmpeg_path, '/'));
+        $ffmpeg_path    = movie::find_ffmpeg();
+        $ffmpeg_dir     = substr($ffmpeg_path, 0, strrpos($ffmpeg_path, '/'));
 
-        $view = new Admin_View('admin.html');
-        $view->page_title = t('Movies settings');
-        $view->content = new View('admin_movies.html');
-        $view->content->form = $form;
-        $view->content->ffmpeg_dir = $ffmpeg_dir;
+        $view                          = new Admin_View('admin.html');
+        $view->page_title              = t('Movies settings');
+        $view->content                 = new View('admin_movies.html');
+        $view->content->form           = $form;
+        $view->content->ffmpeg_dir     = $ffmpeg_dir;
         $view->content->ffmpeg_version = $ffmpeg_version;
         print $view;
     }
 
     private function _get_admin_form()
     {
-        $form = new Forge('admin/movies/save', '', 'post', ['id' => 'g-movies-admin-form']);
+        $form  = new Forge('admin/movies/save', '', 'post', ['id' => 'g-movies-admin-form']);
         $group = $form->group('settings')->label(t('Settings'));
-        $group->dropdown('allow_uploads')
-      ->label(t('Allow movie uploads into Gallery (does not affect existing movies)'))
-      ->options([
-                    'autodetect' =>t('only if FFmpeg is detected (default)'),
-                    'always'     =>t('always'), 'never' =>t('never')
-                ])
-      ->selected(module::get_var('gallery', 'movie_allow_uploads', 'autodetect'));
-        $group->checkbox('rebuild_thumbs')
-      ->label(t('Rebuild all movie thumbnails (once FFmpeg is installed, use this to update existing movie thumbnails)'))
-      ->checked(false);  // always set as false
+        $group->dropdown('allow_uploads')->label(t('Allow movie uploads into Gallery (does not affect existing movies)'))->options([
+                                                                                                                                       'autodetect' => t('only if FFmpeg is detected (default)'),
+                                                                                                                                       'always'     => t('always'),
+                                                                                                                                       'never'      => t('never')
+                                                                                                                                   ])->selected(module::get_var('gallery', 'movie_allow_uploads', 'autodetect'));
+        $group->checkbox('rebuild_thumbs')->label(t('Rebuild all movie thumbnails (once FFmpeg is installed, use this to update existing movie thumbnails)'))->checked(false);  // always set as false
         $form->submit('save')->value(t('Save'));
         return $form;
     }

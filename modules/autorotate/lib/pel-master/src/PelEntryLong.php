@@ -22,12 +22,13 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301 USA
  */
+
 namespace lsolesen\pel;
 
 /**
  * Classes used to hold longs, both signed and unsigned.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public
  *          License (GPL)
  * @package PEL
@@ -49,7 +50,7 @@ namespace lsolesen\pel;
  * Here the width and height is updated to 50% of their original
  * values.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @package PEL
  */
 class PelEntryLong extends PelEntryNumber
@@ -74,23 +75,23 @@ class PelEntryLong extends PelEntryNumber
      * extracted.
      *
      * @param
-     *            int the tag which this entry represents. This
-     *            should be one of the constants defined in {@link PelTag},
-     *            e.g., {@link PelTag::IMAGE_WIDTH}, or any other tag which can
-     *            have format {@link PelFormat::LONG}.
-     * @param int $value...
-     *            the long(s) that this entry will
-     *            represent or an array of longs. The argument passed must obey
-     *            the same rules as the argument to {@link setValue}, namely that
-     *            it should be within range of an unsigned long (32 bit), that is
-     *            between 0 and 4294967295 (inclusive). If not, then a {@link
-     *            PelExifOverflowException} will be thrown.
+     *                   int the tag which this entry represents. This
+     *                   should be one of the constants defined in {@link PelTag},
+     *                   e.g., {@link PelTag::IMAGE_WIDTH}, or any other tag which can
+     *                   have format {@link PelFormat::LONG}.
+     * @param int $value ...
+     *                   the long(s) that this entry will
+     *                   represent or an array of longs. The argument passed must obey
+     *                   the same rules as the argument to {@link setValue}, namely that
+     *                   it should be within range of an unsigned long (32 bit), that is
+     *                   between 0 and 4294967295 (inclusive). If not, then a {@link
+     *                   PelExifOverflowException} will be thrown.
      */
     public function __construct($tag, $value = null)
     {
-        $this->tag = $tag;
-        $this->min = 0;
-        $this->max = 4294967295;
+        $this->tag    = $tag;
+        $this->min    = 0;
+        $this->max    = 4294967295;
         $this->format = PelFormat::LONG;
 
         $value = func_get_args();

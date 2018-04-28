@@ -1,13 +1,14 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Memcache-based Cache driver.
  *
  * $Id$
  *
- * @package    Cache
- * @author     Kohana Team
+ * @package        Cache
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class Cache_Memcache_Driver extends Cache_Driver
 {
@@ -17,13 +18,13 @@ class Cache_Memcache_Driver extends Cache_Driver
 
     public function __construct($config)
     {
-        if (! extension_loaded('memcache')) {
+        if (!extension_loaded('memcache')) {
             throw new Cache_Exception('The memcache PHP extension must be loaded to use this driver.');
         }
 
         ini_set('memcache.allow_failover', (isset($config['allow_failover']) && $config['allow_failover']) ? true : false);
 
-        $this->config = $config;
+        $this->config  = $config;
         $this->backend = new Memcache;
 
         $this->flags = (isset($config['compression']) && $config['compression']) ? MEMCACHE_COMPRESSED : false;
@@ -40,7 +41,7 @@ class Cache_Memcache_Driver extends Cache_Driver
             ];
 
             // Add the server to the pool
-            $this->backend->addServer($server['host'], $server['port'], (bool) $server['persistent'], (int) $server['weight'], (int) $server['timeout'], (int) $server['retry_interval'], true, [$this, '_memcache_failure_callback']);
+            $this->backend->addServer($server['host'], $server['port'], (bool)$server['persistent'], (int)$server['weight'], (int)$server['timeout'], (int)$server['retry_interval'], true, [$this, '_memcache_failure_callback']);
         }
     }
 
@@ -66,7 +67,7 @@ class Cache_Memcache_Driver extends Cache_Driver
                 throw new Cache_Exception('Caching of resources is impossible, because resources cannot be serialised.');
             }
 
-            if (! $this->backend->set($key, $value, $this->flags, $lifetime)) {
+            if (!$this->backend->set($key, $value, $this->flags, $lifetime)) {
                 return false;
             }
         }
@@ -103,7 +104,7 @@ class Cache_Memcache_Driver extends Cache_Driver
     public function delete($keys)
     {
         foreach ($keys as $key) {
-            if (! $this->backend->delete($key)) {
+            if (!$this->backend->delete($key)) {
                 return false;
             }
         }

@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -19,14 +20,14 @@
  */
 class Gallery_View_Core extends View
 {
-    protected $theme_name = null;
+    protected $theme_name    = null;
     protected $combine_queue = [];
 
     /**
      * Provide a url to a resource within the current theme.  This allows us to refer to theme
      * resources without naming the theme itself which makes themes easier to copy.
      */
-    public function url($path, $absolute_url=false)
+    public function url($path, $absolute_url = false)
     {
         $arg = "themes/{$this->theme_name}/$path";
         return $absolute_url ? url::abs_file($arg) : url::file($arg);
@@ -39,21 +40,21 @@ class Gallery_View_Core extends View
      */
     public function paginator()
     {
-        $v = new View('paginator.html');
-        $v->page_type = $this->page_type;
-        $v->page_subtype = $this->page_subtype;
-        $v->first_page_url = null;
+        $v                    = new View('paginator.html');
+        $v->page_type         = $this->page_type;
+        $v->page_subtype      = $this->page_subtype;
+        $v->first_page_url    = null;
         $v->previous_page_url = null;
-        $v->next_page_url = null;
-        $v->last_page_url = null;
+        $v->next_page_url     = null;
+        $v->last_page_url     = null;
 
         if ('collection' == $this->page_type) {
-            $v->page = $this->page;
+            $v->page      = $this->page;
             $v->max_pages = $this->max_pages;
-            $v->total = $this->children_count;
+            $v->total     = $this->children_count;
 
             if (1 != $this->page) {
-                $v->first_page_url = url::site(url::merge(['page' => 1]));
+                $v->first_page_url    = url::site(url::merge(['page' => 1]));
                 $v->previous_page_url = url::site(url::merge(['page' => $this->page - 1]));
             }
 
@@ -63,10 +64,10 @@ class Gallery_View_Core extends View
             }
 
             $v->first_visible_position = ($this->page - 1) * $this->page_size + 1;
-            $v->last_visible_position = min($this->page * $this->page_size, $v->total);
+            $v->last_visible_position  = min($this->page * $this->page_size, $v->total);
         } elseif ('item' == $this->page_type) {
             $v->position = $this->position;
-            $v->total = $this->sibling_count;
+            $v->total    = $this->sibling_count;
             if ($this->previous_item) {
                 $v->previous_page_url = $this->previous_item->url();
             }
@@ -102,7 +103,7 @@ class Gallery_View_Core extends View
      * @param $group the group of scripts to combine this with.  defaults to "core"
      * @return string
      */
-    public function script($file, $group= 'core')
+    public function script($file, $group = 'core')
     {
         if (($path = gallery::find_file('js', $file, false))) {
             if (isset($this->combine_queue['script'])) {
@@ -126,7 +127,7 @@ class Gallery_View_Core extends View
      * @param $group the group of css to combine this with.  defaults to "core"
      * @return string
      */
-    public function css($file, $group= 'core')
+    public function css($file, $group = 'core')
     {
         if (($path = gallery::find_file('css', $file, false))) {
             if (isset($this->combine_queue['css'])) {
@@ -145,7 +146,7 @@ class Gallery_View_Core extends View
      * @param $group the group of scripts or css we want (null will combine all groups)
      * @return string
      */
-    public function get_combined($type, $group=null)
+    public function get_combined($type, $group = null)
     {
         if (null === $group) {
             $groups = array_keys($this->combine_queue[$type]);
@@ -173,15 +174,15 @@ class Gallery_View_Core extends View
                 // Combine enabled - if we're at the start of the buffer, add a comment.
                 if (!$buf) {
                     $type_text = ('css' == $type) ? 'CSS' : 'JS';
-                    $buf .= "<!-- LOOKING FOR YOUR $type_text? It's all been combined into the link(s) below -->\n";
+                    $buf       .= "<!-- LOOKING FOR YOUR $type_text? It's all been combined into the link(s) below -->\n";
                 }
 
-                $cache = Cache::instance();
+                $cache    = Cache::instance();
                 $contents = $cache->get($key);
 
                 if (empty($contents)) {
-                    $combine_data = new stdClass();
-                    $combine_data->type = $type;
+                    $combine_data           = new stdClass();
+                    $combine_data->type     = $type;
                     $combine_data->contents = $this->combine_queue[$type][$group];
                     module::event('before_combine', $combine_data);
 
@@ -194,22 +195,17 @@ class Gallery_View_Core extends View
                         }
                     }
 
-                    $combine_data = new stdClass();
-                    $combine_data->type = $type;
+                    $combine_data           = new stdClass();
+                    $combine_data->type     = $type;
                     $combine_data->contents = $contents;
                     module::event('after_combine', $combine_data);
 
                     $cache->set($key, $combine_data->contents, [$type], 30 * 84600);
 
-                    $use_gzip = function_exists('gzencode') &&
-                                0 === (int) ini_get('zlib.output_compression');
+                    $use_gzip = function_exists('gzencode')
+                                && 0 === (int)ini_get('zlib.output_compression');
                     if ($use_gzip) {
-                        $cache->set(
-                            "{$key}_gz",
-                            gzencode($combine_data->contents, 9, FORCE_GZIP),
-                            [$type, 'gzip'],
-                30 * 84600
-            );
+                        $cache->set("{$key}_gz", gzencode($combine_data->contents, 9, FORCE_GZIP), [$type, 'gzip'], 30 * 84600);
                     }
                 }
 
@@ -220,14 +216,14 @@ class Gallery_View_Core extends View
                 }
             } else {
                 // Don't combine - just return the CSS and JS links (with the key as a cache buster).
-        $key_base = substr($key, 0, (('css' == $type) ? -4 : -3));  // key without extension
-        foreach (array_keys($this->combine_queue[$type][$group]) as $path) {
-            if ('css' == $type) {
-                $buf .= html::stylesheet("$path?m=$key_base", 'screen,print,projection', false);
-            } else {
-                $buf .= html::script("$path?m=$key_base", false);
-            }
-        }
+                $key_base = substr($key, 0, (('css' == $type) ? -4 : -3));  // key without extension
+                foreach (array_keys($this->combine_queue[$type][$group]) as $path) {
+                    if ('css' == $type) {
+                        $buf .= html::stylesheet("$path?m=$key_base", 'screen,print,projection', false);
+                    } else {
+                        $buf .= html::script("$path?m=$key_base", false);
+                    }
+                }
             }
 
             unset($this->combine_queue[$type][$group]);
@@ -255,26 +251,21 @@ class Gallery_View_Core extends View
             foreach ($matches as $match) {
                 $relative = dirname($css_file) . "/$match[1]";
                 if (!empty($relative)) {
-                    $search[] = $match[0];
+                    $search[]  = $match[0];
                     $replace[] = "url('" . url::abs_file($relative) . "')";
                 } else {
                     Kohana_Log::add('error', "Missing URL reference '{$match[1]}' in CSS file '$css_file'");
                 }
             }
             $replace = str_replace(DIRECTORY_SEPARATOR, '/', $replace);
-            $css = str_replace($search, $replace, $css);
+            $css     = str_replace($search, $replace, $css);
         }
-        $imports = preg_match_all(
-        "#@import\s*['|\"]{0,1}(.*?)['|\"]{0,1};#",
-                              $css,
-        $matches,
-        PREG_SET_ORDER
-    );
+        $imports = preg_match_all("#@import\s*['|\"]{0,1}(.*?)['|\"]{0,1};#", $css, $matches, PREG_SET_ORDER);
 
         if ($imports) {
             $search = $replace = [];
             foreach ($matches as $match) {
-                $search[] = $match[0];
+                $search[]  = $match[0];
                 $replace[] = $this->process_css(dirname($css_file) . "/$match[1]");
             }
             $css = str_replace($search, $replace, $css);

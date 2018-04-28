@@ -21,70 +21,70 @@ if (installer::already_installed()) {
     $content = render('success.html.php');
 } else {
     switch (@$_GET['step']) {
-  default:
-  case 'welcome':
-    $errors = installer::check_environment();
-    if ($errors) {
-        $content = render('environment_errors.html.php', ['errors' => $errors]);
-    } else {
-        $content = render('get_db_info.html.php');
-    }
-    break;
+        default:
+        case 'welcome':
+            $errors = installer::check_environment();
+            if ($errors) {
+                $content = render('environment_errors.html.php', ['errors' => $errors]);
+            } else {
+                $content = render('get_db_info.html.php');
+            }
+            break;
 
-  case 'save_db_info':
-    $config = [
-        'host'     => $_POST['dbhost'],
-        'user'     => $_POST['dbuser'],
-        'password' => $_POST['dbpass'],
-        'dbname'   => $_POST['dbname'],
-        'prefix'   => $_POST['prefix'],
-        'type'     => function_exists('mysqli_set_charset') ? 'mysqli' : 'mysql',
-    ];
-    list($config['host'], $config['port']) = explode(':', $config['host'] . ':');
-    foreach ($config as $k => $v) {
-        if ('password' == $k) {
-            $config[$k] = str_replace(["'", "\\"], ["\\'", "\\\\"], $v);
-        } else {
-            $config[$k] = strtr($v, "'`\\", '___');
-        }
-    }
+        case 'save_db_info':
+            $config = [
+                'host'     => $_POST['dbhost'],
+                'user'     => $_POST['dbuser'],
+                'password' => $_POST['dbpass'],
+                'dbname'   => $_POST['dbname'],
+                'prefix'   => $_POST['prefix'],
+                'type'     => function_exists('mysqli_set_charset') ? 'mysqli' : 'mysql',
+            ];
+            list($config['host'], $config['port']) = explode(':', $config['host'] . ':');
+            foreach ($config as $k => $v) {
+                if ('password' == $k) {
+                    $config[$k] = str_replace(["'", "\\"], ["\\'", "\\\\"], $v);
+                } else {
+                    $config[$k] = strtr($v, "'`\\", '___');
+                }
+            }
 
-    if (!installer::connect($config)) {
-        $content = render('invalid_db_info.html.php');
-    } elseif (!installer::verify_mysql_version($config)) {
-        $content = render('invalid_db_version.html.php');
-    } elseif (!installer::select_db($config)) {
-        $content = render('missing_db.html.php');
-    } elseif (is_string($count = installer::db_empty($config)) || !$count) {
-        if (is_string($count)) {
-            $content = oops($count);
-        } else {
-            $content = render('db_not_empty.html.php');
-        }
-    } elseif (!installer::unpack_var()) {
-        $content = oops('Unable to create files inside the <code>var</code> directory');
-    } elseif (!installer::unpack_sql($config)) {
-        $content = oops('Failed to create tables in your database:' . mysql_error());
-    } elseif (!installer::create_database_config($config)) {
-        $content = oops("Couldn't create var/database.php");
-    } else {
-        try {
-            list($user, $password) = installer::create_admin($config);
-            installer::create_admin_session($config);
-            $content = render('success.html.php', ['user' => $user, 'password' => $password]);
+            if (!installer::connect($config)) {
+                $content = render('invalid_db_info.html.php');
+            } elseif (!installer::verify_mysql_version($config)) {
+                $content = render('invalid_db_version.html.php');
+            } elseif (!installer::select_db($config)) {
+                $content = render('missing_db.html.php');
+            } elseif (is_string($count = installer::db_empty($config)) || !$count) {
+                if (is_string($count)) {
+                    $content = oops($count);
+                } else {
+                    $content = render('db_not_empty.html.php');
+                }
+            } elseif (!installer::unpack_var()) {
+                $content = oops('Unable to create files inside the <code>var</code> directory');
+            } elseif (!installer::unpack_sql($config)) {
+                $content = oops('Failed to create tables in your database:' . mysql_error());
+            } elseif (!installer::create_database_config($config)) {
+                $content = oops("Couldn't create var/database.php");
+            } else {
+                try {
+                    list($user, $password) = installer::create_admin($config);
+                    installer::create_admin_session($config);
+                    $content = render('success.html.php', ['user' => $user, 'password' => $password]);
 
-            installer::create_private_key($config);
-        } catch (Exception $e) {
-            $content = oops($e->getMessage());
-        }
+                    installer::create_private_key($config);
+                } catch (Exception $e) {
+                    $content = oops($e->getMessage());
+                }
+            }
+            break;
     }
-    break;
-  }
 }
 
 include('views/install.html.php');
 
-function render($view, $args= [])
+function render($view, $args = [])
 {
     ob_start();
     extract($args);

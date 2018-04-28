@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -26,18 +27,18 @@ class num extends num_Core
      */
     public static function convert_to_bytes($val)
     {
-        $val = trim($val);
-        $last = strtolower($val[strlen($val)-1]);
+        $val  = trim($val);
+        $last = strtolower($val[strlen($val) - 1]);
         switch ($last) {
-    case 'g':
-      $val *= 1024;
-      // no break
-    case 'm':
-      $val *= 1024;
-      // no break
-    case 'k':
-      $val *= 1024;
-    }
+            case 'g':
+                $val *= 1024;
+            // no break
+            case 'm':
+                $val *= 1024;
+            // no break
+            case 'k':
+                $val *= 1024;
+        }
 
         return $val;
     }

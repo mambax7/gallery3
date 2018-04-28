@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -28,41 +29,34 @@ class Quick_Controller extends Controller
 
         $degrees = 0;
         switch ($dir) {
-    case 'ccw':
-      $degrees = -90;
-      break;
+            case 'ccw':
+                $degrees = -90;
+                break;
 
-    case 'cw':
-      $degrees = 90;
-      break;
-    }
+            case 'cw':
+                $degrees = 90;
+                break;
+        }
 
         if ($degrees) {
-            $tmpfile = system::temp_filename(
-                'rotate',
-                pathinfo($item->file_path(), PATHINFO_EXTENSION)
-      );
+            $tmpfile = system::temp_filename('rotate', pathinfo($item->file_path(), PATHINFO_EXTENSION));
             gallery_graphics::rotate($item->file_path(), $tmpfile, ['degrees' => $degrees], $item);
             $item->set_data_file($tmpfile);
             $item->save();
         }
 
         if ('collection' == Input::instance()->get('page_type')) {
-            json::reply(
-                [
-            'src'    => $item->thumb_url(),
-            'width'  => $item->thumb_width,
-            'height' => $item->thumb_height
-                ]
-      );
+            json::reply([
+                            'src'    => $item->thumb_url(),
+                            'width'  => $item->thumb_width,
+                            'height' => $item->thumb_height
+                        ]);
         } else {
-            json::reply(
-                [
-            'src'    => $item->resize_url(),
-            'width'  => $item->resize_width,
-            'height' => $item->resize_height
-                ]
-      );
+            json::reply([
+                            'src'    => $item->resize_url(),
+                            'width'  => $item->resize_width,
+                            'height' => $item->resize_height
+                        ]);
         }
     }
 
@@ -89,7 +83,7 @@ class Quick_Controller extends Controller
         access::required('view', $item);
         access::required('edit', $item);
 
-        $v = new View('quick_delete_confirm.html');
+        $v       = new View('quick_delete_confirm.html');
         $v->item = $item;
         $v->form = item::get_delete_form($item);
         print $v;
@@ -117,11 +111,10 @@ class Quick_Controller extends Controller
             $item->delete();
             batch::stop();
         } else {
-            $where = [['type', '!=', 'album']]; // evaluate redirect item before delete of current item
+            $where    = [['type', '!=', 'album']]; // evaluate redirect item before delete of current item
             $position = item::get_position($item, $where);
             if ($position > 1) {
-                list($previous_item, $ignore, $next_item) =
-          $item->parent()->viewable()->children(3, $position - 2, $where);
+                list($previous_item, $ignore, $next_item) = $item->parent()->viewable()->children(3, $position - 2, $where);
             } else {
                 $previous_item = null;
                 list($next_item) = $item->parent()->viewable()->children(1, $position, $where);
@@ -137,8 +130,7 @@ class Quick_Controller extends Controller
 
         $from_id = Input::instance()->get('from_id');
         if ('collection' == Input::instance()->get('page_type')
-            &&
-        $from_id != $id /* deleted the item we were viewing */) {
+            && $from_id != $id /* deleted the item we were viewing */) {
             json::reply(['result' => 'success', 'reload' => 1]);
         } else {
             json::reply(['result' => 'success', 'location' => $redirect->url()]);
@@ -152,18 +144,18 @@ class Quick_Controller extends Controller
         access::required('edit', $item);
 
         switch ($item->type) {
-    case 'album':
-      $form = album::get_edit_form($item);
-      break;
+            case 'album':
+                $form = album::get_edit_form($item);
+                break;
 
-    case 'photo':
-      $form = photo::get_edit_form($item);
-      break;
+            case 'photo':
+                $form = photo::get_edit_form($item);
+                break;
 
-    case 'movie':
-      $form = movie::get_edit_form($item);
-      break;
-    }
+            case 'movie':
+                $form = movie::get_edit_form($item);
+                break;
+        }
 
         // Pass on the source item where this form was generated, so we have an idea where to return to.
         $form->hidden('from_id')->value((int)Input::instance()->get('from_id', 0));

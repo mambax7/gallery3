@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -19,18 +20,13 @@
  */
 class server_add_Core
 {
-    public static function check_config($paths=null)
+    public static function check_config($paths = null)
     {
         if (null === $paths) {
             $paths = unserialize(module::get_var('server_add', 'authorized_paths'));
         }
         if (empty($paths)) {
-            site_status::warning(
-        t(
-            'Server Add needs configuration. <a href="%url">Configure it now!</a>',
-            ['url' => html::mark_clean(url::site('admin/server_add'))]
-        ), 'server_add_configuration'
-      );
+            site_status::warning(t('Server Add needs configuration. <a href="%url">Configure it now!</a>', ['url' => html::mark_clean(url::site('admin/server_add'))]), 'server_add_configuration');
         } else {
             site_status::clear('server_add_configuration');
         }

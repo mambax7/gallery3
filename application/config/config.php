@@ -155,13 +155,8 @@ $config['modules'] = [
 ];
 
 if (TEST_MODE) {
-    array_splice(
-        $config['modules'],
-        0,
-        0,
-        [
-            MODPATH . 'gallery_unit_test',
-                     MODPATH . 'unit_test'
-        ]
-  );
+    array_splice($config['modules'], 0, 0, [
+                                       MODPATH . 'gallery_unit_test',
+                                       MODPATH . 'unit_test'
+                                   ]);
 }

@@ -22,6 +22,7 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301 USA
  */
+
 namespace lsolesen\pel;
 
 /**
@@ -33,7 +34,7 @@ namespace lsolesen\pel;
  * descendants of the {@link PelEntry} class --- the class itself is
  * abstract and so it cannot be instantiated.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public
  *          License (GPL)
  * @package PEL
@@ -59,7 +60,7 @@ namespace lsolesen\pel;
  * right subclass ({@link PelEntryShort} for short integers, {@link
  * PelEntryAscii} for strings, and so on) directly.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @package PEL
  */
 abstract class PelEntry

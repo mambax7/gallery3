@@ -1,27 +1,24 @@
 <?php defined('SYSPATH') || die('No direct script access.') ?>
 <html>
-  <head>
+<head>
     <title><?= html::clean($subject) ?> </title>
-  </head>
-  <body>
-    <h2><?= html::clean($subject) ?></h2>
-    <table>
-      <tr>
+</head>
+<body>
+<h2><?= html::clean($subject) ?></h2>
+<table>
+    <tr>
         <td colspan="2">
-          <?= t(
-              'To view the changed album %title use the link below.',
-              ['title' => html::purify($item->parent()->title)]
-) ?>
+            <?= t('To view the changed album %title use the link below.', ['title' => html::purify($item->parent()->title)]) ?>
         </td>
-      </tr>
-      <tr>
+    </tr>
+    <tr>
         <td><?= t('Url:') ?></td>
         <td>
-          <a href="<?= $item->parent()->abs_url() ?>">
-            <?= $item->parent()->abs_url() ?>
-          </a>
+            <a href="<?= $item->parent()->abs_url() ?>">
+                <?= $item->parent()->abs_url() ?>
+            </a>
         </td>
-      </tr>
-    </table>
-  </body>
+    </tr>
+</table>
+</body>
 </html>

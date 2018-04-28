@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -19,14 +20,14 @@
  */
 class Admin_Languages_Controller extends Admin_Controller
 {
-    public function index($share_translations_form=null)
+    public function index($share_translations_form = null)
     {
-        $v = new Admin_View('admin.html');
-        $v->page_title = t('Languages and translations');
-        $v->content = new View('admin_languages.html');
+        $v                             = new Admin_View('admin.html');
+        $v->page_title                 = t('Languages and translations');
+        $v->content                    = new View('admin_languages.html');
         $v->content->available_locales = locales::available();
         $v->content->installed_locales = locales::installed();
-        $v->content->default_locale = module::get_var('gallery', 'default_locale');
+        $v->content->default_locale    = module::get_var('gallery', 'default_locale');
 
         if (empty($share_translations_form)) {
             $share_translations_form = $this->_share_translations_form();
@@ -43,7 +44,7 @@ class Admin_Languages_Controller extends Admin_Controller
         $input = Input::instance();
         locales::update_installed($input->post('installed_locales'));
 
-        $installed_locales = array_keys(locales::installed());
+        $installed_locales  = array_keys(locales::installed());
         $new_default_locale = $input->post('default_locale');
         if (!in_array($new_default_locale, $installed_locales)) {
             if (!empty($installed_locales)) {
@@ -116,25 +117,15 @@ class Admin_Languages_Controller extends Admin_Controller
 
     private function _share_translations_form()
     {
-        $form = new Forge('admin/languages/share', '', 'post', ['id' => 'g-share-translations-form']);
-        $group = $form->group('sharing')
-      ->label('Translations API Key');
-        $api_key = l10n_client::api_key();
+        $form        = new Forge('admin/languages/share', '', 'post', ['id' => 'g-share-translations-form']);
+        $group       = $form->group('sharing')->label('Translations API Key');
+        $api_key     = l10n_client::api_key();
         $server_link = l10n_client::server_api_key_url();
-        $group->input('api_key')
-      ->label(empty($api_key)
-              ? t(
-              'This is a unique key that will allow you to send translations to the remote
-                  server. To get your API key go to %server-link.',
-              ['server-link' => html::mark_clean(html::anchor($server_link))]
-              )
-              : t('API key'))
-      ->value($api_key)
-      ->error_messages('invalid', t('The API key you provided is invalid.'))
-      ->error_messages(
-          'no_connection',
-          t('Could not connect to remote server to validate the API key.')
-      );
+        $group->input('api_key')->label(empty($api_key) ? t('This is a unique key that will allow you to send translations to the remote
+                  server. To get your API key go to %server-link.', ['server-link' => html::mark_clean(html::anchor($server_link))]) : t('API key'))->value($api_key)->error_messages('invalid', t('The API key you provided is invalid.'))->error_messages(
+            'no_connection',
+                                                                                                                                                                                                                                                            t('Could not connect to remote server to validate the API key.')
+        );
         $group->submit('save')->value(t('Save settings'));
         if ($api_key && $this->_outgoing_translations_count()) {
             // TODO: UI improvement: hide API key / save button when API key is set.

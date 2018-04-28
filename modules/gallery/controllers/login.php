@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -24,7 +25,7 @@ class Login_Controller extends Controller
 
     public function ajax()
     {
-        $view = new View('login_ajax.html');
+        $view       = new View('login_ajax.html');
         $view->form = auth::get_login_form('login/auth_ajax');
         print $view;
     }
@@ -37,7 +38,7 @@ class Login_Controller extends Controller
         if ($valid) {
             json::reply(['result' => 'success']);
         } else {
-            $view = new View('login_ajax.html');
+            $view       = new View('login_ajax.html');
             $view->form = $form;
             json::reply(['result' => 'error', 'html' => (string)$view]);
         }
@@ -45,9 +46,9 @@ class Login_Controller extends Controller
 
     public function html()
     {
-        $view = new Theme_View('page.html', 'other', 'login');
-        $view->page_title = t('Log in to Gallery');
-        $view->content = new View('login_ajax.html');
+        $view                = new Theme_View('page.html', 'other', 'login');
+        $view->page_title    = t('Log in to Gallery');
+        $view->content       = new View('login_ajax.html');
         $view->content->form = auth::get_login_form('login/auth_html');
         print $view;
     }
@@ -61,9 +62,9 @@ class Login_Controller extends Controller
             $continue_url = $form->continue_url->value;
             url::redirect($continue_url ?: item::root()->abs_url());
         } else {
-            $view = new Theme_View('page.html', 'other', 'login');
-            $view->page_title = t('Log in to Gallery');
-            $view->content = new View('login_ajax.html');
+            $view                = new Theme_View('page.html', 'other', 'login');
+            $view->page_title    = t('Log in to Gallery');
+            $view->content       = new View('login_ajax.html');
             $view->content->form = $form;
             print $view;
         }
@@ -71,7 +72,7 @@ class Login_Controller extends Controller
 
     private function _auth($url)
     {
-        $form = auth::get_login_form($url);
+        $form  = auth::get_login_form($url);
         $valid = $form->validate();
         if ($valid) {
             $user = identity::lookup_user_by_name($form->login->inputs['name']->value);

@@ -3,10 +3,10 @@
  * Set your default language and timezone here. For more information about
  * i18n support see the [i18n] library.
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 
 /**

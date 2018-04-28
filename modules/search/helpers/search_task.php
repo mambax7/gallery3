@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -22,26 +23,16 @@ class search_task_Core
     public static function available_tasks()
     {
         // Delete extra search_records
-        db::build()
-      ->delete('search_records')
-      ->where('item_id', 'NOT IN', db::build()->select('id')->from('items'))
-      ->execute();
+        db::build()->delete('search_records')->where('item_id', 'NOT IN', db::build()->select('id')->from('items'))->execute();
 
         list($remaining, $total, $percent) = search::stats();
         return [
-            Task_Definition::factory()
-                           ->callback('search_task::update_index')
-                           ->name(t('Update Search Index'))
-                           ->description(
-                   $remaining
-                   ? t2(
-                       '1 photo or album needs to be scanned', '%count (%percent%) of your photos and albums need to be scanned',
-                       $remaining,
-                       ['percent' => (100 - $percent)]
-                   )
-                   : t('Search data is up-to-date')
-                 )
-                           ->severity($remaining ? log::WARNING : log::SUCCESS)
+            Task_Definition::factory()->callback('search_task::update_index')->name(t('Update Search Index'))->description($remaining ? t2(
+                '1 photo or album needs to be scanned',
+                '%count (%percent%) of your photos and albums need to be scanned',
+                $remaining,
+                                                                                                                                           ['percent' => (100 - $percent)]
+            ) : t('Search data is up-to-date'))->severity($remaining ? log::WARNING : log::SUCCESS)
         ];
     }
 
@@ -51,11 +42,7 @@ class search_task_Core
             $completed = $task->get('completed', 0);
 
             $start = microtime(true);
-            foreach (ORM::factory('item')
-               ->join('search_records', 'items.id', 'search_records.item_id', 'left')
-               ->where('search_records.item_id', 'IS', null)
-               ->or_where('search_records.dirty', '=', 1)
-               ->find_all(100) as $item) {
+            foreach (ORM::factory('item')->join('search_records', 'items.id', 'search_records.item_id', 'left')->where('search_records.item_id', 'IS', null)->or_where('search_records.dirty', '=', 1)->find_all(100) as $item) {
                 // The query above can take a long time, so start the timer after its done
                 // to give ourselves a little time to actually process rows.
                 if (!isset($start)) {
@@ -73,21 +60,17 @@ class search_task_Core
             list($remaining, $total, $percent) = search::stats();
             $task->set('completed', $completed);
             if (0 == $remaining || !($remaining + $completed)) {
-                $task->done = true;
+                $task->done  = true;
                 $task->state = 'success';
                 site_status::clear('search_index_out_of_date');
                 $task->percent_complete = 100;
             } else {
                 $task->percent_complete = round(100 * $completed / ($remaining + $completed));
             }
-            $task->status = t2(
-                'one record updated, index is %percent% up-to-date', '%count records updated, index is %percent% up-to-date',
-                $completed,
-                ['percent' => $percent]
-      );
+            $task->status = t2('one record updated, index is %percent% up-to-date', '%count records updated, index is %percent% up-to-date', $completed, ['percent' => $percent]);
         } catch (Exception $e) {
-            $task->done = true;
-            $task->state = 'error';
+            $task->done   = true;
+            $task->state  = 'error';
             $task->status = $e->getMessage();
         }
     }

@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -17,13 +18,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
 class Forge extends Forge_Core
 {
     /**
      * Force a CSRF element into every form.
      */
-    public function __construct($action=null, $title='', $method=null, $attr= [])
+    public function __construct($action = null, $title = '', $method = null, $attr = [])
     {
         parent::__construct($action, $title, $method, $attr);
         $this->hidden('csrf')->value(access::csrf_token());
@@ -32,7 +32,7 @@ class Forge extends Forge_Core
     /**
      * Use our own template
      */
-    public function render($template= 'form.html', $custom=false)
+    public function render($template = 'form.html', $custom = false)
     {
         return parent::render($template, $custom);
     }

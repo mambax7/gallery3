@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -42,29 +43,29 @@ class tree_rest_Core
         access::required('view', $item);
 
         $query_params = [];
-        $p = $request->params;
-        $where = [];
+        $p            = $request->params;
+        $where        = [];
         if (isset($p->type)) {
-            $where[] = ['type', '=', $p->type];
+            $where[]        = ['type', '=', $p->type];
             $query_params[] = "type={$p->type}";
         }
 
         if (isset($p->depth)) {
-            $lowest_depth = $item->level + $p->depth;
-            $where[] = ['level', '<=', $lowest_depth];
+            $lowest_depth   = $item->level + $p->depth;
+            $where[]        = ['level', '<=', $lowest_depth];
             $query_params[] = "depth={$p->depth}";
         }
 
         $fields = [];
         if (isset($p->fields)) {
-            $fields = explode(',', $p->fields);
+            $fields         = explode(',', $p->fields);
             $query_params[] = "fields={$p->fields}";
         }
 
-        $entity = [
+        $entity  = [
             [
-                            'url'    => rest::url('item', $item),
-                            'entity' => $item->as_restful_array($fields)
+                'url'    => rest::url('item', $item),
+                'entity' => $item->as_restful_array($fields)
             ]
         ];
         $members = [];

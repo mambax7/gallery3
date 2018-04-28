@@ -36,8 +36,8 @@ class exif_Core
             if (isset($exif_raw['ValidEXIFData'])) {
                 foreach (self::_keys() as $field => $exifvar) {
                     if (isset($exif_raw[$exifvar[0]][$exifvar[1]])) {
-                        $value = $exif_raw[$exifvar[0]][$exifvar[1]];
-                        $value = encoding::convert_to_utf8($value);
+                        $value        = $exif_raw[$exifvar[0]][$exifvar[1]];
+                        $value        = encoding::convert_to_utf8($value);
                         $keys[$field] = Input::clean($value);
 
                         if ('DateTime' == $field) {
@@ -57,8 +57,8 @@ class exif_Core
                 $iptc = iptcparse($info['APP13']);
                 foreach (['Keywords' => '2#025', 'Caption' => '2#120'] as $keyword => $iptc_key) {
                     if (!empty($iptc[$iptc_key])) {
-                        $value = implode(' ', $iptc[$iptc_key]);
-                        $value = encoding::convert_to_utf8($value);
+                        $value          = implode(' ', $iptc[$iptc_key]);
+                        $value          = encoding::convert_to_utf8($value);
                         $keys[$keyword] = Input::clean($value);
 
                         if ('Caption' == $keyword && !$item->description) {
@@ -74,24 +74,22 @@ class exif_Core
         if (!$record->loaded()) {
             $record->item_id = $item->id;
         }
-        $record->data = serialize($keys);
+        $record->data      = serialize($keys);
         $record->key_count = count($keys);
-        $record->dirty = 0;
+        $record->dirty     = 0;
         $record->save();
     }
 
     public static function get($item)
     {
-        $exif = [];
-        $record = ORM::factory('exif_record')
-      ->where('item_id', '=', $item->id)
-      ->find();
+        $exif   = [];
+        $record = ORM::factory('exif_record')->where('item_id', '=', $item->id)->find();
         if (!$record->loaded()) {
             return [];
         }
 
         $definitions = self::_keys();
-        $keys = unserialize($record->data);
+        $keys        = unserialize($record->data);
         foreach ($keys as $key => $value) {
             $exif[] = ['caption' => $definitions[$key][2], 'value' => $value];
         }
@@ -139,24 +137,15 @@ class exif_Core
 
     public static function stats()
     {
-        $missing_exif = db::build()
-      ->select('items.id')
-      ->from('items')
-      ->join('exif_records', 'items.id', 'exif_records.item_id', 'left')
-      ->where('type', '=', 'photo')
-      ->and_open()
-      ->where('exif_records.item_id', 'IS', null)
-      ->or_where('exif_records.dirty', '=', 1)
-      ->close()
-      ->execute()
-      ->count();
+        $missing_exif = db::build()->select('items.id')->from('items')->join('exif_records', 'items.id', 'exif_records.item_id', 'left')->where('type', '=', 'photo')->and_open()->where('exif_records.item_id', 'IS', null)->or_where('exif_records.dirty', '=', 1)->close()->execute()->count();
 
         $total_items = ORM::factory('item')->where('type', '=', 'photo')->count_all();
         if (!$total_items) {
             return [0, 0, 0];
         }
         return [
-            $missing_exif, $total_items,
+            $missing_exif,
+            $total_items,
             round(100 * (($total_items - $missing_exif) / $total_items))
         ];
     }
@@ -165,12 +154,7 @@ class exif_Core
     {
         list($remaining) = exif::stats();
         if ($remaining) {
-            site_status::warning(
-        t(
-            'Your Exif index needs to be updated.  <a href="%url" class="g-dialog-link">Fix this now</a>',
-            ['url' => html::mark_clean(url::site('admin/maintenance/start/exif_task::update_index?csrf=__CSRF__'))]
-        ), 'exif_index_out_of_date'
-      );
+            site_status::warning(t('Your Exif index needs to be updated.  <a href="%url" class="g-dialog-link">Fix this now</a>', ['url' => html::mark_clean(url::site('admin/maintenance/start/exif_task::update_index?csrf=__CSRF__'))]), 'exif_index_out_of_date');
         }
     }
 }

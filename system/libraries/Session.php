@@ -1,13 +1,14 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Session library.
  *
  * $Id: Session.php 4729 2009-12-29 20:35:19Z isaiah $
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class Session_Core
 {
@@ -74,7 +75,7 @@ class Session_Core
             Session::$protect = array_combine(Session::$protect, Session::$protect);
 
             // Configure garbage collection
-            ini_set('session.gc_probability', (int) Session::$config['gc_probability']);
+            ini_set('session.gc_probability', (int)Session::$config['gc_probability']);
             ini_set('session.gc_divisor', 100);
             ini_set('session.gc_maxlifetime', (0 == Session::$config['expiration']) ? 86400 : Session::$config['expiration']);
 
@@ -124,40 +125,27 @@ class Session_Core
 
         if ('native' !== Session::$config['driver']) {
             // Set driver name
-            $driver = 'Session_'.ucfirst(Session::$config['driver']).'_Driver';
+            $driver = 'Session_' . ucfirst(Session::$config['driver']) . '_Driver';
 
             // Load the driver
-            if (! Kohana::auto_load($driver)) {
-                throw new Kohana_Exception(
-                    'The :driver: driver for the :library: library could not be found',
-                    [':driver:' => Session::$config['driver'], ':library:' => get_class($this)]
-                );
+            if (!Kohana::auto_load($driver)) {
+                throw new Kohana_Exception('The :driver: driver for the :library: library could not be found', [':driver:' => Session::$config['driver'], ':library:' => get_class($this)]);
             }
 
             // Initialize the driver
             Session::$driver = new $driver();
 
             // Validate the driver
-            if (! (Session::$driver instanceof Session_Driver)) {
-                throw new Kohana_Exception(
-                    'The :driver: driver for the :library: library must implement the :interface: interface',
-                    [':driver:' => Session::$config['driver'], ':library:' => get_class($this), ':interface:' => 'Session_Driver']
-                );
+            if (!(Session::$driver instanceof Session_Driver)) {
+                throw new Kohana_Exception('The :driver: driver for the :library: library must implement the :interface: interface', [':driver:' => Session::$config['driver'], ':library:' => get_class($this), ':interface:' => 'Session_Driver']);
             }
 
             // Register non-native driver as the session handler
-            session_set_save_handler(
-                [Session::$driver, 'open'],
-                [Session::$driver, 'close'],
-                [Session::$driver, 'read'],
-                [Session::$driver, 'write'],
-                [Session::$driver, 'destroy'],
-                [Session::$driver, 'gc']
-            );
+            session_set_save_handler([Session::$driver, 'open'], [Session::$driver, 'close'], [Session::$driver, 'read'], [Session::$driver, 'write'], [Session::$driver, 'destroy'], [Session::$driver, 'gc']);
         }
 
         // Validate the session name
-        if (! preg_match('~^(?=.*[a-z])[a-z0-9_]++$~iD', Session::$config['name'])) {
+        if (!preg_match('~^(?=.*[a-z])[a-z0-9_]++$~iD', Session::$config['name'])) {
             throw new Kohana_Exception('The session_name, :session:, is invalid. It must contain only alphanumeric characters and underscores. Also at least one letter must be present.', [':session:' => Session::$config['name']]);
         }
 
@@ -165,16 +153,10 @@ class Session_Core
         session_name(Session::$config['name']);
 
         // Set the session cookie parameters
-        session_set_cookie_params(
-            Session::$config['expiration'],
-            Kohana::config('cookie.path'),
-            Kohana::config('cookie.domain'),
-            Kohana::config('cookie.secure'),
-            Kohana::config('cookie.httponly')
-        );
+        session_set_cookie_params(Session::$config['expiration'], Kohana::config('cookie.path'), Kohana::config('cookie.domain'), Kohana::config('cookie.secure'), Kohana::config('cookie.httponly'));
 
         $cookie = cookie::get(Session::$config['name']);
-        
+
         if (null === $session_id) {
             // Reopen session from signed cookie value.
             $session_id = $cookie;
@@ -192,7 +174,7 @@ class Session_Core
         $_SESSION['session_id'] = session_id();
 
         // Set defaults
-        if (! isset($_SESSION['_kf_flash_'])) {
+        if (!isset($_SESSION['_kf_flash_'])) {
             $_SESSION['total_hits'] = 0;
             $_SESSION['_kf_flash_'] = [];
 
@@ -216,21 +198,21 @@ class Session_Core
                         if ($_SESSION[$valid] !== request::user_agent()) {
                             return $this->create();
                         }
-                    break;
+                        break;
 
                     // Check ip address for consistency
                     case 'ip_address':
                         if ($_SESSION[$valid] !== $this->input->$valid()) {
                             return $this->create();
                         }
-                    break;
+                        break;
 
                     // Check expiration time to prevent users from manually modifying it
                     case 'expiration':
                         if (time() - $_SESSION['last_activity'] > ini_get('session.gc_maxlifetime')) {
                             return $this->create();
                         }
-                    break;
+                        break;
                 }
             }
         }
@@ -331,7 +313,7 @@ class Session_Core
             return false;
         }
 
-        if (! is_array($keys)) {
+        if (!is_array($keys)) {
             $keys = [$keys => $val];
         }
 
@@ -358,7 +340,7 @@ class Session_Core
             return false;
         }
 
-        if (! is_array($keys)) {
+        if (!is_array($keys)) {
             $keys = [$keys => $val];
         }
 
@@ -403,7 +385,7 @@ class Session_Core
             return;
         }
 
-        if (! empty(Session::$flash)) {
+        if (!empty(Session::$flash)) {
             foreach (Session::$flash as $key => $state) {
                 if ('old' === $state) {
                     // Flash has expired

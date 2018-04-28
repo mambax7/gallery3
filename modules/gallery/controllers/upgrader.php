@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -41,13 +42,13 @@ class Upgrader_Controller extends Controller
             }
         }
 
-        $failed = Input::instance()->get('failed');
-        $view = new View('upgrader.html');
-        $view->can_upgrade = identity::active_user()->admin || $session->get('can_upgrade');
-        $view->upgrade_token = $upgrade_token;
-        $view->available = module::available();
-        $view->failed = $failed ? explode(',', $failed) : [];
-        $view->done = 0 == $available_upgrades;
+        $failed                         = Input::instance()->get('failed');
+        $view                           = new View('upgrader.html');
+        $view->can_upgrade              = identity::active_user()->admin || $session->get('can_upgrade');
+        $view->upgrade_token            = $upgrade_token;
+        $view->available                = module::available();
+        $view->failed                   = $failed ? explode(',', $failed) : [];
+        $view->done                     = 0 == $available_upgrades;
         $view->obsolete_modules_message = module::get_obsolete_modules_message();
         print $view;
     }

@@ -22,6 +22,7 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301 USA
  */
+
 namespace lsolesen\pel;
 
 /**
@@ -33,7 +34,7 @@ namespace lsolesen\pel;
  * PelEntryVersion} which is used to manage entries with version
  * information.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public
  *          License (GPL)
  * @package PEL
@@ -62,7 +63,7 @@ namespace lsolesen\pel;
  * }
  * </code>
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @package PEL
  */
 class PelEntryVersion extends PelEntry
@@ -83,14 +84,14 @@ class PelEntryVersion extends PelEntry
      *            PelTag::EXIF_VERSION}, {@link PelTag::FLASH_PIX_VERSION},
      *            or {@link PelTag::INTEROPERABILITY_VERSION}.
      *
-     * @param float $version
+     * @param float   $version
      *            The size of the entries leave room for
      *            exactly four digits: two digits on either side of the decimal
      *            point.
      */
     public function __construct($tag, $version = 0.0)
     {
-        $this->tag = $tag;
+        $this->tag    = $tag;
         $this->format = PelFormat::UNDEFINED;
         $this->setValue($version);
     }
@@ -105,12 +106,12 @@ class PelEntryVersion extends PelEntry
      */
     public function setValue($version = 0.0)
     {
-        $this->version = $version;
-        $major = floor($version);
-        $minor = ($version - $major) * 100;
-        $strValue = sprintf('%02.0f%02.0f', $major, $minor);
+        $this->version    = $version;
+        $major            = floor($version);
+        $minor            = ($version - $major) * 100;
+        $strValue         = sprintf('%02.0f%02.0f', $major, $minor);
         $this->components = strlen($strValue);
-        $this->bytes = $strValue;
+        $this->bytes      = $strValue;
     }
 
     /**

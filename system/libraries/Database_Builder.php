@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * The Database Query Builder provides methods for creating database agnostic queries and
  * data manipulation.
@@ -12,10 +13,10 @@
  *                 ->from('frameworks')
  *                 ->execute();
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2008-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class Database_Builder_Core
 {
@@ -44,7 +45,7 @@ class Database_Builder_Core
     protected $reset    = true;
 
     // TTL for caching (using Cache library)
-    protected $ttl      = false;
+    protected $ttl = false;
 
     public function __construct($db = 'default')
     {
@@ -91,7 +92,7 @@ class Database_Builder_Core
 
         if (null === $columns) {
             $columns = ['*'];
-        } elseif (! is_array($columns)) {
+        } elseif (!is_array($columns)) {
             $columns = func_get_args();
         }
 
@@ -129,7 +130,7 @@ class Database_Builder_Core
      */
     public function from($tables)
     {
-        if (! is_array($tables)) {
+        if (!is_array($tables)) {
             $tables = func_get_args();
         }
 
@@ -370,7 +371,7 @@ class Database_Builder_Core
      */
     public function group_by($columns)
     {
-        if (! is_array($columns)) {
+        if (!is_array($columns)) {
             $columns = func_get_args();
         }
 
@@ -469,7 +470,7 @@ class Database_Builder_Core
      */
     public function limit($number)
     {
-        $this->limit = (int) $number;
+        $this->limit = (int)$number;
 
         return $this;
     }
@@ -483,7 +484,7 @@ class Database_Builder_Core
      */
     public function offset($number)
     {
-        $this->offset = (int) $number;
+        $this->offset = (int)$number;
 
         return $this;
     }
@@ -582,7 +583,7 @@ class Database_Builder_Core
      */
     public function columns($columns)
     {
-        if (! is_array($columns)) {
+        if (!is_array($columns)) {
             $columns = func_get_args();
         }
 
@@ -600,7 +601,7 @@ class Database_Builder_Core
      */
     public function values($values)
     {
-        if (! is_array($values)) {
+        if (!is_array($values)) {
             $values = func_get_args();
         }
 
@@ -647,7 +648,7 @@ class Database_Builder_Core
      */
     public function reset($reset = true)
     {
-        $this->reset = (bool) $reset;
+        $this->reset = (bool)$reset;
         return $this;
     }
 
@@ -666,9 +667,9 @@ class Database_Builder_Core
             // Process groups of conditions
             foreach ($group as $logic => $condition) {
                 if ('(' === $condition) {
-                    if (! empty($sql) && '(' !== $last_condition) {
+                    if (!empty($sql) && '(' !== $last_condition) {
                         // Include logic operator
-                        $sql .= ' '.$logic.' ';
+                        $sql .= ' ' . $logic . ' ';
                     }
 
                     $sql .= '(';
@@ -682,11 +683,11 @@ class Database_Builder_Core
 
                     if ($columns instanceof Database_Expression) {
                         // Add directly to condition list
-                        $vals[] = (string) $columns;
+                        $vals[] = (string)$columns;
                     } else {
                         $op = strtoupper($op);
 
-                        if (! is_array($columns)) {
+                        if (!is_array($columns)) {
                             $columns = [$columns => $value];
                         }
 
@@ -694,37 +695,37 @@ class Database_Builder_Core
                             if ($value instanceof Database_Builder) {
                                 // Using a subquery
                                 $value->db = $this->db;
-                                $value = '('.(string) $value.')';
+                                $value     = '(' . (string)$value . ')';
                             } elseif (is_array($value)) {
                                 if ('BETWEEN' === $op or 'NOT BETWEEN' === $op) {
                                     // Falls between two values
-                                    $value = $this->db->quote($value[0]).' AND '.$this->db->quote($value[1]);
+                                    $value = $this->db->quote($value[0]) . ' AND ' . $this->db->quote($value[1]);
                                 } else {
                                     // Return as list
                                     $value = array_map([$this->db, 'quote'], $value);
-                                    $value = '('.implode(', ', $value).')';
+                                    $value = '(' . implode(', ', $value) . ')';
                                 }
                             } else {
                                 $value = $this->db->quote($value);
                             }
 
-                            if (! empty($column)) {
+                            if (!empty($column)) {
                                 // Ignore blank columns
                                 $column = $this->db->quote_column($column);
                             }
 
                             // Add to condition list
-                            $vals[] = $column.' '.$op.' '.$value;
+                            $vals[] = $column . ' ' . $op . ' ' . $value;
                         }
                     }
 
-                    if (! empty($sql) && '(' !== $last_condition) {
+                    if (!empty($sql) && '(' !== $last_condition) {
                         // Add the logic operator
-                        $sql .= ' '.$logic.' ';
+                        $sql .= ' ' . $logic . ' ';
                     }
 
                     // Join the condition list items together by the given logic operator
-                    $sql .= implode(' '.$logic.' ', $vals);
+                    $sql .= implode(' ' . $logic . ' ', $vals);
                 }
 
                 $last_condition = $condition;
@@ -741,7 +742,7 @@ class Database_Builder_Core
      */
     protected function compile_columns()
     {
-        return '('.implode(', ', array_map([$this->db, 'quote_column'], $this->columns)) . ')';
+        return '(' . implode(', ', array_map([$this->db, 'quote_column'], $this->columns)) . ')';
     }
 
     /**
@@ -754,7 +755,7 @@ class Database_Builder_Core
         $values = [];
         foreach ($this->values as $group) {
             // Each set of values to be inserted
-            $values[] = '('.implode(', ', array_map([$this->db, 'quote'], $group)) . ')';
+            $values[] = '(' . implode(', ', array_map([$this->db, 'quote'], $group)) . ')';
         }
 
         return implode(', ', $values);
@@ -874,7 +875,7 @@ class Database_Builder_Core
             $this->db = $db;
         }
 
-        if (! is_object($this->db)) {
+        if (!is_object($this->db)) {
             // Get the database instance
             $this->db = Database::instance($this->db);
         }
@@ -902,7 +903,7 @@ class Database_Builder_Core
      */
     protected function compile()
     {
-        if (! is_object($this->db)) {
+        if (!is_object($this->db)) {
             // Use default database for compiling to string if none is given
             $this->db = Database::instance($this->db);
         }
@@ -912,43 +913,43 @@ class Database_Builder_Core
             $sql = $this->distinct ? 'SELECT DISTINCT ' : 'SELECT ';
             $sql .= $this->compile_select();
 
-            if (! empty($this->from)) {
-                $sql .= "\nFROM ".$this->compile_from();
+            if (!empty($this->from)) {
+                $sql .= "\nFROM " . $this->compile_from();
             }
         } elseif ($this->type === Database::UPDATE) {
-            $sql = 'UPDATE '.$this->compile_from()."\n".'SET '.$this->compile_set();
+            $sql = 'UPDATE ' . $this->compile_from() . "\n" . 'SET ' . $this->compile_set();
         } elseif ($this->type === Database::INSERT) {
-            $sql = 'INSERT INTO '.$this->compile_from()."\n".$this->compile_columns()."\nVALUES ".$this->compile_values();
+            $sql = 'INSERT INTO ' . $this->compile_from() . "\n" . $this->compile_columns() . "\nVALUES " . $this->compile_values();
         } elseif ($this->type === Database::DELETE) {
-            $sql = 'DELETE FROM '.$this->compile_from();
+            $sql = 'DELETE FROM ' . $this->compile_from();
         }
 
-        if (! empty($this->join)) {
+        if (!empty($this->join)) {
             $sql .= $this->compile_join();
         }
 
-        if (! empty($this->where)) {
-            $sql .= "\n".'WHERE '.$this->compile_conditions($this->where);
+        if (!empty($this->where)) {
+            $sql .= "\n" . 'WHERE ' . $this->compile_conditions($this->where);
         }
 
-        if (! empty($this->group_by)) {
-            $sql .= "\n".'GROUP BY '.$this->compile_group_by();
+        if (!empty($this->group_by)) {
+            $sql .= "\n" . 'GROUP BY ' . $this->compile_group_by();
         }
 
-        if (! empty($this->having)) {
-            $sql .= "\n".'HAVING '.$this->compile_conditions($this->having);
+        if (!empty($this->having)) {
+            $sql .= "\n" . 'HAVING ' . $this->compile_conditions($this->having);
         }
 
-        if (! empty($this->order_by)) {
-            $sql .= "\nORDER BY ".$this->compile_order_by();
+        if (!empty($this->order_by)) {
+            $sql .= "\nORDER BY " . $this->compile_order_by();
         }
 
         if (is_int($this->limit)) {
-            $sql .= "\nLIMIT ".$this->limit;
+            $sql .= "\nLIMIT " . $this->limit;
         }
 
         if (is_int($this->offset)) {
-            $sql .= "\nOFFSET ".$this->offset;
+            $sql .= "\nOFFSET " . $this->offset;
         }
 
         return $sql;
@@ -967,7 +968,7 @@ class Database_Builder_Core
             if ($name instanceof Database_Builder) {
                 // Using a subquery
                 $name->db = $this->db;
-                $vals[] = '('.(string) $name.') AS '.$this->db->quote_column($alias);
+                $vals[]   = '(' . (string)$name . ') AS ' . $this->db->quote_column($alias);
             } elseif (is_string($alias)) {
                 $vals[] = $this->db->quote_column($name, $alias);
             } else {
@@ -1013,28 +1014,28 @@ class Database_Builder_Core
 
             if (null !== $type) {
                 // Join type
-                $sql .= ' '.$type;
+                $sql .= ' ' . $type;
             }
 
-            $sql .= ' JOIN '.$this->db->quote_table($table);
+            $sql .= ' JOIN ' . $this->db->quote_table($table);
 
             $condition = '';
             if ($keys instanceof Database_Expression) {
-                $condition = (string) $keys;
+                $condition = (string)$keys;
             } elseif (is_array($keys)) {
                 // ON condition is an array of matches
                 foreach ($keys as $key => $value) {
-                    if (! empty($condition)) {
+                    if (!empty($condition)) {
                         $condition .= ' AND ';
                     }
 
-                    $condition .= $this->db->quote_column($key).' = '.$this->db->quote_column($value);
+                    $condition .= $this->db->quote_column($key) . ' = ' . $this->db->quote_column($value);
                 }
             }
 
-            if (! empty($condition)) {
+            if (!empty($condition)) {
                 // Add ON condition
-                $sql .= ' ON ('.$condition.')';
+                $sql .= ' ON (' . $condition . ')';
             }
         }
 
@@ -1073,10 +1074,10 @@ class Database_Builder_Core
             $column = $this->db->quote_column($column);
 
             if (null !== $direction) {
-                $direction = ' '.$direction;
+                $direction = ' ' . $direction;
             }
 
-            $ordering[] = $column.$direction;
+            $ordering[] = $column . $direction;
         }
 
         return implode(', ', $ordering);
@@ -1093,7 +1094,7 @@ class Database_Builder_Core
 
         foreach ($this->set as $key => $value) {
             // Using an UPDATE so Key = Val
-            $vals[] = $this->db->quote_column($key).' = '.$this->db->quote($value);
+            $vals[] = $this->db->quote_column($key) . ' = ' . $this->db->quote($value);
         }
 
         return implode(', ', $vals);

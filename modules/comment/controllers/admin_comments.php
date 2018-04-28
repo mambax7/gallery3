@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,9 +22,9 @@ class Admin_Comments_Controller extends Admin_Controller
 {
     public function index()
     {
-        $view = new Admin_View('admin.html');
-        $view->page_title = t('Comment settings');
-        $view->content = new View('admin_comments.html');
+        $view                = new Admin_View('admin.html');
+        $view->page_title    = t('Comment settings');
+        $view->content       = new View('admin_comments.html');
         $view->content->form = $this->_get_admin_form();
         print $view;
     }
@@ -59,23 +60,23 @@ class Admin_Comments_Controller extends Admin_Controller
         $comment_settings->dropdown('access_permissions')
       ->label(t('Who can leave comments?'))
       ->options([
-                    'everybody'        => t('Everybody'),
-                    'registered_users' => t('Only registered users')
+                                                                                                            'everybody'        => t('Everybody'),
+                                                                                                            'registered_users' => t('Only registered users')
                 ])
       ->selected(module::get_var('comment', 'access_permissions'));
         $comment_settings->dropdown('initial_state')
       ->label(t('Are new comments published or unpublished by default?'))
       ->options([
-                    'published'   => t('Published'),
-                    'unpublished' => t('Unpublished')
+                                                                                                                                     'published'   => t('Published'),
+                                                                                                                                     'unpublished' => t('Unpublished')
                 ])
       ->selected(module::get_var('comment', 'initial_state'));
         $comment_settings->dropdown('rss_visible')
       ->label(t('Which RSS feeds can users see?'))
       ->options([
-                    'all'      => t('All comment feeds'),
-                    'newest'   => t('New comments feed only'),
-                    'per_item' => t('Comments on photos, movies and albums only')
+                                                                                                            'all'      => t('All comment feeds'),
+                                                                                                            'newest'   => t('New comments feed only'),
+                                                                                                            'per_item' => t('Comments on photos, movies and albums only')
                 ])
       ->selected(module::get_var('comment', 'rss_visible'));
         $comment_settings->submit('save')->value(t('Save'));

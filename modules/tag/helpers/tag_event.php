@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -37,8 +38,8 @@ class tag_event_Core
                     foreach ($iptc['2#025'] as $tag) {
                         $tag = str_replace("\0", '', $tag);
                         foreach (explode(',', $tag) as $word) {
-                            $word = trim($word);
-                            $word = encoding::convert_to_utf8($word);
+                            $word        = trim($word);
+                            $word        = encoding::convert_to_utf8($word);
                             $tags[$word] = 1;
                         }
                     }
@@ -51,8 +52,7 @@ class tag_event_Core
             try {
                 tag::add($photo, $tag);
             } catch (Exception $e) {
-                Kohana_Log::add('error', "Error adding tag: $tag\n" .
-                                         $e->getMessage() . "\n" . $e->getTraceAsString());
+                Kohana_Log::add('error', "Error adding tag: $tag\n" . $e->getMessage() . "\n" . $e->getTraceAsString());
             }
         }
 
@@ -78,8 +78,7 @@ class tag_event_Core
         foreach (tag::item_tags($item) as $tag) {
             $tag_names[] = $tag->name;
         }
-        $form->edit_item->input('tags')->label(t('Tags (comma separated)'))
-                        ->value(implode(', ', $tag_names));
+        $form->edit_item->input('tags')->label(t('Tags (comma separated)'))->value(implode(', ', $tag_names));
 
         $form->script('')->text(self::_get_autocomplete_js());
     }
@@ -98,11 +97,7 @@ class tag_event_Core
 
     public static function admin_menu($menu, $theme)
     {
-        $menu->get('content_menu')
-      ->append(Menu::factory('link')
-               ->id('tags')
-               ->label(t('Tags'))
-               ->url(url::site('admin/tags')));
+        $menu->get('content_menu')->append(Menu::factory('link')->id('tags')->label(t('Tags'))->url(url::site('admin/tags')));
     }
 
     public static function item_index_data($item, $data)
@@ -116,9 +111,7 @@ class tag_event_Core
     {
         $group = $form->add_photos;
 
-        $group->input('tags')
-      ->label(t('Add tags to all uploaded files'))
-      ->value('');
+        $group->input('tags')->label(t('Add tags to all uploaded files'))->value('');
 
         $group->script('')->text(self::_get_autocomplete_js());
     }
@@ -139,8 +132,7 @@ class tag_event_Core
     {
         $tags = [];
         foreach (tag::item_tags($item) as $tag) {
-            $tags[] = "<a href=\"{$tag->url()}\">" .
-        html::clean($tag->name) . '</a>';
+            $tags[] = "<a href=\"{$tag->url()}\">" . html::clean($tag->name) . '</a>';
         }
         if ($tags) {
             $info                     = $block->content->metadata;

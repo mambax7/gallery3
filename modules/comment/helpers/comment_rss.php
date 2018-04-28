@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -17,7 +18,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
 class comment_rss_Core
 {
     public static function feed_visible($feed_id)
@@ -63,42 +63,42 @@ class comment_rss_Core
         ->where('items.right_ptr', '<=', $item->right_ptr);
         }
 
-        $feed = new stdClass();
-        $feed->view = 'comment.mrss';
+        $feed           = new stdClass();
+        $feed->view     = 'comment.mrss';
         $feed->comments = [];
         foreach ($comments->find_all($limit, $offset) as $comment) {
-            $item = $comment->item();
+            $item             = $comment->item();
             $feed->comments[] = new ArrayObject(
                 [
-            'pub_date'     => date('D, d M Y H:i:s O', $comment->created),
-            'text'         => nl2br(html::purify($comment->text)),
-            'thumb_url'    => $item->thumb_url(),
-            'thumb_height' => $item->thumb_height,
-            'thumb_width'  => $item->thumb_width,
-            'item_uri'     => url::abs_site("{$item->type}s/$item->id"),
+                                                    'pub_date'     => date('D, d M Y H:i:s O', $comment->created),
+                                                    'text'         => nl2br(html::purify($comment->text)),
+                                                    'thumb_url'    => $item->thumb_url(),
+                                                    'thumb_height' => $item->thumb_height,
+                                                    'thumb_width'  => $item->thumb_width,
+                                                    'item_uri'     => url::abs_site("{$item->type}s/$item->id"),
             'title'        => (
                 ($item->id == item::root()->id) ?
                 html::purify($item->title) :
                 t(
                     '%site_title - %item_title',
                     [
-                        'site_title' => item::root()->title,
-                        'item_title' => $item->title
+                                                                                                                                                                       'site_title' => item::root()->title,
+                                                                                                                                                                       'item_title' => $item->title
                     ]
                 )
               ),
-            'author'       => html::clean($comment->author_name())
+                                                    'author'       => html::clean($comment->author_name())
                 ],
                 ArrayObject::ARRAY_AS_PROPS
       );
         }
 
-        $feed->max_pages = ceil($comments->count_all() / $limit);
+        $feed->max_pages   = ceil($comments->count_all() / $limit);
         $feed->title = html::purify(t(
                                         '%site_title - Recent Comments',
                                         ['site_title' => item::root()->title]
     ));
-        $feed->uri = url::abs_site('albums/' . (empty($id) ? '1' : $id));
+        $feed->uri         = url::abs_site('albums/' . (empty($id) ? '1' : $id));
         $feed->description = t('Recent comments');
 
         return $feed;

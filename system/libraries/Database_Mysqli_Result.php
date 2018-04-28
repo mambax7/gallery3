@@ -1,11 +1,12 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * MySQL database result.
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2008-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class Database_Mysqli_Result_Core extends Database_Result
 {
@@ -20,17 +21,14 @@ class Database_Mysqli_Result_Core extends Database_Result
             $this->total_rows = $result->num_rows;
         } elseif (is_bool($result)) {
             if (false == $result) {
-                throw new Database_Exception(
-                    '#:errno: :error [ :query ]',
-                    [
-                        ':error' => $link->error,
-                        ':query' => $sql,
-                        ':errno' => $link->errno
-                    ]
-                );
+                throw new Database_Exception('#:errno: :error [ :query ]', [
+                                                                             ':error' => $link->error,
+                                                                             ':query' => $sql,
+                                                                             ':errno' => $link->errno
+                                                                         ]);
             } else {
                 // It's a DELETE, INSERT, REPLACE, or UPDATE query
-                $this->insert_id = $link->insert_id;
+                $this->insert_id  = $link->insert_id;
                 $this->total_rows = $link->affected_rows;
             }
         }
@@ -53,7 +51,7 @@ class Database_Mysqli_Result_Core extends Database_Result
         // Return arrays rather than objects
         $this->return_objects = false;
 
-        if (! $return) {
+        if (!$return) {
             // Return this result object
             return $this;
         }
@@ -84,7 +82,7 @@ class Database_Mysqli_Result_Core extends Database_Result
         // Return objects of type $class (or stdClass if none given)
         $this->return_objects = (null !== $class) ? $class : true;
 
-        if (! $return) {
+        if (!$return) {
             // Return this result object
             return $this;
         }
@@ -134,7 +132,7 @@ class Database_Mysqli_Result_Core extends Database_Result
      */
     public function current()
     {
-        if ($this->current_row !== $this->internal_row and ! $this->seek($this->current_row)) {
+        if ($this->current_row !== $this->internal_row and !$this->seek($this->current_row)) {
             return null;
         }
 

@@ -1,11 +1,12 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Array helper class.
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class arr_Core
 {
@@ -20,7 +21,7 @@ class arr_Core
     public static function callback_string($str)
     {
         // command[param,param]
-        if (preg_match('/([^\[]*+)\[(.+)\]/', (string) $str, $match)) {
+        if (preg_match('/([^\[]*+)\[(.+)\]/', (string)$str, $match)) {
             // command
             $command = $match[1];
 
@@ -69,7 +70,7 @@ class arr_Core
      */
     public static function remove($key, & $array)
     {
-        if (! array_key_exists($key, $array)) {
+        if (!array_key_exists($key, $array)) {
             return null;
         }
 
@@ -78,7 +79,6 @@ class arr_Core
 
         return $val;
     }
-
 
     /**
      * Extract one or more keys from an array. Each key given after the first
@@ -125,9 +125,9 @@ class arr_Core
      */
     public static function unshift_assoc(array & $array, $key, $val)
     {
-        $array = array_reverse($array, true);
+        $array       = array_reverse($array, true);
         $array[$key] = $val;
-        $array = array_reverse($array, true);
+        $array       = array_reverse($array, true);
 
         return $array;
     }
@@ -236,8 +236,8 @@ class arr_Core
     /**
      * Returns specific key/column from an array of objects.
      *
-     * @param string|integer $key The key or column number to pluck from each object.
-     * @param array $array        The array of objects to pluck from.
+     * @param string|integer $key   The key or column number to pluck from each object.
+     * @param array          $array The array of objects to pluck from.
      * @return array
      */
     public static function pluck($key, $array)

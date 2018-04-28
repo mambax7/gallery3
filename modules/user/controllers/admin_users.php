@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,33 +22,31 @@ class Admin_Users_Controller extends Admin_Controller
 {
     public function index()
     {
-        $view = new Admin_View('admin.html');
-        $view->page_title = t('Users and groups');
-        $view->page_type = 'collection';
+        $view               = new Admin_View('admin.html');
+        $view->page_title   = t('Users and groups');
+        $view->page_type    = 'collection';
         $view->page_subtype = 'admin_users';
-        $view->content = new View('admin_users.html');
+        $view->content      = new View('admin_users.html');
 
         // @todo: add this as a config option
-        $page_size = module::get_var('user', 'page_size', 10);
-        $page = Input::instance()->get('page', '1');
-        $builder = db::build();
+        $page_size  = module::get_var('user', 'page_size', 10);
+        $page       = Input::instance()->get('page', '1');
+        $builder    = db::build();
         $user_count = $builder->from('users')->count_records();
 
         // Pagination info
-        $view->page = $page;
-        $view->page_size = $page_size;
+        $view->page           = $page;
+        $view->page_size      = $page_size;
         $view->children_count = $user_count;
-        $view->max_pages = ceil($view->children_count / $view->page_size);
+        $view->max_pages      = ceil($view->children_count / $view->page_size);
 
         $view->content->pager = new Pagination();
-        $view->content->pager->initialize(
-            [
-          'query_string'   => 'page',
-          'total_items'    => $user_count,
-          'items_per_page' => $page_size,
-          'style'          => 'classic'
-            ]
-    );
+        $view->content->pager->initialize([
+                                              'query_string'   => 'page',
+                                              'total_items'    => $user_count,
+                                              'items_per_page' => $page_size,
+                                              'style'          => 'classic'
+                                          ]);
 
         // Make sure that the page references a valid offset
         if ($page < 1) {
@@ -58,9 +57,7 @@ class Admin_Users_Controller extends Admin_Controller
 
         // Join our users against the items table so that we can get a count of their items
         // in the same query.
-        $view->content->users = ORM::factory('user')
-      ->order_by('users.name', 'ASC')
-      ->find_all($page_size, $view->content->pager->sql_offset);
+        $view->content->users  = ORM::factory('user')->order_by('users.name', 'ASC')->find_all($page_size, $view->content->pager->sql_offset);
         $view->content->groups = ORM::factory('group')->order_by('name', 'ASC')->find_all();
 
         print $view;
@@ -72,15 +69,15 @@ class Admin_Users_Controller extends Admin_Controller
 
         $form = $this->_get_user_add_form_admin();
         try {
-            $user = ORM::factory('user');
-            $valid = $form->validate();
-            $user->name = $form->add_user->inputs['name']->value;
+            $user            = ORM::factory('user');
+            $valid           = $form->validate();
+            $user->name      = $form->add_user->inputs['name']->value;
             $user->full_name = $form->add_user->full_name->value;
-            $user->password = $form->add_user->password->value;
-            $user->email = $form->add_user->email->value;
-            $user->url = $form->add_user->url->value;
-            $user->locale = $form->add_user->locale->value;
-            $user->admin = $form->add_user->admin->checked;
+            $user->password  = $form->add_user->password->value;
+            $user->email     = $form->add_user->email->value;
+            $user->url       = $form->add_user->url->value;
+            $user->locale    = $form->add_user->locale->value;
+            $user->admin     = $form->add_user->admin->checked;
             $user->validate();
         } catch (ORM_Validation_Exception $e) {
             // Translate ORM validation errors into form error messages
@@ -138,7 +135,7 @@ class Admin_Users_Controller extends Admin_Controller
         if (empty($user)) {
             throw new Kohana_404_Exception();
         }
-        $v = new View('admin_users_delete_user.html');
+        $v       = new View('admin_users_delete_user.html');
         $v->user = $user;
         $v->form = $this->_get_user_delete_form_admin($user);
         print $v;
@@ -155,14 +152,14 @@ class Admin_Users_Controller extends Admin_Controller
 
         $form = $this->_get_user_edit_form_admin($user);
         try {
-            $valid = $form->validate();
-            $user->name = $form->edit_user->inputs['name']->value;
+            $valid           = $form->validate();
+            $user->name      = $form->edit_user->inputs['name']->value;
             $user->full_name = $form->edit_user->full_name->value;
             if ($form->edit_user->password->value) {
                 $user->password = $form->edit_user->password->value;
             }
-            $user->email = $form->edit_user->email->value;
-            $user->url = $form->edit_user->url->value;
+            $user->email  = $form->edit_user->email->value;
+            $user->url    = $form->edit_user->url->value;
             $user->locale = $form->edit_user->locale->value;
             if ($user->id != identity::active_user()->id) {
                 $user->admin = $form->edit_user->admin->checked;
@@ -183,7 +180,7 @@ class Admin_Users_Controller extends Admin_Controller
             message::success(t('Changed user %user_name', ['user_name' => $user->name]));
             json::reply(['result' => 'success']);
         } else {
-            json::reply(['result' => 'error', 'html' => (string) $form]);
+            json::reply(['result' => 'error', 'html' => (string)$form]);
         }
     }
 
@@ -201,7 +198,7 @@ class Admin_Users_Controller extends Admin_Controller
     {
         access::verify_csrf();
         $group = group::lookup($group_id);
-        $user = user::lookup($user_id);
+        $user  = user::lookup($user_id);
         $group->add($user);
         $group->save();
     }
@@ -210,14 +207,14 @@ class Admin_Users_Controller extends Admin_Controller
     {
         access::verify_csrf();
         $group = group::lookup($group_id);
-        $user = user::lookup($user_id);
+        $user  = user::lookup($user_id);
         $group->remove($user);
         $group->save();
     }
 
     public function group($group_id)
     {
-        $view = new View('admin_users_group.html');
+        $view        = new View('admin_users_group.html');
         $view->group = group::lookup($group_id);
         print $view;
     }
@@ -228,8 +225,8 @@ class Admin_Users_Controller extends Admin_Controller
 
         $form = $this->_get_group_add_form_admin();
         try {
-            $valid = $form->validate();
-            $group = ORM::factory('group');
+            $valid       = $form->validate();
+            $group       = ORM::factory('group');
             $group->name = $form->add_group->inputs['name']->value;
             $group->validate();
         } catch (ORM_Validation_Exception $e) {
@@ -242,9 +239,7 @@ class Admin_Users_Controller extends Admin_Controller
 
         if ($valid) {
             $group->save();
-            message::success(
-        t('Created group %group_name', ['group_name' => $group->name])
-      );
+            message::success(t('Created group %group_name', ['group_name' => $group->name]));
             json::reply(['result' => 'success']);
         } else {
             json::reply(['result' => 'error', 'html' => (string)$form]);
@@ -270,7 +265,7 @@ class Admin_Users_Controller extends Admin_Controller
             $name = $group->name;
             $group->delete();
         } else {
-            json::reply(['result' => 'error', 'html' => (string) $form]);
+            json::reply(['result' => 'error', 'html' => (string)$form]);
         }
 
         $message = t('Deleted group %group_name', ['group_name' => $name]);
@@ -300,7 +295,7 @@ class Admin_Users_Controller extends Admin_Controller
 
         $form = $this->_get_group_edit_form_admin($group);
         try {
-            $valid = $form->validate();
+            $valid       = $form->validate();
             $group->name = $form->edit_group->inputs['name']->value;
             $group->validate();
         } catch (ORM_Validation_Exception $e) {
@@ -313,16 +308,12 @@ class Admin_Users_Controller extends Admin_Controller
 
         if ($valid) {
             $group->save();
-            message::success(
-        t('Changed group %group_name', ['group_name' => $group->name])
-      );
+            message::success(t('Changed group %group_name', ['group_name' => $group->name]));
             json::reply(['result' => 'success']);
         } else {
             $group->reload();
-            message::error(
-        t('Failed to change group %group_name', ['group_name' => $group->name])
-      );
-            json::reply(['result' => 'error', 'html' => (string) $form]);
+            message::error(t('Failed to change group %group_name', ['group_name' => $group->name]));
+            json::reply(['result' => 'error', 'html' => (string)$form]);
         }
     }
 
@@ -339,32 +330,15 @@ class Admin_Users_Controller extends Admin_Controller
     /* User Form Definitions */
     public static function _get_user_edit_form_admin($user)
     {
-        $form = new Forge(
-            "admin/users/edit_user/$user->id", '', 'post',
-            ['id' => 'g-edit-user-form']
-    );
+        $form  = new Forge("admin/users/edit_user/$user->id", '', 'post', ['id' => 'g-edit-user-form']);
         $group = $form->group('edit_user')->label(t('Edit user'));
-        $group->input('name')->label(t('Username'))->id('g-username')->value($user->name)
-              ->error_messages('required', t('A name is required'))
-              ->error_messages('conflict', t('There is already a user with that username'))
-              ->error_messages('length', t('This name is too long'));
-        $group->input('full_name')->label(t('Full name'))->id('g-fullname')->value($user->full_name)
-              ->error_messages('length', t('This name is too long'));
-        $group->password('password')->label(t('Password'))->id('g-password')
-              ->error_messages('min_length', t('This password is too short'));
-        $group->script('')
-      ->text(
-        '$("form").ready(function(){$(\'input[name="password"]\').user_password_strength();});'
-      );
-        $group->password('password2')->label(t('Confirm password'))->id('g-password2')
-              ->error_messages('matches', t('The passwords you entered do not match'))
-              ->matches($group->password);
-        $group->input('email')->label(t('Email'))->id('g-email')->value($user->email)
-              ->error_messages('required', t('You must enter a valid email address'))
-              ->error_messages('length', t('This email address is too long'))
-              ->error_messages('email', t('You must enter a valid email address'));
-        $group->input('url')->label(t('URL'))->id('g-url')->value($user->url)
-              ->error_messages('url', t('You must enter a valid URL'));
+        $group->input('name')->label(t('Username'))->id('g-username')->value($user->name)->error_messages('required', t('A name is required'))->error_messages('conflict', t('There is already a user with that username'))->error_messages('length', t('This name is too long'));
+        $group->input('full_name')->label(t('Full name'))->id('g-fullname')->value($user->full_name)->error_messages('length', t('This name is too long'));
+        $group->password('password')->label(t('Password'))->id('g-password')->error_messages('min_length', t('This password is too short'));
+        $group->script('')->text('$("form").ready(function(){$(\'input[name="password"]\').user_password_strength();});');
+        $group->password('password2')->label(t('Confirm password'))->id('g-password2')->error_messages('matches', t('The passwords you entered do not match'))->matches($group->password);
+        $group->input('email')->label(t('Email'))->id('g-email')->value($user->email)->error_messages('required', t('You must enter a valid email address'))->error_messages('length', t('This email address is too long'))->error_messages('email', t('You must enter a valid email address'));
+        $group->input('url')->label(t('URL'))->id('g-url')->value($user->url)->error_messages('url', t('You must enter a valid URL'));
         self::_add_locale_dropdown($group, $user);
         $group->checkbox('admin')->label(t('Admin'))->id('g-admin')->checked($user->admin);
 
@@ -380,29 +354,15 @@ class Admin_Users_Controller extends Admin_Controller
 
     public static function _get_user_add_form_admin()
     {
-        $form = new Forge('admin/users/add_user', '', 'post', ['id' => 'g-add-user-form']);
+        $form  = new Forge('admin/users/add_user', '', 'post', ['id' => 'g-add-user-form']);
         $group = $form->group('add_user')->label(t('Add user'));
-        $group->input('name')->label(t('Username'))->id('g-username')
-              ->error_messages('required', t('A name is required'))
-              ->error_messages('length', t('This name is too long'))
-              ->error_messages('conflict', t('There is already a user with that username'));
-        $group->input('full_name')->label(t('Full name'))->id('g-fullname')
-              ->error_messages('length', t('This name is too long'));
-        $group->password('password')->label(t('Password'))->id('g-password')
-              ->error_messages('min_length', t('This password is too short'));
-        $group->script('')
-      ->text(
-        '$("form").ready(function(){$(\'input[name="password"]\').user_password_strength();});'
-      );
-        $group->password('password2')->label(t('Confirm password'))->id('g-password2')
-              ->error_messages('matches', t('The passwords you entered do not match'))
-              ->matches($group->password);
-        $group->input('email')->label(t('Email'))->id('g-email')
-              ->error_messages('required', t('You must enter a valid email address'))
-              ->error_messages('length', t('This email address is too long'))
-              ->error_messages('email', t('You must enter a valid email address'));
-        $group->input('url')->label(t('URL'))->id('g-url')
-              ->error_messages('url', t('You must enter a valid URL'));
+        $group->input('name')->label(t('Username'))->id('g-username')->error_messages('required', t('A name is required'))->error_messages('length', t('This name is too long'))->error_messages('conflict', t('There is already a user with that username'));
+        $group->input('full_name')->label(t('Full name'))->id('g-fullname')->error_messages('length', t('This name is too long'));
+        $group->password('password')->label(t('Password'))->id('g-password')->error_messages('min_length', t('This password is too short'));
+        $group->script('')->text('$("form").ready(function(){$(\'input[name="password"]\').user_password_strength();});');
+        $group->password('password2')->label(t('Confirm password'))->id('g-password2')->error_messages('matches', t('The passwords you entered do not match'))->matches($group->password);
+        $group->input('email')->label(t('Email'))->id('g-email')->error_messages('required', t('You must enter a valid email address'))->error_messages('length', t('This email address is too long'))->error_messages('email', t('You must enter a valid email address'));
+        $group->input('url')->label(t('URL'))->id('g-url')->error_messages('url', t('You must enter a valid URL'));
         self::_add_locale_dropdown($group);
         $group->checkbox('admin')->label(t('Admin'))->id('g-admin');
 
@@ -411,7 +371,7 @@ class Admin_Users_Controller extends Admin_Controller
         return $form;
     }
 
-    private static function _add_locale_dropdown(&$form, $user=null)
+    private static function _add_locale_dropdown(&$form, $user = null)
     {
         $locales = locales::installed();
         foreach ($locales as $locale => $display_name) {
@@ -419,23 +379,15 @@ class Admin_Users_Controller extends Admin_Controller
         }
 
         // Put "none" at the first position in the array
-        $locales = array_merge(['' => t('« none »')], $locales);
+        $locales         = array_merge(['' => t('« none »')], $locales);
         $selected_locale = ($user && $user->locale) ? $user->locale : '';
-        $form->dropdown('locale')
-      ->label(t('Language preference'))
-      ->options($locales)
-      ->selected($selected_locale);
+        $form->dropdown('locale')->label(t('Language preference'))->options($locales)->selected($selected_locale);
     }
 
     private function _get_user_delete_form_admin($user)
     {
-        $form = new Forge(
-            "admin/users/delete_user/$user->id", '', 'post',
-            ['id' => 'g-delete-user-form']
-    );
-        $group = $form->group('delete_user')->label(
-      t('Delete user %name?', ['name' => $user->display_name()])
-    );
+        $form  = new Forge("admin/users/delete_user/$user->id", '', 'post', ['id' => 'g-delete-user-form']);
+        $group = $form->group('delete_user')->label(t('Delete user %name?', ['name' => $user->display_name()]));
         $group->submit('')->value(t('Delete'));
         return $form;
     }
@@ -443,43 +395,28 @@ class Admin_Users_Controller extends Admin_Controller
     /* Group Form Definitions */
     private function _get_group_edit_form_admin($group)
     {
-        $form = new Forge("admin/users/edit_group/$group->id", '', 'post', ['id' => 'g-edit-group-form']);
+        $form       = new Forge("admin/users/edit_group/$group->id", '', 'post', ['id' => 'g-edit-group-form']);
         $form_group = $form->group('edit_group')->label(t('Edit group'));
-        $form_group->input('name')->label(t('Name'))->id('g-name')->value($group->name)
-                   ->error_messages('required', t('A name is required'));
-        $form_group->inputs['name']->error_messages('conflict', t('There is already a group with that name'))
-                                   ->error_messages('required', t('You must enter a group name'))
-                                   ->error_messages(
-                                       'length',
-                                       t(
-                                           'The group name must be less than %max_length characters',
-                                           ['max_length' => 255]
-                       )
-      );
+        $form_group->input('name')->label(t('Name'))->id('g-name')->value($group->name)->error_messages('required', t('A name is required'));
+        $form_group->inputs['name']->error_messages('conflict', t('There is already a group with that name'))->error_messages('required', t('You must enter a group name'))->error_messages('length', t('The group name must be less than %max_length characters', ['max_length' => 255]));
         $form_group->submit('')->value(t('Save'));
         return $form;
     }
 
     private function _get_group_add_form_admin()
     {
-        $form = new Forge('admin/users/add_group', '', 'post', ['id' => 'g-add-group-form']);
+        $form       = new Forge('admin/users/add_group', '', 'post', ['id' => 'g-add-group-form']);
         $form_group = $form->group('add_group')->label(t('Add group'));
         $form_group->input('name')->label(t('Name'))->id('g-name');
-        $form_group->inputs['name']->error_messages('conflict', t('There is already a group with that name'))
-                                   ->error_messages('required', t('You must enter a group name'));
+        $form_group->inputs['name']->error_messages('conflict', t('There is already a group with that name'))->error_messages('required', t('You must enter a group name'));
         $form_group->submit('')->value(t('Add group'));
         return $form;
     }
 
     private function _get_group_delete_form_admin($group)
     {
-        $form = new Forge(
-            "admin/users/delete_group/$group->id", '', 'post',
-            ['id' => 'g-delete-group-form']
-    );
-        $form_group = $form->group('delete_group')->label(
-      t('Are you sure you want to delete group %group_name?', ['group_name' => $group->name])
-    );
+        $form       = new Forge("admin/users/delete_group/$group->id", '', 'post', ['id' => 'g-delete-group-form']);
+        $form_group = $form->group('delete_group')->label(t('Are you sure you want to delete group %group_name?', ['group_name' => $group->name]));
         $form_group->submit('')->value(t('Delete'));
         return $form;
     }

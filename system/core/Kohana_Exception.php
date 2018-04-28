@@ -1,13 +1,13 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Kohana Exceptions
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
-
 class Kohana_Exception_Core extends Exception
 {
     public static $enabled = false;
@@ -53,7 +53,7 @@ class Kohana_Exception_Core extends Exception
      */
     public static function enable()
     {
-        if (! Kohana_Exception::$enabled) {
+        if (!Kohana_Exception::$enabled) {
             set_exception_handler(['Kohana_Exception', 'handle']);
 
             Kohana_Exception::$enabled = true;
@@ -84,14 +84,7 @@ class Kohana_Exception_Core extends Exception
      */
     public static function text($e)
     {
-        return sprintf(
-            '%s [ %s ]: %s ~ %s [ %d ]',
-            get_class($e),
-            $e->getCode(),
-            strip_tags($e->getMessage()),
-            Kohana_Exception::debug_path($e->getFile()),
-            $e->getLine()
-        );
+        return sprintf('%s [ %s ]: %s ~ %s [ %d ]', get_class($e), $e->getCode(), strip_tags($e->getMessage()), Kohana_Exception::debug_path($e->getFile()), $e->getLine());
     }
 
     /**
@@ -122,37 +115,37 @@ class Kohana_Exception_Core extends Exception
 
             if (false === Kohana::config('kohana/core.display_errors')) {
                 // Do not show the details
-                $file = $line = null;
+                $file  = $line = null;
                 $trace = [];
 
                 $template = '_disabled';
             } else {
-                $file = $e->getFile();
-                $line = $e->getLine();
+                $file  = $e->getFile();
+                $line  = $e->getLine();
                 $trace = $e->getTrace();
 
                 $template = '';
             }
 
             if ($e instanceof Kohana_Exception) {
-                $template = $e->getTemplate().$template;
+                $template = $e->getTemplate() . $template;
 
-                if (! headers_sent()) {
+                if (!headers_sent()) {
                     $e->sendHeaders();
                 }
 
                 // Use the human-readable error name
-                $code = Kohana::message('kohana/core.errors.'.$code);
+                $code = Kohana::message('kohana/core.errors.' . $code);
             } else {
-                $template = Kohana_Exception::$template.$template;
+                $template = Kohana_Exception::$template . $template;
 
-                if (! headers_sent()) {
+                if (!headers_sent()) {
                     header('HTTP/1.1 500 Internal Server Error');
                 }
 
                 if ($e instanceof ErrorException) {
                     // Use the human-readable error name
-                    $code = Kohana::message('kohana/core.errors.'.$e->getSeverity());
+                    $code = Kohana::message('kohana/core.errors.' . $e->getSeverity());
 
                     if (version_compare(PHP_VERSION, '5.3', '<')) {
                         // Workaround for a bug in ErrorException::getTrace() that exists in
@@ -240,9 +233,9 @@ class Kohana_Exception_Core extends Exception
         if (null === $var) {
             return '<small>NULL</small>';
         } elseif (is_bool($var)) {
-            return '<small>bool</small> '.($var ? 'TRUE' : 'FALSE');
+            return '<small>bool</small> ' . ($var ? 'TRUE' : 'FALSE');
         } elseif (is_float($var)) {
-            return '<small>float</small> '.$var;
+            return '<small>float</small> ' . $var;
         } elseif (is_resource($var)) {
             if ('stream' === ($type = get_resource_type($var)) && $meta = stream_get_meta_data($var)) {
                 $meta = stream_get_meta_data($var);
@@ -257,21 +250,21 @@ class Kohana_Exception_Core extends Exception
                         }
                     }
 
-                    return '<small>resource</small><span>('.$type.')</span> '.htmlspecialchars($file, ENT_NOQUOTES, Kohana::CHARSET);
+                    return '<small>resource</small><span>(' . $type . ')</span> ' . htmlspecialchars($file, ENT_NOQUOTES, Kohana::CHARSET);
                 }
             } else {
-                return '<small>resource</small><span>('.$type.')</span>';
+                return '<small>resource</small><span>(' . $type . ')</span>';
             }
         } elseif (is_string($var)) {
             if (strlen($var) > $length) {
                 // Encode the truncated string
-                $str = htmlspecialchars(substr($var, 0, $length), ENT_NOQUOTES, Kohana::CHARSET).'&nbsp;&hellip;';
+                $str = htmlspecialchars(substr($var, 0, $length), ENT_NOQUOTES, Kohana::CHARSET) . '&nbsp;&hellip;';
             } else {
                 // Encode the string
                 $str = htmlspecialchars($var, ENT_NOQUOTES, Kohana::CHARSET);
             }
 
-            return '<small>string</small><span>('.strlen($var).')</span> "'.$str.'"';
+            return '<small>string</small><span>(' . strlen($var) . ')</span> "' . $str . '"';
         } elseif (is_array($var)) {
             $output = [];
 
@@ -297,11 +290,11 @@ class Kohana_Exception_Core extends Exception
                     if ($key === $marker) {
                         continue;
                     }
-                    if (! is_int($key)) {
-                        $key = '"'.$key.'"';
+                    if (!is_int($key)) {
+                        $key = '"' . $key . '"';
                     }
 
-                    $output[] = "$space$s$key => ".Kohana_Exception::_dump($val, $length, $max_level, $level + 1);
+                    $output[] = "$space$s$key => " . Kohana_Exception::_dump($val, $length, $max_level, $level + 1);
                 }
                 unset($var[$marker]);
 
@@ -311,10 +304,10 @@ class Kohana_Exception_Core extends Exception
                 $output[] = "(\n$space$s...\n$space)";
             }
 
-            return '<small>array</small><span>('.count($var).')</span> '.implode("\n", $output);
+            return '<small>array</small><span>(' . count($var) . ')</span> ' . implode("\n", $output);
         } elseif (is_object($var)) {
             // Copy the object as an array
-            $array = (array) $var;
+            $array = (array)$var;
 
             $output = [];
 
@@ -337,7 +330,7 @@ class Kohana_Exception_Core extends Exception
                 foreach ($array as $key => & $val) {
                     if ("\x00" === $key[0]) {
                         // Determine if the access is private or protected
-                        $access = '<small>'.('*' === $key[1] ? 'protected' : 'private') . '</small>';
+                        $access = '<small>' . ('*' === $key[1] ? 'protected' : 'private') . '</small>';
 
                         // Remove the access level from the variable name
                         $key = substr($key, strrpos($key, "\x00") + 1);
@@ -345,7 +338,7 @@ class Kohana_Exception_Core extends Exception
                         $access = '<small>public</small>';
                     }
 
-                    $output[] = "$space$s$access $key => ".Kohana_Exception::_dump($val, $length, $max_level, $level + 1);
+                    $output[] = "$space$s$access $key => " . Kohana_Exception::_dump($val, $length, $max_level, $level + 1);
                 }
                 unset($objects[$hash]);
 
@@ -355,9 +348,9 @@ class Kohana_Exception_Core extends Exception
                 $output[] = "{\n$space$s...\n$space}";
             }
 
-            return '<small>object</small> <span>'.get_class($var).'('.count($array).')</span> '.implode("\n", $output);
+            return '<small>object</small> <span>' . get_class($var) . '(' . count($array) . ')</span> ' . implode("\n", $output);
         } else {
-            return '<small>'.gettype($var).'</small> '.htmlspecialchars(print_r($var, true), ENT_NOQUOTES, Kohana::CHARSET);
+            return '<small>' . gettype($var) . '</small> ' . htmlspecialchars(print_r($var, true), ENT_NOQUOTES, Kohana::CHARSET);
         }
     }
 
@@ -374,13 +367,13 @@ class Kohana_Exception_Core extends Exception
         $file = str_replace('\\', '/', $file);
 
         if (0 === strpos($file, APPPATH)) {
-            $file = 'APPPATH/'.substr($file, strlen(APPPATH));
+            $file = 'APPPATH/' . substr($file, strlen(APPPATH));
         } elseif (0 === strpos($file, SYSPATH)) {
-            $file = 'SYSPATH/'.substr($file, strlen(SYSPATH));
+            $file = 'SYSPATH/' . substr($file, strlen(SYSPATH));
         } elseif (0 === strpos($file, MODPATH)) {
-            $file = 'MODPATH/'.substr($file, strlen(MODPATH));
+            $file = 'MODPATH/' . substr($file, strlen(MODPATH));
         } elseif (0 === strpos($file, DOCROOT)) {
-            $file = 'DOCROOT/'.substr($file, strlen(DOCROOT));
+            $file = 'DOCROOT/' . substr($file, strlen(DOCROOT));
         }
 
         return $file;
@@ -400,7 +393,7 @@ class Kohana_Exception_Core extends Exception
     public static function debug_source($file, $line_number, $padding = 5)
     {
         // Make sure we can read the source file
-        if (! is_readable($file)) {
+        if (!is_readable($file)) {
             return [];
         }
 
@@ -412,7 +405,7 @@ class Kohana_Exception_Core extends Exception
         $range = ['start' => $line_number - $padding, 'end' => $line_number + $padding];
 
         // Set the zero-padding amount for line numbers
-        $format = '% '.strlen($range['end']).'d';
+        $format = '% ' . strlen($range['end']) . 'd';
 
         $source = [];
         while (false !== ($row = fgets($file))) {
@@ -450,7 +443,7 @@ class Kohana_Exception_Core extends Exception
 
         $output = [];
         foreach ($trace as $step) {
-            if (! isset($step['function'])) {
+            if (!isset($step['function'])) {
                 // Invalid trace step
                 continue;
             }
@@ -513,14 +506,14 @@ class Kohana_Exception_Core extends Exception
 
             if (isset($step['class'])) {
                 // Class->method() or Class::method()
-                $function = $step['class'].$step['type'].$step['function'];
+                $function = $step['class'] . $step['type'] . $step['function'];
             }
 
             $output[] = [
                 'function' => $function,
-                'args'     => isset($args)   ? $args : null,
-                'file'     => isset($file)   ? $file : null,
-                'line'     => isset($line)   ? $line : null,
+                'args'     => isset($args) ? $args : null,
+                'file'     => isset($file) ? $file : null,
+                'line'     => isset($line) ? $line : null,
                 'source'   => isset($source) ? $source : null,
             ];
 

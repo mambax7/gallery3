@@ -1,11 +1,12 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * File helper class.
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class file_Core
 {
@@ -22,7 +23,7 @@ class file_Core
     public static function mime($filename)
     {
         // Make sure the file is readable
-        if (! (is_file($filename) && is_readable($filename))) {
+        if (!(is_file($filename) && is_readable($filename))) {
             return false;
         }
 
@@ -60,14 +61,14 @@ class file_Core
             return mime_content_type($filename);
         }
 
-        if (! KOHANA_IS_WIN) {
+        if (!KOHANA_IS_WIN) {
             // Attempt to locate use the file command, checking the return value
             if ($command = trim(exec('which file', $output, $return)) && 0 === $return) {
-                return trim(exec($command.' -bi '.escapeshellarg($filename)));
+                return trim(exec($command . ' -bi ' . escapeshellarg($filename)));
             }
         }
 
-        if (! empty($extension) && is_array($mime = Kohana::config('mimes.'.$extension))) {
+        if (!empty($extension) && is_array($mime = Kohana::config('mimes.' . $extension))) {
             // Return the mime-type guess, based on the extension
             return $mime[0];
         }
@@ -88,13 +89,13 @@ class file_Core
     {
         // Find output dir
         $output_dir = (false == $output_dir) ? pathinfo(str_replace('\\', '/', realpath($filename)), PATHINFO_DIRNAME) : str_replace('\\', '/', realpath($output_dir));
-        $output_dir = rtrim($output_dir, '/').'/';
+        $output_dir = rtrim($output_dir, '/') . '/';
 
         // Open files for writing
         $input_file = fopen($filename, 'rb');
 
         // Change the piece size to bytes
-        $piece_size = 1024 * 1024 * (int) $piece_size; // Size in bytes
+        $piece_size = 1024 * 1024 * (int)$piece_size; // Size in bytes
 
         // Set up reading variables
         $read  = 0; // Number of bytes read
@@ -102,14 +103,14 @@ class file_Core
         $chunk = 1024 * 8; // Chunk size to read
 
         // Split the file
-        while (! feof($input_file)) {
+        while (!feof($input_file)) {
             // Open a new piece
-            $piece_name = $filename.'.'.str_pad($piece, 3, '0', STR_PAD_LEFT);
-            $piece_open = @fopen($piece_name, 'wb+') || die('Could not write piece '.$piece_name);
+            $piece_name = $filename . '.' . str_pad($piece, 3, '0', STR_PAD_LEFT);
+            $piece_open = @fopen($piece_name, 'wb+') || die('Could not write piece ' . $piece_name);
 
             // Fill the current piece
             while ($read < $piece_size && $data = fread($input_file, $chunk)) {
-                fwrite($piece_open, $data) || die('Could not write to open piece '.$piece_name);
+                fwrite($piece_open, $data) || die('Could not write to open piece ' . $piece_name);
                 $read += $chunk;
             }
 
@@ -149,12 +150,12 @@ class file_Core
         $chunk = 1024 * 8; // Chunk size to read
 
         // Open output file
-        $output_file = @fopen($output, 'wb+') || die('Could not open output file '.$output);
+        $output_file = @fopen($output, 'wb+') || die('Could not open output file ' . $output);
 
         // Read each piece
-        while ($piece_open = @fopen(($piece_name = $filename.'.'.str_pad($piece, 3, '0', STR_PAD_LEFT)), 'rb')) {
+        while ($piece_open = @fopen(($piece_name = $filename . '.' . str_pad($piece, 3, '0', STR_PAD_LEFT)), 'rb')) {
             // Write the piece into the output file
-            while (! feof($piece_open)) {
+            while (!feof($piece_open)) {
                 fwrite($output_file, fread($piece_open, $chunk));
             }
 

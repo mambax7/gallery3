@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Kohana_Config Array driver to get and set
  * configuration options using PHP arrays.
@@ -8,10 +9,10 @@
  *
  * $Id: Array.php 4679 2009-11-10 01:45:52Z isaiah $
  *
- * @package    Kohana_Config
- * @author     Kohana Team
+ * @package        Kohana_Config
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class Config_Array_Driver extends Config_Driver
 {
@@ -49,9 +50,9 @@ class Config_Array_Driver extends Config_Driver
     {
         if ('core' === $group) {
             // Load the application configuration file
-            require APPPATH.'config/config'.EXT;
+            require APPPATH . 'config/config' . EXT;
 
-            if (! isset($config['site_domain'])) {
+            if (!isset($config['site_domain'])) {
                 // Invalid config file
                 throw new Kohana_Config_Exception('Your Kohana application configuration file is not valid.');
             }

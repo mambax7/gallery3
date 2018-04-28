@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,9 +22,7 @@ class Exif_Test extends Gallery_Unit_Test_Case
 {
     public function exif_extract_test()
     {
-        $photo = test::random_photo_unsaved()
-      ->set_data_file(MODPATH . 'exif/tests/data/image.jpg')
-      ->save();
+        $photo = test::random_photo_unsaved()->set_data_file(MODPATH . 'exif/tests/data/image.jpg')->save();
 
         $expected = [
             ['caption' => 'Camera Maker', 'value' => 'Pentax Corporation'],

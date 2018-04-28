@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -27,23 +28,17 @@ class Item_Helper_Test extends Gallery_Unit_Test_Case
     public function viewable_test()
     {
         $album = test::random_album();
-        $item = test::random_photo($album);
+        $item  = test::random_photo($album);
         $album->reload();
         identity::set_active_user(identity::guest());
 
         // We can see the item when permissions are granted
         access::allow(identity::everybody(), 'view', $album);
-        $this->assert_equal(
-      1,
-      ORM::factory('item')->viewable()->where('id', '=', $item->id)->count_all()
-    );
+        $this->assert_equal(1, ORM::factory('item')->viewable()->where('id', '=', $item->id)->count_all());
 
         // We can't see the item when permissions are denied
         access::deny(identity::everybody(), 'view', $album);
-        $this->assert_equal(
-      0,
-      ORM::factory('item')->viewable()->where('id', '=', $item->id)->count_all()
-    );
+        $this->assert_equal(0, ORM::factory('item')->viewable()->where('id', '=', $item->id)->count_all());
     }
 
     public function convert_filename_to_title_test()
@@ -64,7 +59,7 @@ class Item_Helper_Test extends Gallery_Unit_Test_Case
 
     public function move_test()
     {
-        $photo = test::random_photo(item::root());
+        $photo     = test::random_photo(item::root());
         $dst_album = test::random_album();
 
         item::move($photo, $dst_album);
@@ -75,8 +70,8 @@ class Item_Helper_Test extends Gallery_Unit_Test_Case
     {
         // 2 photos in the source album
         $src_album = test::random_album();
-        $photo1 = test::random_photo($src_album);
-        $photo2 = test::random_photo($src_album);
+        $photo1    = test::random_photo($src_album);
+        $photo2    = test::random_photo($src_album);
         $src_album->reload();
 
         // destination album
@@ -97,7 +92,7 @@ class Item_Helper_Test extends Gallery_Unit_Test_Case
     public function move_leaves_empty_album_with_no_album_cover_test()
     {
         $src_album = test::random_album();
-        $photo = test::random_photo($src_album);
+        $photo     = test::random_photo($src_album);
 
         item::move($photo, item::root());
 
@@ -107,14 +102,14 @@ class Item_Helper_Test extends Gallery_Unit_Test_Case
 
     public function move_conflicts_result_in_a_rename_test()
     {
-        $rand = random::int();
-        $photo1 = test::random_photo_unsaved(item::root());
+        $rand         = random::int();
+        $photo1       = test::random_photo_unsaved(item::root());
         $photo1->name = "{$rand}.jpg";
         $photo1->slug = (string)$rand;
         $photo1->save();
 
-        $src_album = test::random_album();
-        $photo2 = test::random_photo_unsaved($src_album);
+        $src_album    = test::random_album();
+        $photo2       = test::random_photo_unsaved($src_album);
         $photo2->name = "{$rand}.jpg";
         $photo2->slug = (string)$rand;
         $photo2->save();
@@ -129,7 +124,7 @@ class Item_Helper_Test extends Gallery_Unit_Test_Case
     public function delete_cover_photo_picks_new_album_cover_test()
     {
         $parent = test::random_album();
-        $album = test::random_album($parent);
+        $album  = test::random_album($parent);
         $photo1 = test::random_photo($album);
         // At this point, $photo1 is the album cover.  We verify this in
         // Item_Model_Test::first_photo_becomes_album_cover
@@ -144,37 +139,28 @@ class Item_Helper_Test extends Gallery_Unit_Test_Case
 
     public function find_by_path_test()
     {
-        $level1 = test::random_album();
-        $level2 = test::random_album_unsaved($level1);
+        $level1       = test::random_album();
+        $level2       = test::random_album_unsaved($level1);
         $level2->name = 'plus + space';
         $level2->save()->reload();
 
-        $level3 = test::random_photo_unsaved($level2);
+        $level3       = test::random_photo_unsaved($level2);
         $level3->name = 'same.jpg';
         $level3->save()->reload();
 
-        $level2b = test::random_album($level1);
-        $level3b = test::random_photo_unsaved($level2b);
+        $level2b       = test::random_album($level1);
+        $level3b       = test::random_photo_unsaved($level2b);
         $level3b->name = 'same.jpg';
         $level3b->save()->reload();
 
         // Item in album
-        $this->assert_same(
-      $level3->id,
-      item::find_by_path("/{$level1->name}/{$level2->name}/{$level3->name}")->id
-    );
+        $this->assert_same($level3->id, item::find_by_path("/{$level1->name}/{$level2->name}/{$level3->name}")->id);
 
         // Album, ends with a slash
-        $this->assert_same(
-      $level2->id,
-      item::find_by_path("{$level1->name}/{$level2->name}/")->id
-    );
+        $this->assert_same($level2->id, item::find_by_path("{$level1->name}/{$level2->name}/")->id);
 
         // Album, ends without a slash
-        $this->assert_same(
-      $level2->id,
-      item::find_by_path("/{$level1->name}/{$level2->name}")->id
-    );
+        $this->assert_same($level2->id, item::find_by_path("/{$level1->name}/{$level2->name}")->id);
 
         // Return root if "" is passed
         $this->assert_same(item::root()->id, item::find_by_path('')->id);
@@ -183,26 +169,18 @@ class Item_Helper_Test extends Gallery_Unit_Test_Case
         self::_remove_relative_path_caches();
         self::_remove_relative_path_caches();
 
-        $this->assert_same(
-      $level3->id,
-      item::find_by_path("{$level1->name}/{$level2->name}/{$level3->name}")->id
-    );
+        $this->assert_same($level3->id, item::find_by_path("{$level1->name}/{$level2->name}/{$level3->name}")->id);
 
-        $this->assert_same(
-      $level3b->id,
-      item::find_by_path("{$level1->name}/{$level2b->name}/{$level3b->name}")->id
-    );
+        $this->assert_same($level3b->id, item::find_by_path("{$level1->name}/{$level2b->name}/{$level3b->name}")->id);
 
         // Verify that we don't get false positives
-        $this->assert_false(
-      item::find_by_path('foo/bar/baz')->loaded()
-    );
+        $this->assert_false(item::find_by_path('foo/bar/baz')->loaded());
     }
 
     public function find_by_path_with_jpg_test()
     {
         $parent = test::random_album();
-        $jpg = test::random_photo($parent);
+        $jpg    = test::random_photo($parent);
 
         $jpg_path = "{$parent->name}/{$jpg->name}";
         $flv_path = legal_file::change_extension($jpg_path, 'flv');
@@ -240,7 +218,7 @@ class Item_Helper_Test extends Gallery_Unit_Test_Case
     public function find_by_path_with_png_test()
     {
         $parent = test::random_album();
-        $png = test::random_photo_unsaved($parent);
+        $png    = test::random_photo_unsaved($parent);
         $png->set_data_file(MODPATH . 'gallery/images/graphicsmagick.png');
         $png->save();
 
@@ -280,7 +258,7 @@ class Item_Helper_Test extends Gallery_Unit_Test_Case
     public function find_by_path_with_flv_test()
     {
         $parent = test::random_album();
-        $flv = test::random_movie($parent);
+        $flv    = test::random_movie($parent);
 
         $flv_path = "{$parent->name}/{$flv->name}";
         $jpg_path = legal_file::change_extension($flv_path, 'jpg');
@@ -313,7 +291,7 @@ class Item_Helper_Test extends Gallery_Unit_Test_Case
     public function find_by_path_with_album_test()
     {
         $parent = test::random_album();
-        $album = test::random_movie($parent);
+        $album  = test::random_movie($parent);
 
         $album_path = "{$parent->name}/{$album->name}";
         $thumb_path = "{$album_path}/.album.jpg";
@@ -346,71 +324,47 @@ class Item_Helper_Test extends Gallery_Unit_Test_Case
     private function _remove_relative_path_caches()
     {
         // This gets used *many* times in the find_by_path tests above to check the fallback code.
-        db::build()
-      ->update('items')
-      ->set('relative_path_cache', null)
-      ->execute();
+        db::build()->update('items')->set('relative_path_cache', null)->execute();
     }
 
     public function find_by_relative_url_test()
     {
-        $level1 = test::random_album();
-        $level2 = test::random_album($level1);
-        $level3 = test::random_photo_unsaved($level2);
+        $level1       = test::random_album();
+        $level2       = test::random_album($level1);
+        $level3       = test::random_photo_unsaved($level2);
         $level3->slug = 'same';
         $level3->save()->reload();
 
-        $level2b = test::random_album($level1);
-        $level3b = test::random_photo_unsaved($level2b);
+        $level2b       = test::random_album($level1);
+        $level3b       = test::random_photo_unsaved($level2b);
         $level3b->slug = 'same';
         $level3b->save()->reload();
 
         // Item in album
-        $this->assert_same(
-      $level3->id,
-      item::find_by_relative_url("{$level1->slug}/{$level2->slug}/{$level3->slug}")->id
-    );
+        $this->assert_same($level3->id, item::find_by_relative_url("{$level1->slug}/{$level2->slug}/{$level3->slug}")->id);
 
         // Album, ends without a slash
-        $this->assert_same(
-      $level2->id,
-      item::find_by_relative_url("{$level1->slug}/{$level2->slug}")->id
-    );
+        $this->assert_same($level2->id, item::find_by_relative_url("{$level1->slug}/{$level2->slug}")->id);
 
         // Return root if "" is passed
         $this->assert_same(item::root()->id, item::find_by_relative_url('')->id);
 
         // Verify that we don't get confused by the part slugs, using the fallback code.
-        db::build()
-      ->update('items')
-      ->set(['relative_url_cache' => null])
-      ->where('id', 'IN', [$level3->id, $level3b->id])
-      ->execute();
-        $this->assert_same(
-      $level3->id,
-      item::find_by_relative_url("{$level1->slug}/{$level2->slug}/{$level3->slug}")->id
-    );
+        db::build()->update('items')->set(['relative_url_cache' => null])->where('id', 'IN', [$level3->id, $level3b->id])->execute();
+        $this->assert_same($level3->id, item::find_by_relative_url("{$level1->slug}/{$level2->slug}/{$level3->slug}")->id);
 
-        $this->assert_same(
-      $level3b->id,
-      item::find_by_relative_url("{$level1->slug}/{$level2b->slug}/{$level3b->slug}")->id
-    );
+        $this->assert_same($level3b->id, item::find_by_relative_url("{$level1->slug}/{$level2b->slug}/{$level3b->slug}")->id);
 
         // Verify that we don't get false positives
-        $this->assert_false(
-      item::find_by_relative_url('foo/bar/baz')->loaded()
-    );
+        $this->assert_false(item::find_by_relative_url('foo/bar/baz')->loaded());
 
         // Verify that the fallback code works
-        $this->assert_same(
-      $level3b->id,
-      item::find_by_relative_url("{$level1->slug}/{$level2b->slug}/{$level3b->slug}")->id
-    );
+        $this->assert_same($level3b->id, item::find_by_relative_url("{$level1->slug}/{$level2b->slug}/{$level3b->slug}")->id);
     }
 
     public function resequence_child_weights_test()
     {
-        $album = test::random_album_unsaved();
+        $album              = test::random_album_unsaved();
         $album->sort_column = 'id';
         $album->save();
 

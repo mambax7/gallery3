@@ -22,12 +22,13 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301 USA
  */
+
 namespace lsolesen\pel;
 
 /**
  * Classes for dealing with TIFF data.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public
  *          License (GPL)
  * @package PEL
@@ -56,7 +57,7 @@ namespace lsolesen\pel;
  * data could be valid TIFF data. The {@link PelJpeg::isValid()}
  * function does the same for JPEG images.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @package PEL
  */
 class PelTiff
@@ -88,7 +89,7 @@ class PelTiff
      *
      * Use {@link setIfd()} to explicitly set the IFD.
      *
-     * @param boolean|string|PelDataWindow $data;
+     * @param boolean|string|PelDataWindow $data ;
      */
     public function __construct($data = false)
     {

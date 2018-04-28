@@ -22,6 +22,7 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301 USA
  */
+
 namespace lsolesen\pel;
 
 use lsolesen\pel\PelException;
@@ -29,7 +30,7 @@ use lsolesen\pel\PelException;
 /**
  * Standard PEL exception.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public
  *          License (GPL)
  * @package PEL
@@ -38,8 +39,8 @@ use lsolesen\pel\PelException;
 /**
  * Exception throw if an invalid argument is passed.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
- * @package PEL
+ * @author     Martin Geisler <mgeisler@users.sourceforge.net>
+ * @package    PEL
  * @subpackage Exception
  */
 class PelInvalidArgumentException extends PelException

@@ -1,13 +1,14 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Unit_Test library.
  *
  * $Id: Unit_Test.php 4367 2009-05-27 21:23:57Z samsoir $
  *
- * @package    Unit_Test
- * @author     Kohana Team
+ * @package        Unit_Test
+ * @author         Kohana Team
  * @copyright  (c) 2007-2008 Kohana Team
- * @license    http://kohanaphp.com/license.html
+ * @license        http://kohanaphp.com/license.html
  */
 class Unit_Test_Core
 {
@@ -22,47 +23,48 @@ class Unit_Test_Core
     protected $stats = [];
 
     public static $lang = [
-                'class'                => 'Class',
-                'method'               => 'Method',
-                'invalid_test_path'    => 'Failed to open test path: %s.',
-                'duplicate_test_class' => 'Duplicate test class named %s found in %s.',
-                'test_class_not_found' => 'No test class by the name of %s found in %s.',
-                'test_class_extends'   => '%s must extend Unit_Test_Case.',
-                'no_tests_found'       => 'No tests found',
-                'score'                => 'Score',
-                'total'                => 'Total',
-                'passed'               => 'Passed',
-                'failed'               => 'Failed',
-                'error'                => 'Error',
-                'errors'               => 'Errors',
-                'line'                 => 'line',
-                'assert_true'          => 'assert_true: Expected true, but was given (%s) %s.',
-                'assert_true_strict'   => 'assert_true_strict: Expected (boolean) true, but was given (%s) %s.',
-                'assert_false'         => 'assert_false: Expected false, but was given (%s) %s.',
-                'assert_false_strict'  => 'assert_false_strict: Expected (boolean) false, but was given (%s) %s.',
-                'assert_equal'         => 'assert_equal: Expected (%s) %s, but was given (%s) %s.',
-                'assert_not_equal'     => 'assert_not_equal: Expected not (%s) %s, but was given (%s) %s.',
-                'assert_same'          => 'assert_same: Expected (%s) %s, but was given (%s) %s.',
-                'assert_not_same'      => 'assert_not_same: Expected not (%s) %s, but was given (%s) %s.',
-                'assert_boolean'       => 'assert_boolean: Expected a boolean, but was given (%s) %s.',
-                'assert_not_boolean'   => 'assert_not_boolean: Expected not a boolean, but was given (%s) %s.',
-                'assert_integer'       => 'assert_integer: Expected an integer, but was given (%s) %s.',
-                'assert_not_integer'   => 'assert_not_integer: Expected not an integer, but was given (%s) %s.',
-                'assert_float'         => 'assert_float: Expected a float, but was given (%s) %s.',
-                'assert_not_float'     => 'assert_not_float: Expected not a float, but was given (%s) %s.',
-                'assert_array'         => 'assert_array: Expected an array, but was given (%s) %s.',
-                'assert_array_key'     => 'assert_array_key: Expected a valid key, but was given (%s) %s.',
-                'assert_in_array'      => 'assert_in_array: Expected a valid value, but was given (%s) %s.',
-                'assert_not_array'     => 'assert_not_array: Expected not an array, but was given (%s) %s.',
-                'assert_object'        => 'assert_object: Expected an object, but was given (%s) %s.',
-                'assert_not_object'    => 'assert_not_object: Expected not an object, but was given (%s) %s.',
-                'assert_null'          => 'assert_null: Expected null, but was given (%s) %s.',
-                'assert_not_null'      => 'assert_not_null: Expected not null, but was given (%s) %s.',
-                'assert_empty'         => 'assert_empty: Expected an empty value, but was given (%s) %s.',
-                'assert_not_empty'     => 'assert_not_empty: Expected not an empty value, but was given (%s) %s.',
-                'assert_pattern'       => 'assert_pattern: Expected %s to match %s.',
-                'assert_not_pattern'   => 'assert_not_pattern: Expected %s to not match %s.'
+        'class'                => 'Class',
+        'method'               => 'Method',
+        'invalid_test_path'    => 'Failed to open test path: %s.',
+        'duplicate_test_class' => 'Duplicate test class named %s found in %s.',
+        'test_class_not_found' => 'No test class by the name of %s found in %s.',
+        'test_class_extends'   => '%s must extend Unit_Test_Case.',
+        'no_tests_found'       => 'No tests found',
+        'score'                => 'Score',
+        'total'                => 'Total',
+        'passed'               => 'Passed',
+        'failed'               => 'Failed',
+        'error'                => 'Error',
+        'errors'               => 'Errors',
+        'line'                 => 'line',
+        'assert_true'          => 'assert_true: Expected true, but was given (%s) %s.',
+        'assert_true_strict'   => 'assert_true_strict: Expected (boolean) true, but was given (%s) %s.',
+        'assert_false'         => 'assert_false: Expected false, but was given (%s) %s.',
+        'assert_false_strict'  => 'assert_false_strict: Expected (boolean) false, but was given (%s) %s.',
+        'assert_equal'         => 'assert_equal: Expected (%s) %s, but was given (%s) %s.',
+        'assert_not_equal'     => 'assert_not_equal: Expected not (%s) %s, but was given (%s) %s.',
+        'assert_same'          => 'assert_same: Expected (%s) %s, but was given (%s) %s.',
+        'assert_not_same'      => 'assert_not_same: Expected not (%s) %s, but was given (%s) %s.',
+        'assert_boolean'       => 'assert_boolean: Expected a boolean, but was given (%s) %s.',
+        'assert_not_boolean'   => 'assert_not_boolean: Expected not a boolean, but was given (%s) %s.',
+        'assert_integer'       => 'assert_integer: Expected an integer, but was given (%s) %s.',
+        'assert_not_integer'   => 'assert_not_integer: Expected not an integer, but was given (%s) %s.',
+        'assert_float'         => 'assert_float: Expected a float, but was given (%s) %s.',
+        'assert_not_float'     => 'assert_not_float: Expected not a float, but was given (%s) %s.',
+        'assert_array'         => 'assert_array: Expected an array, but was given (%s) %s.',
+        'assert_array_key'     => 'assert_array_key: Expected a valid key, but was given (%s) %s.',
+        'assert_in_array'      => 'assert_in_array: Expected a valid value, but was given (%s) %s.',
+        'assert_not_array'     => 'assert_not_array: Expected not an array, but was given (%s) %s.',
+        'assert_object'        => 'assert_object: Expected an object, but was given (%s) %s.',
+        'assert_not_object'    => 'assert_not_object: Expected not an object, but was given (%s) %s.',
+        'assert_null'          => 'assert_null: Expected null, but was given (%s) %s.',
+        'assert_not_null'      => 'assert_not_null: Expected not null, but was given (%s) %s.',
+        'assert_empty'         => 'assert_empty: Expected an empty value, but was given (%s) %s.',
+        'assert_not_empty'     => 'assert_not_empty: Expected not an empty value, but was given (%s) %s.',
+        'assert_pattern'       => 'assert_pattern: Expected %s to match %s.',
+        'assert_not_pattern'   => 'assert_not_pattern: Expected %s to not match %s.'
     ];
+
     /**
      * Sets the test path(s), runs the tests inside and stores the results.
      *
@@ -70,14 +72,14 @@ class Unit_Test_Core
      * @param   string     filter (regular expression)
      * @return  void
      */
-    public function __construct($extra_paths= [], $filter=null)
+    public function __construct($extra_paths = [], $filter = null)
     {
         // Merge possible default test path(s) from config with the rest
         $paths = array_merge($extra_paths, Kohana::config('unit_test.paths', false, false));
 
         // Normalize all test paths
         foreach ($paths as $path) {
-            $path = str_replace('\\', '/', realpath((string) $path));
+            $path = str_replace('\\', '/', realpath((string)$path));
         }
 
         // Take out duplicate test paths after normalization
@@ -86,20 +88,17 @@ class Unit_Test_Core
         // Loop over each given test path
         foreach ($this->paths as $path) {
             // Validate test path
-            if (! is_dir($path)) {
+            if (!is_dir($path)) {
                 throw new Kohana_Exception('unit_test.invalid_test_path', $path);
             }
 
             // Recursively iterate over each file in the test path
-            foreach (
-                new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::KEY_AS_PATHNAME))
-                as $path => $file
-            ) {
+            foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::KEY_AS_PATHNAME)) as $path => $file) {
                 // Normalize path
                 $path = str_replace('\\', '/', $path);
 
                 // Skip files without "_Test" suffix
-                if (! $file->isFile() || substr($path, -9) !== '_Test'.EXT) {
+                if (!$file->isFile() || substr($path, -9) !== '_Test' . EXT) {
                     continue;
                 }
 
@@ -120,7 +119,7 @@ class Unit_Test_Core
                 include_once $path;
 
                 // Check whether the test class has been found and loaded
-                if (! class_exists($class, false)) {
+                if (!class_exists($class, false)) {
                     throw new Kohana_Exception('unit_test.test_class_not_found', $class, $path);
                 }
 
@@ -128,7 +127,7 @@ class Unit_Test_Core
                 $reflector = new ReflectionClass($class);
 
                 // Test classes must extend Unit_Test_Case
-                if (! $reflector->isSubclassOf(new ReflectionClass('Unit_Test_Case'))) {
+                if (!$reflector->isSubclassOf(new ReflectionClass('Unit_Test_Case'))) {
                     throw new Kohana_Exception('unit_test.test_class_extends', $class);
                 }
 
@@ -143,25 +142,25 @@ class Unit_Test_Core
                 // Look for valid setup and teardown methods
                 foreach (['setup', 'teardown'] as $method_name) {
                     if ($reflector->hasMethod($method_name)) {
-                        $method = new ReflectionMethod($class, $method_name);
-                        $$method_name = ($method->isPublic() && ! $method->isStatic() && 0 === $method->getNumberOfRequiredParameters());
+                        $method       = new ReflectionMethod($class, $method_name);
+                        $$method_name = ($method->isPublic() && !$method->isStatic() && 0 === $method->getNumberOfRequiredParameters());
                     }
                 }
 
                 // Initialize test class results and stats
                 $this->results[$class] = [];
-                $this->stats[$class] = [
+                $this->stats[$class]   = [
                     'passed' => 0,
                     'failed' => 0,
                     'errors' => 0,
-                    'total' => 0,
+                    'total'  => 0,
                     'score'  => 0,
                 ];
 
                 // Loop through all the class methods
                 foreach ($reflector->getMethods() as $method) {
                     // Skip invalid test methods
-                    if (! $method->isPublic() || $method->isStatic() || 0 !== $method->getNumberOfRequiredParameters()) {
+                    if (!$method->isPublic() || $method->isStatic() || 0 !== $method->getNumberOfRequiredParameters()) {
                         continue;
                     }
 
@@ -201,7 +200,6 @@ class Unit_Test_Core
                         if ($e) {
                             throw $e;
                         }
-
 
                         $this->stats[$class]['total']++;
 
@@ -250,19 +248,15 @@ class Unit_Test_Core
         }
 
         // Hide passed tests from the report?
-        $hide_passed = (bool) ((null !== $hide_passed) ? $hide_passed : Kohana::config('unit_test.hide_passed', false, false));
-        
-        
+        $hide_passed = (bool)((null !== $hide_passed) ? $hide_passed : Kohana::config('unit_test.hide_passed', false, false));
+
         if (PHP_SAPI == 'cli') {
             $report = View::factory('kohana_unit_test_cli');
         } else {
             $report = View::factory('kohana_unit_test');
         }
         // Render unit_test report
-        return $report->set('results', $this->results)
-                      ->set('stats', $this->stats)
-                      ->set('hide_passed', $hide_passed)
-                      ->render();
+        return $report->set('results', $this->results)->set('stats', $this->stats)->set('hide_passed', $hide_passed)->render();
     }
 
     /**
@@ -289,7 +283,6 @@ class Unit_Test_Core
         }
     }
 } // End Unit_Test_Core
-
 
 abstract class Unit_Test_Case
 {
@@ -367,7 +360,7 @@ abstract class Unit_Test_Case
 
     public function assert_boolean($value, $debug = null)
     {
-        if (! is_bool($value)) {
+        if (!is_bool($value)) {
             throw new Kohana_Unit_Test_Exception(sprintf(Unit_Test::$lang['assert_boolean'], gettype($value), var_export($value, true)), $debug);
         }
 
@@ -385,7 +378,7 @@ abstract class Unit_Test_Case
 
     public function assert_integer($value, $debug = null)
     {
-        if (! is_int($value)) {
+        if (!is_int($value)) {
             throw new Kohana_Unit_Test_Exception(sprintf(Unit_Test::$lang['assert_integer'], gettype($value), var_export($value, true)), $debug);
         }
 
@@ -403,7 +396,7 @@ abstract class Unit_Test_Case
 
     public function assert_float($value, $debug = null)
     {
-        if (! is_float($value)) {
+        if (!is_float($value)) {
             throw new Kohana_Unit_Test_Exception(sprintf(Unit_Test::$lang['assert_float'], gettype($value), var_export($value, true)), $debug);
         }
 
@@ -421,7 +414,7 @@ abstract class Unit_Test_Case
 
     public function assert_array($value, $debug = null)
     {
-        if (! is_array($value)) {
+        if (!is_array($value)) {
             throw new Kohana_Unit_Test_Exception(sprintf(Unit_Test::$lang['assert_array'], gettype($value), var_export($value, true)), $debug);
         }
 
@@ -430,7 +423,7 @@ abstract class Unit_Test_Case
 
     public function assert_array_key($key, $array, $debug = null)
     {
-        if (! array_key_exists($key, $array)) {
+        if (!array_key_exists($key, $array)) {
             throw new Kohana_Unit_Test_Exception(sprintf(Unit_Test::$lang['assert_array_key'], gettype($key), var_export($key, true)), $debug);
         }
 
@@ -439,7 +432,7 @@ abstract class Unit_Test_Case
 
     public function assert_in_array($value, $array, $debug = null)
     {
-        if (! in_array($value, $array)) {
+        if (!in_array($value, $array)) {
             throw new Kohana_Unit_Test_Exception(sprintf(Unit_Test::$lang['assert_in_array'], gettype($value), var_export($value, true)), $debug);
         }
 
@@ -457,7 +450,7 @@ abstract class Unit_Test_Case
 
     public function assert_object($value, $debug = null)
     {
-        if (! is_object($value)) {
+        if (!is_object($value)) {
             throw new Kohana_Unit_Test_Exception(sprintf(Unit_Test::$lang['assert_object'], gettype($value), var_export($value, true)), $debug);
         }
 
@@ -493,7 +486,7 @@ abstract class Unit_Test_Case
 
     public function assert_empty($value, $debug = null)
     {
-        if (! empty($value)) {
+        if (!empty($value)) {
             throw new Kohana_Unit_Test_Exception(sprintf(Unit_Test::$lang['assert_empty'], gettype($value), var_export($value, true)), $debug);
         }
 
@@ -511,7 +504,7 @@ abstract class Unit_Test_Case
 
     public function assert_pattern($value, $regex, $debug = null)
     {
-        if (! is_string($value) || ! is_string($regex) || ! preg_match($regex, $value)) {
+        if (!is_string($value) || !is_string($regex) || !preg_match($regex, $value)) {
             throw new Kohana_Unit_Test_Exception(sprintf(Unit_Test::$lang['assert_pattern'], var_export($value, true), var_export($regex, true)), $debug);
         }
 
@@ -520,14 +513,13 @@ abstract class Unit_Test_Case
 
     public function assert_not_pattern($value, $regex, $debug = null)
     {
-        if (! is_string($value) || ! is_string($regex) || preg_match($regex, $value)) {
+        if (!is_string($value) || !is_string($regex) || preg_match($regex, $value)) {
             throw new Kohana_Unit_Test_Exception(sprintf(Unit_Test::$lang['assert_not_pattern'], var_export($value, true), var_export($regex, true)), $debug);
         }
 
         return $this;
     }
 } // End Unit_Test_Case
-
 
 class Kohana_Unit_Test_Exception extends Exception
 {
@@ -543,13 +535,13 @@ class Kohana_Unit_Test_Exception extends Exception
     public function __construct($message, $debug = null)
     {
         // Failure message
-        parent::__construct((string) $message);
+        parent::__construct((string)$message);
 
         // Extra user-defined debug info
         $this->debug = $debug;
 
         // Overwrite failure location
-        $trace = $this->getTrace();
+        $trace      = $this->getTrace();
         $this->file = $trace[0]['file'];
         $this->line = $trace[0]['line'];
     }

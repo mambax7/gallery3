@@ -1,11 +1,12 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Date helper class.
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class date_Core
 {
@@ -28,9 +29,7 @@ class date_Core
 
         // What voodoo is this? I have no idea... Geert can explain it though,
         // and that's good enough for me.
-        return ($timestamp['year']    << 25 | $timestamp['mon']     << 21 |
-                $timestamp['mday']    << 16 | $timestamp['hours']   << 11 |
-                $timestamp['minutes'] << 5  | $timestamp['seconds'] >> 1);
+        return ($timestamp['year'] << 25 | $timestamp['mon'] << 21 | $timestamp['mday'] << 16 | $timestamp['hours'] << 11 | $timestamp['minutes'] << 5 | $timestamp['seconds'] >> 1);
     }
 
     /**
@@ -42,7 +41,7 @@ class date_Core
     public static function dos2unix($timestamp = false)
     {
         $sec  = 2 * ($timestamp & 0x1f);
-        $min  = ($timestamp >>  5) & 0x3f;
+        $min  = ($timestamp >> 5) & 0x3f;
         $hrs  = ($timestamp >> 11) & 0x1f;
         $day  = ($timestamp >> 16) & 0x1f;
         $mon  = ($timestamp >> 21) & 0x0f;
@@ -89,12 +88,12 @@ class date_Core
     public static function seconds($step = 1, $start = 0, $end = 60)
     {
         // Always integer
-        $step = (int) $step;
+        $step = (int)$step;
 
         $seconds = [];
 
         for ($i = $start; $i < $end; $i += $step) {
-            $seconds[$i] = ($i < 10) ? '0'.$i : $i;
+            $seconds[$i] = ($i < 10) ? '0' . $i : $i;
         }
 
         return $seconds;
@@ -126,8 +125,8 @@ class date_Core
     public static function hours($step = 1, $long = false, $start = null)
     {
         // Default values
-        $step = (int) $step;
-        $long = (bool) $long;
+        $step  = (int)$step;
+        $long  = (bool)$long;
         $hours = [];
 
         // Set the default start if none was specified.
@@ -156,7 +155,7 @@ class date_Core
     public static function ampm($hour)
     {
         // Always integer
-        $hour = (int) $hour;
+        $hour = (int)$hour;
 
         return ($hour > 11) ? 'PM' : 'AM';
     }
@@ -170,7 +169,7 @@ class date_Core
      */
     public static function adjust($hour, $ampm)
     {
-        $hour = (int) $hour;
+        $hour = (int)$hour;
         $ampm = strtolower($ampm);
 
         switch ($ampm) {
@@ -178,12 +177,12 @@ class date_Core
                 if (12 == $hour) {
                     $hour = 0;
                 }
-            break;
+                break;
             case 'pm':
                 if ($hour < 12) {
                     $hour += 12;
                 }
-            break;
+                break;
         }
 
         return sprintf('%02s', $hour);
@@ -201,11 +200,11 @@ class date_Core
         static $months;
 
         // Always integers
-        $month = (int) $month;
-        $year  = (int) $year;
+        $month = (int)$month;
+        $year  = (int)$year;
 
         // Use the current year by default
-        $year  = (false == $year) ? date('Y') : $year;
+        $year = (false == $year) ? date('Y') : $year;
 
         // We use caching for months, because time functions are used
         if (empty($months[$year][$month])) {
@@ -243,8 +242,8 @@ class date_Core
     public static function years($start = false, $end = false)
     {
         // Default values
-        $start = (false === $start) ? date('Y') - 5 : (int) $start;
-        $end   = (false === $end) ? date('Y') + 5 : (int) $end;
+        $start = (false === $start) ? date('Y') - 5 : (int)$start;
+        $end   = (false === $end) ? date('Y') + 5 : (int)$end;
 
         $years = [];
 
@@ -269,7 +268,7 @@ class date_Core
     public static function timespan($time1, $time2 = null, $output = 'years,months,weeks,days,hours,minutes,seconds')
     {
         // Array with the output formats
-        $output = preg_split('/[^a-z]+/', strtolower((string) $output));
+        $output = preg_split('/[^a-z]+/', strtolower((string)$output));
 
         // Invalid output
         if (empty($output)) {
@@ -280,8 +279,8 @@ class date_Core
         extract(array_flip($output), EXTR_SKIP);
 
         // Default values
-        $time1  = max(0, (int) $time1);
-        $time2  = empty($time2) ? time() : max(0, (int) $time2);
+        $time1 = max(0, (int)$time1);
+        $time2 = empty($time2) ? time() : max(0, (int)$time2);
 
         // Calculate timespan (seconds)
         $timespan = abs($time1 - $time2);
@@ -290,22 +289,22 @@ class date_Core
         // Years and months do not match the formula exactly, due to leap years.
 
         // Years ago, 60 * 60 * 24 * 365
-        isset($years) && $timespan -= 31556926 * ($years = (int) floor($timespan / 31556926));
+        isset($years) && $timespan -= 31556926 * ($years = (int)floor($timespan / 31556926));
 
         // Months ago, 60 * 60 * 24 * 30
-        isset($months) && $timespan -= 2629744 * ($months = (int) floor($timespan / 2629743.83));
+        isset($months) && $timespan -= 2629744 * ($months = (int)floor($timespan / 2629743.83));
 
         // Weeks ago, 60 * 60 * 24 * 7
-        isset($weeks) && $timespan -= 604800 * ($weeks = (int) floor($timespan / 604800));
+        isset($weeks) && $timespan -= 604800 * ($weeks = (int)floor($timespan / 604800));
 
         // Days ago, 60 * 60 * 24
-        isset($days) && $timespan -= 86400 * ($days = (int) floor($timespan / 86400));
+        isset($days) && $timespan -= 86400 * ($days = (int)floor($timespan / 86400));
 
         // Hours ago, 60 * 60
-        isset($hours) && $timespan -= 3600 * ($hours = (int) floor($timespan / 3600));
+        isset($hours) && $timespan -= 3600 * ($hours = (int)floor($timespan / 3600));
 
         // Minutes ago, 60
-        isset($minutes) && $timespan -= 60 * ($minutes = (int) floor($timespan / 60));
+        isset($minutes) && $timespan -= 60 * ($minutes = (int)floor($timespan / 60));
 
         // Seconds ago, 1
         isset($seconds) && $seconds = $timespan;
@@ -319,7 +318,7 @@ class date_Core
         // Return the difference
         $difference = [];
         foreach ($output as $key) {
-            if (isset($$key) && ! isset($deny[$key])) {
+            if (isset($$key) && !isset($deny[$key])) {
                 // Add requested key to the output
                 $difference[$key] = $$key;
             }
@@ -363,7 +362,7 @@ class date_Core
                 }
 
                 // Add the amount to the span
-                $span[] = ($name === $last ? ' and ' : ', ').$amount.' '.(1 === $amount ? inflector::singular($name) : $name);
+                $span[] = ($name === $last ? ' and ' : ', ') . $amount . ' ' . (1 === $amount ? inflector::singular($name) : $name);
             }
 
             // If the difference is less than 60 seconds, remove the preceding and.
@@ -375,7 +374,7 @@ class date_Core
             $difference = trim(implode('', $span), ',');
         } elseif (is_int($difference)) {
             // Single-value return
-            $difference = $difference.' '.(1 === $difference ? inflector::singular($output) : $output);
+            $difference = $difference . ' ' . (1 === $difference ? inflector::singular($output) : $output);
         }
 
         return $difference;

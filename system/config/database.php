@@ -8,10 +8,10 @@
  * connected at once. For more information about connecting to a database group
  * see the [Database] library.
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 
 /**

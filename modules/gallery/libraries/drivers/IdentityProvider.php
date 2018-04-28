@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -36,10 +37,10 @@ interface IdentityProvider_Driver
     /**
      * Create a new user.
      *
-     * @param string  $name
-     * @param string  $full_name
-     * @param string  $password
-     * @param string  $email
+     * @param string $name
+     * @param string $full_name
+     * @param string $password
+     * @param string $email
      * @return User_Definition the user object
      */
     public function create_user($name, $full_name, $password, $email);

@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -20,50 +21,50 @@
 class log_Core
 {
     const SUCCESS = 1;
-    const INFO    = 2;
+    const INFO = 2;
     const WARNING = 3;
-    const ERROR   = 4;
+    const ERROR = 4;
 
     /**
      * Report a successful event.
-     * @param string  $category  an arbitrary category we can use to filter log messages
-     * @param string  $message   a detailed log message
-     * @param string  $html      an html snippet presented alongside the log message to aid the admin
+     * @param string $category an arbitrary category we can use to filter log messages
+     * @param string $message  a detailed log message
+     * @param string $html     an html snippet presented alongside the log message to aid the admin
      */
-    public static function success($category, $message, $html= '')
+    public static function success($category, $message, $html = '')
     {
         self::_add($category, $message, $html, log::SUCCESS);
     }
 
     /**
      * Report an informational event.
-     * @param string  $category  an arbitrary category we can use to filter log messages
-     * @param string  $message   a detailed log message
-     * @param string  $html      an html snippet presented alongside the log message to aid the admin
+     * @param string $category an arbitrary category we can use to filter log messages
+     * @param string $message  a detailed log message
+     * @param string $html     an html snippet presented alongside the log message to aid the admin
      */
-    public static function info($category, $message, $html= '')
+    public static function info($category, $message, $html = '')
     {
         self::_add($category, $message, $html, log::INFO);
     }
 
     /**
      * Report that something went wrong, not fatal, but worth investigation.
-     * @param string  $category  an arbitrary category we can use to filter log messages
-     * @param string  $message   a detailed log message
-     * @param string  $html      an html snippet presented alongside the log message to aid the admin
+     * @param string $category an arbitrary category we can use to filter log messages
+     * @param string $message  a detailed log message
+     * @param string $html     an html snippet presented alongside the log message to aid the admin
      */
-    public static function warning($category, $message, $html= '')
+    public static function warning($category, $message, $html = '')
     {
         self::_add($category, $message, $html, log::WARNING);
     }
 
     /**
      * Report that something went wrong that should be fixed.
-     * @param string  $category  an arbitrary category we can use to filter log messages
-     * @param string  $message   a detailed log message
-     * @param string  $html      an html snippet presented alongside the log message to aid the admin
+     * @param string $category an arbitrary category we can use to filter log messages
+     * @param string $message  a detailed log message
+     * @param string $html     an html snippet presented alongside the log message to aid the admin
      */
-    public static function error($category, $message, $html= '')
+    public static function error($category, $message, $html = '')
     {
         self::_add($category, $message, $html, log::ERROR);
     }
@@ -71,25 +72,24 @@ class log_Core
     /**
      * Add a log entry.
      *
-     * @param string  $category  an arbitrary category we can use to filter log messages
-     * @param string  $message   a detailed log message
-     * @param integer $severity  INFO, WARNING or ERROR
-     * @param string  $html      an html snippet presented alongside the log message to aid the admin
+     * @param string  $category an arbitrary category we can use to filter log messages
+     * @param string  $message  a detailed log message
+     * @param integer $severity INFO, WARNING or ERROR
+     * @param string  $html     an html snippet presented alongside the log message to aid the admin
      */
     private static function _add($category, $message, $html, $severity)
     {
-        $log = ORM::factory('log');
-        $log->category = $category;
-        $log->message = $message;
-        $log->severity = $severity;
-        $log->html = $html;
-        $log->url = substr(url::abs_current(true), 0, 255);
-        $log->referer = request::referrer(null);
+        $log            = ORM::factory('log');
+        $log->category  = $category;
+        $log->message   = $message;
+        $log->severity  = $severity;
+        $log->html      = $html;
+        $log->url       = substr(url::abs_current(true), 0, 255);
+        $log->referer   = request::referrer(null);
         $log->timestamp = time();
-        $log->user_id = identity::active_user()->id;
+        $log->user_id   = identity::active_user()->id;
         $log->save();
     }
-
 
     /**
      * Convert a message severity to a CSS class
@@ -99,17 +99,17 @@ class log_Core
     public static function severity_class($severity)
     {
         switch ($severity) {
-    case log::SUCCESS:
-      return 'g-success';
+            case log::SUCCESS:
+                return 'g-success';
 
-    case log::INFO:
-      return 'g-info';
+            case log::INFO:
+                return 'g-info';
 
-    case log::WARNING:
-      return 'g-warning';
+            case log::WARNING:
+                return 'g-warning';
 
-    case log::ERROR:
-      return 'g-error';
-    }
+            case log::ERROR:
+                return 'g-error';
+        }
     }
 }

@@ -1,13 +1,14 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * FORGE (FORm GEneration) library.
  *
  * $Id: Forge.php 3326 2008-08-09 21:24:30Z Shadowhand $
  *
- * @package    Forge
- * @author     Kohana Team
+ * @package        Forge
+ * @author         Kohana Team
  * @copyright  (c) 2007-2008 Kohana Team
- * @license    http://kohanaphp.com/license.html
+ * @license        http://kohanaphp.com/license.html
  */
 class Forge_Core
 {
@@ -81,21 +82,21 @@ class Forge_Core
     public function __call($method, $args)
     {
         // Class name
-        $input = 'Form_'.ucfirst($method);
+        $input = 'Form_' . ucfirst($method);
 
         // Create the input
         switch (count($args)) {
             case 1:
                 $input = new $input($args[0]);
-            break;
+                break;
             case 2:
                 $input = new $input($args[0], $args[1]);
-            break;
+                break;
             default:
                 throw new Kohana_Exception('forge.invalid_input', $input);
         }
 
-        if (! ($input instanceof Form_Input) && ! ($input instanceof Forge)) {
+        if (!($input instanceof Form_Input) && !($input instanceof Forge)) {
             throw new Kohana_Exception('forge.unknown_input', get_class($input));
         }
 
@@ -195,7 +196,7 @@ class Forge_Core
      */
     public function error_format($string = '')
     {
-        if (false === strpos((string) $string, '{message}')) {
+        if (false === strpos((string)$string, '{message}')) {
             throw new Kohana_Exception('validation.error_format');
         }
 
@@ -228,15 +229,15 @@ class Forge_Core
 
                 // Compile the error messages for this input
                 $messages = '';
-                $errors = $input->error_messages();
-                if (is_array($errors) && ! empty($errors)) {
+                $errors   = $input->error_messages();
+                if (is_array($errors) && !empty($errors)) {
                     foreach ($errors as $error) {
                         // Replace the message with the error in the html error string
-                        $messages .= str_replace('{message}', $error, $this->error_format).$this->newline_char;
+                        $messages .= str_replace('{message}', $error, $this->error_format) . $this->newline_char;
                     }
                 }
 
-                $data[$input->name.'_errors'] = $messages;
+                $data[$input->name . '_errors'] = $messages;
             }
 
             $form->set($data);
@@ -245,9 +246,9 @@ class Forge_Core
 
             $form->set($this->template);
             $hidden = [];
-            if (! empty($this->hidden)) {
+            if (!empty($this->hidden)) {
                 foreach ($this->hidden as $input) {
-                    $hidden['name'] = $input->name;
+                    $hidden['name']  = $input->name;
                     $hidden['value'] = $input->value;
                 }
             }
@@ -267,7 +268,7 @@ class Forge_Core
             }
 
             // Set the form open and close
-            $form->open  = form::$form_type(arr::remove('action', $this->attr), $this->attr);
+            $form->open = form::$form_type(arr::remove('action', $this->attr), $this->attr);
             foreach ($this->hidden as $hidden) {
                 $form->open .= form::hidden($hidden->name, $hidden->value);
             }
@@ -285,6 +286,6 @@ class Forge_Core
      */
     public function __toString()
     {
-        return (string) $this->render();
+        return (string)$this->render();
     }
 } // End Forge

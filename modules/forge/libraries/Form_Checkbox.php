@@ -1,20 +1,21 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * FORGE checkbox input library.
  *
  * $Id: Form_Checkbox.php 3326 2008-08-09 21:24:30Z Shadowhand $
  *
- * @package    Forge
- * @author     Kohana Team
+ * @package        Forge
+ * @author         Kohana Team
  * @copyright  (c) 2007-2008 Kohana Team
- * @license    http://kohanaphp.com/license.html
+ * @license        http://kohanaphp.com/license.html
  */
 class Form_Checkbox_Core extends Form_Input
 {
     protected $data = [
-        'type' => 'checkbox',
-        'class' => 'checkbox',
-        'value' => '1',
+        'type'    => 'checkbox',
+        'class'   => 'checkbox',
+        'value'   => '1',
         'checked' => false,
     ];
 
@@ -56,10 +57,10 @@ class Form_Checkbox_Core extends Form_Input
 
         if ($label = arr::remove('label', $data)) {
             // There must be one space before the text
-            $label = ' '.ltrim($label);
+            $label = ' ' . ltrim($label);
         }
 
-        return '<label>'.form::input($data).html::clean($label).'</label>';
+        return '<label>' . form::input($data) . html::clean($label) . '</label>';
     }
 
     protected function load_value()

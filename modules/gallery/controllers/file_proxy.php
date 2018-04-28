@@ -17,6 +17,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
  * Proxy access to files in var/albums and var/resizes, making sure that the session user has
  * access to view these files.
@@ -29,10 +30,11 @@
 class File_Proxy_Controller extends Controller
 {
     const ALLOW_PRIVATE_GALLERY = true;
+
     public function __call($function, $args)
     {
 
-    // Force zlib compression off.  Image and movie files are already compressed and
+        // Force zlib compression off.  Image and movie files are already compressed and
         // recompressing them is CPU intensive.
         if (ini_get('zlib.output_compression')) {
             ini_set('zlib.output_compression', 'Off');
@@ -51,7 +53,7 @@ class File_Proxy_Controller extends Controller
         // Make sure that the request is for a file inside var
         $offset = strpos(rawurldecode($request_uri), $var_uri);
         if (0 !== $offset) {
-            $e = new Kohana_404_Exception();
+            $e                 = new Kohana_404_Exception();
             $e->test_fail_code = 1;
             throw $e;
         }
@@ -63,7 +65,7 @@ class File_Proxy_Controller extends Controller
         // path: foo/bar.jpg
         list($type, $path) = explode('/', $file_uri, 2);
         if ('resizes' != $type && 'albums' != $type && 'thumbs' != $type) {
-            $e = new Kohana_404_Exception();
+            $e                 = new Kohana_404_Exception();
             $e->test_fail_code = 2;
             throw $e;
         }
@@ -72,28 +74,28 @@ class File_Proxy_Controller extends Controller
         $item = item::find_by_path($path, $type);
 
         if (!$item->loaded()) {
-            $e = new Kohana_404_Exception();
+            $e                 = new Kohana_404_Exception();
             $e->test_fail_code = 3;
             throw $e;
         }
 
         // Make sure we have access to the item
         if (!access::can('view', $item)) {
-            $e = new Kohana_404_Exception();
+            $e                 = new Kohana_404_Exception();
             $e->test_fail_code = 4;
             throw $e;
         }
 
         // Make sure we have view_full access to the original
         if ('albums' == $type && !access::can('view_full', $item)) {
-            $e = new Kohana_404_Exception();
+            $e                 = new Kohana_404_Exception();
             $e->test_fail_code = 5;
             throw $e;
         }
 
         // Don't try to load a directory
         if ('albums' == $type && $item->is_album()) {
-            $e = new Kohana_404_Exception();
+            $e                 = new Kohana_404_Exception();
             $e->test_fail_code = 6;
             throw $e;
         }
@@ -110,7 +112,7 @@ class File_Proxy_Controller extends Controller
         }
 
         if (!file_exists($file)) {
-            $e = new Kohana_404_Exception();
+            $e                 = new Kohana_404_Exception();
             $e->test_fail_code = 7;
             throw $e;
         }

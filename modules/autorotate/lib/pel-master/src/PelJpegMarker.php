@@ -23,6 +23,7 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301 USA
  */
+
 namespace lsolesen\pel;
 
 /**
@@ -33,8 +34,8 @@ namespace lsolesen\pel;
  * operate on one argument which should be one of the class constants.
  * They will all be denoted by PelJpegMarker in the documentation.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
- * @author Johannes Weberhofer <jweberhofer@weberhofer.at>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Johannes Weberhofer <jweberhofer@weberhofer.at>
  *
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public
  *          License (GPL)
@@ -366,105 +367,105 @@ class PelJpegMarker
      * Values for marker's short names
      */
     protected static $jpegMarkerShort = [
-        self::SOF0 => 'SOF0',
-        self::SOF1 => 'SOF1',
-        self::SOF2 => 'SOF2',
-        self::SOF3 => 'SOF3',
-        self::SOF5 => 'SOF5',
-        self::SOF6 => 'SOF6',
-        self::SOF7 => 'SOF7',
-        self::SOF9 => 'SOF9',
+        self::SOF0  => 'SOF0',
+        self::SOF1  => 'SOF1',
+        self::SOF2  => 'SOF2',
+        self::SOF3  => 'SOF3',
+        self::SOF5  => 'SOF5',
+        self::SOF6  => 'SOF6',
+        self::SOF7  => 'SOF7',
+        self::SOF9  => 'SOF9',
         self::SOF10 => 'SOF10',
         self::SOF11 => 'SOF11',
         self::SOF13 => 'SOF13',
         self::SOF14 => 'SOF14',
         self::SOF15 => 'SOF15',
-        self::SOI => 'SOI',
-        self::EOI => 'EOI',
-        self::SOS => 'SOS',
-        self::COM => 'COM',
-        self::DHT => 'DHT',
-        self::JPG => 'JPG',
-        self::DAC => 'DAC',
-        self::RST0 => 'RST0',
-        self::RST1 => 'RST1',
-        self::RST2 => 'RST2',
-        self::RST3 => 'RST3',
-        self::RST4 => 'RST4',
-        self::RST5 => 'RST5',
-        self::RST6 => 'RST6',
-        self::RST7 => 'RST7',
-        self::DQT => 'DQT',
-        self::DNL => 'DNL',
-        self::DRI => 'DRI',
-        self::DHP => 'DHP',
-        self::EXP => 'EXP',
-        self::APP0 => 'APP0',
-        self::APP1 => 'APP1',
-        self::APP2 => 'APP2',
-        self::APP3 => 'APP3',
-        self::APP4 => 'APP4',
-        self::APP5 => 'APP5',
-        self::APP6 => 'APP6',
-        self::APP7 => 'APP7',
-        self::APP8 => 'APP8',
-        self::APP9 => 'APP9',
+        self::SOI   => 'SOI',
+        self::EOI   => 'EOI',
+        self::SOS   => 'SOS',
+        self::COM   => 'COM',
+        self::DHT   => 'DHT',
+        self::JPG   => 'JPG',
+        self::DAC   => 'DAC',
+        self::RST0  => 'RST0',
+        self::RST1  => 'RST1',
+        self::RST2  => 'RST2',
+        self::RST3  => 'RST3',
+        self::RST4  => 'RST4',
+        self::RST5  => 'RST5',
+        self::RST6  => 'RST6',
+        self::RST7  => 'RST7',
+        self::DQT   => 'DQT',
+        self::DNL   => 'DNL',
+        self::DRI   => 'DRI',
+        self::DHP   => 'DHP',
+        self::EXP   => 'EXP',
+        self::APP0  => 'APP0',
+        self::APP1  => 'APP1',
+        self::APP2  => 'APP2',
+        self::APP3  => 'APP3',
+        self::APP4  => 'APP4',
+        self::APP5  => 'APP5',
+        self::APP6  => 'APP6',
+        self::APP7  => 'APP7',
+        self::APP8  => 'APP8',
+        self::APP9  => 'APP9',
         self::APP10 => 'APP10',
         self::APP11 => 'APP11',
         self::APP12 => 'APP12',
         self::APP13 => 'APP13',
         self::APP14 => 'APP14',
         self::APP15 => 'APP15',
-        self::JPG0 => 'JPG0',
-        self::JPG1 => 'JPG1',
-        self::JPG2 => 'JPG2',
-        self::JPG3 => 'JPG3',
-        self::JPG4 => 'JPG4',
-        self::JPG5 => 'JPG5',
-        self::JPG6 => 'JPG6',
-        self::JPG7 => 'JPG7',
-        self::JPG8 => 'JPG8',
-        self::JPG9 => 'JPG9',
+        self::JPG0  => 'JPG0',
+        self::JPG1  => 'JPG1',
+        self::JPG2  => 'JPG2',
+        self::JPG3  => 'JPG3',
+        self::JPG4  => 'JPG4',
+        self::JPG5  => 'JPG5',
+        self::JPG6  => 'JPG6',
+        self::JPG7  => 'JPG7',
+        self::JPG8  => 'JPG8',
+        self::JPG9  => 'JPG9',
         self::JPG10 => 'JPG10',
         self::JPG11 => 'JPG11',
         self::JPG12 => 'JPG12',
         self::JPG13 => 'JPG13',
-        self::COM => 'COM'
+        self::COM   => 'COM'
     ];
 
     /**
      * Values for marker's descriptions names.
      */
     protected static $jpegMarkerDescriptions = [
-        self::SOF0 => 'Encoding (baseline)',
-        self::SOF1 => 'Encoding (extended sequential)',
-        self::SOF2 => 'Encoding (progressive)',
-        self::SOF3 => 'Encoding (lossless)',
-        self::SOF5 => 'Encoding (differential sequential)',
-        self::SOF6 => 'Encoding (differential progressive)',
-        self::SOF7 => 'Encoding (differential lossless)',
-        self::SOF9 => 'Encoding (extended sequential, arithmetic)',
+        self::SOF0  => 'Encoding (baseline)',
+        self::SOF1  => 'Encoding (extended sequential)',
+        self::SOF2  => 'Encoding (progressive)',
+        self::SOF3  => 'Encoding (lossless)',
+        self::SOF5  => 'Encoding (differential sequential)',
+        self::SOF6  => 'Encoding (differential progressive)',
+        self::SOF7  => 'Encoding (differential lossless)',
+        self::SOF9  => 'Encoding (extended sequential, arithmetic)',
         self::SOF10 => 'Encoding (progressive, arithmetic)',
         self::SOF11 => 'Encoding (lossless, arithmetic)',
         self::SOF13 => 'Encoding (differential sequential, arithmetic)',
         self::SOF14 => 'Encoding (differential progressive, arithmetic)',
         self::SOF15 => 'Encoding (differential lossless, arithmetic)',
-        self::SOI => 'Start of image',
-        self::EOI => 'End of image',
-        self::SOS => 'Start of scan',
-        self::COM => 'Comment',
-        self::DHT => 'Define Huffman table',
-        self::JPG => 'Extension',
-        self::DAC => 'Define arithmetic coding conditioning',
-        'RST' => 'Restart %d',
-        self::DQT => 'Define quantization table',
-        self::DNL => 'Define number of lines',
-        self::DRI => 'Define restart interval',
-        self::DHP => 'Define hierarchical progression',
-        self::EXP => 'Expand reference component',
-        'APP' => 'Application segment %d',
-        'JPG' => 'Extension %d',
-        self::COM => 'Comment'
+        self::SOI   => 'Start of image',
+        self::EOI   => 'End of image',
+        self::SOS   => 'Start of scan',
+        self::COM   => 'Comment',
+        self::DHT   => 'Define Huffman table',
+        self::JPG   => 'Extension',
+        self::DAC   => 'Define arithmetic coding conditioning',
+        'RST'       => 'Restart %d',
+        self::DQT   => 'Define quantization table',
+        self::DNL   => 'Define number of lines',
+        self::DRI   => 'Define restart interval',
+        self::DHP   => 'Define hierarchical progression',
+        self::EXP   => 'Expand reference component',
+        'APP'       => 'Application segment %d',
+        'JPG'       => 'Extension %d',
+        self::COM   => 'Comment'
     ];
 
     /**
@@ -527,12 +528,7 @@ class PelJpegMarker
             if (array_key_exists($marker, self::$jpegMarkerDescriptions)) {
                 return self::$jpegMarkerDescriptions[$marker];
             } else {
-                $splitted = preg_split(
-                    "/(\d+)/",
-                    self::$jpegMarkerShort[$marker],
-                    - 1,
-                    PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE
-                );
+                $splitted = preg_split("/(\d+)/", self::$jpegMarkerShort[$marker], -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
                 if ((2 == count($splitted)) && array_key_exists($splitted[0], self::$jpegMarkerDescriptions)) {
                     return Pel::fmt(self::$jpegMarkerDescriptions[$splitted[0]], $splitted[1]);
                 }

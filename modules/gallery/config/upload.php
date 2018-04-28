@@ -23,7 +23,7 @@
  *
  * This path is relative to your index file. Absolute paths are also supported.
  */
-$config['directory'] = VARPATH.'uploads';
+$config['directory'] = VARPATH . 'uploads';
 
 /**
  * Enable or disable directory creation.

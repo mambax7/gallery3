@@ -1,13 +1,14 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Session cookie driver.
  *
  * $Id: Cookie.php 4729 2009-12-29 20:35:19Z isaiah $
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class Session_Cookie_Driver implements Session_Driver
 {
@@ -16,7 +17,7 @@ class Session_Cookie_Driver implements Session_Driver
 
     public function __construct()
     {
-        $this->cookie_name = Kohana::config('session.name').'_data';
+        $this->cookie_name = Kohana::config('session.name') . '_data';
 
         if (Kohana::config('session.encryption')) {
             $this->encrypt = Encrypt::instance();
@@ -37,7 +38,7 @@ class Session_Cookie_Driver implements Session_Driver
 
     public function read($id)
     {
-        $data = (string) cookie::get($this->cookie_name);
+        $data = (string)cookie::get($this->cookie_name);
 
         if ('' == $data) {
             return $data;
@@ -48,14 +49,14 @@ class Session_Cookie_Driver implements Session_Driver
 
     public function write($id, $data)
     {
-        if (! Session::$should_save) {
+        if (!Session::$should_save) {
             return true;
         }
 
         $data = empty($this->encrypt) ? base64_encode($data) : $this->encrypt->encode($data);
 
         if (strlen($data) > 4048) {
-            Kohana_Log::add('error', 'Session ('.$id.') data exceeds the 4KB limit, ignoring write.');
+            Kohana_Log::add('error', 'Session (' . $id . ') data exceeds the 4KB limit, ignoring write.');
             return false;
         }
 

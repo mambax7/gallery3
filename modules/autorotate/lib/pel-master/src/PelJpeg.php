@@ -57,7 +57,7 @@ namespace lsolesen\pel;
  * data could be valid JPEG data. The {@link PelTiff::isValid()}
  * function does the same for TIFF images.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @package PEL
  */
 class PelJpeg
@@ -142,7 +142,7 @@ class PelJpeg
      */
     protected static function getJpgSectionStart($d)
     {
-        for ($i = 0; $i < 7; $i ++) {
+        for ($i = 0; $i < 7; $i++) {
             if (0xFF != $d->getByte($i)) {
                 break;
             }
@@ -247,7 +247,7 @@ class PelJpeg
 
                         $length = $d->getSize();
                         while (0xFF != $d->getByte($length - 2) || $d->getByte($length - 1) != PelJpegMarker::EOI) {
-                            $length --;
+                            $length--;
                         }
 
                         $this->jpeg_data = $d->getClone(0, $length - 2);
@@ -298,12 +298,12 @@ class PelJpeg
     public function setExif(PelExif $exif)
     {
         $app0_offset = 1;
-        $app1_offset = - 1;
+        $app1_offset = -1;
 
         /* Search through all sections looking for APP0 or APP1. */
         $sections_count = count($this->sections);
-        for ($i = 0; $i < $sections_count; $i ++) {
-            if (! empty($this->sections[$i][0])) {
+        for ($i = 0; $i < $sections_count; $i++) {
+            if (!empty($this->sections[$i][0])) {
                 $section = $this->sections[$i];
                 if ($section[0] == PelJpegMarker::APP0) {
                     $app0_offset = $i;
@@ -338,12 +338,12 @@ class PelJpeg
     public function setICC(PelJpegContent $icc)
     {
         $app1_offset = 1;
-        $app2_offset = - 1;
+        $app2_offset = -1;
 
         /* Search through all sections looking for APP0 or APP1. */
         $count_sections = count($this->sections);
-        for ($i = 0; $i < $count_sections; $i ++) {
-            if (! empty($this->sections[$i][0])) {
+        for ($i = 0; $i < $count_sections; $i++) {
+            if (!empty($this->sections[$i][0])) {
                 if ($this->sections[$i][0] == PelJpegMarker::APP1) {
                     $app1_offset = $i;
                 } elseif ($this->sections[$i][0] == PelJpegMarker::APP2) {
@@ -376,7 +376,7 @@ class PelJpeg
     public function getExif()
     {
         $sections_count = count($this->sections);
-        for ($i = 0; $i < $sections_count; $i ++) {
+        for ($i = 0; $i < $sections_count; $i++) {
             $section = $this->getSection(PelJpegMarker::APP1, $i);
             if ($section instanceof PelExif) {
                 return $section;
@@ -416,7 +416,7 @@ class PelJpeg
                 array_splice($this->sections, $idx, 1);
                 $idx--;
             } else {
-                ++ $idx;
+                ++$idx;
             }
         }
     }
@@ -505,7 +505,7 @@ class PelJpeg
         foreach ($this->sections as $s) {
             if ($s[0] == $marker) {
                 if ($skip > 0) {
-                    $skip --;
+                    $skip--;
                 } else {
                     return $s[1];
                 }
@@ -616,11 +616,11 @@ class PelJpeg
      */
     public function __toString()
     {
-        $str = Pel::tra("Dumping JPEG data...\n");
+        $str            = Pel::tra("Dumping JPEG data...\n");
         $count_sections = count($this->sections);
-        for ($i = 0; $i < $count_sections; $i ++) {
-            $m = $this->sections[$i][0];
-            $c = $this->sections[$i][1];
+        for ($i = 0; $i < $count_sections; $i++) {
+            $m   = $this->sections[$i][0];
+            $c   = $this->sections[$i][1];
             $str .= Pel::fmt("Section %d (marker 0x%02X - %s):\n", $i, $m, PelJpegMarker::getName($m));
             $str .= Pel::fmt("  Description: %s\n", PelJpegMarker::getDescription($m));
 

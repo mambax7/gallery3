@@ -22,6 +22,7 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301 USA
  */
+
 namespace lsolesen\pel;
 
 /**
@@ -33,7 +34,7 @@ namespace lsolesen\pel;
  * descendants of the {@link PelEntry} class --- the class itself is
  * abstract and so it cannot be instantiated.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public
  *          License (GPL)
  * @package PEL
@@ -49,8 +50,8 @@ use lsolesen\pel\PelTag;
  * a constraint. The documentation for each tag in {@link PelTag}
  * explains the expected number of components.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
- * @package PEL
+ * @author     Martin Geisler <mgeisler@users.sourceforge.net>
+ * @package    PEL
  * @subpackage Exception
  */
 class PelWrongComponentCountException extends \lsolesen\pel\PelEntryException
@@ -75,7 +76,7 @@ class PelWrongComponentCountException extends \lsolesen\pel\PelEntryException
     public function __construct($type, $tag, $found, $expected)
     {
         parent::__construct('Wrong number of components found for %s tag: %d. ' . 'Expected %d.', PelTag::getName($type, $tag), $found, $expected);
-        $this->tag = $tag;
+        $this->tag  = $tag;
         $this->type = $type;
     }
 }

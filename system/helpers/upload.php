@@ -1,12 +1,13 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Upload helper class for working with the global $_FILES
  * array and Validation library.
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class upload_Core
 {
@@ -27,7 +28,7 @@ class upload_Core
 
         if (null === $filename) {
             // Use the default filename, with a timestamp pre-pended
-            $filename = time().$file['name'];
+            $filename = time() . $file['name'];
         }
 
         if (true === Kohana::config('upload.remove_spaces')) {
@@ -41,18 +42,18 @@ class upload_Core
         }
 
         // Make sure the directory ends with a slash
-        $directory = rtrim($directory, '/').'/';
+        $directory = rtrim($directory, '/') . '/';
 
-        if (! is_dir($directory) && true === Kohana::config('upload.create_directories')) {
+        if (!is_dir($directory) && true === Kohana::config('upload.create_directories')) {
             // Create the upload directory
             mkdir($directory, 0777, true);
         }
 
-        if (! is_writable($directory)) {
+        if (!is_writable($directory)) {
             throw new Kohana_Exception('The upload destination folder, :dir:, does not appear to be writable.', [':dir:' => $directory]);
         }
 
-        if (is_uploaded_file($file['tmp_name']) && move_uploaded_file($file['tmp_name'], $filename = $directory.$filename)) {
+        if (is_uploaded_file($file['tmp_name']) && move_uploaded_file($file['tmp_name'], $filename = $directory . $filename)) {
             if (false !== $chmod) {
                 // Set permissions on filename
                 chmod($filename, $chmod);
@@ -70,37 +71,37 @@ class upload_Core
     /**
      * Tests if input data is valid file type, even if no upload is present.
      *
-     * @param   array  $_FILES item
+     * @param   array $_FILES item
      * @return  bool
      */
     public static function valid($file)
     {
         return (is_array($file)
-            && isset($file['error'])
-            && isset($file['name'])
-            && isset($file['type'])
-            && isset($file['tmp_name'])
-            && isset($file['size']));
+                && isset($file['error'])
+                && isset($file['name'])
+                && isset($file['type'])
+                && isset($file['tmp_name'])
+                && isset($file['size']));
     }
 
     /**
      * Tests if input data has valid upload data.
      *
-     * @param   array    $_FILES item
+     * @param   array $_FILES item
      * @return  bool
      */
     public static function required(array $file)
     {
         return (isset($file['tmp_name'])
-            && isset($file['error'])
-            && is_uploaded_file($file['tmp_name'])
-            && UPLOAD_ERR_OK === (int)$file['error']);
+                && isset($file['error'])
+                && is_uploaded_file($file['tmp_name'])
+                && UPLOAD_ERR_OK === (int)$file['error']);
     }
 
     /**
      * Validation rule to test if an uploaded file is allowed by extension.
      *
-     * @param   array    $_FILES item
+     * @param   array $_FILES item
      * @param   array    allowed file extensions
      * @return  bool
      */
@@ -114,7 +115,7 @@ class upload_Core
         $extension = strtolower(substr(strrchr($file['name'], '.'), 1));
 
         // Make sure there is an extension and that the extension is allowed
-        return (! empty($extension) && in_array($extension, $allowed_types));
+        return (!empty($extension) && in_array($extension, $allowed_types));
     }
 
     /**
@@ -123,7 +124,7 @@ class upload_Core
      * B is the byte modifier: (B)ytes, (K)ilobytes, (M)egabytes, (G)igabytes.
      * Eg: to limit the size to 1MB or less, you would use "1M".
      *
-     * @param   array    $_FILES item
+     * @param   array $_FILES item
      * @param   array    maximum file size
      * @return  bool
      */
@@ -136,16 +137,24 @@ class upload_Core
         // Only one size is allowed
         $size = strtoupper($size[0]);
 
-        if (! preg_match('/[0-9]++[BKMG]/', $size)) {
+        if (!preg_match('/[0-9]++[BKMG]/', $size)) {
             return false;
         }
 
         // Make the size into a power of 1024
         switch (substr($size, -1)) {
-            case 'G': $size = (int)$size * pow(1024, 3); break;
-            case 'M': $size = (int)$size * pow(1024, 2); break;
-            case 'K': $size = (int)$size * pow(1024, 1); break;
-            default:  $size = (int)$size;                break;
+            case 'G':
+                $size = (int)$size * pow(1024, 3);
+                break;
+            case 'M':
+                $size = (int)$size * pow(1024, 2);
+                break;
+            case 'K':
+                $size = (int)$size * pow(1024, 1);
+                break;
+            default:
+                $size = (int)$size;
+                break;
         }
 
         // Test that the file is under or equal to the max size

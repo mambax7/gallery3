@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -22,8 +23,8 @@ class Num_Helper_Test extends Gallery_Unit_Test_Case
     public function convert_to_bytes_test()
     {
         $this->assert_equal(5 * 1024, num::convert_to_bytes('5K'));
-        $this->assert_equal(3 * 1024*1024, num::convert_to_bytes('3M'));
-        $this->assert_equal(4 * 1024*1024*1024, num::convert_to_bytes('4G'));
+        $this->assert_equal(3 * 1024 * 1024, num::convert_to_bytes('3M'));
+        $this->assert_equal(4 * 1024 * 1024 * 1024, num::convert_to_bytes('4G'));
     }
 
     public function convert_to_human_readable_test()

@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -23,7 +24,7 @@ class akismet_Core
 
     public static function get_configure_form()
     {
-        $form = new Forge('admin/akismet', '', 'post', ['id' => 'g-configure-akismet-form']);
+        $form  = new Forge('admin/akismet', '', 'post', ['id' => 'g-configure-akismet-form']);
         $group = $form->group('configure_akismet')->label(t('Configure Akismet'));
         $group->input('api_key')->label(t('API Key'))->value(module::get_var('akismet', 'api_key'))
               ->callback('akismet::validate_key')
@@ -34,7 +35,7 @@ class akismet_Core
 
     /**
      * Check a comment against Akismet and return "spam", "ham" or "unknown".
-     * @param  Comment_Model  $comment  A comment to check
+     * @param  Comment_Model $comment A comment to check
      * @return $string "spam", "ham" or "unknown"
      */
     public static function check_comment($comment)
@@ -43,9 +44,9 @@ class akismet_Core
             return;
         }
 
-        $request = self::_build_request('comment-check', $comment);
+        $request  = self::_build_request('comment-check', $comment);
         $response = self::_http_post($request);
-        $answer = $response->body[0];
+        $answer   = $response->body[0];
         if ('true' == $answer) {
             return 'spam';
         } elseif ('false' == $answer) {
@@ -57,7 +58,7 @@ class akismet_Core
 
     /**
      * Tell Akismet that this comment is spam
-     * @param  Comment_Model  $comment  A comment to check
+     * @param  Comment_Model $comment A comment to check
      */
     public static function submit_spam($comment)
     {
@@ -71,7 +72,7 @@ class akismet_Core
 
     /**
      * Tell Akismet that this comment is ham
-     * @param  Comment_Model  $comment  A comment to check
+     * @param  Comment_Model $comment A comment to check
      */
     public static function submit_ham($comment)
     {
@@ -85,20 +86,19 @@ class akismet_Core
 
     /**
      * Check an API Key against Akismet to make sure that it's valid
-     * @param  string   $api_key the API key
+     * @param  string $api_key the API key
      * @return boolean
      */
     public static function validate_key($api_key_input)
     {
         if ($api_key_input->value) {
-            $request = self::_build_verify_request($api_key_input->value);
+            $request  = self::_build_verify_request($api_key_input->value);
             $response = self::_http_post($request, 'rest.akismet.com');
             if ('valid' != $response->body[0]) {
                 $api_key_input->add_error('invalid', 1);
             }
         }
     }
-
 
     public static function check_config()
     {
@@ -115,14 +115,13 @@ class akismet_Core
         }
     }
 
-
     public static function _build_verify_request($api_key)
     {
-        $base_url = url::base(false, 'http');
+        $base_url     = url::base(false, 'http');
         $query_string = "key={$api_key}&blog=$base_url";
 
-        $version = module::get_version('akismet');
-        $http_request  = "POST /1.1/verify-key HTTP/1.0\r\n";
+        $version      = module::get_version('akismet');
+        $http_request = "POST /1.1/verify-key HTTP/1.0\r\n";
         $http_request .= "Host: rest.akismet.com\r\n";
         $http_request .= "Content-Type: application/x-www-form-urlencoded; charset=UTF-8\r\n";
         $http_request .= 'Content-Length: ' . strlen($query_string) . "\r\n";
@@ -164,8 +163,8 @@ class akismet_Core
         }
         $query_string = implode('&', $query_string);
 
-        $version = module::get_version('akismet');
-        $http_request  = "POST /1.1/$function HTTP/1.0\r\n";
+        $version      = module::get_version('akismet');
+        $http_request = "POST /1.1/$function HTTP/1.0\r\n";
         $http_request .= 'Host: ' . module::get_var('akismet', 'api_key') . ".rest.akismet.com\r\n";
         $http_request .= "Content-Type: application/x-www-form-urlencoded; charset=UTF-8\r\n";
         $http_request .= 'Content-Length: ' . strlen($query_string) . "\r\n";
@@ -176,7 +175,7 @@ class akismet_Core
         return $http_request;
     }
 
-    private static function _http_post($http_request, $host=null)
+    private static function _http_post($http_request, $host = null)
     {
         if (!$host) {
             $host = module::get_var('akismet', 'api_key') . '.rest.akismet.com';
@@ -191,8 +190,8 @@ class akismet_Core
             }
             fclose($fs);
             list($headers, $body) = explode("\r\n\r\n", $response);
-            $headers = explode("\r\n", $headers);
-            $body = explode("\r\n", $body);
+            $headers  = explode("\r\n", $headers);
+            $body     = explode("\r\n", $body);
             $response = new ArrayObject(
                 ['headers' => $headers, 'body' => $body],
                 ArrayObject::ARRAY_AS_PROPS

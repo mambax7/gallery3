@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -27,22 +28,14 @@ class Kohana_Exception extends Kohana_Exception_Core
         if ($e instanceof Kohana_404_Exception) {
             return 'File not found: ' . rawurlencode(Router::$complete_uri);
         } else {
-            return sprintf(
-        "%s [ %s ]: %s\n%s [ %s ]\n%s",
-        get_class($e),
-          $e->getCode(),
-          strip_tags($e->getMessage()),
-        $e->getFile(),
-          $e->getLine(),
-        $e->getTraceAsString()
-      );
+            return sprintf("%s [ %s ]: %s\n%s [ %s ]\n%s", get_class($e), $e->getCode(), strip_tags($e->getMessage()), $e->getFile(), $e->getLine(), $e->getTraceAsString());
         }
     }
 
     /**
      * @see Kohana_Exception::dump()
      */
-    public static function dump($value, $length=128, $max_level=5)
+    public static function dump($value, $length = 128, $max_level = 5)
     {
         return self::safe_dump($value, null, $length, $max_level);
     }
@@ -51,7 +44,7 @@ class Kohana_Exception extends Kohana_Exception_Core
      * A safer version of dump(), eliding sensitive information in the dumped
      * data, such as session ids and passwords / hashes.
      */
-    public static function safe_dump($value, $key, $length=128, $max_level=5)
+    public static function safe_dump($value, $key, $length = 128, $max_level = 5)
     {
         return parent::dump(self::_sanitize_for_dump($value, $key, $max_level), $length, $max_level);
     }
@@ -60,7 +53,8 @@ class Kohana_Exception extends Kohana_Exception_Core
      * Elides sensitive data which shouldn't be echoed to the client,
      * such as passwords, and other secrets.
      */
-    /* Visible for testing*/ public static function _sanitize_for_dump($value, $key=null, $max_level)
+    /* Visible for testing*/
+    public static function _sanitize_for_dump($value, $key = null, $max_level)
     {
         // Better elide too much than letting something through.
         // Note: unanchored match is intended.
@@ -69,10 +63,9 @@ class Kohana_Exception extends Kohana_Exception_Core
             return $value;
         }
 
-        $sensitive_info_pattern =
-      '/(password|pass|email|hash|private_key|session_id|session|g3sid|csrf|secret)/i';
-        if (preg_match($sensitive_info_pattern, $key) ||
-        (is_string($value) && preg_match('/[a-f0-9]{20,}/i', $value))) {
+        $sensitive_info_pattern = '/(password|pass|email|hash|private_key|session_id|session|g3sid|csrf|secret)/i';
+        if (preg_match($sensitive_info_pattern, $key)
+            || (is_string($value) && preg_match('/[a-f0-9]{20,}/i', $value))) {
             return 'removed for display';
         } elseif (is_object($value)) {
             if ($value instanceof Database) {
@@ -81,16 +74,16 @@ class Kohana_Exception extends Kohana_Exception_Core
             } elseif ($value instanceof User_Model) {
                 return get_class($value) . ' object for "' . $value->name . '" - details omitted for display';
             }
-            return self::_sanitize_for_dump((array) $value, $key, $max_level - 1);
+            return self::_sanitize_for_dump((array)$value, $key, $max_level - 1);
         } elseif (is_array($value)) {
             $result = [];
             foreach ($value as $k => $v) {
-                $actual_key = $k;
+                $actual_key      = $k;
                 $key_for_display = $k;
                 if ("\x00" === $k[0]) {
                     // Remove the access level from the variable name
-                    $actual_key = substr($k, strrpos($k, "\x00") + 1);
-                    $access = '*' === $k[1] ? 'protected' : 'private';
+                    $actual_key      = substr($k, strrpos($k, "\x00") + 1);
+                    $access          = '*' === $k[1] ? 'protected' : 'private';
                     $key_for_display = "$access: $actual_key";
                 }
                 if (is_object($v)) {

@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -32,12 +33,12 @@ class comment_theme_Core
 
     public static function photo_bottom($theme)
     {
-        $block = new Block;
+        $block         = new Block;
         $block->css_id = 'g-comments';
-        $block->title = t('Comments');
+        $block->title  = t('Comments');
         $block->anchor = 'comments';
 
-        $view = new View('comments.html');
+        $view           = new View('comments.html');
         $view->comments = ORM::factory('comment')
       ->where('item_id', '=', $theme->item()->id)
       ->where('state', '=', 'published')

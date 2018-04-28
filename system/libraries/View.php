@@ -1,14 +1,15 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Loads and displays Kohana view files. Can also handle output of some binary
  * files, such as image, Javascript, and CSS files.
  *
  * $Id: View.php 4729 2009-12-29 20:35:19Z isaiah $
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class View_Core
 {
@@ -49,7 +50,7 @@ class View_Core
             $this->set_filename($name, $type);
         }
 
-        if (is_array($data) && ! empty($data)) {
+        if (is_array($data) && !empty($data)) {
             // Preload data using array_merge, to allow user extensions
             $this->kohana_local_data = array_merge($this->kohana_local_data, $data);
         }
@@ -82,13 +83,13 @@ class View_Core
             $this->kohana_filetype = EXT;
         } else {
             // Check if the filetype is allowed by the configuration
-            if (! in_array($type, Kohana::config('view.allowed_filetypes'))) {
+            if (!in_array($type, Kohana::config('view.allowed_filetypes'))) {
                 throw new Kohana_Exception('The requested filetype, .:type:, is not allowed in your view configuration file', [':type:' => $type]);
             }
 
             // Load the filename and set the content type
             $this->kohana_filename = Kohana::find_file('views', $name, true, $type);
-            $this->kohana_filetype = Kohana::config('mimes.'.$type);
+            $this->kohana_filetype = Kohana::config('mimes.' . $type);
 
             if (null == $this->kohana_filetype) {
                 // Use the specified type
@@ -124,7 +125,7 @@ class View_Core
      * this method can take an array of properties to test simultaneously.
      *
      * @param string $key property name to test for
-     * @param array $key array of property names to test for
+     * @param array  $key array of property names to test for
      * @return boolean property test result
      * @return array associative array of keys and boolean test result
      */
@@ -192,10 +193,7 @@ class View_Core
         } elseif (isset($this->$key)) {
             return $this->$key;
         } else {
-            throw new Kohana_Exception(
-                'Undefined view variable: :var',
-                [':var' => $key]
-            );
+            throw new Kohana_Exception('Undefined view variable: :var', [':var' => $key]);
         }
     }
 
@@ -210,7 +208,7 @@ class View_Core
             return $this->render();
         } catch (Exception $e) {
             Kohana_Exception::handle($e);
-            return (string) '';
+            return (string)'';
         }
     }
 
@@ -252,7 +250,7 @@ class View_Core
             }
         } else {
             // Set the content type and size
-            header('Content-Type: '.$this->kohana_filetype[0]);
+            header('Content-Type: ' . $this->kohana_filetype[0]);
 
             if (true === $print) {
                 if ($file = fopen($this->kohana_filename, 'rb')) {

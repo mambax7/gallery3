@@ -1,11 +1,12 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Download helper class.
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class download_Core
 {
@@ -23,7 +24,7 @@ class download_Core
     {
         $filename = basename($filename);
 
-        header('Content-Disposition: attachment; filename="'.$filename.'"');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
 
         return $filename;
     }
@@ -51,7 +52,7 @@ class download_Core
         }
 
         // Retrieve MIME type by extension
-        $mime = Kohana::config('mimes.'.strtolower(substr(strrchr($filename, '.'), 1)));
+        $mime = Kohana::config('mimes.' . strtolower(substr(strrchr($filename, '.'), 1)));
         $mime = empty($mime) ? 'application/octet-stream' : $mime[0];
 
         // Close output buffers
@@ -62,7 +63,7 @@ class download_Core
 
         // Send headers
         header("Content-Type: $mime");
-        header('Content-Length: '.sprintf('%d', $filesize));
+        header('Content-Length: ' . sprintf('%d', $filesize));
         header('Content-Transfer-Encoding: binary');
 
         // Send data

@@ -21,8 +21,8 @@
 define('IN_PRODUCTION', true);
 
 // Gallery requires PHP 5.2+
-version_compare(PHP_VERSION, '5.2.3', '<') and
-exit("Gallery requires PHP 5.2.3 or newer (you're using " . PHP_VERSION . ')');
+version_compare(PHP_VERSION, '5.2.3', '<')
+&& exit("Gallery requires PHP 5.2.3 or newer (you're using " . PHP_VERSION . ')');
 
 // Gallery is not supported on Windows.
 if ('WIN' === strtoupper(substr(PHP_OS, 0, 3))) {
@@ -36,7 +36,7 @@ if (!ini_get('date.timezone')) {
 }
 
 // Gallery requires short_tags to be on
-!ini_get('short_open_tag') and exit('Gallery requires short_open_tag to be on.');
+!ini_get('short_open_tag') && exit('Gallery requires short_open_tag to be on.');
 
 // Suppress errors.  For information on how to debug Gallery 3, see:
 // http://codex.galleryproject.org/Gallery3:FAQ#How_do_I_see_debug_information.3F
@@ -70,38 +70,38 @@ define('SYSPATH', realpath('system') . '/');
 // We only accept a few controllers on the command line
 if (PHP_SAPI == 'cli') {
     switch ($arg_1 = $_SERVER['argv'][1]) {
-  case 'install':
-    include('installer/index.php');
-    exit(0);
-  case 'upgrade':
-  case 'package':
-      $_SERVER['argv'] = ['index.php', "{$arg_1}r/$arg_1"];
-    define('TEST_MODE', 0);
-    define('VARPATH', realpath('var') . '/');
-    break;
+        case 'install':
+            include('installer/index.php');
+            exit(0);
+        case 'upgrade':
+        case 'package':
+            $_SERVER['argv'] = ['index.php', "{$arg_1}r/$arg_1"];
+            define('TEST_MODE', 0);
+            define('VARPATH', realpath('var') . '/');
+            break;
 
-  case 'test':
-    array_splice($_SERVER['argv'], 1, 1, 'gallery_unit_test');
-    define('TEST_MODE', 1);
-    if (!is_dir('test/var')) {
-        @mkdir('test/var', 0777, true);
-        @mkdir('test/var/logs', 0777, true);
+        case 'test':
+            array_splice($_SERVER['argv'], 1, 1, 'gallery_unit_test');
+            define('TEST_MODE', 1);
+            if (!is_dir('test/var')) {
+                @mkdir('test/var', 0777, true);
+                @mkdir('test/var/logs', 0777, true);
+            }
+            @copy('var/database.php', 'test/var/database.php');
+            define('VARPATH', realpath('test/var') . '/');
+            break;
+
+        default:
+            print "To install:\n";
+            print "  php index.php install -d database -h host -u user -p password -x table_prefix -g3p gallery3_admin_password \n\n";
+            print "To upgrade:\n";
+            print "  php index.php upgrade\n\n";
+            print "Developer-only features:\n";
+            print "  ** CAUTION! THESE FEATURES -WILL- DAMAGE YOUR INSTALL **\n";
+            print "  php index.php package  # create new installer files\n";
+            print "  php index.php test     # run unit tests\n";
+            exit(1);
     }
-    @copy('var/database.php', 'test/var/database.php');
-    define('VARPATH', realpath('test/var') . '/');
-    break;
-
-  default:
-    print "To install:\n";
-    print "  php index.php install -d database -h host -u user -p password -x table_prefix -g3p gallery3_admin_password \n\n";
-    print "To upgrade:\n";
-    print "  php index.php upgrade\n\n";
-    print "Developer-only features:\n";
-    print "  ** CAUTION! THESE FEATURES -WILL- DAMAGE YOUR INSTALL **\n";
-    print "  php index.php package  # create new installer files\n";
-    print "  php index.php test     # run unit tests\n";
-    exit(1);
-  }
 } else {
     define('TEST_MODE', 0);
     define('VARPATH', realpath('var') . '/');

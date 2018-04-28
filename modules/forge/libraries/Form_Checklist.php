@@ -1,13 +1,14 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * FORGE checklist input library.
  *
  * $Id: Form_Checklist.php 3326 2008-08-09 21:24:30Z Shadowhand $
  *
- * @package    Forge
- * @author     Kohana Team
+ * @package        Forge
+ * @author         Kohana Team
  * @copyright  (c) 2007-2008 Kohana Team
- * @license    http://kohanaphp.com/license.html
+ * @license        http://kohanaphp.com/license.html
  */
 class Form_Checklist_Core extends Form_Input
 {
@@ -51,7 +52,7 @@ class Form_Checklist_Core extends Form_Input
         // Newline
         $nl = "\n";
 
-        $checklist = '<ul class="'.arr::remove('class', $base_data).'">'.$nl;
+        $checklist = '<ul class="' . arr::remove('class', $base_data) . '">' . $nl;
         foreach (arr::remove('options', $base_data) as $val => $opt) {
             // New set of input data
             $data = $base_data;
@@ -63,7 +64,7 @@ class Form_Checklist_Core extends Form_Input
             $data['value']   = $val;
             $data['checked'] = $checked;
 
-            $checklist .= '<li><label>'.form::checkbox($data).' '.html::purify($title).'</label></li>'.$nl;
+            $checklist .= '<li><label>' . form::checkbox($data) . ' ' . html::purify($title) . '</label></li>' . $nl;
         }
         $checklist .= '</ul>';
 

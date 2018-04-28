@@ -1,14 +1,15 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * XCache-based Cache driver.
  *
  * $Id: Memcache.php 4605 2009-09-14 17:22:21Z kiall $
  *
- * @package    Cache
- * @author     Kohana Team
+ * @package        Cache
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
- * @TODO       Check if XCache cleans its own keys.
+ * @license        http://kohanaphp.com/license
+ * @TODO           Check if XCache cleans its own keys.
  */
 class Cache_Xcache_Driver extends Cache_Driver
 {
@@ -16,7 +17,7 @@ class Cache_Xcache_Driver extends Cache_Driver
 
     public function __construct($config)
     {
-        if (! extension_loaded('xcache')) {
+        if (!extension_loaded('xcache')) {
             throw new Cache_Exception('The xcache PHP extension must be loaded to use this driver.');
         }
 
@@ -34,7 +35,7 @@ class Cache_Xcache_Driver extends Cache_Driver
                 throw new Cache_Exception('Caching of resources is impossible, because resources cannot be serialised.');
             }
 
-            if (! xcache_set($key, $value, $lifetime)) {
+            if (!xcache_set($key, $value, $lifetime)) {
                 return false;
             }
         }
@@ -76,7 +77,7 @@ class Cache_Xcache_Driver extends Cache_Driver
     public function delete($keys)
     {
         foreach ($keys as $key) {
-            if (! xcache_unset($key)) {
+            if (!xcache_unset($key)) {
                 return false;
             }
         }
@@ -131,7 +132,7 @@ class Cache_Xcache_Driver extends Cache_Driver
             } else {
                 $value = getenv($key);
 
-                if (! empty($value)) {
+                if (!empty($value)) {
                     $backup[$key] = $value;
                 }
 

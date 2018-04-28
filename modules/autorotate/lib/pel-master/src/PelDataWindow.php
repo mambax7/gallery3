@@ -22,6 +22,7 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301 USA
  */
+
 namespace lsolesen\pel;
 
 /**
@@ -80,7 +81,7 @@ class PelDataWindow
     /**
      * Construct a new data window with the data supplied.
      *
-     * @param mixed $data
+     * @param mixed   $data
      *            the data that this window will contain. This can
      *            either be given as a string (interpreted litteraly as a sequence
      *            of bytes) or a PHP image resource handle. The data will be copied
@@ -111,7 +112,7 @@ class PelDataWindow
         }
 
         $this->order = $endianess;
-        $this->size = strlen($this->data);
+        $this->size  = strlen($this->data);
     }
 
     /**
@@ -170,7 +171,7 @@ class PelDataWindow
             );
         }
         $this->start += $start;
-        $this->size -= $start;
+        $this->size  -= $start;
     }
 
     /**
@@ -257,7 +258,7 @@ class PelDataWindow
      *            window. Invalid offsets will result in a {@link
      *            PelDataWindowOffsetException} being thrown.
      *
-     * @param integer|NUL $size
+     * @param integer|NUL  $size
      *            the size of the sub-window. If a negative number is
      *            given, then that many bytes will be omitted from the result.
      *
@@ -518,7 +519,7 @@ class PelDataWindow
      *            minus the length of the string. If the string is too long, then
      *            a {@link PelDataWindowOffsetException} will be thrown.
      *
-     * @param string $str
+     * @param string  $str
      *            the string to compare with.
      *
      * @return boolean true if the string given matches the data in the
@@ -540,7 +541,7 @@ class PelDataWindow
         $offset += $this->start;
 
         /* Check each character, return as soon as the answer is known. */
-        for ($i = 0; $i < $s; $i ++) {
+        for ($i = 0; $i < $s; $i++) {
             if ($this->data{$offset + $i} != $str{$i}) {
                 return false;
             }

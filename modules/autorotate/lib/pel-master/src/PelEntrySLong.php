@@ -22,12 +22,13 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301 USA
  */
+
 namespace lsolesen\pel;
 
 /**
  * Classes used to hold longs, both signed and unsigned.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public
  *          License (GPL)
  * @package PEL
@@ -40,7 +41,7 @@ namespace lsolesen\pel;
  * longs. The class will be used to manipulate any of the Exif tags
  * which can have format {@link PelFormat::SLONG}.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @package PEL
  */
 class PelEntrySLong extends PelEntryNumber
@@ -56,23 +57,23 @@ class PelEntrySLong extends PelEntryNumber
      * single integer is given.
      *
      * @param
-     *            int the tag which this entry represents. This
-     *            should be one of the constants defined in {@link PelTag}
-     *            which have format {@link PelFormat::SLONG}.
+     *                   int the tag which this entry represents. This
+     *                   should be one of the constants defined in {@link PelTag}
+     *                   which have format {@link PelFormat::SLONG}.
      *
-     * @param int $value...
-     *            the long(s) that this entry will represent
-     *            or an array of longs. The argument passed must obey the same
-     *            rules as the argument to {@link setValue}, namely that it should
-     *            be within range of a signed long (32 bit), that is between
-     *            -2147483648 and 2147483647 (inclusive). If not, then a {@link
-     *            PelOverflowException} will be thrown.
+     * @param int $value ...
+     *                   the long(s) that this entry will represent
+     *                   or an array of longs. The argument passed must obey the same
+     *                   rules as the argument to {@link setValue}, namely that it should
+     *                   be within range of a signed long (32 bit), that is between
+     *                   -2147483648 and 2147483647 (inclusive). If not, then a {@link
+     *                   PelOverflowException} will be thrown.
      */
     public function __construct($tag, $value = null)
     {
-        $this->tag = $tag;
-        $this->min = - 2147483648;
-        $this->max = 2147483647;
+        $this->tag    = $tag;
+        $this->min    = -2147483648;
+        $this->max    = 2147483647;
         $this->format = PelFormat::SLONG;
 
         $value = func_get_args();

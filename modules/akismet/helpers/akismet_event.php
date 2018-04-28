@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -26,19 +27,19 @@ class akismet_event_Core
         }
 
         switch (akismet::check_comment($comment)) {
-    case 'spam':
-      $comment->state = 'spam';
-      module::incr_var('comment', 'spam_caught');
-      break;
+            case 'spam':
+                $comment->state = 'spam';
+                module::incr_var('comment', 'spam_caught');
+                break;
 
-    case 'ham':
-      $comment->state = 'published';
-      break;
+            case 'ham':
+                $comment->state = 'published';
+                break;
 
-    case 'unknown':
-      $comment->state = 'unpublished';
-      break;
-    }
+            case 'unknown':
+                $comment->state = 'unpublished';
+                break;
+        }
         $comment->save();
     }
 
@@ -58,14 +59,14 @@ class akismet_event_Core
     public static function admin_menu($menu, $theme)
     {
         $menu->get('settings_menu')
-      ->append(Menu::factory('link')
+               ->append(Menu::factory('link')
                ->id('akismet')
                ->label(t('Akismet'))
                ->url(url::site('admin/akismet')));
 
         if (module::get_var('akismet', 'api_key')) {
             $menu->get('statistics_menu')
-        ->append(Menu::factory('link')
+                 ->append(Menu::factory('link')
                  ->id('akismet')
                  ->label(t('Akismet'))
                  ->url(url::site('admin/akismet/stats')));

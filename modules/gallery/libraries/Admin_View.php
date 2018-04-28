@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -23,8 +24,8 @@ class Admin_View_Core extends Gallery_View
      * Attempts to load a view and pre-load view data.
      *
      * @throws  Kohana_Exception  if the requested view cannot be found
-     * @param   string  $name view name
-     * @param   string  $theme_name view name
+     * @param   string $name       view name
+     * @param   string $theme_name view name
      * @return  void
      */
     public function __construct($name)
@@ -34,9 +35,9 @@ class Admin_View_Core extends Gallery_View
         $this->theme_name = module::get_var('gallery', 'active_admin_theme');
         if (identity::active_user()->admin) {
             $theme_name = Input::instance()->get('theme');
-            if ($theme_name &&
-          file_exists(THEMEPATH . $theme_name) &&
-                0 == strpos(realpath(THEMEPATH . $theme_name), THEMEPATH)) {
+            if ($theme_name
+                && file_exists(THEMEPATH . $theme_name)
+                && 0 == strpos(realpath(THEMEPATH . $theme_name), THEMEPATH)) {
                 $this->theme_name = $theme_name;
             }
         }
@@ -63,9 +64,7 @@ class Admin_View_Core extends Gallery_View
 
     public function user_menu()
     {
-        $menu = Menu::factory('root')
-      ->css_id('g-login-menu')
-      ->css_class('g-inline ui-helper-clear-fix');
+        $menu = Menu::factory('root')->css_id('g-login-menu')->css_class('g-inline ui-helper-clear-fix');
         module::event('user_menu', $menu, $this);
         return $menu->render();
     }
@@ -87,75 +86,62 @@ class Admin_View_Core extends Gallery_View
     }
 
     /**
-      * Handle all theme functions that insert module content.
-      */
+     * Handle all theme functions that insert module content.
+     */
     public function __call($function, $args)
     {
         switch ($function) {
-    case 'admin_credits':
-    case 'admin_footer':
-    case 'admin_header_top':
-    case 'admin_header_bottom':
-    case 'admin_page_bottom':
-    case 'admin_page_top':
-    case 'admin_head':
-    case 'body_attributes':
-    case 'html_attributes':
-      $blocks = [];
-      if (method_exists('gallery_theme', $function)) {
-          switch (count($args)) {
-        case 0:
-          $blocks[] = gallery_theme::$function($this);
-          break;
-        case 1:
-          $blocks[] = gallery_theme::$function($this, $args[0]);
-          break;
-        case 2:
-          $blocks[] = gallery_theme::$function($this, $args[0], $args[1]);
-          break;
-        default:
-          $blocks[] = call_user_func_array(
-              ['gallery_theme', $function],
-              array_merge([$this], $args)
-          );
+            case 'admin_credits':
+            case 'admin_footer':
+            case 'admin_header_top':
+            case 'admin_header_bottom':
+            case 'admin_page_bottom':
+            case 'admin_page_top':
+            case 'admin_head':
+            case 'body_attributes':
+            case 'html_attributes':
+                $blocks = [];
+                if (method_exists('gallery_theme', $function)) {
+                    switch (count($args)) {
+                        case 0:
+                            $blocks[] = gallery_theme::$function($this);
+                            break;
+                        case 1:
+                            $blocks[] = gallery_theme::$function($this, $args[0]);
+                            break;
+                        case 2:
+                            $blocks[] = gallery_theme::$function($this, $args[0], $args[1]);
+                            break;
+                        default:
+                            $blocks[] = call_user_func_array(['gallery_theme', $function], array_merge([$this], $args));
+                    }
+                }
+
+                foreach (module::active() as $module) {
+                    if ('gallery' == $module->name) {
+                        continue;
+                    }
+                    $helper_class = "{$module->name}_theme";
+                    if (class_exists($helper_class) && method_exists($helper_class, $function)) {
+                        $blocks[] = call_user_func_array([$helper_class, $function], array_merge([$this], $args));
+                    }
+                }
+
+                $helper_class = theme::$admin_theme_name . '_theme';
+                if (class_exists($helper_class) && method_exists($helper_class, $function)) {
+                    $blocks[] = call_user_func_array([$helper_class, $function], array_merge([$this], $args));
+                }
+
+                if (Session::instance()->get('debug')) {
+                    if ('admin_head' != $function && 'body_attributes' != $function) {
+                        array_unshift($blocks, "<div class=\"g-annotated-theme-block g-annotated-theme-block_$function g-clear-fix\">" . "<div class=\"title\">$function</div>");
+                        $blocks[] = '</div>';
+                    }
+                }
+                return implode("\n", $blocks);
+
+            default:
+                throw new Exception("@todo UNKNOWN_THEME_FUNCTION: $function");
         }
-      }
-
-      foreach (module::active() as $module) {
-          if ('gallery' == $module->name) {
-              continue;
-          }
-          $helper_class = "{$module->name}_theme";
-          if (class_exists($helper_class) && method_exists($helper_class, $function)) {
-              $blocks[] = call_user_func_array(
-                  [$helper_class, $function],
-                  array_merge([$this], $args)
-          );
-          }
-      }
-
-      $helper_class = theme::$admin_theme_name . '_theme';
-      if (class_exists($helper_class) && method_exists($helper_class, $function)) {
-          $blocks[] = call_user_func_array(
-              [$helper_class, $function],
-              array_merge([$this], $args)
-        );
-      }
-
-      if (Session::instance()->get('debug')) {
-          if ('admin_head' != $function && 'body_attributes' != $function) {
-              array_unshift(
-            $blocks,
-            "<div class=\"g-annotated-theme-block g-annotated-theme-block_$function g-clear-fix\">" .
-            "<div class=\"title\">$function</div>"
-          );
-              $blocks[] = '</div>';
-          }
-      }
-      return implode("\n", $blocks);
-
-    default:
-      throw new Exception("@todo UNKNOWN_THEME_FUNCTION: $function");
-    }
     }
 }

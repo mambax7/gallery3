@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,11 +22,11 @@ class Admin_Server_Add_Controller extends Admin_Controller
 {
     public function index()
     {
-        $view = new Admin_View('admin.html');
-        $view->page_title = t('Add from server');
-        $view->content = new View('admin_server_add.html');
-        $view->content->form = $this->_get_admin_form();
-        $paths = unserialize(module::get_var('server_add', 'authorized_paths', 'a:0:{}'));
+        $view                 = new Admin_View('admin.html');
+        $view->page_title     = t('Add from server');
+        $view->content        = new View('admin_server_add.html');
+        $view->content->form  = $this->_get_admin_form();
+        $paths                = unserialize(module::get_var('server_add', 'authorized_paths', 'a:0:{}'));
         $view->content->paths = array_keys($paths);
 
         print $view;
@@ -35,7 +36,7 @@ class Admin_Server_Add_Controller extends Admin_Controller
     {
         access::verify_csrf();
 
-        $form = $this->_get_admin_form();
+        $form  = $this->_get_admin_form();
         $paths = unserialize(module::get_var('server_add', 'authorized_paths', 'a:0:{}'));
         if ($form->validate()) {
             $path = html_entity_decode($form->add_path->path->value);
@@ -52,9 +53,9 @@ class Admin_Server_Add_Controller extends Admin_Controller
             }
         }
 
-        $view = new Admin_View('admin.html');
-        $view->content = new View('admin_server_add.html');
-        $view->content->form = $form;
+        $view                 = new Admin_View('admin.html');
+        $view->content        = new View('admin_server_add.html');
+        $view->content->form  = $form;
         $view->content->paths = array_keys($paths);
         print $view;
     }
@@ -63,7 +64,7 @@ class Admin_Server_Add_Controller extends Admin_Controller
     {
         access::verify_csrf();
 
-        $path = Input::instance()->get('path');
+        $path  = Input::instance()->get('path');
         $paths = unserialize(module::get_var('server_add', 'authorized_paths'));
         if (isset($paths[$path])) {
             unset($paths[$path]);
@@ -90,14 +91,9 @@ class Admin_Server_Add_Controller extends Admin_Controller
 
     private function _get_admin_form()
     {
-        $form = new Forge(
-            'admin/server_add/add_path', '', 'post',
-            ['id' => 'g-server-add-admin-form', 'class' => 'g-short-form']
-    );
+        $form     = new Forge('admin/server_add/add_path', '', 'post', ['id' => 'g-server-add-admin-form', 'class' => 'g-short-form']);
         $add_path = $form->group('add_path');
-        $add_path->input('path')->label(t('Path'))->rules('required')->id('g-path')
-                 ->error_messages('not_readable', t('This directory is not readable by the webserver'))
-                 ->error_messages('is_symlink', t('Symbolic links are not allowed'));
+        $add_path->input('path')->label(t('Path'))->rules('required')->id('g-path')->error_messages('not_readable', t('This directory is not readable by the webserver'))->error_messages('is_symlink', t('Symbolic links are not allowed'));
         $add_path->submit('add')->value(t('Add Path'));
 
         return $form;

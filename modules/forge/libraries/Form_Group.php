@@ -1,21 +1,22 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * FORGE group library.
  *
  * $Id: Form_Group.php 3326 2008-08-09 21:24:30Z Shadowhand $
  *
- * @package    Forge
- * @author     Kohana Team
+ * @package        Forge
+ * @author         Kohana Team
  * @copyright  (c) 2007-2008 Kohana Team
- * @license    http://kohanaphp.com/license.html
+ * @license        http://kohanaphp.com/license.html
  */
 class Form_Group_Core extends Forge
 {
     protected $data = [
-        'type'  => 'group',
-        'name'  => '',
-        'class' => 'group',
-        'label' => '',
+        'type'    => 'group',
+        'name'    => '',
+        'class'   => 'group',
+        'label'   => '',
         'message' => ''
     ];
 
@@ -24,7 +25,7 @@ class Form_Group_Core extends Forge
 
     public function __construct($name = null, $class = 'group')
     {
-        $this->data['name'] = $name;
+        $this->data['name']  = $name;
         $this->data['class'] = $class;
 
         // Set dummy data so we don't get errors

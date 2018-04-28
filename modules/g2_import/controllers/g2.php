@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -33,9 +34,9 @@ class G2_Controller extends Controller
     public function map()
     {
         $input = Input::instance();
-        $path = $input->get('path');
-        $id = $input->get('g2_itemId');
-        $view = $input->get('g2_view');
+        $path  = $input->get('path');
+        $id    = $input->get('g2_itemId');
+        $view  = $input->get('g2_view');
 
         // Tags did not have mappings created, so we need to catch them first. However, if a g2_itemId was
         // passed, we'll want to show lookup the mapping anyway
@@ -78,9 +79,7 @@ class G2_Controller extends Controller
                 throw new Kohana_404_Exception();
             }
 
-            $g2_map = ORM::factory('g2_map')
-        ->merge_where($where)
-        ->find();
+            $g2_map = ORM::factory('g2_map')->merge_where($where)->find();
 
             if (!$g2_map->loaded()) {
                 throw new Kohana_404_Exception();
@@ -92,36 +91,35 @@ class G2_Controller extends Controller
             }
             $resource_type = $g2_map->resource_type;
         } else {
-            $item = item::root();
+            $item          = item::root();
             $resource_type = 'album';
         }
         access::required('view', $item);
 
-
         // Redirect the user to the new url
         switch ($resource_type) {
-    case 'thumbnail':
-      url::redirect($item->thumb_url(true), 301);
+            case 'thumbnail':
+                url::redirect($item->thumb_url(true), 301);
 
-      // no break
-    case 'resize':
-      url::redirect($item->resize_url(true), 301);
+            // no break
+            case 'resize':
+                url::redirect($item->resize_url(true), 301);
 
-      // no break
-    case 'file':
-    case 'full':
-      url::redirect($item->file_url(true), 301);
+            // no break
+            case 'file':
+            case 'full':
+                url::redirect($item->file_url(true), 301);
 
-      // no break
-    case 'item':
-    case 'album':
-      url::redirect($item->abs_url(), 301);
+            // no break
+            case 'item':
+            case 'album':
+                url::redirect($item->abs_url(), 301);
 
-      // no break
-    case 'group':
-    case 'user':
-    default:
-      throw new Kohana_404_Exception();
-    }
+            // no break
+            case 'group':
+            case 'user':
+            default:
+                throw new Kohana_404_Exception();
+        }
     }
 }

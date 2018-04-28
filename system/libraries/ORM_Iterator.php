@@ -1,11 +1,12 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Object Relational Mapping (ORM) result iterator.
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class ORM_Iterator_Core implements Iterator, ArrayAccess, Countable
 {
@@ -62,12 +63,12 @@ class ORM_Iterator_Core implements Iterator, ArrayAccess, Countable
                 $temp = [];
 
                 foreach ($data as $key => $val) {
-                    $ptr = & $temp;
+                    $ptr = &$temp;
 
                     foreach (explode(':', $key) as $subkey) {
                         // Walk thru the relationships (separated in the key name by a ':')
                         // 'user:email:address' will be array['user']['email']['address']
-                        $ptr = & $ptr[$subkey];
+                        $ptr = &$ptr[$subkey];
                     }
 
                     // Set the value

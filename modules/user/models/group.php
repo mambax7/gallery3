@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -20,21 +21,18 @@
 class Group_Model_Core extends ORM implements Group_Definition
 {
     protected $has_and_belongs_to_many = ['users'];
-    protected $users_cache = null;
+    protected $users_cache             = null;
 
     /**
      * @see ORM::delete()
      */
-    public function delete($id=null)
+    public function delete($id = null)
     {
         $old = clone $this;
         module::event('group_before_delete', $this);
         parent::delete($id);
 
-        db::build()
-      ->delete('groups_users')
-      ->where('group_id', '=', empty($id) ? $old->id : $id)
-      ->execute();
+        db::build()->delete('groups_users')->where('group_id', '=', empty($id) ? $old->id : $id)->execute();
 
         module::event('group_deleted', $old);
         $this->users_cache = null;
@@ -51,7 +49,7 @@ class Group_Model_Core extends ORM implements Group_Definition
     /**
      * Specify our rules here so that we have access to the instance of this model.
      */
-    public function validate(Validation $array=null)
+    public function validate(Validation $array = null)
     {
         // validate() is recursive, only modify the rules on the outermost call.
         if (!$array) {
@@ -88,10 +86,7 @@ class Group_Model_Core extends ORM implements Group_Definition
      */
     public function valid_name(Validation $v, $field)
     {
-        if (1 == db::build()->from('groups')
-                   ->where('name', '=', $this->name)
-                   ->where('id', '<>', $this->id)
-                   ->count_records()) {
+        if (1 == db::build()->from('groups')->where('name', '=', $this->name)->where('id', '<>', $this->id)->count_records()) {
             $v->add_error('name', 'conflict');
         }
     }

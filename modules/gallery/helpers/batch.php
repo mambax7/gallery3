@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -27,7 +28,7 @@ class batch_Core
 
     public static function stop()
     {
-        $session = Session::instance();
+        $session     = Session::instance();
         $batch_level = $session->get('batch_level', 0) - 1;
         if ($batch_level > 0) {
             $session->set('batch_level', $batch_level);

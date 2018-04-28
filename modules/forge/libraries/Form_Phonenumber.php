@@ -1,13 +1,14 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * FORGE phone number input library.
  *
  * $Id: Form_Phonenumber.php 3326 2008-08-09 21:24:30Z Shadowhand $
  *
- * @package    Forge
- * @author     Kohana Team
+ * @package        Forge
+ * @author         Kohana Team
  * @copyright  (c) 2007-2008 Kohana Team
- * @license    http://kohanaphp.com/license.html
+ * @license        http://kohanaphp.com/license.html
  */
 class Form_Phonenumber_Core extends Form_Input
 {
@@ -20,9 +21,9 @@ class Form_Phonenumber_Core extends Form_Input
 
     // Precision for the parts, you can use @ to insert a literal @ symbol
     protected $parts = [
-        'area_code'   => '',
-        'exchange'     => '',
-        'last_four'    => '',
+        'area_code' => '',
+        'exchange'  => '',
+        'last_four' => '',
     ];
 
     public function __construct($name)
@@ -50,9 +51,9 @@ class Form_Phonenumber_Core extends Form_Input
         $input = '';
         foreach ($this->parts as $type => $val) {
             isset($data['value']) || $data['value'] = '';
-            $temp = $data;
-            $temp['name'] = $this->data['name'].'['.$type.']';
-            $offset = (10 == strlen($data['value'])) ? 0 : 3;
+            $temp         = $data;
+            $temp['name'] = $this->data['name'] . '[' . $type . ']';
+            $offset       = (10 == strlen($data['value'])) ? 0 : 3;
             switch ($type) {
                 case 'area_code':
                     if (10 == strlen($data['value'])) {
@@ -61,17 +62,17 @@ class Form_Phonenumber_Core extends Form_Input
                         $temp['value'] = '';
                     }
                     $temp['class'] = 'area_code';
-                    $input .= form::input(array_merge(['value' => $val], $temp)) . '-';
+                    $input         .= form::input(array_merge(['value' => $val], $temp)) . '-';
                     break;
                 case 'exchange':
-                    $temp['value'] = substr($data['value'], (3-$offset), 3);
+                    $temp['value'] = substr($data['value'], (3 - $offset), 3);
                     $temp['class'] = 'exchange';
-                    $input .= form::input(array_merge(['value' => $val], $temp)) . '-';
+                    $input         .= form::input(array_merge(['value' => $val], $temp)) . '-';
                     break;
                 case 'last_four':
-                    $temp['value'] = substr($data['value'], (6-$offset), 4);
+                    $temp['value'] = substr($data['value'], (6 - $offset), 4);
                     $temp['class'] = 'last_four';
-                    $input .= form::input(array_merge(['value' => $val], $temp));
+                    $input         .= form::input(array_merge(['value' => $val], $temp));
                     break;
             }
         }
@@ -87,6 +88,6 @@ class Form_Phonenumber_Core extends Form_Input
 
         $data = $this->input_value($this->name, $this->data['name']);
 
-        $this->data['value'] = $data['area_code'].$data['exchange'].$data['last_four'];
+        $this->data['value'] = $data['area_code'] . $data['exchange'] . $data['last_four'];
     }
 } // End Form Phonenumber

@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,13 +22,13 @@ class Search_Controller extends Controller
 {
     public function index()
     {
-        $page_size = module::get_var('gallery', 'page_size', 9);
-        $q = Input::instance()->get('q');
+        $page_size         = module::get_var('gallery', 'page_size', 9);
+        $q                 = Input::instance()->get('q');
         $q_with_more_terms = search::add_query_terms($q);
-        $show = Input::instance()->get('show');
+        $show              = Input::instance()->get('show');
 
         $album_id = Input::instance()->get('album', item::root()->id);
-        $album = ORM::factory('item', $album_id);
+        $album    = ORM::factory('item', $album_id);
         if (!access::can('view', $album) || !$album->is_album()) {
             $album = item::root();
         }
@@ -37,8 +38,7 @@ class Search_Controller extends Controller
             $index = search::get_position_within_album($child, $q_with_more_terms, $album);
             if ($index) {
                 $page = ceil($index / $page_size);
-                url::redirect(url::abs_site('search' . '?q=' . urlencode($q) . '&album=' . urlencode($album->id) .
-                                            (1 == $page ? '' : "&page=$page")));
+                url::redirect(url::abs_site('search' . '?q=' . urlencode($q) . '&album=' . urlencode($album->id) . (1 == $page ? '' : "&page=$page")));
             }
         }
 
@@ -51,30 +51,27 @@ class Search_Controller extends Controller
 
         $offset = ($page - 1) * $page_size;
 
-        list($count, $result) =
-      search::search_within_album($q_with_more_terms, $album, $page_size, $offset);
+        list($count, $result) = search::search_within_album($q_with_more_terms, $album, $page_size, $offset);
 
         $max_pages = max(ceil($count / $page_size), 1);
 
         $template = new Theme_View('page.html', 'collection', 'search');
-        $root = item::root();
-        $template->set_global(
-            [
-                'page'           => $page,
-                'max_pages'      => $max_pages,
-                'page_size'      => $page_size,
-                'breadcrumbs'    => [
-              Breadcrumb::instance($root->title, $root->url())->set_first(),
-              Breadcrumb::instance($q, url::abs_site('search?q=' . urlencode($q)))->set_last(),
-                ],
-                'children_count' => $count
-            ]
-    );
+        $root     = item::root();
+        $template->set_global([
+                                  'page'           => $page,
+                                  'max_pages'      => $max_pages,
+                                  'page_size'      => $page_size,
+                                  'breadcrumbs'    => [
+                                      Breadcrumb::instance($root->title, $root->url())->set_first(),
+                                      Breadcrumb::instance($q, url::abs_site('search?q=' . urlencode($q)))->set_last(),
+                                  ],
+                                  'children_count' => $count
+                              ]);
 
-        $template->content = new View('search.html');
+        $template->content        = new View('search.html');
         $template->content->album = $album;
         $template->content->items = $result;
-        $template->content->q = $q;
+        $template->content->q     = $q;
 
         print $template;
 
@@ -84,22 +81,19 @@ class Search_Controller extends Controller
     public static function get_display_context($item, $album, $q)
     {
         $q_with_more_terms = search::add_query_terms($q);
-        $position = search::get_position_within_album($item, $q_with_more_terms, $album);
+        $position          = search::get_position_within_album($item, $q_with_more_terms, $album);
 
         if ($position > 1) {
-            list($count, $result_data) =
-        search::search_within_album($q_with_more_terms, $album, 3, $position - 2);
+            list($count, $result_data) = search::search_within_album($q_with_more_terms, $album, 3, $position - 2);
             list($previous_item, $ignore, $next_item) = $result_data;
         } else {
             $previous_item = null;
-            list($count, $result_data) =
-        search::search_within_album($q_with_more_terms, $album, 1, $position);
+            list($count, $result_data) = search::search_within_album($q_with_more_terms, $album, 1, $position);
             list($next_item) = $result_data;
         }
 
-        $search_url = url::abs_site('search' . '?q=' . urlencode($q) . '&album=' . urlencode($album->id) .
-                                    "&show={$item->id}");
-        $root = item::root();
+        $search_url = url::abs_site('search' . '?q=' . urlencode($q) . '&album=' . urlencode($album->id) . "&show={$item->id}");
+        $root       = item::root();
 
         return [
             'position'          => $position,

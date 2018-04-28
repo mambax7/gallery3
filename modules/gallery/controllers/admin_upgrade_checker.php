@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -25,10 +26,7 @@ class Admin_Upgrade_Checker_Controller extends Admin_Controller
         upgrade_checker::fetch_version_info();
         $message = upgrade_checker::get_upgrade_message();
         if ($message) {
-            $message .= t(
-                ' <a href="%hide-url"><i>(remind me later)</i></a>',
-                ['hide-url' => url::site('admin/upgrade_checker/remind_me_later?csrf=__CSRF__')]
-      );
+            $message .= t(' <a href="%hide-url"><i>(remind me later)</i></a>', ['hide-url' => url::site('admin/upgrade_checker/remind_me_later?csrf=__CSRF__')]);
             site_status::info($message, 'upgrade_checker');
         } else {
             site_status::clear('upgrade_checker');

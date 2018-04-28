@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -26,7 +27,7 @@ class Data_Rest_Helper_Test extends Gallery_Unit_Test_Case
 
     public function resolve_test()
     {
-        $photo = test::random_photo();
+        $photo    = test::random_photo();
         $resolved = rest::resolve(rest::url('data', $photo, 640));
         $this->assert_equal($photo->id, $resolved->id);
     }
@@ -52,8 +53,8 @@ class Data_Rest_Helper_Test extends Gallery_Unit_Test_Case
     {
         $photo = test::random_photo();
 
-        $request = new stdClass();
-        $request->url = rest::url('data', $photo, 'thumb');
+        $request         = new stdClass();
+        $request->url    = rest::url('data', $photo, 'thumb');
         $request->params = new stdClass();
 
         $request->params->size = 'thumb';
@@ -75,9 +76,9 @@ class Data_Rest_Helper_Test extends Gallery_Unit_Test_Case
         access::deny(identity::everybody(), 'view', $album);
         identity::set_active_user(identity::guest());
 
-        $request = new stdClass();
-        $request->url = rest::url('data', $photo, 'thumb');
-        $request->params = new stdClass();
+        $request               = new stdClass();
+        $request->url          = rest::url('data', $photo, 'thumb');
+        $request->params       = new stdClass();
         $request->params->size = 'thumb';
 
         try {
@@ -92,9 +93,9 @@ class Data_Rest_Helper_Test extends Gallery_Unit_Test_Case
     {
         $photo = test::random_photo();
 
-        $request = new stdClass();
-        $request->url = rest::url('data', $photo, 'thumb');
-        $request->params = new stdClass();
+        $request               = new stdClass();
+        $request->url          = rest::url('data', $photo, 'thumb');
+        $request->params       = new stdClass();
         $request->params->size = 'thumb';
 
         unlink($photo->thumb_path());  // oops!
@@ -111,9 +112,6 @@ class Data_Rest_Helper_Test extends Gallery_Unit_Test_Case
     {
         $photo = test::random_photo();
 
-        $this->assert_same(
-      url::abs_site("rest/data/{$photo->id}?size=thumb&m=" . filemtime($photo->thumb_path())),
-      data_rest::url($photo, 'thumb')
-    );
+        $this->assert_same(url::abs_site("rest/data/{$photo->id}?size=thumb&m=" . filemtime($photo->thumb_path())), data_rest::url($photo, 'thumb'));
     }
 }

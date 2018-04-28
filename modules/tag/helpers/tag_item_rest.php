@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -42,7 +43,7 @@ class tag_item_rest_Core
     public static function resolve($tuple)
     {
         list($tag_id, $item_id) = explode(',', $tuple);
-        $tag = ORM::factory('tag', $tag_id);
+        $tag  = ORM::factory('tag', $tag_id);
         $item = ORM::factory('item', $item_id);
         if (!$tag->loaded() || !$item->loaded() || !$tag->has($item) || !access::can('view', $item)) {
             throw new Kohana_404_Exception();

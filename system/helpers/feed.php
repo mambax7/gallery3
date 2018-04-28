@@ -1,11 +1,12 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Feed helper class.
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class feed_Core
 {
@@ -20,12 +21,12 @@ class feed_Core
     public static function parse($feed, $limit = 0)
     {
         // Check if SimpleXML is installed
-        if (! function_exists('simplexml_load_file')) {
+        if (!function_exists('simplexml_load_file')) {
             throw new Kohana_User_Exception('Feed Error', 'SimpleXML must be installed!');
         }
 
         // Make limit an integer
-        $limit = (int) $limit;
+        $limit = (int)$limit;
 
         // Disable error reporting while opening the feed
         $ER = error_reporting(0);
@@ -47,7 +48,7 @@ class feed_Core
         // Detect the feed type. RSS 1.0/2.0 and Atom 1.0 are supported.
         $feed = isset($feed->channel) ? $feed->xpath('//item') : $feed->entry;
 
-        $i = 0;
+        $i     = 0;
         $items = [];
 
         foreach ($feed as $item) {
@@ -55,7 +56,7 @@ class feed_Core
                 break;
             }
 
-            $items[] = (array) $item;
+            $items[] = (array)$item;
         }
 
         return $items;
@@ -74,7 +75,7 @@ class feed_Core
     {
         $info += ['title' => 'Generated Feed', 'link' => '', 'generator' => 'KohanaPHP'];
 
-        $feed = '<?xml version="1.0" encoding="'.$encoding.'"?><rss version="2.0"><channel></channel></rss>';
+        $feed = '<?xml version="1.0" encoding="' . $encoding . '"?><rss version="2.0"><channel></channel></rss>';
         $feed = simplexml_load_string($feed);
 
         foreach ($info as $name => $value) {

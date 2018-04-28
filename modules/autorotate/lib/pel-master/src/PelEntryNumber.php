@@ -22,12 +22,13 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301 USA
  */
+
 namespace lsolesen\pel;
 
 /**
  * Abstract class for numbers.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public
  *          License (GPL)
  * @package PEL
@@ -38,7 +39,7 @@ namespace lsolesen\pel;
  *
  * This class can hold numbers, with range checks.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @package PEL
  */
 abstract class PelEntryNumber extends PelEntry
@@ -93,11 +94,11 @@ abstract class PelEntryNumber extends PelEntry
      * method will always return an array except for when a single
      * number is given here.
      *
-     * @param int|array $value...
-     *            the new value(s). This can be zero or
-     *            more numbers, that is, either integers or arrays. The input will
-     *            be checked to ensure that the numbers are within the valid range.
-     *            If not, then a {@link PelOverflowException} will be thrown.
+     * @param int|array $value ...
+     *                         the new value(s). This can be zero or
+     *                         more numbers, that is, either integers or arrays. The input will
+     *                         be checked to ensure that the numbers are within the valid range.
+     *                         If not, then a {@link PelOverflowException} will be thrown.
      *
      * @see getValue
      */
@@ -128,7 +129,7 @@ abstract class PelEntryNumber extends PelEntry
         }
 
         $this->components = count($value);
-        $this->value = $value;
+        $this->value      = $value;
     }
 
     /**
@@ -167,7 +168,7 @@ abstract class PelEntryNumber extends PelEntry
                 Pel::maybeThrow(new PelOverflowException($n, $this->min, $this->max));
             }
         } else {
-            for ($i = 0; $i < $this->dimension; $i ++) {
+            for ($i = 0; $i < $this->dimension; $i++) {
                 if ($n[$i] < $this->min || $n[$i] > $this->max) {
                     Pel::maybeThrow(new PelOverflowException($n[$i], $this->min, $this->max));
                 }
@@ -188,7 +189,7 @@ abstract class PelEntryNumber extends PelEntry
     {
         $this->validateNumber($n);
         $this->value[] = $n;
-        $this->components ++;
+        $this->components++;
     }
 
     /**
@@ -223,11 +224,11 @@ abstract class PelEntryNumber extends PelEntry
     public function getBytes($o)
     {
         $bytes = '';
-        for ($i = 0; $i < $this->components; $i ++) {
+        for ($i = 0; $i < $this->components; $i++) {
             if (1 == $this->dimension) {
                 $bytes .= $this->numberToBytes($this->value[$i], $o);
             } else {
-                for ($j = 0; $j < $this->dimension; $j ++) {
+                for ($j = 0; $j < $this->dimension; $j++) {
                     $bytes .= $this->numberToBytes($this->value[$i][$j], $o);
                 }
             }
@@ -275,7 +276,7 @@ abstract class PelEntryNumber extends PelEntry
         }
 
         $str = $this->formatNumber($this->value[0]);
-        for ($i = 1; $i < $this->components; $i ++) {
+        for ($i = 1; $i < $this->components; $i++) {
             $str .= ($brief ? ' ' : ', ');
             $str .= $this->formatNumber($this->value[$i]);
         }

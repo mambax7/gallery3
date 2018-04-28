@@ -5,10 +5,10 @@
  *
  * [!!] All groups inherit and overwrite the default group.
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 
 /**
@@ -29,7 +29,7 @@
  * - cipher - MCrypt encryption cipher. By default, the MCRYPT_RIJNDAEL_128 cipher is used.
  *           This is also known as 128-bit AES.
  *
- * 	For more information about mcrypt modes and cipers see the [mcrypt php docs](http://php.net/mcrypt).
+ *    For more information about mcrypt modes and cipers see the [mcrypt php docs](http://php.net/mcrypt).
  */
 $config['default'] = [
     'key'    => 'K0H@NA+PHP_7hE-SW!FtFraM3w0R|<',

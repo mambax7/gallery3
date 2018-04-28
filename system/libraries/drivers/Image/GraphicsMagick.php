@@ -1,11 +1,12 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * GraphicsMagick Image Driver.
  *
- * @package    Image
- * @author     Kohana Team
+ * @package        Image
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class Image_GraphicsMagick_Driver extends Image_Driver
 {
@@ -30,7 +31,7 @@ class Image_GraphicsMagick_Driver extends Image_Driver
     {
         if (empty($config['directory'])) {
             // Attempt to locate GM by using "which" (only works for *nix!)
-            if (! is_file($path = exec('which gm'))) {
+            if (!is_file($path = exec('which gm'))) {
                 throw new Kohana_Exception('The GraphicsMagick directory specified does not contain a required program.');
             }
 
@@ -41,13 +42,12 @@ class Image_GraphicsMagick_Driver extends Image_Driver
         $this->ext = (PHP_SHLIB_SUFFIX === 'dll') ? '.exe' : '';
 
         // Check to make sure the provided path is correct
-        if (! is_file(realpath($config['directory']).'/gm'.$this->ext)) {
+        if (!is_file(realpath($config['directory']) . '/gm' . $this->ext)) {
             throw new Kohana_Exception('The GraphicsMagick directory specified does not contain a required program, :gm:.', [':gm:' => 'gm' . $this->ext]);
         }
 
-
         // Set the installation directory
-        $this->dir = str_replace('\\', '/', realpath($config['directory'])).'/';
+        $this->dir = str_replace('\\', '/', realpath($config['directory'])) . '/';
     }
 
     /**
@@ -65,26 +65,26 @@ class Image_GraphicsMagick_Driver extends Image_Driver
         $image = $image['file'];
 
         // Unique temporary filename
-        $this->tmp_image = $dir.'k2img--'.sha1(time().$dir.$file).substr($file, strrpos($file, '.'));
+        $this->tmp_image = $dir . 'k2img--' . sha1(time() . $dir . $file) . substr($file, strrpos($file, '.'));
 
         // Copy the image to the temporary file
         copy($image, $this->tmp_image);
 
         // Quality change is done last
-        $quality = (int) arr::remove('quality', $actions);
+        $quality = (int)arr::remove('quality', $actions);
 
         // Use 95 for the default quality
         empty($quality) && $quality = 95;
 
         // All calls to these will need to be escaped, so do it now
         $this->cmd_image = escapeshellarg($this->tmp_image);
-        $this->new_image = ($render)? $this->cmd_image : escapeshellarg($dir.$file);
+        $this->new_image = ($render) ? $this->cmd_image : escapeshellarg($dir . $file);
 
         if ($status = $this->execute($actions)) {
             // Use convert to change the image into its final version. This is
             // done to allow the file type to change correctly, and to handle
             // the quality conversion in the most effective way possible.
-            if ($error = exec(escapeshellcmd($this->dir.'gm'.$this->ext.' convert').' -quality '.$quality.'% '.$this->cmd_image.' '.$this->new_image)) {
+            if ($error = exec(escapeshellcmd($this->dir . 'gm' . $this->ext . ' convert') . ' -quality ' . $quality . '% ' . $this->cmd_image . ' ' . $this->new_image)) {
                 $this->errors[] = $error;
             } else {
                 // Output the image directly to the browser
@@ -94,13 +94,13 @@ class Image_GraphicsMagick_Driver extends Image_Driver
                         case 'jpg':
                         case 'jpeg':
                             header('Content-Type: image/jpeg');
-                        break;
+                            break;
                         case 'gif':
                             header('Content-Type: image/gif');
-                        break;
+                            break;
                         case 'png':
                             header('Content-Type: image/png');
-                        break;
+                            break;
                     }
                     echo $contents;
                 }
@@ -120,9 +120,9 @@ class Image_GraphicsMagick_Driver extends Image_Driver
         $this->sanitize_geometry($prop);
 
         // Set the IM geometry based on the properties
-        $geometry = escapeshellarg($prop['width'].'x'.$prop['height'].'+'.$prop['left'].'+'.$prop['top']);
+        $geometry = escapeshellarg($prop['width'] . 'x' . $prop['height'] . '+' . $prop['left'] . '+' . $prop['top']);
 
-        if ($error = exec(escapeshellcmd($this->dir.'gm'.$this->ext.' convert').' -crop '.$geometry.' '.$this->cmd_image.' '.$this->cmd_image)) {
+        if ($error = exec(escapeshellcmd($this->dir . 'gm' . $this->ext . ' convert') . ' -crop ' . $geometry . ' ' . $this->cmd_image . ' ' . $this->cmd_image)) {
             $this->errors[] = $error;
             return false;
         }
@@ -135,7 +135,7 @@ class Image_GraphicsMagick_Driver extends Image_Driver
         // Convert the direction into a GM command
         $dir = ($dir === Image::HORIZONTAL) ? '-flop' : '-flip';
 
-        if ($error = exec(escapeshellcmd($this->dir.'gm'.$this->ext.' convert').' '.$dir.' '.$this->cmd_image.' '.$this->cmd_image)) {
+        if ($error = exec(escapeshellcmd($this->dir . 'gm' . $this->ext . ' convert') . ' ' . $dir . ' ' . $this->cmd_image . ' ' . $this->cmd_image)) {
             $this->errors[] = $error;
             return false;
         }
@@ -147,21 +147,21 @@ class Image_GraphicsMagick_Driver extends Image_Driver
     {
         switch ($prop['master']) {
             case Image::WIDTH:  // Wx
-                $dim = escapeshellarg($prop['width'].'x');
-            break;
+                $dim = escapeshellarg($prop['width'] . 'x');
+                break;
             case Image::HEIGHT: // xH
-                $dim = escapeshellarg('x'.$prop['height']);
-            break;
+                $dim = escapeshellarg('x' . $prop['height']);
+                break;
             case Image::AUTO:   // WxH
-                $dim = escapeshellarg($prop['width'].'x'.$prop['height']);
-            break;
+                $dim = escapeshellarg($prop['width'] . 'x' . $prop['height']);
+                break;
             case Image::NONE:   // WxH!
-                $dim = escapeshellarg($prop['width'].'x'.$prop['height'].'!');
-            break;
+                $dim = escapeshellarg($prop['width'] . 'x' . $prop['height'] . '!');
+                break;
         }
 
         // Use "convert" to change the width and height
-        if ($error = exec(escapeshellcmd($this->dir.'gm'.$this->ext.' convert').' -resize '.$dim.' '.$this->cmd_image.' '.$this->cmd_image)) {
+        if ($error = exec(escapeshellcmd($this->dir . 'gm' . $this->ext . ' convert') . ' -resize ' . $dim . ' ' . $this->cmd_image . ' ' . $this->cmd_image)) {
             $this->errors[] = $error;
             return false;
         }
@@ -171,7 +171,7 @@ class Image_GraphicsMagick_Driver extends Image_Driver
 
     public function rotate($amt)
     {
-        if ($error = exec(escapeshellcmd($this->dir.'gm'.$this->ext.' convert').' -rotate '.escapeshellarg($amt).' -background transparent '.$this->cmd_image.' '.$this->cmd_image)) {
+        if ($error = exec(escapeshellcmd($this->dir . 'gm' . $this->ext . ' convert') . ' -rotate ' . escapeshellarg($amt) . ' -background transparent ' . $this->cmd_image . ' ' . $this->cmd_image)) {
             $this->errors[] = $error;
             return false;
         }
@@ -188,9 +188,9 @@ class Image_GraphicsMagick_Driver extends Image_Driver
         $amount = round(($amount / 80) * 3.14, 2);
 
         // Convert the amount to an GM command
-        $sharpen = escapeshellarg($radius.'x'.$sigma.'+'.$amount.'+0');
+        $sharpen = escapeshellarg($radius . 'x' . $sigma . '+' . $amount . '+0');
 
-        if ($error = exec(escapeshellcmd($this->dir.'gm'.$this->ext.' convert').' -unsharp '.$sharpen.' '.$this->cmd_image.' '.$this->cmd_image)) {
+        if ($error = exec(escapeshellcmd($this->dir . 'gm' . $this->ext . ' convert') . ' -unsharp ' . $sharpen . ' ' . $this->cmd_image . ' ' . $this->cmd_image)) {
             $this->errors[] = $error;
             return false;
         }
@@ -200,7 +200,17 @@ class Image_GraphicsMagick_Driver extends Image_Driver
 
     public function composite($properties)
     {
-        if ($error = exec(escapeshellcmd($this->dir.'gm'.$this->ext.' composite').' -geometry ' . escapeshellarg('+'.$properties['x'].'+'.$properties['y']).' -dissolve '.escapeshellarg($properties['transparency']).' '.escapeshellarg($properties['overlay_file']).' '.$this->cmd_image.' '.$this->cmd_image)) {
+        if ($error = exec(escapeshellcmd($this->dir . 'gm' . $this->ext . ' composite')
+                          . ' -geometry '
+                          . escapeshellarg('+' . $properties['x'] . '+' . $properties['y'])
+                          . ' -dissolve '
+                          . escapeshellarg($properties['transparency'])
+                          . ' '
+                          . escapeshellarg($properties['overlay_file'])
+                          . ' '
+                          . $this->cmd_image
+                          . ' '
+                          . $this->cmd_image)) {
             $this->errors[] = $error;
             return false;
         }

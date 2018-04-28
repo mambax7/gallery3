@@ -1,13 +1,14 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Model base class.
  *
  * $Id: Model.php 4729 2009-12-29 20:35:19Z isaiah $
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class Model_Core
 {
@@ -23,7 +24,7 @@ class Model_Core
     public static function factory($name, $args = null, $multiple = false)
     {
         // Model class name
-        $class = ucfirst($name).'_Model';
+        $class = ucfirst($name) . '_Model';
 
         if (null === $args) {
             // Create a new model with no arguments
@@ -51,7 +52,7 @@ class Model_Core
      */
     public function __construct()
     {
-        if (! is_object($this->db)) {
+        if (!is_object($this->db)) {
             // Load the default database
             $this->db = Database::instance($this->db);
         }

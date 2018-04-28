@@ -1,11 +1,12 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Format helper class.
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class format_Core
 {
@@ -38,7 +39,7 @@ class format_Core
     public static function phone($number, $format = '3-3-4')
     {
         // Get rid of all non-digit characters in number string
-        $number_clean = preg_replace('/\D+/', '', (string) $number);
+        $number_clean = preg_replace('/\D+/', '', (string)$number);
 
         // Array of digits we need for a valid format
         $format_parts = preg_split('/[^1-9][^0-9]*/', $format, -1, PREG_SPLIT_NO_EMPTY);
@@ -49,15 +50,15 @@ class format_Core
         }
 
         // Build regex
-        $regex = '(\d{'.implode('})(\d{', $format_parts).'})';
+        $regex = '(\d{' . implode('})(\d{', $format_parts) . '})';
 
         // Build replace string
         for ($i = 1, $c = count($format_parts); $i <= $c; $i++) {
-            $format = preg_replace('/(?<!\$)[1-9][0-9]*/', '\$'.$i, $format, 1);
+            $format = preg_replace('/(?<!\$)[1-9][0-9]*/', '\$' . $i, $format, 1);
         }
 
         // Hocus pocus!
-        return preg_replace('/^'.$regex.'$/', $format, $number_clean);
+        return preg_replace('/^' . $regex . '$/', $format, $number_clean);
     }
 
     /**
@@ -75,7 +76,7 @@ class format_Core
 
         // If no protocol given, prepend "http://" by default
         if (false === strpos($str, '://')) {
-            return 'http://'.$str;
+            return 'http://' . $str;
         }
 
         // Return the original URL
@@ -92,7 +93,7 @@ class format_Core
     public static function color($str = '')
     {
         // Reject invalid values
-        if (! valid::color($str)) {
+        if (!valid::color($str)) {
             return '';
         }
 
@@ -101,12 +102,12 @@ class format_Core
 
         // Prepend "#"
         if ('#' !== $str[0]) {
-            $str = '#'.$str;
+            $str = '#' . $str;
         }
 
         // Expand short notation
         if (4 === strlen($str)) {
-            $str = '#'.$str[1].$str[1].$str[2].$str[2].$str[3].$str[3];
+            $str = '#' . $str[1] . $str[1] . $str[2] . $str[2] . $str[3] . $str[3];
         }
 
         return $str;

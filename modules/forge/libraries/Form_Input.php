@@ -1,13 +1,14 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * FORGE base input library.
  *
  * $Id: Form_Input.php 3326 2008-08-09 21:24:30Z Shadowhand $
  *
- * @package    Forge
- * @author     Kohana Team
+ * @package        Forge
+ * @author         Kohana Team
  * @copyright  (c) 2007-2008 Kohana Team
- * @license    http://kohanaphp.com/license.html
+ * @license        http://kohanaphp.com/license.html
  */
 class Form_Input_Core
 {
@@ -17,24 +18,24 @@ class Form_Input_Core
 
     // Element data
     protected $data = [
-        'type'    => 'text',
-        'class'   => 'textbox',
-        'value'   => ''
+        'type'  => 'text',
+        'class' => 'textbox',
+        'value' => ''
     ];
 
     // Protected data keys
     protected $protect = [];
 
     // Validation rules, matches, and callbacks
-    protected $rules = [];
-    protected $matches = [];
+    protected $rules     = [];
+    protected $matches   = [];
     protected $callbacks = [];
 
     // Validation check
     protected $is_valid;
 
     // Errors
-    protected $errors = [];
+    protected $errors         = [];
     protected $error_messages = [];
 
     /**
@@ -99,7 +100,7 @@ class Form_Input_Core
      */
     public function matches($input)
     {
-        if (! in_array($input, $this->matches, true)) {
+        if (!in_array($input, $this->matches, true)) {
             $this->matches[] = $input;
         }
 
@@ -115,7 +116,7 @@ class Form_Input_Core
      */
     public function callback($callback)
     {
-        if (! in_array($callback, $this->callbacks, true)) {
+        if (!in_array($callback, $this->callbacks, true)) {
             $this->callbacks[] = $callback;
         }
 
@@ -210,7 +211,7 @@ class Form_Input_Core
                     unset($this->rules[$key]);
                 }
             } else {
-                if (! in_array($rule, $this->rules)) {
+                if (!in_array($rule, $this->rules)) {
                     if ('+' == $action) {
                         array_unshift($this->rules, $rule);
                     } else {
@@ -229,7 +230,7 @@ class Form_Input_Core
      */
     public function add_error($key, $val)
     {
-        if (! isset($this->errors[$key])) {
+        if (!isset($this->errors[$key])) {
             $this->errors[$key] = $val;
         }
 
@@ -247,7 +248,7 @@ class Form_Input_Core
     public function error_messages($func = null, $message = null)
     {
         // Set custom error messages
-        if (! empty($func)) {
+        if (!empty($func)) {
             if (is_array($func)) {
                 // Replace all
                 $this->error_messages = $func;
@@ -267,7 +268,7 @@ class Form_Input_Core
         null === $this->is_valid && $this->validate();
 
         // Return single error
-        if (! is_array($this->error_messages) && ! empty($this->errors)) {
+        if (!is_array($this->error_messages) && !empty($this->errors)) {
             return [$this->error_messages];
         }
 
@@ -292,22 +293,22 @@ class Form_Input_Core
                         case 'valid_email':
                         case 'valid_ip':
                             // Fetch an i18n error message
-                                                        $error = 'validation.'.$func;
+                            $error = 'validation.' . $func;
                             break;
                         case 'valid_' === substr($func, 0, 6):
                             // Strip 'valid_' from func name
                             $func = ('valid_' === substr($func, 0, 6)) ? substr($func, 6) : $func;
-                            // no break
+                        // no break
                         case 'alpha':
                         case 'alpha_dash':
                         case 'digit':
                         case 'numeric':
                             // i18n strings have to be inserted into valid_type
-                            $args[] = 'validation.'.$func;
-                            $error = 'validation.valid_type';
+                            $args[] = 'validation.' . $func;
+                            $error  = 'validation.valid_type';
                             break;
                         default:
-                            $error = 'validation.'.$func;
+                            $error = 'validation.' . $func;
                     }
                 }
             }
@@ -382,7 +383,7 @@ class Form_Input_Core
             return $this->is_valid = true;
         }
 
-        if (! empty($this->rules)) {
+        if (!empty($this->rules)) {
             foreach ($this->rules as $rule) {
                 if (false !== ($offset = strpos($rule, '['))) {
                     // Get the args
@@ -395,25 +396,25 @@ class Form_Input_Core
                 if ('valid_' === substr($rule, 0, 6) && method_exists('valid', substr($rule, 6))) {
                     $func = substr($rule, 6);
 
-                    if ($this->value && ! valid::$func($this->value)) {
+                    if ($this->value && !valid::$func($this->value)) {
                         $this->errors[$rule] = true;
                     }
-                } elseif (method_exists($this, 'rule_'.$rule)) {
+                } elseif (method_exists($this, 'rule_' . $rule)) {
                     // The rule function is always prefixed with rule_
-                    $rule = 'rule_'.$rule;
+                    $rule = 'rule_' . $rule;
 
                     if (isset($args)) {
                         // Manually call up to 2 args for speed
                         switch (count($args)) {
                             case 1:
                                 $this->$rule($args[0]);
-                            break;
+                                break;
                             case 2:
                                 $this->$rule($args[0], $args[1]);
-                            break;
+                                break;
                             default:
                                 call_user_func_array([$this, $rule], $args);
-                            break;
+                                break;
                         }
                     } else {
                         // Just call the rule
@@ -427,13 +428,13 @@ class Form_Input_Core
                 }
 
                 // Stop when an error occurs
-                if (! empty($this->errors)) {
+                if (!empty($this->errors)) {
                     break;
                 }
             }
         }
 
-        if (! empty($this->matches)) {
+        if (!empty($this->matches)) {
             foreach ($this->matches as $input) {
                 if ($this->value != $input->value) {
                     // Field does not match
@@ -443,12 +444,12 @@ class Form_Input_Core
             }
         }
 
-        if (! empty($this->callbacks)) {
+        if (!empty($this->callbacks)) {
             foreach ($this->callbacks as $callback) {
                 call_user_func($callback, $this);
 
                 // Stop when an error occurs
-                if (! empty($this->errors)) {
+                if (!empty($this->errors)) {
                     break;
                 }
             }

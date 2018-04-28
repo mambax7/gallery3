@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -31,10 +32,7 @@ class search_event_Core
 
     public static function item_deleted($item)
     {
-        db::build()
-      ->delete('search_records')
-      ->where('item_id', '=', $item->id)
-      ->execute();
+        db::build()->delete('search_records')->where('item_id', '=', $item->id)->execute();
     }
 
     public static function item_related_update($item)

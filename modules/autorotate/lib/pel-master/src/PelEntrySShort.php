@@ -22,12 +22,13 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301 USA
  */
+
 namespace lsolesen\pel;
 
 /**
  * Classes used to hold shorts, both signed and unsigned.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public
  *          License (GPL)
  * @package PEL
@@ -40,7 +41,7 @@ namespace lsolesen\pel;
  * of shorts. The class will be used to manipulate any of the Exif
  * tags which has format {@link PelFormat::SSHORT}.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @package PEL
  */
 class PelEntrySShort extends PelEntryNumber
@@ -54,23 +55,23 @@ class PelEntrySShort extends PelEntryNumber
      * single integer argument is given here.
      *
      * @param int $tag
-     *            the tag which this entry represents. This
-     *            should be one of the constants defined in {@link PelTag}
-     *            which has format {@link PelFormat::SSHORT}.
+     *                   the tag which this entry represents. This
+     *                   should be one of the constants defined in {@link PelTag}
+     *                   which has format {@link PelFormat::SSHORT}.
      *
-     * @param int $value...
-     *            the signed short(s) that this entry will
-     *            represent. The argument passed must obey the same rules as the
-     *            argument to {@link setValue}, namely that it should be within
-     *            range of a signed short, that is between -32768 to 32767
-     *            (inclusive). If not, then a {@link PelOverFlowException} will be
-     *            thrown.
+     * @param int $value ...
+     *                   the signed short(s) that this entry will
+     *                   represent. The argument passed must obey the same rules as the
+     *                   argument to {@link setValue}, namely that it should be within
+     *                   range of a signed short, that is between -32768 to 32767
+     *                   (inclusive). If not, then a {@link PelOverFlowException} will be
+     *                   thrown.
      */
     public function __construct($tag, $value = null)
     {
-        $this->tag = $tag;
-        $this->min = - 32768;
-        $this->max = 32767;
+        $this->tag    = $tag;
+        $this->min    = -32768;
+        $this->max    = 32767;
         $this->format = PelFormat::SSHORT;
 
         $value = func_get_args();
@@ -81,7 +82,7 @@ class PelEntrySShort extends PelEntryNumber
     /**
      * Convert a number into bytes.
      *
-     * @param int $number
+     * @param int          $number
      *            the number that should be converted.
      *
      * @param PelByteOrder $order

@@ -28,14 +28,14 @@ class autorotate
 {
     public static function rotate_item($item)
     {
-        
+
         // Only try to rotate photos based on EXIF
         if ($item->is_photo() && 'image/jpeg' == $item->mime_type) {
             $exif_data = exif_read_data($item->file_path());
 
             if (isset($exif_data['Orientation']) && $exif_data['Orientation']) {
                 $orientation = $exif_data['Orientation'];
-                $degrees = 0;
+                $degrees     = 0;
 
                 if ('3' == $orientation) {
                     $degrees = 180;
@@ -57,8 +57,8 @@ class autorotate
                         $exif = $jpeg->getExif();
 
                         if (null !== $exif) {
-                            $tiff = $exif->getTiff();
-                            $ifd0 = $tiff->getIfd();
+                            $tiff        = $exif->getTiff();
+                            $ifd0        = $tiff->getIfd();
                             $orientation = $ifd0->getEntry(PelTag::ORIENTATION);
                             $orientation->setValue(1);
                             file_put_contents($tmpfile, $file->getBytes());

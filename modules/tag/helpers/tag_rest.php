@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,7 +22,7 @@ class tag_rest_Core
 {
     public static function get($request)
     {
-        $tag = rest::resolve($request->url);
+        $tag       = rest::resolve($request->url);
         $tag_items = [];
         foreach ($tag->items() as $item) {
             if (access::can('view', $item)) {
@@ -69,18 +70,18 @@ class tag_rest_Core
     public static function relationships($resource_type, $resource)
     {
         switch ($resource_type) {
-    case 'item':
-      $tags = [];
-      foreach (tag::item_tags($resource) as $tag) {
-          $tags[] = rest::url('tag_item', $tag, $resource);
-      }
-      return [
-          'tags' => [
-              'url'     => rest::url('item_tags', $resource),
-              'members' => $tags
-          ]
-      ];
-    }
+            case 'item':
+                $tags = [];
+                foreach (tag::item_tags($resource) as $tag) {
+                    $tags[] = rest::url('tag_item', $tag, $resource);
+                }
+                return [
+                    'tags' => [
+                        'url'     => rest::url('item_tags', $resource),
+                        'members' => $tags
+                    ]
+                ];
+        }
     }
 
     public static function resolve($id)

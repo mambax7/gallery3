@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -35,7 +36,7 @@ class system_Core
      * @param  string $priority_path (optional)
      * @return string path to binary if found; null if not found
      */
-    public static function find_binary($binary, $priority_path=null)
+    public static function find_binary($binary, $priority_path = null)
     {
         $bin_path = DOCROOT . 'bin';
 
@@ -44,19 +45,15 @@ class system_Core
         } else {
             $paths = [$bin_path];
         }
-        $paths = array_merge(
-        $paths,
-      explode(':', getenv('PATH')),
-      explode(':', module::get_var('gallery', 'extra_binary_paths'))
-    );
+        $paths = array_merge($paths, explode(':', getenv('PATH')), explode(':', module::get_var('gallery', 'extra_binary_paths')));
 
         foreach ($paths as $path) {
-            $path = rtrim($path, '/');
+            $path      = rtrim($path, '/');
             $candidate = "$path/$binary";
             // @suppress errors below to avoid open_basedir issues
             if (@file_exists($candidate)) {
-                if (!@is_executable($candidate) &&
-            (0 == substr_compare($bin_path, $candidate, 0, strlen($bin_path)))) {
+                if (!@is_executable($candidate)
+                    && (0 == substr_compare($bin_path, $candidate, 0, strlen($bin_path)))) {
                     // Binary isn't executable but is in Gallery's bin directory - try fixing permissions.
                     @chmod($candidate, 0755);
                 }
@@ -76,7 +73,7 @@ class system_Core
      * Unless specified with the $delete_later argument, it will be marked
      * for deletion at shutdown using system::delete_later.
      */
-    public static function temp_filename($prefix= '', $extension= '', $delete_later=true)
+    public static function temp_filename($prefix = '', $extension = '', $delete_later = true)
     {
         do {
             $basename = tempnam(TMPPATH, $prefix);
@@ -84,7 +81,7 @@ class system_Core
                 return false;
             }
             $filename = "$basename.$extension";
-            $success = !file_exists($filename) && @rename($basename, $filename);
+            $success  = !file_exists($filename) && @rename($basename, $filename);
             if (!$success) {
                 @unlink($basename);
             }

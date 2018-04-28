@@ -25,8 +25,8 @@
  */
 class module_Core
 {
-    public static $active = [];
-    public static $modules = [];
+    public static $active    = [];
+    public static $modules   = [];
     public static $var_cache = null;
     public static $available = [];
 
@@ -39,7 +39,7 @@ class module_Core
     {
         $module = module::get($module_name);
         if (!$module->loaded()) {
-            $module->name = $module_name;
+            $module->name   = $module_name;
             $module->active = 'gallery' == $module_name;  // only gallery is active by default
         }
         $module->version = $version;
@@ -88,8 +88,8 @@ class module_Core
      */
     public static function is_active($module_name)
     {
-        return array_key_exists($module_name, self::$modules) &&
-      self::$modules[$module_name]->active;
+        return array_key_exists($module_name, self::$modules)
+               && self::$modules[$module_name]->active;
     }
 
     /**
@@ -100,19 +100,18 @@ class module_Core
         if (empty(self::$available)) {
             $modules = new ArrayObject([], ArrayObject::ARRAY_AS_PROPS);
             foreach (glob(MODPATH . '*/module.info') as $file) {
-                $module_name = basename(dirname($file));
-                $modules->$module_name =
-          new ArrayObject(parse_ini_file($file), ArrayObject::ARRAY_AS_PROPS);
+                $module_name           = basename(dirname($file));
+                $modules->$module_name = new ArrayObject(parse_ini_file($file), ArrayObject::ARRAY_AS_PROPS);
                 foreach ($modules->$module_name as &$value) {
                     $value = html::purify($value);
                 }
 
-                $m =& $modules->$module_name;
-                $m->installed = module::is_installed($module_name);
-                $m->active = module::is_active($module_name);
+                $m               =& $modules->$module_name;
+                $m->installed    = module::is_installed($module_name);
+                $m->active       = module::is_active($module_name);
                 $m->code_version = $m->version;
-                $m->version = module::get_version($module_name);
-                $m->locked = false;
+                $m->version      = module::get_version($module_name);
+                $m->locked       = false;
 
                 if ($m->active && $m->version != $m->code_version) {
                     site_status::warning(t('Some of your modules are out of date.  <a href="%upgrader_url">Upgrade now!</a>', ['upgrader_url' => url::abs_site('upgrader')]), 'upgrade_now');
@@ -120,8 +119,8 @@ class module_Core
             }
 
             // Lock certain modules
-            $modules->gallery->locked = true;
-            $identity_module = module::get_var('gallery', 'identity_provider', 'user');
+            $modules->gallery->locked          = true;
+            $identity_module                   = module::get_var('gallery', 'identity_provider', 'user');
             $modules->$identity_module->locked = true;
 
             $modules->uasort(['module', 'module_comparator']);
@@ -211,15 +210,12 @@ class module_Core
         // Now the module is installed but inactive, so don't leave it in the active path
         module::_remove_from_path($module_name);
 
-        log::success(
-            'module',
-            t('Installed module %module_name', ['module_name' => $module_name])
-    );
+        log::success('module', t('Installed module %module_name', ['module_name' => $module_name]));
     }
 
     private static function _add_to_path($module_name)
     {
-        $config = Kohana_Config::instance();
+        $config         = Kohana_Config::instance();
         $kohana_modules = $config->get('core.modules');
         array_unshift($kohana_modules, MODPATH . $module_name);
         $config->set('core.modules', $kohana_modules);
@@ -229,7 +225,7 @@ class module_Core
 
     private static function _remove_from_path($module_name)
     {
-        $config = Kohana_Config::instance();
+        $config         = Kohana_Config::instance();
         $kohana_modules = $config->get('core.modules');
         if (false !== ($key = array_search(MODPATH . $module_name, $kohana_modules))) {
             unset($kohana_modules[$key]);
@@ -247,9 +243,9 @@ class module_Core
      */
     public static function upgrade($module_name)
     {
-        $version_before = module::get_version($module_name);
+        $version_before  = module::get_version($module_name);
         $installer_class = "{$module_name}_installer";
-        $available = module::available();
+        $available       = module::available();
         if (class_exists($installer_class) && method_exists($installer_class, 'upgrade')) {
             call_user_func_array([$installer_class, 'upgrade'], [$version_before]);
         } else {
@@ -263,17 +259,11 @@ class module_Core
 
         $version_after = module::get_version($module_name);
         if ($version_before != $version_after) {
-            log::success(
-                'module',
-                t(
-                    'Upgraded module %module_name from %version_before to %version_after',
-                    [
-                        'module_name'    => $module_name,
-                        'version_before' => $version_before,
-                        'version_after'  => $version_after
-                    ]
-        )
-      );
+            log::success('module', t('Upgraded module %module_name from %version_before to %version_after', [
+                                                                                                              'module_name'    => $module_name,
+                                                                                                              'version_before' => $version_before,
+                                                                                                              'version_after'  => $version_after
+                                                                                                          ]));
         }
 
         if ($version_after != $available->$module_name->code_version) {
@@ -307,10 +297,7 @@ class module_Core
 
         block_manager::activate_blocks($module_name);
 
-        log::success(
-            'module',
-            t('Activated module %module_name', ['module_name' => $module_name])
-    );
+        log::success('module', t('Activated module %module_name', ['module_name' => $module_name]));
     }
 
     /**
@@ -338,15 +325,9 @@ class module_Core
         block_manager::deactivate_blocks($module_name);
 
         if (module::info($module_name)) {
-            log::success(
-                'module',
-                t('Deactivated module %module_name', ['module_name' => $module_name])
-      );
+            log::success('module', t('Deactivated module %module_name', ['module_name' => $module_name]));
         } else {
-            log::success(
-                'module',
-                t('Deactivated missing module %module_name', ['module_name' => $module_name])
-      );
+            log::success('module', t('Deactivated missing module %module_name', ['module_name' => $module_name]));
         }
     }
 
@@ -385,10 +366,7 @@ class module_Core
         // We could delete the module vars here too, but it's nice to leave them around
         // in case the module gets reinstalled.
 
-        log::success(
-            'module',
-            t('Uninstalled module %module_name', ['module_name' => $module_name])
-    );
+        log::success('module', t('Uninstalled module %module_name', ['module_name' => $module_name]));
     }
 
     /**
@@ -396,16 +374,14 @@ class module_Core
      */
     public static function load_modules()
     {
-        self::$modules = [];
-        self::$active = [];
+        self::$modules  = [];
+        self::$active   = [];
         $kohana_modules = [];
 
         // In version 32 we introduced a weight column so we can specify the module order
         // If we try to use that blindly, we'll break earlier versions before they can even
         // run the upgrader.
-        $modules = module::get_version('gallery') < 32 ?
-      ORM::factory('module')->find_all():
-      ORM::factory('module')->order_by('weight')->find_all();
+        $modules = module::get_version('gallery') < 32 ? ORM::factory('module')->find_all() : ORM::factory('module')->order_by('weight')->find_all();
 
         foreach ($modules as $module) {
             self::$modules[$module->name] = $module;
@@ -416,16 +392,13 @@ class module_Core
             if ('gallery' == $module->name) {
                 $gallery = $module;
             } else {
-                self::$active[] = $module;
+                self::$active[]   = $module;
                 $kohana_modules[] = MODPATH . $module->name;
             }
         }
         self::$active[] = $gallery;  // put gallery last in the module list to match core.modules
-        $config = Kohana_Config::instance();
-        $config->set(
-            'core.modules',
-            array_merge($kohana_modules, $config->get('core.modules'))
-    );
+        $config         = Kohana_Config::instance();
+        $config->set('core.modules', array_merge($kohana_modules, $config->get('core.modules')));
     }
 
     /**
@@ -433,7 +406,7 @@ class module_Core
      * @param string $name the event name
      * @param mixed  $data data to pass to each event handler
      */
-    public static function event($name, &$data=null)
+    public static function event($name, &$data = null)
     {
         $args = func_get_args();
         array_shift($args);
@@ -441,24 +414,24 @@ class module_Core
 
         if (method_exists('gallery_event', $function)) {
             switch (count($args)) {
-      case 0:
-        gallery_event::$function();
-        break;
-      case 1:
-        gallery_event::$function($args[0]);
-        break;
-      case 2:
-        gallery_event::$function($args[0], $args[1]);
-        break;
-      case 3:
-        gallery_event::$function($args[0], $args[1], $args[2]);
-        break;
-      case 4:      // Context menu events have 4 arguments so lets optimize them
-        gallery_event::$function($args[0], $args[1], $args[2], $args[3]);
-        break;
-      default:
-        call_user_func_array(['gallery_event', $function], $args);
-      }
+                case 0:
+                    gallery_event::$function();
+                    break;
+                case 1:
+                    gallery_event::$function($args[0]);
+                    break;
+                case 2:
+                    gallery_event::$function($args[0], $args[1]);
+                    break;
+                case 3:
+                    gallery_event::$function($args[0], $args[1], $args[2]);
+                    break;
+                case 4:      // Context menu events have 4 arguments so lets optimize them
+                    gallery_event::$function($args[0], $args[1], $args[2], $args[3]);
+                    break;
+                default:
+                    call_user_func_array(['gallery_event', $function], $args);
+            }
         }
 
         foreach (self::$active as $module) {
@@ -494,19 +467,14 @@ class module_Core
      * @param string $default_value
      * @return the value
      */
-    public static function get_var($module_name, $name, $default_value=null)
+    public static function get_var($module_name, $name, $default_value = null)
     {
         // We cache vars so we can load them all at once for performance.
         if (empty(self::$var_cache)) {
             self::$var_cache = Cache::instance()->get('var_cache');
             if (empty(self::$var_cache)) {
                 // Cache doesn't exist, create it now.
-                foreach (db::build()
-                 ->select('module_name', 'name', 'value')
-                 ->from('vars')
-                 ->order_by('module_name')
-                 ->order_by('name')
-                 ->execute() as $row) {
+                foreach (db::build()->select('module_name', 'name', 'value')->from('vars')->order_by('module_name')->order_by('name')->execute() as $row) {
                     // Mute the "Creating default object from empty value" warning below
                     @self::$var_cache->{$row->module_name}->{$row->name} = $row->value;
                 }
@@ -529,13 +497,10 @@ class module_Core
      */
     public static function set_var($module_name, $name, $value)
     {
-        $var = ORM::factory('var')
-      ->where('module_name', '=', $module_name)
-      ->where('name', '=', $name)
-      ->find();
+        $var = ORM::factory('var')->where('module_name', '=', $module_name)->where('name', '=', $name)->find();
         if (!$var->loaded()) {
             $var->module_name = $module_name;
-            $var->name = $name;
+            $var->name        = $name;
         }
         $var->value = $value;
         $var->save();
@@ -557,46 +522,34 @@ class module_Core
      * @param string $name
      * @param string $increment (optional, default is 1)
      */
-    public static function incr_var($module_name, $name, $increment=1)
+    public static function incr_var($module_name, $name, $increment = 1)
     {
-        db::build()
-      ->update('vars')
-      ->set('value', db::expr("`value` + $increment"))
-      ->where('module_name', '=', $module_name)
-      ->where('name', '=', $name)
-      ->execute();
+        db::build()->update('vars')->set('value', db::expr("`value` + $increment"))->where('module_name', '=', $module_name)->where('name', '=', $name)->execute();
 
         Cache::instance()->delete('var_cache');
         self::$var_cache = null;
     }
 
     /**
-      * Remove a variable for this module.
-      * @param string $module_name
-      * @param string $name
-      */
+     * Remove a variable for this module.
+     * @param string $module_name
+     * @param string $name
+     */
     public static function clear_var($module_name, $name)
     {
-        db::build()
-      ->delete('vars')
-      ->where('module_name', '=', $module_name)
-      ->where('name', '=', $name)
-      ->execute();
+        db::build()->delete('vars')->where('module_name', '=', $module_name)->where('name', '=', $name)->execute();
 
         Cache::instance()->delete('var_cache');
         self::$var_cache = null;
     }
 
     /**
-      * Remove all variables for this module.
-      * @param string $module_name
-      */
+     * Remove all variables for this module.
+     * @param string $module_name
+     */
     public static function clear_all_vars($module_name)
     {
-        db::build()
-      ->delete('vars')
-      ->where('module_name', '=', $module_name)
-      ->execute();
+        db::build()->delete('vars')->where('module_name', '=', $module_name)->execute();
 
         Cache::instance()->delete('var_cache');
         self::$var_cache = null;
@@ -622,8 +575,10 @@ class module_Core
         // with version number at or below the one given will be considered obsolete.
         // It is hard-coded here, and may be updated with future releases of Gallery.
         $obsolete_modules = [
-            'videos'  => 4, 'noffmpeg' => 1, 'videodimensions' => 1,
-            'digibug' => 2
+            'videos'          => 4,
+            'noffmpeg'        => 1,
+            'videodimensions' => 1,
+            'digibug'         => 2
         ];
 
         // Before we check the active modules, deactivate any that are missing.
@@ -639,14 +594,11 @@ class module_Core
         if ($modules_found) {
             // Need this to be on one super-long line or else the localization scanner may not work.
             // (ref: http://sourceforge.net/apps/trac/gallery/ticket/1321)
-            return t(
-                'Recent upgrades to Gallery have made the following modules obsolete: %modules. We recommend that you <a href="%url_mod">deactivate</a> the module(s). For more information, please see the <a href="%url_doc">documentation page</a>.',
-                [
-                    'modules' => implode(', ', $modules_found),
-                    'url_mod' => url::site('admin/modules'),
-                    'url_doc' => 'http://codex.galleryproject.org/Gallery3:User_guide:Obsolete_modules'
-                ]
-      );
+            return t('Recent upgrades to Gallery have made the following modules obsolete: %modules. We recommend that you <a href="%url_mod">deactivate</a> the module(s). For more information, please see the <a href="%url_doc">documentation page</a>.', [
+                                                                                                                                                                                                                                                                'modules' => implode(', ', $modules_found),
+                                                                                                                                                                                                                                                                'url_mod' => url::site('admin/modules'),
+                                                                                                                                                                                                                                                                'url_doc' => 'http://codex.galleryproject.org/Gallery3:User_guide:Obsolete_modules'
+                                                                                                                                                                                                                                                            ]);
         }
 
         return null;

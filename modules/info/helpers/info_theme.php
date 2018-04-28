@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -30,13 +31,10 @@ class info_theme_Core
         if ($item->owner) {
             $results .= '<li>';
             if ($item->owner->url) {
-                $results .= t(
-                    'By: <a href="%owner_url">%owner_name</a>',
-                    [
-                        'owner_name' => $item->owner->display_name(),
-                        'owner_url'  => $item->owner->url
-                    ]
-        );
+                $results .= t('By: <a href="%owner_url">%owner_name</a>', [
+                                                                            'owner_name' => $item->owner->display_name(),
+                                                                            'owner_url'  => $item->owner->url
+                                                                        ]);
             } else {
                 $results .= t('By: %owner_name', ['owner_name' => $item->owner->display_name()]);
             }

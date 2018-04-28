@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -21,12 +22,11 @@ class Admin_Dashboard_Controller extends Admin_Controller
 {
     public function index()
     {
-        $view = new Admin_View('admin.html');
-        $view->page_title = t('Dashboard');
-        $view->content = new View('admin_dashboard.html');
-        $view->content->blocks = block_manager::get_html('dashboard_center');
-        $view->sidebar = '<div id="g-admin-dashboard-sidebar">' .
-                         block_manager::get_html('dashboard_sidebar') . '</div>';
+        $view                                    = new Admin_View('admin.html');
+        $view->page_title                        = t('Dashboard');
+        $view->content                           = new View('admin_dashboard.html');
+        $view->content->blocks                   = block_manager::get_html('dashboard_center');
+        $view->sidebar                           = '<div id="g-admin-dashboard-sidebar">' . block_manager::get_html('dashboard_sidebar') . '</div>';
         $view->content->obsolete_modules_message = module::get_obsolete_modules_message();
         print $view;
     }
@@ -42,20 +42,10 @@ class Admin_Dashboard_Controller extends Admin_Controller
 
             if ($form->add_block->center->value) {
                 block_manager::add('dashboard_center', $module_name, $id);
-                message::success(
-          t(
-              'Added <b>%title</b> block to the dashboard center',
-              ['title' => $available["$module_name:$id"]]
-          )
-        );
+                message::success(t('Added <b>%title</b> block to the dashboard center', ['title' => $available["$module_name:$id"]]));
             } else {
                 block_manager::add('dashboard_sidebar', $module_name, $id);
-                message::success(
-          t(
-              'Added <b>%title</b> to the dashboard sidebar',
-              ['title' => $available["$module_name:$id"]]
-          )
-        );
+                message::success(t('Added <b>%title</b> to the dashboard sidebar', ['title' => $available["$module_name:$id"]]));
             }
         }
         url::redirect('admin/dashboard');
@@ -65,7 +55,7 @@ class Admin_Dashboard_Controller extends Admin_Controller
     {
         access::verify_csrf();
 
-        $blocks_center = block_manager::get_active('dashboard_center');
+        $blocks_center  = block_manager::get_active('dashboard_center');
         $blocks_sidebar = block_manager::get_active('dashboard_sidebar');
 
         if (array_key_exists($id, $blocks_sidebar)) {
@@ -78,7 +68,7 @@ class Admin_Dashboard_Controller extends Admin_Controller
 
         if (!empty($deleted)) {
             $available = block_manager::get_available_admin_blocks();
-            $title = $available[implode(':', $deleted)];
+            $title     = $available[implode(':', $deleted)];
             message::success(t('Removed <b>%title</b> block', ['title' => $title]));
         }
 

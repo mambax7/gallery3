@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -25,7 +26,7 @@ class Organize_Controller extends Controller
         access::required('view', $album);
         access::required('edit', $album);
 
-        $v = new View('organize_frame.html');
+        $v        = new View('organize_frame.html');
         $v->album = $album;
         print $v;
     }
@@ -36,14 +37,14 @@ class Organize_Controller extends Controller
         access::required('view', $album);
         access::required('edit', $album);
 
-        $v = new View('organize_dialog.html');
+        $v        = new View('organize_dialog.html');
         $v->album = $album;
         print $v;
     }
 
     public function tree($selected_album_id)
     {
-        $root = ORM::factory('item', Input::instance()->post('root_id', 1));
+        $root           = ORM::factory('item', Input::instance()->post('root_id', 1));
         $selected_album = ORM::factory('item', $selected_album_id);
         access::required('view', $root);
         access::required('view', $selected_album);
@@ -83,7 +84,7 @@ class Organize_Controller extends Controller
     {
         access::verify_csrf();
 
-        $input = Input::instance();
+        $input      = Input::instance();
         $new_parent = ORM::factory('item', $input->post('target_id'));
         access::required('edit', $new_parent);
 
@@ -127,7 +128,7 @@ class Organize_Controller extends Controller
     {
         access::verify_csrf();
 
-        $input = Input::instance();
+        $input  = Input::instance();
         $target = ORM::factory('item', $input->post('target_id'));
         if (!$target->loaded()) {
             json::reply(null);
@@ -142,11 +143,11 @@ class Organize_Controller extends Controller
             // @todo: consider making this a trigger in the Item_Model.
             item::resequence_child_weights($album);
             $album->sort_column = 'weight';
-            $album->sort_order = 'ASC';
+            $album->sort_order  = 'ASC';
             $album->save();
         }
 
-        $source_ids = explode(',', $input->post('source_ids'));
+        $source_ids  = explode(',', $input->post('source_ids'));
         $base_weight = $target->weight;
         if ('after' == $input->post('relative')) {
             $base_weight++;
@@ -154,12 +155,7 @@ class Organize_Controller extends Controller
 
         if ($source_ids) {
             // Make a hole the right size
-            db::build()
-        ->update('items')
-        ->set('weight', db::expr('`weight` + ' . count($source_ids)))
-        ->where('parent_id', '=', $album->id)
-        ->where('weight', '>=', $base_weight)
-        ->execute();
+            db::build()->update('items')->set('weight', db::expr('`weight` + ' . count($source_ids)))->where('parent_id', '=', $album->id)->where('weight', '>=', $base_weight)->execute();
 
             // Move all the source items to the right spots.
             for ($i = 0; $i < count($source_ids); $i++) {
@@ -214,10 +210,8 @@ class Organize_Controller extends Controller
 
     private function _get_tree($item, $selected)
     {
-        $tree = [];
-        $children = $item->viewable()
-      ->children(null, null, [['type', '=', 'album']])
-      ->as_array();
+        $tree     = [];
+        $children = $item->viewable()->children(null, null, [['type', '=', 'album']])->as_array();
         foreach ($children as $child) {
             $node = [
                 'allowDrag'  => false,

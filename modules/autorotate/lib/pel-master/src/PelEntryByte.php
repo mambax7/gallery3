@@ -22,6 +22,7 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301 USA
  */
+
 namespace lsolesen\pel;
 
 /**
@@ -30,7 +31,7 @@ namespace lsolesen\pel;
  * PelEntryWindowsString} class is used to manipulate strings in the
  * format Windows XP needs.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public
  *          License (GPL)
  * @package PEL
@@ -43,7 +44,7 @@ namespace lsolesen\pel;
  * bytes. The class will be used to manipulate any of the Exif tags
  * which has format {@link PelFormat::BYTE}.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @package PEL
  */
 class PelEntryByte extends PelEntryNumber
@@ -57,22 +58,22 @@ class PelEntryByte extends PelEntryNumber
      * single integer argument is given here.
      *
      * @param int $tag
-     *            the tag which this entry represents. This
-     *            should be one of the constants defined in {@link PelTag}
-     *            which has format {@link PelFormat::BYTE}.
+     *                   the tag which this entry represents. This
+     *                   should be one of the constants defined in {@link PelTag}
+     *                   which has format {@link PelFormat::BYTE}.
      *
-     * @param int $value...
-     *            the byte(s) that this entry will represent.
-     *            The argument passed must obey the same rules as the argument to
-     *            {@link setValue}, namely that it should be within range of an
-     *            unsigned byte, that is between 0 and 255 (inclusive). If not,
-     *            then a {@link PelOverflowException} will be thrown.
+     * @param int $value ...
+     *                   the byte(s) that this entry will represent.
+     *                   The argument passed must obey the same rules as the argument to
+     *                   {@link setValue}, namely that it should be within range of an
+     *                   unsigned byte, that is between 0 and 255 (inclusive). If not,
+     *                   then a {@link PelOverflowException} will be thrown.
      */
     public function __construct($tag, $value = null)
     {
-        $this->tag = $tag;
-        $this->min = 0;
-        $this->max = 255;
+        $this->tag    = $tag;
+        $this->min    = 0;
+        $this->max    = 255;
         $this->format = PelFormat::BYTE;
 
         $value = func_get_args();
@@ -83,7 +84,7 @@ class PelEntryByte extends PelEntryNumber
     /**
      * Convert a number into bytes.
      *
-     * @param int $number
+     * @param int          $number
      *            the number that should be converted.
      *
      * @param PelByteOrder $order

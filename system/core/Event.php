@@ -1,14 +1,15 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Process queuing/execution class. Allows an unlimited number of callbacks
  * to be added to 'events'. Events can be run multiple times, and can also
  * process event-specific data. By default, Kohana has several system events.
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
- * @link       http://docs.kohanaphp.com/general/events
+ * @license        http://kohanaphp.com/license
+ * @link           http://docs.kohanaphp.com/general/events
  */
 abstract class Event_Core
 {
@@ -32,7 +33,7 @@ abstract class Event_Core
      */
     public static function add($name, $callback, $unique = false)
     {
-        if (! isset(Event::$events[$name])) {
+        if (!isset(Event::$events[$name])) {
             // Create an empty event if it is not yet defined
             Event::$events[$name] = [];
         } elseif ($unique && in_array($callback, Event::$events[$name], true)) {
@@ -99,14 +100,10 @@ abstract class Event_Core
         }
 
         // Add the new event at the given key location
-        Event::$events[$name] = array_merge(
-            // Events before the key
-            array_slice(Event::$events[$name], 0, $key),
-            // New event callback
-            [$callback],
-            // Events after the key
-            array_slice(Event::$events[$name], $key)
-        );
+        Event::$events[$name] = array_merge(// Events before the key
+            array_slice(Event::$events[$name], 0, $key), // New event callback
+            [$callback], // Events after the key
+            array_slice(Event::$events[$name], $key));
 
         return true;
     }
@@ -125,7 +122,7 @@ abstract class Event_Core
             return false;
         }
 
-        if (! in_array($callback, Event::$events[$name], true)) {
+        if (!in_array($callback, Event::$events[$name], true)) {
             // Replace the exisiting event with the new event
             Event::$events[$name][$key] = $callback;
         } else {
@@ -182,17 +179,17 @@ abstract class Event_Core
      */
     public static function run($name, & $data = null)
     {
-        if (! empty(Event::$events[$name])) {
+        if (!empty(Event::$events[$name])) {
             // So callbacks can access Event::$data
             Event::$data =& $data;
-            $callbacks  =  Event::get($name);
+            $callbacks   = Event::get($name);
 
             foreach ($callbacks as $callback) {
                 call_user_func_array($callback, [&$data]);
             }
 
             // Do this to prevent data from getting 'stuck'
-            $clear_data = '';
+            $clear_data  = '';
             Event::$data =& $clear_data;
         }
 

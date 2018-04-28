@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -23,9 +24,9 @@ class Admin_Tags_Controller extends Admin_Controller
     {
         $filter = Input::instance()->get('filter');
 
-        $view = new Admin_View('admin.html');
-        $view->page_title = t('Manage tags');
-        $view->content = new View('admin_tags.html');
+        $view                  = new Admin_View('admin.html');
+        $view->page_title      = t('Manage tags');
+        $view->content         = new View('admin_tags.html');
         $view->content->filter = $filter;
 
         $query = ORM::factory('tag');
@@ -70,9 +71,7 @@ class Admin_Tags_Controller extends Admin_Controller
     {
         $tag = ORM::factory('tag', $id);
         if ($tag->loaded()) {
-            print InPlaceEdit::factory($tag->name)
-        ->action("admin/tags/rename/$id")
-        ->render();
+            print InPlaceEdit::factory($tag->name)->action("admin/tags/rename/$id")->render();
         }
     }
 
@@ -85,29 +84,21 @@ class Admin_Tags_Controller extends Admin_Controller
             throw new Kohana_404_Exception();
         }
 
-        $in_place_edit = InPlaceEdit::factory($tag->name)
-      ->action("admin/tags/rename/$tag->id")
-      ->rules(['required', 'length[1,64]']);
+        $in_place_edit = InPlaceEdit::factory($tag->name)->action("admin/tags/rename/$tag->id")->rules(['required', 'length[1,64]']);
 
         if ($in_place_edit->validate()) {
-            $old_name = $tag->name;
+            $old_name         = $tag->name;
             $new_name_or_list = $in_place_edit->value();
-            $tag_list = explode(',', $new_name_or_list);
+            $tag_list         = explode(',', $new_name_or_list);
 
             $tag->name = array_shift($tag_list);
             $tag->save();
 
             if (!empty($tag_list)) {
                 $this->_copy_items_for_tags($tag, $tag_list);
-                $message = t(
-                    'Split tag <i>%old_name</i> into <i>%tag_list</i>',
-                    ['old_name' => $old_name, 'tag_list' => $new_name_or_list]
-        );
+                $message = t('Split tag <i>%old_name</i> into <i>%tag_list</i>', ['old_name' => $old_name, 'tag_list' => $new_name_or_list]);
             } else {
-                $message = t(
-                    'Renamed tag <i>%old_name</i> to <i>%new_name</i>',
-                    ['old_name' => $old_name, 'new_name' => $tag->name]
-        );
+                $message = t('Renamed tag <i>%old_name</i> to <i>%new_name</i>', ['old_name' => $old_name, 'new_name' => $tag->name]);
             }
 
             message::success($message);

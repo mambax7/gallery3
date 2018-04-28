@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -25,10 +26,10 @@ class Admin_Recaptcha_Controller extends Admin_Controller
         if ('post' == request::method()) {
             // @todo move the "save" part of this into a separate controller function
             access::verify_csrf();
-            $old_public_key = module::get_var('recaptcha', 'public_key');
+            $old_public_key  = module::get_var('recaptcha', 'public_key');
             $old_private_key = module::get_var('recaptcha', 'private_key');
             if ($form->validate()) {
-                $public_key = $form->configure_recaptcha->public_key->value;
+                $public_key  = $form->configure_recaptcha->public_key->value;
                 $private_key = $form->configure_recaptcha->private_key->value;
 
                 if ($public_key && $private_key) {
@@ -52,12 +53,12 @@ class Admin_Recaptcha_Controller extends Admin_Controller
         }
 
         recaptcha::check_config();
-        $view = new Admin_View('admin.html');
-        $view->page_title = t('reCAPTCHA');
-        $view->content = new View('admin_recaptcha.html');
-        $view->content->public_key = module::get_var('recaptcha', 'public_key');
+        $view                       = new Admin_View('admin.html');
+        $view->page_title           = t('reCAPTCHA');
+        $view->content              = new View('admin_recaptcha.html');
+        $view->content->public_key  = module::get_var('recaptcha', 'public_key');
         $view->content->private_key = module::get_var('recaptcha', 'private_key');
-        $view->content->form = $form;
+        $view->content->form        = $form;
         print $view;
     }
 }

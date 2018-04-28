@@ -1,13 +1,14 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * FORGE dropdown input library.
  *
  * $Id: Form_Dropdown.php 3326 2008-08-09 21:24:30Z Shadowhand $
  *
- * @package    Forge
- * @author     Kohana Team
+ * @package        Forge
+ * @author         Kohana Team
  * @copyright  (c) 2007-2008 Kohana Team
- * @license    http://kohanaphp.com/license.html
+ * @license        http://kohanaphp.com/license.html
  */
 class Form_Dropdown_Core extends Form_Input
 {
@@ -35,7 +36,7 @@ class Form_Dropdown_Core extends Form_Input
         unset($base_data['label']);
 
         // Get the options and default selection
-        $options = arr::remove('options', $base_data);
+        $options  = arr::remove('options', $base_data);
         $selected = arr::remove('selected', $base_data);
 
         return form::dropdown($base_data, $options, $selected);
@@ -65,7 +66,7 @@ class Form_Dropdown_Core extends Form_Input
         // Load the submitted value
         $this->load_value();
 
-        if (! array_key_exists($this->value, $this->data['options'])) {
+        if (!array_key_exists($this->value, $this->data['options'])) {
             // Value does not exist in the options
             return $this->is_valid = false;
         }

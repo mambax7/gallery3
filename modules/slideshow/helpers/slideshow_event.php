@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -29,12 +30,7 @@ class slideshow_event_Core
     public static function module_change($changes)
     {
         if (!module::is_active('rss') || in_array('rss', $changes->deactivate)) {
-            site_status::warning(
-        t(
-            'The Slideshow module requires the RSS module.  <a href="%url">Activate the RSS module now</a>',
-            ['url' => html::mark_clean(url::site('admin/modules'))]
-        ), 'slideshow_needs_rss'
-      );
+            site_status::warning(t('The Slideshow module requires the RSS module.  <a href="%url">Activate the RSS module now</a>', ['url' => html::mark_clean(url::site('admin/modules'))]), 'slideshow_needs_rss');
         } else {
             site_status::clear('slideshow_needs_rss');
         }
@@ -44,35 +40,20 @@ class slideshow_event_Core
     {
         $max_scale = module::get_var('slideshow', 'max_scale');
         if ($theme->item()->descendants_count([['type', '=', 'photo']])) {
-            $menu->append(Menu::factory('link')
-                    ->id('slideshow')
-                    ->label(t('View slideshow'))
-                    ->url('javascript:cooliris.embed.show(' .
-                          "{maxScale:$max_scale,feed:'" . self::_feed_url($theme) . "'})")
-                    ->css_id('g-slideshow-link'));
+            $menu->append(Menu::factory('link')->id('slideshow')->label(t('View slideshow'))->url('javascript:cooliris.embed.show(' . "{maxScale:$max_scale,feed:'" . self::_feed_url($theme) . "'})")->css_id('g-slideshow-link'));
         }
     }
 
     public static function photo_menu($menu, $theme)
     {
         $max_scale = module::get_var('slideshow', 'max_scale');
-        $menu->append(Menu::factory('link')
-                  ->id('slideshow')
-                  ->label(t('View slideshow'))
-                  ->url('javascript:cooliris.embed.show(' .
-                        "{maxScale:$max_scale,feed:'" . self::_feed_url($theme) . "'})")
-                  ->css_id('g-slideshow-link'));
+        $menu->append(Menu::factory('link')->id('slideshow')->label(t('View slideshow'))->url('javascript:cooliris.embed.show(' . "{maxScale:$max_scale,feed:'" . self::_feed_url($theme) . "'})")->css_id('g-slideshow-link'));
     }
 
     public static function tag_menu($menu, $theme)
     {
         $max_scale = module::get_var('slideshow', 'max_scale');
-        $menu->append(Menu::factory('link')
-                  ->id('slideshow')
-                  ->label(t('View slideshow'))
-                  ->url('javascript:cooliris.embed.show(' .
-                        "{maxScale:$max_scale,feed:'" . self::_feed_url($theme) . "'})")
-                  ->css_id('g-slideshow-link'));
+        $menu->append(Menu::factory('link')->id('slideshow')->label(t('View slideshow'))->url('javascript:cooliris.embed.show(' . "{maxScale:$max_scale,feed:'" . self::_feed_url($theme) . "'})")->css_id('g-slideshow-link'));
     }
 
     private static function _feed_url($theme)

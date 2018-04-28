@@ -1,11 +1,12 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * URL helper class.
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class url_Core
 {
@@ -42,7 +43,7 @@ class url_Core
         }
 
         // Load the site domain
-        $site_domain = (string) Kohana::config('core.site_domain', true);
+        $site_domain = (string)Kohana::config('core.site_domain', true);
 
         if (false == $protocol) {
             if ('' === $site_domain || '/' === $site_domain[0]) {
@@ -55,22 +56,22 @@ class url_Core
         } else {
             if ('' === $site_domain || '/' === $site_domain[0]) {
                 // Guess the server name if the domain starts with slash
-                $port = $_SERVER['SERVER_PORT'];
-                $port = (((80 == $port) && ('http' == $protocol)) || ((443 == $port) && ('https' == $protocol)) || !$port) ? '' : ":$port";
-                $base_url = $protocol.'://'.($_SERVER['SERVER_NAME']?($_SERVER['SERVER_NAME'].$port):$_SERVER['HTTP_HOST']).$site_domain;
+                $port     = $_SERVER['SERVER_PORT'];
+                $port     = (((80 == $port) && ('http' == $protocol)) || ((443 == $port) && ('https' == $protocol)) || !$port) ? '' : ":$port";
+                $base_url = $protocol . '://' . ($_SERVER['SERVER_NAME'] ? ($_SERVER['SERVER_NAME'] . $port) : $_SERVER['HTTP_HOST']) . $site_domain;
             } else {
                 // Use the configured site domain
-                $base_url = $protocol.'://'.$site_domain;
+                $base_url = $protocol . '://' . $site_domain;
             }
         }
 
         if (true === $index && $index = Kohana::config('core.index_page')) {
             // Append the index page
-            $base_url = $base_url.$index;
+            $base_url = $base_url . $index;
         }
 
         // Force a slash on the end of the URL
-        return rtrim($base_url, '/').'/';
+        return rtrim($base_url, '/') . '/';
     }
 
     /**
@@ -89,16 +90,16 @@ class url_Core
 
         if ($query = parse_url($uri, PHP_URL_QUERY)) {
             // ?query=string
-            $query = '?'.$query;
+            $query = '?' . $query;
         }
 
         if ($fragment = parse_url($uri, PHP_URL_FRAGMENT)) {
             // #fragment
-            $fragment =  '#'.$fragment;
+            $fragment = '#' . $fragment;
         }
 
         // Concat the URL
-        return url::base(true, $protocol).$path.$query.$fragment;
+        return url::base(true, $protocol) . $path . $query . $fragment;
     }
 
     /**
@@ -113,7 +114,7 @@ class url_Core
     {
         if (false === strpos($file, '://')) {
             // Add the base URL to the filename
-            $file = url::base($index).$file;
+            $file = url::base($index) . $file;
         }
 
         return $file;
@@ -131,11 +132,11 @@ class url_Core
         if ($_GET === $arguments) {
             $query = Router::$query_string;
         } elseif ($query = http_build_query(array_merge($_GET, $arguments))) {
-            $query = '?'.$query;
+            $query = '?' . $query;
         }
 
         // Return the current URI with the arguments merged into the query string
-        return Router::$current_uri.$query;
+        return Router::$current_uri . $query;
     }
 
     /**
@@ -155,14 +156,14 @@ class url_Core
             $title = text::transliterate_to_ascii($title);
 
             // Remove all characters that are not the separator, a-z, 0-9, or whitespace
-            $title = preg_replace('/[^'.$separator.'a-z0-9\s]+/', '', strtolower($title));
+            $title = preg_replace('/[^' . $separator . 'a-z0-9\s]+/', '', strtolower($title));
         } else {
             // Remove all characters that are not the separator, letters, numbers, or whitespace
-            $title = preg_replace('/[^'.$separator.'\pL\pN\s]+/u', '', mb_strtolower($title));
+            $title = preg_replace('/[^' . $separator . '\pL\pN\s]+/u', '', mb_strtolower($title));
         }
 
         // Replace all separator characters and whitespace by a single separator
-        $title = preg_replace('/['.$separator.'\s]+/', $separator, $title);
+        $title = preg_replace('/[' . $separator . '\s]+/', $separator, $title);
 
         // Trim separators from the beginning and end
         return trim($title, $separator);
@@ -183,31 +184,31 @@ class url_Core
 
         $codes = [
             'refresh' => 'Refresh',
-            '300' => 'Multiple Choices',
-            '301' => 'Moved Permanently',
-            '302' => 'Found',
-            '303' => 'See Other',
-            '304' => 'Not Modified',
-            '305' => 'Use Proxy',
-            '307' => 'Temporary Redirect'
+            '300'     => 'Multiple Choices',
+            '301'     => 'Moved Permanently',
+            '302'     => 'Found',
+            '303'     => 'See Other',
+            '304'     => 'Not Modified',
+            '305'     => 'Use Proxy',
+            '307'     => 'Temporary Redirect'
         ];
 
         // Validate the method and default to 302
-        $method = isset($codes[$method]) ? (string) $method : '302';
+        $method = isset($codes[$method]) ? (string)$method : '302';
 
         if ('300' === $method) {
-            $uri = (array) $uri;
+            $uri = (array)$uri;
 
             $output = '<ul>';
             foreach ($uri as $link) {
-                $output .= '<li>'.html::anchor($link).'</li>';
+                $output .= '<li>' . html::anchor($link) . '</li>';
             }
             $output .= '</ul>';
 
             // The first URI will be used for the Location header
             $uri = $uri[0];
         } else {
-            $output = '<p>'.html::anchor($uri).'</p>';
+            $output = '<p>' . html::anchor($uri) . '</p>';
         }
 
         // Run the redirect event
@@ -219,15 +220,15 @@ class url_Core
         }
 
         if ('refresh' === $method) {
-            header('Refresh: 0; url='.$uri);
+            header('Refresh: 0; url=' . $uri);
         } else {
-            header('HTTP/1.1 '.$method.' '.$codes[$method]);
-            header('Location: '.$uri);
+            header('HTTP/1.1 ' . $method . ' ' . $codes[$method]);
+            header('Location: ' . $uri);
         }
 
         // We are about to exit, so run the send_headers event
         Event::run('system.send_headers');
 
-        exit('<h1>'.$method.' - '.$codes[$method].'</h1>'.$output);
+        exit('<h1>' . $method . ' - ' . $codes[$method] . '</h1>' . $output);
     }
 } // End url

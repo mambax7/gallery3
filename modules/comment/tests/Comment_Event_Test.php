@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -23,12 +24,12 @@ class Comment_Event_Test extends Gallery_Unit_Test_Case
     {
         $album = test::random_album();
 
-        $comment = ORM::factory('comment');
-        $comment->item_id = $album->id;
-        $comment->author_id = identity::guest()->id;
-        $comment->guest_name = 'test';
+        $comment              = ORM::factory('comment');
+        $comment->item_id     = $album->id;
+        $comment->author_id   = identity::guest()->id;
+        $comment->guest_name  = 'test';
         $comment->guest_email = 'test@test.com';
-        $comment->text = 'text';
+        $comment->text        = 'text';
         $comment->save();
 
         $album->delete();

@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Kohana_Config abstract driver to get and set
  * configuration options.
@@ -8,10 +9,10 @@
  *
  * $Id: Config.php 4679 2009-11-10 01:45:52Z isaiah $
  *
- * @package    Kohana_Config
- * @author     Kohana Team
+ * @package        Kohana_Config
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  * @abstract
  */
 abstract class Config_Driver
@@ -106,7 +107,7 @@ abstract class Config_Driver
         $group = $group[0];
 
         // Check for existing value and load it dynamically if required
-        if (! isset($this->config[$group])) {
+        if (!isset($this->config[$group])) {
             $this->config[$group] = $this->load($group, $required);
         }
 
@@ -115,7 +116,7 @@ abstract class Config_Driver
 
         if (true === $slash && is_string($value) && '' !== $value) {
             // Force the value to end with "/"
-            $value = rtrim($value, '/').'/';
+            $value = rtrim($value, '/') . '/';
         }
 
         if ((true === $required) && (null === $value)) {

@@ -1,11 +1,12 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Log API driver.
  *
- * @package    Kohana_Log
- * @author     Kohana Team
+ * @package        Kohana_Log
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class Log_Syslog_Driver extends Log_Driver
 {
@@ -26,7 +27,7 @@ class Log_Syslog_Driver extends Log_Driver
             list($date, $type, $text) = array_shift($messages);
 
             syslog($this->syslog_levels[$type], $text);
-        } while (! empty($messages));
+        } while (!empty($messages));
 
         // Close connection to syslog
         closelog();

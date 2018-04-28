@@ -36,12 +36,12 @@ class theme_Core
     public static function load_themes()
     {
         $input = Input::instance();
-        $path = $input->server('PATH_INFO');
+        $path  = $input->server('PATH_INFO');
         if (empty($path)) {
             $path = '/' . $input->get('kohana_uri');
         }
 
-        $config = Kohana_Config::instance();
+        $config  = Kohana_Config::instance();
         $modules = $config->get('core.modules');
 
         // Normally Router::find_uri() strips off the url suffix for us, but we're working off of the
@@ -50,15 +50,12 @@ class theme_Core
             $path = preg_replace('#' . preg_quote($suffix) . '$#u', '', $path);
         }
 
-        self::$is_admin = '/admin' == $path || !strncmp($path, '/admin/', 7);
+        self::$is_admin        = '/admin' == $path || !strncmp($path, '/admin/', 7);
         self::$site_theme_name = module::get_var('gallery', 'active_site_theme');
 
         // If the site theme doesn't exist, fall back to wind.
         if (!file_exists(THEMEPATH . self::$site_theme_name . '/theme.info')) {
-            site_status::error(t(
-                                   "Theme '%name' is missing.  Falling back to the Wind theme.",
-                                   ['name' => self::$site_theme_name]
-      ), 'missing_site_theme');
+            site_status::error(t("Theme '%name' is missing.  Falling back to the Wind theme.", ['name' => self::$site_theme_name]), 'missing_site_theme');
             module::set_var('gallery', 'active_site_theme', self::$site_theme_name = 'wind');
         }
 
@@ -68,10 +65,7 @@ class theme_Core
 
             // If the admin theme doesn't exist, fall back to admin_wind.
             if (!file_exists(THEMEPATH . self::$admin_theme_name . '/theme.info')) {
-                site_status::error(t(
-                                       "Admin theme '%name' is missing!  Falling back to the Wind theme.",
-                                       ['name' => self::$admin_theme_name]
-        ), 'missing_admin_theme');
+                site_status::error(t("Admin theme '%name' is missing!  Falling back to the Wind theme.", ['name' => self::$admin_theme_name]), 'missing_admin_theme');
                 module::set_var('gallery', 'active_admin_theme', self::$admin_theme_name = 'admin_wind');
             }
 
@@ -108,11 +102,11 @@ class theme_Core
 
     public static function get_info($theme_name)
     {
-        $theme_name = preg_replace("/[^a-zA-Z0-9\._-]/", '', $theme_name);
-        $file = THEMEPATH . "$theme_name/theme.info";
-        $theme_info = new ArrayObject(parse_ini_file($file), ArrayObject::ARRAY_AS_PROPS);
+        $theme_name              = preg_replace("/[^a-zA-Z0-9\._-]/", '', $theme_name);
+        $file                    = THEMEPATH . "$theme_name/theme.info";
+        $theme_info              = new ArrayObject(parse_ini_file($file), ArrayObject::ARRAY_AS_PROPS);
         $theme_info->description = t($theme_info->description);
-        $theme_info->name = t($theme_info->name);
+        $theme_info->name        = t($theme_info->name);
 
         return $theme_info;
     }

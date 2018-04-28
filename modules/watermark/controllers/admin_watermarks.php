@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -23,14 +24,14 @@ class Admin_Watermarks_Controller extends Admin_Controller
     {
         $name = module::get_var('watermark', 'name');
 
-        $view = new Admin_View('admin.html');
+        $view             = new Admin_View('admin.html');
         $view->page_title = t('Watermarks');
-        $view->content = new View('admin_watermarks.html');
+        $view->content    = new View('admin_watermarks.html');
         if ($name) {
-            $view->content->name = module::get_var('watermark', 'name');
-            $view->content->url = url::file("var/modules/watermark/$name");
-            $view->content->width = module::get_var('watermark', 'width');
-            $view->content->height = module::get_var('watermark', 'height');
+            $view->content->name     = module::get_var('watermark', 'name');
+            $view->content->url      = url::file("var/modules/watermark/$name");
+            $view->content->width    = module::get_var('watermark', 'width');
+            $view->content->height   = module::get_var('watermark', 'height');
             $view->content->position = module::get_var('watermark', 'position');
         }
         print $view;
@@ -53,12 +54,10 @@ class Admin_Watermarks_Controller extends Admin_Controller
 
             log::success('watermark', t('Watermark changed'));
             message::success(t('Watermark changed'));
-            json::reply(
-                [
-            'result'   => 'success',
-            'location' => url::site('admin/watermarks')
-                ]
-      );
+            json::reply([
+                            'result'   => 'success',
+                            'location' => url::site('admin/watermarks')
+                        ]);
         } else {
             json::reply(['result' => 'error', 'html' => (string)$form]);
         }
@@ -152,18 +151,13 @@ class Admin_Watermarks_Controller extends Admin_Controller
         graphics::remove_rules('watermark');
         if ($name = module::get_var('watermark', 'name')) {
             foreach (['thumb', 'resize'] as $target) {
-                graphics::add_rule(
-                    'watermark',
-                    $target, 'gallery_graphics::composite',
-                    [
-                        'file'         => VARPATH . "modules/watermark/$name",
-                        'width'        => module::get_var('watermark', 'width'),
-                        'height'       => module::get_var('watermark', 'height'),
-                        'position'     => module::get_var('watermark', 'position'),
-                        'transparency' => 101 - module::get_var('watermark', 'transparency')
-                    ],
-                    1000
-        );
+                graphics::add_rule('watermark', $target, 'gallery_graphics::composite', [
+                                                  'file'         => VARPATH . "modules/watermark/$name",
+                                                  'width'        => module::get_var('watermark', 'width'),
+                                                  'height'       => module::get_var('watermark', 'height'),
+                                                  'position'     => module::get_var('watermark', 'position'),
+                                                  'transparency' => 101 - module::get_var('watermark', 'transparency')
+                                              ], 1000);
             }
         }
     }

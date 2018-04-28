@@ -22,6 +22,7 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301 USA
  */
+
 namespace lsolesen\pel;
 
 /**
@@ -35,8 +36,8 @@ namespace lsolesen\pel;
  * All the methods defined here are static, and they all operate on a
  * single argument which should be one of the class constants.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
- * @author Johannes Weberhofer <jweberhofer@weberhofer.at>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Johannes Weberhofer <jweberhofer@weberhofer.at>
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public
  *          License (GPL)
  * @package
@@ -163,32 +164,32 @@ class PelFormat
      * Values for format's short names
      */
     protected static $formatName = [
-        self::ASCII => 'Ascii',
-        self::BYTE => 'Byte',
-        self::SHORT => 'Short',
-        self::LONG => 'Long',
-        self::RATIONAL => 'Rational',
-        self::SBYTE => 'SByte',
-        self::SSHORT => 'SShort',
-        self::SLONG => 'SLong',
+        self::ASCII     => 'Ascii',
+        self::BYTE      => 'Byte',
+        self::SHORT     => 'Short',
+        self::LONG      => 'Long',
+        self::RATIONAL  => 'Rational',
+        self::SBYTE     => 'SByte',
+        self::SSHORT    => 'SShort',
+        self::SLONG     => 'SLong',
         self::SRATIONAL => 'SRational',
-        self::FLOAT => 'Float',
-        self::DOUBLE => 'Double',
+        self::FLOAT     => 'Float',
+        self::DOUBLE    => 'Double',
         self::UNDEFINED => 'Undefined'
     ];
 
     protected static $formatLength = [
-        self::ASCII => 1,
-        self::BYTE => 1,
-        self::SHORT => 2,
-        self::LONG => 4,
-        self::RATIONAL => 8,
-        self::SBYTE => 1,
-        self::SSHORT => 2,
-        self::SLONG => 4,
+        self::ASCII     => 1,
+        self::BYTE      => 1,
+        self::SHORT     => 2,
+        self::LONG      => 4,
+        self::RATIONAL  => 8,
+        self::SBYTE     => 1,
+        self::SSHORT    => 2,
+        self::SLONG     => 4,
         self::SRATIONAL => 8,
-        self::FLOAT => 4,
-        self::DOUBLE => 8,
+        self::FLOAT     => 4,
+        self::DOUBLE    => 8,
         self::UNDEFINED => 1
     ];
 

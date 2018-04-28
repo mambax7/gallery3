@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -56,43 +57,22 @@ class Password_Controller extends Controller
     private function _send_reset($form)
     {
         $user_name = $form->reset->inputs['name']->value;
-        $user = user::lookup_by_name($user_name);
+        $user      = user::lookup_by_name($user_name);
         if ($user && !empty($user->email)) {
             $user->hash = random::hash();
             $user->save();
-            $message = new View('reset_password.html');
+            $message              = new View('reset_password.html');
             $message->confirm_url = url::abs_site("password/do_reset?key=$user->hash");
-            $message->user = $user;
+            $message->user        = $user;
 
-            Sendmail::factory()
-        ->to($user->email)
-        ->subject(t('Password Reset Request'))
-        ->header('Mime-Version', '1.0')
-        ->header('Content-type', 'text/html; charset=UTF-8')
-        ->message($message->render())
-        ->send();
+            Sendmail::factory()->to($user->email)->subject(t('Password Reset Request'))->header('Mime-Version', '1.0')->header('Content-type', 'text/html; charset=UTF-8')->message($message->render())->send();
 
-            log::success(
-                'user',
-                t('Password reset email sent for user %name', ['name' => $user->name])
-      );
+            log::success('user', t('Password reset email sent for user %name', ['name' => $user->name]));
         } elseif (!$user) {
             // Don't include the username here until you're sure that it's XSS safe
-            log::warning(
-                'user',
-                t(
-                    'Password reset email requested for user %user_name, which does not exist.',
-                    ['user_name' => $user_name]
-                   )
-      );
+            log::warning('user', t('Password reset email requested for user %user_name, which does not exist.', ['user_name' => $user_name]));
         } else {
-            log::warning(
-                'user',
-                t(
-                    'Password reset failed for %user_name (has no email address on record).',
-                    ['user_name' => $user->name]
-          )
-      );
+            log::warning('user', t('Password reset failed for %user_name (has no email address on record).', ['user_name' => $user->name]));
         }
 
         // Always pretend that an email has been sent to avoid leaking
@@ -103,35 +83,28 @@ class Password_Controller extends Controller
 
     private static function _reset_form()
     {
-        $form = new Forge(url::current(true), '', 'post', ['id' => 'g-reset-form']);
+        $form  = new Forge(url::current(true), '', 'post', ['id' => 'g-reset-form']);
         $group = $form->group('reset')->label(t('Reset Password'));
-        $group->input('name')->label(t('Username'))->id('g-name')->class(null)
-              ->rules('required')
-              ->error_messages('required', t('You must enter a user name'));
+        $group->input('name')->label(t('Username'))->id('g-name')->class(null)->rules('required')->error_messages('required', t('You must enter a user name'));
         $group->submit('')->value(t('Reset'));
 
         return $form;
     }
 
-    private function _new_password_form($hash=null)
+    private function _new_password_form($hash = null)
     {
         $template = new Theme_View('page.html', 'other', 'reset');
 
-        $form = new Forge('password/do_reset', '', 'post', ['id' => 'g-change-password-form']);
-        $group = $form->group('reset')->label(t('Change Password'));
+        $form   = new Forge('password/do_reset', '', 'post', ['id' => 'g-change-password-form']);
+        $group  = $form->group('reset')->label(t('Change Password'));
         $hidden = $group->hidden('hash');
         if (!empty($hash)) {
             $hidden->value($hash);
         }
         $minimum_length = module::get_var('user', 'minimum_password_length', 5);
-        $input_password = $group->password('password')->label(t('Password'))->id('g-password')
-                                ->rules($minimum_length ? "required|length[$minimum_length, 40]" : 'length[40]');
-        $group->password('password2')->label(t('Confirm Password'))->id('g-password2')
-              ->matches($group->password);
-        $group->inputs['password2']->error_messages(
-            'mistyped',
-            t('The password and the confirm password must match')
-    );
+        $input_password = $group->password('password')->label(t('Password'))->id('g-password')->rules($minimum_length ? "required|length[$minimum_length, 40]" : 'length[40]');
+        $group->password('password2')->label(t('Confirm Password'))->id('g-password2')->matches($group->password);
+        $group->inputs['password2']->error_messages('mistyped', t('The password and the confirm password must match'));
         $group->submit('')->value(t('Update'));
 
         $template->content = $form;
@@ -148,7 +121,7 @@ class Password_Controller extends Controller
             }
 
             $user->password = $view->content->reset->password->value;
-            $user->hash = null;
+            $user->hash     = null;
             $user->save();
             message::success(t('Password reset successfully'));
             url::redirect(item::root()->abs_url());

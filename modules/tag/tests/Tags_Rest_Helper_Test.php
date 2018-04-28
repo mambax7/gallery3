@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -39,30 +40,24 @@ class Tags_Rest_Helper_Test extends Gallery_Unit_Test_Case
         $t2 = tag::add(item::root(), 't2');
 
         $request = new stdClass();
-        $this->assert_equal_array(
-            [
-          'url'     => rest::url('tags'),
-          'members' => [
-              rest::url('tag', $t1),
-              rest::url('tag', $t2)
-          ]
-            ],
-            tags_rest::get($request)
-    );
+        $this->assert_equal_array([
+                                      'url'     => rest::url('tags'),
+                                      'members' => [
+                                          rest::url('tag', $t1),
+                                          rest::url('tag', $t2)
+                                      ]
+                                  ], tags_rest::get($request));
     }
 
     public function post_test()
     {
         identity::set_active_user(identity::admin_user());
 
-        $request = new stdClass();
-        $request->params = new stdClass();
-        $request->params->entity = new stdClass();
+        $request                       = new stdClass();
+        $request->params               = new stdClass();
+        $request->params->entity       = new stdClass();
         $request->params->entity->name = 'test tag';
-        $this->assert_equal(
-            ['url' => url::site('rest/tag/1')],
-            tags_rest::post($request)
-    );
+        $this->assert_equal(['url' => url::site('rest/tag/1')], tags_rest::post($request));
     }
 
     public function post_fails_without_permissions_test()
@@ -72,9 +67,9 @@ class Tags_Rest_Helper_Test extends Gallery_Unit_Test_Case
         identity::set_active_user(identity::guest());
 
         try {
-            $request = new stdClass();
-            $request->params = new stdClass();
-            $request->params->entity = new stdClass();
+            $request                       = new stdClass();
+            $request->params               = new stdClass();
+            $request->params->entity       = new stdClass();
             $request->params->entity->name = 'test tag';
             tags_rest::post($request);
         } catch (Exception $e) {

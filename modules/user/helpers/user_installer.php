@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -38,15 +39,7 @@ class user_installer
         }
 
         if (2 == $version) {
-            db::build()
-        ->update('users')
-        ->set('email', 'unknown@unknown.com')
-        ->where('guest', '=', 0)
-        ->and_open()
-        ->where('email', 'IS', null)
-        ->or_where('email', '=', '')
-        ->close()
-        ->execute();
+            db::build()->update('users')->set('email', 'unknown@unknown.com')->where('guest', '=', 0)->and_open()->where('email', 'IS', null)->or_where('email', '=', '')->close()->execute();
             module::set_version('user', $version = 3);
         }
 
@@ -111,29 +104,29 @@ class user_installer
                  UNIQUE KEY(`user_id`, `group_id`))
                DEFAULT CHARSET=utf8;');
 
-        $everybody = ORM::factory('group');
-        $everybody->name = 'Everybody';
+        $everybody          = ORM::factory('group');
+        $everybody->name    = 'Everybody';
         $everybody->special = true;
         $everybody->save();
 
-        $registered = ORM::factory('group');
-        $registered->name = 'Registered Users';
+        $registered          = ORM::factory('group');
+        $registered->name    = 'Registered Users';
         $registered->special = true;
         $registered->save();
 
-        $guest = ORM::factory('user');
-        $guest->name = 'guest';
+        $guest            = ORM::factory('user');
+        $guest->name      = 'guest';
         $guest->full_name = 'Guest User';
-        $guest->password = '';
-        $guest->guest = true;
+        $guest->password  = '';
+        $guest->guest     = true;
         $guest->save();
 
-        $admin = ORM::factory('user');
-        $admin->name = 'admin';
+        $admin            = ORM::factory('user');
+        $admin->name      = 'admin';
         $admin->full_name = 'Gallery Administrator';
-        $admin->password = 'admin';
-        $admin->email = 'unknown@unknown.com';
-        $admin->admin = true;
+        $admin->password  = 'admin';
+        $admin->email     = 'unknown@unknown.com';
+        $admin->admin     = true;
         $admin->save();
 
         $root = ORM::factory('item', 1);

@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -20,37 +21,34 @@
 class User_Model_Core extends ORM implements User_Definition
 {
     protected $has_and_belongs_to_many = ['groups'];
-    protected $password_length = null;
-    protected $groups_cache = null;
+    protected $password_length         = null;
+    protected $groups_cache            = null;
 
     public function __set($column, $value)
     {
         switch ($column) {
-    case 'hashed_password':
-      $column = 'password';
-      break;
+            case 'hashed_password':
+                $column = 'password';
+                break;
 
-    case 'password':
-      $this->password_length = strlen($value);
-      $value = user::hash_password($value);
-      break;
-    }
+            case 'password':
+                $this->password_length = strlen($value);
+                $value                 = user::hash_password($value);
+                break;
+        }
         parent::__set($column, $value);
     }
 
     /**
      * @see ORM::delete()
      */
-    public function delete($id=null)
+    public function delete($id = null)
     {
         $old = clone $this;
         module::event('user_before_delete', $this);
         parent::delete($id);
 
-        db::build()
-      ->delete('groups_users')
-      ->where('user_id', '=', empty($id) ? $old->id : $id)
-      ->execute();
+        db::build()->delete('groups_users')->where('user_id', '=', empty($id) ? $old->id : $id)->execute();
 
         module::event('user_deleted', $old);
         $this->groups_cache = null;
@@ -61,14 +59,9 @@ class User_Model_Core extends ORM implements User_Definition
      * @param integer $size the target size of the image (default 80px)
      * @return string a url
      */
-    public function avatar_url($size=80, $default=null)
+    public function avatar_url($size = 80, $default = null)
     {
-        return sprintf(
-            '//www.gravatar.com/avatar/%s.jpg?s=%d&r=pg%s',
-            md5($this->email),
-            $size,
-            $default ? '&d=' . urlencode($default) : ''
-    );
+        return sprintf('//www.gravatar.com/avatar/%s.jpg?s=%d&r=pg%s', md5($this->email), $size, $default ? '&d=' . urlencode($default) : '');
     }
 
     public function groups()
@@ -82,7 +75,7 @@ class User_Model_Core extends ORM implements User_Definition
     /**
      * Specify our rules here so that we have access to the instance of this model.
      */
-    public function validate(Validation $array=null)
+    public function validate(Validation $array = null)
     {
         // validate() is recursive, only modify the rules on the outermost call.
         if (!$array) {
@@ -153,10 +146,7 @@ class User_Model_Core extends ORM implements User_Definition
      */
     public function valid_name(Validation $v, $field)
     {
-        if (1 == db::build()->from('users')
-                   ->where('name', '=', $this->name)
-                   ->merge_where($this->id ? [['id', '<>', $this->id]] : null)
-                   ->count_records()) {
+        if (1 == db::build()->from('users')->where('name', '=', $this->name)->merge_where($this->id ? [['id', '<>', $this->id]] : null)->count_records()) {
             $v->add_error('name', 'conflict');
         }
     }

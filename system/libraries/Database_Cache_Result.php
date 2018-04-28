@@ -1,11 +1,12 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Cached database result.
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2008-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class Database_Cache_Result_Core extends Database_Result
 {
@@ -34,7 +35,7 @@ class Database_Cache_Result_Core extends Database_Result
         // Return arrays rather than objects
         $this->return_objects = false;
 
-        if (! $return) {
+        if (!$return) {
             // Return this result object
             return $this;
         }
@@ -57,7 +58,7 @@ class Database_Cache_Result_Core extends Database_Result
 
     public function seek($offset)
     {
-        if (! $this->offsetExists($offset)) {
+        if (!$this->offsetExists($offset)) {
             return false;
         }
 
@@ -70,7 +71,7 @@ class Database_Cache_Result_Core extends Database_Result
     {
         if ($this->return_objects) {
             // Return a new object with the current row of data
-            return (object) $this->data[$this->current_row];
+            return (object)$this->data[$this->current_row];
         } else {
             // Return an array of the row
             return $this->data[$this->current_row];

@@ -2,10 +2,10 @@
 /**
  * MySQL database connection.
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2008-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 
 define('RUNS_MYSQLND', function_exists('mysqli_fetch_all'));
@@ -22,18 +22,15 @@ class Database_Mysqli_Core extends Database_Mysql
 
         // Persistent connections are supported as of PHP 5.3
         if (RUNS_MYSQLND and true === $this->config['persistent']) {
-            $host = 'p:'.$host;
+            $host = 'p:' . $host;
         }
 
         $host = isset($host) ? $host : $socket;
 
         $mysqli = mysqli_init();
 
-        if (! $mysqli->real_connect($host, $user, $pass, $database, $port, $socket, $params)) {
-            throw new Database_Exception(
-                '#:errno: :error',
-                [':error' => $mysqli->connect_error, ':errno' => $mysqli->connect_errno]
-            );
+        if (!$mysqli->real_connect($host, $user, $pass, $database, $port, $socket, $params)) {
+            throw new Database_Exception('#:errno: :error', [':error' => $mysqli->connect_error, ':errno' => $mysqli->connect_errno]);
         }
 
         $this->connection = $mysqli;
@@ -58,15 +55,12 @@ class Database_Mysqli_Core extends Database_Mysql
         // Make sure the database is connected
         is_object($this->connection) || $this->connect();
 
-        if (! $this->connection->set_charset($charset)) {
+        if (!$this->connection->set_charset($charset)) {
             // Unable to set charset
-            throw new Database_Exception(
-                '#:errno: :error',
-                [
-                    ':error' => $this->connection->connect_error,
-                    ':errno' => $this->connection->connect_errno
-                ]
-            );
+            throw new Database_Exception('#:errno: :error', [
+                                                              ':error' => $this->connection->connect_error,
+                                                              ':errno' => $this->connection->connect_errno
+                                                          ]);
         }
     }
 

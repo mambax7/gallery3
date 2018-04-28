@@ -1,11 +1,12 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Request helper class.
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class request_Core
 {
@@ -37,7 +38,7 @@ class request_Core
      */
     public static function referrer($default = false, $remove_base = false)
     {
-        if (! empty($_SERVER['HTTP_REFERER'])) {
+        if (!empty($_SERVER['HTTP_REFERER'])) {
             // Set referrer
             $ref = $_SERVER['HTTP_REFERER'];
 
@@ -60,7 +61,7 @@ class request_Core
     {
         if ('cli' === Kohana::$server_api) {
             return null;
-        } elseif (! empty($_SERVER['HTTPS']) && 'on' === $_SERVER['HTTPS']) {
+        } elseif (!empty($_SERVER['HTTPS']) && 'on' === $_SERVER['HTTPS']) {
             return 'https';
         } else {
             return 'http';
@@ -88,7 +89,7 @@ class request_Core
     {
         $method = strtolower($_SERVER['REQUEST_METHOD']);
 
-        if (! in_array($method, request::$http_methods)) {
+        if (!in_array($method, request::$http_methods)) {
             throw new Kohana_Exception('Invalid request method :method:', [':method:' => $method]);
         }
 
@@ -117,8 +118,8 @@ class request_Core
             return request::$user_agent;
         }
 
-        if (! is_array(request::$user_agent)) {
-            request::$user_agent = [];
+        if (!is_array(request::$user_agent)) {
+            request::$user_agent          = [];
             request::$user_agent['agent'] = isset($_SERVER['HTTP_USER_AGENT']) ? trim($_SERVER['HTTP_USER_AGENT']) : '';
 
             // Parse the user agent and extract basic information
@@ -223,14 +224,14 @@ class request_Core
      */
     public static function preferred_accept($types, $explicit_check = false)
     {
-        $max_q = 0;
+        $max_q     = 0;
         $preferred = false;
 
         foreach ($types as $type) {
             $q = request::accepts_at_quality($type, $explicit_check);
 
             if ($q > $max_q) {
-                $max_q = $q;
+                $max_q     = $q;
                 $preferred = $type;
             }
         }
@@ -249,14 +250,14 @@ class request_Core
      */
     public static function preferred_charset($charsets)
     {
-        $max_q = 0;
+        $max_q     = 0;
         $preferred = false;
 
         foreach ($charsets as $charset) {
             $q = request::accepts_charset_at_quality($charset);
 
             if ($q > $max_q) {
-                $max_q = $q;
+                $max_q     = $q;
                 $preferred = $charset;
             }
         }
@@ -276,14 +277,14 @@ class request_Core
      */
     public static function preferred_encoding($encodings, $explicit_check = false)
     {
-        $max_q = 0;
+        $max_q     = 0;
         $preferred = false;
 
         foreach ($encodings as $encoding) {
             $q = request::accepts_encoding_at_quality($encoding, $explicit_check);
 
             if ($q > $max_q) {
-                $max_q = $q;
+                $max_q     = $q;
                 $preferred = $encoding;
             }
         }
@@ -303,14 +304,14 @@ class request_Core
      */
     public static function preferred_language($tags, $explicit_check = false)
     {
-        $max_q = 0;
+        $max_q     = 0;
         $preferred = false;
 
         foreach ($tags as $tag) {
             $q = request::accepts_language_at_quality($tag, $explicit_check);
 
             if ($q > $max_q) {
-                $max_q = $q;
+                $max_q     = $q;
                 $preferred = $tag;
             }
         }
@@ -338,9 +339,9 @@ class request_Core
             $q = 0;
 
             // Look up relevant mime types
-            foreach ((array) Kohana::config('mimes.'.$type) as $type) {
+            foreach ((array)Kohana::config('mimes.' . $type) as $type) {
                 $q2 = request::accepts_at_quality($type, $explicit_check);
-                $q = ($q2 > $q) ? $q2 : $q;
+                $q  = ($q2 > $q) ? $q2 : $q;
             }
 
             return $q;
@@ -485,10 +486,10 @@ class request_Core
             // Explode each entry in content type and possible quality factor
             $entry = explode(';', trim($entry), 2);
 
-            $q = (isset($entry[1]) && preg_match('~\bq\s*+=\s*+([.0-9]+)~', $entry[1], $match)) ? (float) $match[1] : 1;
+            $q = (isset($entry[1]) && preg_match('~\bq\s*+=\s*+([.0-9]+)~', $entry[1], $match)) ? (float)$match[1] : 1;
 
             // Overwrite entries with a smaller q value
-            if (! isset($result[$entry[0]]) || $q > $result[$entry[0]]) {
+            if (!isset($result[$entry[0]]) || $q > $result[$entry[0]]) {
                 $result[$entry[0]] = $q;
             }
         }
@@ -537,7 +538,7 @@ class request_Core
                 $type = explode('/', $type, 2);
 
                 // Skip invalid content types
-                if (! isset($type[1])) {
+                if (!isset($type[1])) {
                     continue;
                 }
 
@@ -557,7 +558,7 @@ class request_Core
         }
 
         // No HTTP Accept-Encoding header found
-        if (! isset($_SERVER['HTTP_ACCEPT_ENCODING'])) {
+        if (!isset($_SERVER['HTTP_ACCEPT_ENCODING'])) {
             // Accept everything
             request::$accept_encodings['*'] = 1;
         } elseif ('' === $_SERVER['HTTP_ACCEPT_ENCODING']) {

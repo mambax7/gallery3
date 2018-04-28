@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -33,50 +34,27 @@ class GalleryCodeFilterIterator extends FilterIterator
         // Skip anything that we didn't write
         $path_name = $this->getInnerIterator()->getPathName();
         $file_name = $this->getInnerIterator()->getFileName();
-        return !(
-            '.' == $file_name
-            ||
-            '..' == $file_name
-            ||
-            false !== strpos($path_name, DOCROOT . '.git')
-            ||
-            false !== strpos($path_name, DOCROOT . 'test')
-            ||
-            false !== strpos($path_name, DOCROOT . 'var')
-            ||
-            false !== strpos($path_name, MODPATH . 'forge')
-            ||
-            false !== strpos($path_name, MODPATH . 'gallery/views/kohana_error_page.php')
-            ||
-            false !== strpos($path_name, MODPATH . 'gallery/views/kohana_profiler.php')
-            ||
-            false !== strpos($path_name, MODPATH . 'gallery_unit_test/vendor')
-            ||
-            false !== strpos($path_name, MODPATH . 'gallery_unit_test/views/kohana_error_page.php')
-            ||
-            false !== strpos($path_name, MODPATH . 'gallery_unit_test/views/kohana_unit_test_cli.php')
-            ||
-            false !== strpos($path_name, MODPATH . 'unit_test')
-            ||
-            false !== strpos($path_name, MODPATH . 'exif/lib')
-            ||
-            false !== strpos($path_name, MODPATH . 'user/lib/PasswordHash')
-            ||
-            false !== strpos($path_name, SYSPATH)
-            ||
-            false !== strpos($path_name, MODPATH . 'gallery/libraries/HTMLPurifier')
-            ||
-            false !== strpos($path_name, MODPATH . 'gallery/vendor/joomla')
-            ||
-            false !== strpos($path_name, MODPATH . 'organize/vendor/ext')
-            ||
-            false !== strpos($path_name, DOCROOT . 'lib')
-            ||
-            false !== strpos($path_name, DOCROOT . 'themes/admin_wind/css/themeroller')
-            ||
-            false !== strpos($path_name, DOCROOT . 'themes/wind/css/themeroller')
-            ||
-            '~' == substr($path_name, -1, 1)
-    );
+        return !('.' == $file_name
+                 || '..' == $file_name
+                 || false !== strpos($path_name, DOCROOT . '.git')
+                 || false !== strpos($path_name, DOCROOT . 'test')
+                 || false !== strpos($path_name, DOCROOT . 'var')
+                 || false !== strpos($path_name, MODPATH . 'forge')
+                 || false !== strpos($path_name, MODPATH . 'gallery/views/kohana_error_page.php')
+                 || false !== strpos($path_name, MODPATH . 'gallery/views/kohana_profiler.php')
+                 || false !== strpos($path_name, MODPATH . 'gallery_unit_test/vendor')
+                 || false !== strpos($path_name, MODPATH . 'gallery_unit_test/views/kohana_error_page.php')
+                 || false !== strpos($path_name, MODPATH . 'gallery_unit_test/views/kohana_unit_test_cli.php')
+                 || false !== strpos($path_name, MODPATH . 'unit_test')
+                 || false !== strpos($path_name, MODPATH . 'exif/lib')
+                 || false !== strpos($path_name, MODPATH . 'user/lib/PasswordHash')
+                 || false !== strpos($path_name, SYSPATH)
+                 || false !== strpos($path_name, MODPATH . 'gallery/libraries/HTMLPurifier')
+                 || false !== strpos($path_name, MODPATH . 'gallery/vendor/joomla')
+                 || false !== strpos($path_name, MODPATH . 'organize/vendor/ext')
+                 || false !== strpos($path_name, DOCROOT . 'lib')
+                 || false !== strpos($path_name, DOCROOT . 'themes/admin_wind/css/themeroller')
+                 || false !== strpos($path_name, DOCROOT . 'themes/wind/css/themeroller')
+                 || '~' == substr($path_name, -1, 1));
     }
 }

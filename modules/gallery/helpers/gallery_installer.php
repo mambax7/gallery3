@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -234,26 +235,22 @@ class gallery_installer
 
         // Hardcode the first item to sidestep ORM validation rules
         $now = time();
-        db::build()->insert(
-            'items',
-            [
-                'created'      => $now,
-                'description'  => '',
-                'left_ptr'     => 1,
-                'level'        => 1,
-                'parent_id'    => 0,
-                'resize_dirty' => 1,
-                'right_ptr'    => 2,
-                'sort_column'  => 'weight',
-                'sort_order'   => 'ASC',
-                'thumb_dirty'  => 1,
-                'title'        => 'Gallery',
-                'type'         => 'album',
-                'updated'      => $now,
-                'weight'       => 1
-            ]
-    )
-      ->execute();
+        db::build()->insert('items', [
+                                       'created'      => $now,
+                                       'description'  => '',
+                                       'left_ptr'     => 1,
+                                       'level'        => 1,
+                                       'parent_id'    => 0,
+                                       'resize_dirty' => 1,
+                                       'right_ptr'    => 2,
+                                       'sort_column'  => 'weight',
+                                       'sort_order'   => 'ASC',
+                                       'thumb_dirty'  => 1,
+                                       'title'        => 'Gallery',
+                                       'type'         => 'album',
+                                       'updated'      => $now,
+                                       'weight'       => 1
+                                   ])->execute();
         $root = ORM::factory('item', 1);
         access::add_item($root);
 
@@ -268,25 +265,14 @@ class gallery_installer
         module::set_var('gallery', 'upgrade_checker_auto_enabled', true);
 
         // Add rules for generating our thumbnails and resizes
-        graphics::add_rule(
-            'gallery', 'thumb', 'gallery_graphics::resize',
-            ['width' => 200, 'height' => 200, 'master' => Image::AUTO],
-            100
-    );
-        graphics::add_rule(
-            'gallery', 'resize', 'gallery_graphics::resize',
-            ['width' => 640, 'height' => 640, 'master' => Image::AUTO],
-            100
-    );
+        graphics::add_rule('gallery', 'thumb', 'gallery_graphics::resize', ['width' => 200, 'height' => 200, 'master' => Image::AUTO], 100);
+        graphics::add_rule('gallery', 'resize', 'gallery_graphics::resize', ['width' => 640, 'height' => 640, 'master' => Image::AUTO], 100);
 
         // Instantiate default themes (site and admin)
         foreach (['wind', 'admin_wind'] as $theme_name) {
-            $theme_info = new ArrayObject(
-          parse_ini_file(THEMEPATH . $theme_name . '/theme.info'),
-                                    ArrayObject::ARRAY_AS_PROPS
-      );
-            $theme = ORM::factory('theme');
-            $theme->name = $theme_name;
+            $theme_info     = new ArrayObject(parse_ini_file(THEMEPATH . $theme_name . '/theme.info'), ArrayObject::ARRAY_AS_PROPS);
+            $theme          = ORM::factory('theme');
+            $theme->name    = $theme_name;
             $theme->version = $theme_info->version;
             $theme->save();
         }
@@ -306,11 +292,8 @@ class gallery_installer
         module::set_var('gallery', 'time_format', 'H:i:s');
         module::set_var('gallery', 'show_credits', 1);
         // Mark string for translation
-        $powered_by_string = t(
-            'Powered by <a href="%url">%gallery_version</a>',
-            ['locale' => 'root']
-    );
-        module::set_var('gallery', 'credits', (string) $powered_by_string);
+        $powered_by_string = t('Powered by <a href="%url">%gallery_version</a>', ['locale' => 'root']);
+        module::set_var('gallery', 'credits', (string)$powered_by_string);
         module::set_var('gallery', 'simultaneous_upload_limit', 5);
         module::set_var('gallery', 'admin_area_timeout', 90 * 60);
         module::set_var('gallery', 'maintenance_mode', 0);
@@ -376,7 +359,7 @@ class gallery_installer
         }
 
         if (7 == $version) {
-            $groups = identity::groups();
+            $groups      = identity::groups();
             $permissions = ORM::factory('permission')->find_all();
             foreach ($groups as $group) {
                 foreach ($permissions as $permission) {
@@ -436,9 +419,7 @@ class gallery_installer
 
         if (13 == $version) {
             // Add rules for generating our thumbnails and resizes
-            Database::instance()->query(
-        "UPDATE {graphics_rules} SET `operation` = CONCAT('gallery_graphics::', `operation`);"
-      );
+            Database::instance()->query("UPDATE {graphics_rules} SET `operation` = CONCAT('gallery_graphics::', `operation`);");
             module::set_version('gallery', $version = 14);
         }
 
@@ -462,7 +443,7 @@ class gallery_installer
         // Convert block keys to an md5 hash of the module and block name
         if (16 == $version) {
             foreach (['dashboard_sidebar', 'dashboard_center', 'site_sidebar'] as $location) {
-                $blocks = block_manager::get_active($location);
+                $blocks     = block_manager::get_active($location);
                 $new_blocks = [];
                 foreach ($blocks as $block) {
                     $new_blocks[md5("{$block[0]}:{$block[1]}")] = $block;
@@ -475,7 +456,7 @@ class gallery_installer
         // We didn't like md5 hashes so convert block keys back to random keys to allow duplicates.
         if (17 == $version) {
             foreach (['dashboard_sidebar', 'dashboard_center', 'site_sidebar'] as $location) {
-                $blocks = block_manager::get_active($location);
+                $blocks     = block_manager::get_active($location);
                 $new_blocks = [];
                 foreach ($blocks as $block) {
                     $new_blocks[random::int()] = $block;
@@ -503,9 +484,7 @@ class gallery_installer
         // Update the graphics rules table so that the maximum height for resizes is 640 not 480.
         // Fixes ticket #671
         if (21 == $version) {
-            $resize_rule = ORM::factory('graphics_rule')
-        ->where('id', '=', '2')
-        ->find();
+            $resize_rule = ORM::factory('graphics_rule')->where('id', '=', '2')->find();
             // make sure it hasn't been changed already
             $args = unserialize($resize_rule->args);
             if (480 == $args['height'] && 640 == $args['width']) {
@@ -519,21 +498,12 @@ class gallery_installer
         // Update slug values to be legal.  We should have done this in the 11->12 upgrader, but I was
         // lazy.  Mea culpa!
         if (22 == $version) {
-            foreach (db::build()
-               ->from('items')
-               ->select('id', 'slug')
-               ->where(db::expr("`slug` REGEXP '[^_A-Za-z0-9-]'"), '=', 1)
-               ->execute() as $row) {
+            foreach (db::build()->from('items')->select('id', 'slug')->where(db::expr("`slug` REGEXP '[^_A-Za-z0-9-]'"), '=', 1)->execute() as $row) {
                 $new_slug = item::convert_filename_to_slug($row->slug);
                 if (empty($new_slug)) {
                     $new_slug = random::int();
                 }
-                db::build()
-          ->update('items')
-          ->set('slug', $new_slug)
-          ->set('relative_url_cache', null)
-          ->where('id', '=', $row->id)
-          ->execute();
+                db::build()->update('items')->set('slug', $new_slug)->set('relative_url_cache', null)->where('id', '=', $row->id)->execute();
             }
             module::set_version('gallery', $version = 23);
         }
@@ -557,14 +527,7 @@ class gallery_installer
         }
 
         if (25 == $version) {
-            db::build()
-        ->update('items')
-        ->set('title', db::expr('`name`'))
-        ->and_open()
-        ->where('title', 'IS', null)
-        ->or_where('title', '=', '')
-        ->close()
-        ->execute();
+            db::build()->update('items')->set('title', db::expr('`name`'))->and_open()->where('title', 'IS', null)->or_where('title', '=', '')->close()->execute();
             module::set_version('gallery', $version = 26);
         }
 
@@ -599,9 +562,7 @@ class gallery_installer
         if (31 == $version) {
             $db->query('ALTER TABLE {modules} ADD COLUMN `weight` int(9) DEFAULT NULL');
             $db->query('ALTER TABLE {modules} ADD KEY (`weight`)');
-            db::update('modules')
-        ->set('weight', db::expr('`id`'))
-        ->execute();
+            db::update('modules')->set('weight', db::expr('`id`'))->execute();
             module::set_version('gallery', $version = 32);
         }
 
@@ -687,7 +648,7 @@ class gallery_installer
             // Splice the upgrade_checker block into the admin dashboard at the top
             // of the page, but under the welcome block if it's in the first position.
             $blocks = block_manager::get_active('dashboard_center');
-            $index = count($blocks) && current($blocks) == ['gallery', 'welcome'] ? 1 : 0;
+            $index  = count($blocks) && current($blocks) == ['gallery', 'welcome'] ? 1 : 0;
             array_splice($blocks, $index, 0, [random::int() => ['gallery', 'upgrade_checker']]);
             block_manager::set_active('dashboard_center', $blocks);
 
@@ -714,15 +675,9 @@ class gallery_installer
             // change those files (eg. as a side effect of getting the url or file path) it fails to
             // validate.  Fix those here.  This might be slow, but if it times out it can just pick up
             // where it left off.
-            foreach (db::build()
-               ->from('items')
-               ->select('id')
-               ->where('type', '<>', 'album')
-               ->where(db::expr("`name` REGEXP '\\\\..*\\\\.'"), '=', 1)
-               ->order_by('id', 'asc')
-               ->execute() as $row) {
+            foreach (db::build()->from('items')->select('id')->where('type', '<>', 'album')->where(db::expr("`name` REGEXP '\\\\..*\\\\.'"), '=', 1)->order_by('id', 'asc')->execute() as $row) {
                 set_time_limit(30);
-                $item = ORM::factory('item', $row->id);
+                $item       = ORM::factory('item', $row->id);
                 $item->name = legal_file::smash_extensions($item->name);
                 $item->save();
             }
@@ -742,11 +697,8 @@ class gallery_installer
             // extensions to their mime types (and allow extension of the list by other modules).  During
             // this process, we correctly mapped m4v files to video/x-m4v, correcting a previous error
             // where they were mapped to video/mp4.  This corrects the existing items.
-            db::build()
-        ->update('items')
-        ->set('mime_type', 'video/x-m4v')
-        ->where('name', 'REGEXP', "\.m4v$") // case insensitive since name column is utf8_general_ci
-        ->execute();
+            db::build()->update('items')->set('mime_type', 'video/x-m4v')->where('name', 'REGEXP', "\.m4v$")// case insensitive since name column is utf8_general_ci
+              ->execute();
             module::set_version('gallery', $version = 52);
         }
 
@@ -768,31 +720,17 @@ class gallery_installer
 
             // Find and loop through each conflict (e.g. "foo.jpg", "foo.png", and "foo.flv" are one
             // conflict; "bar.jpg", "bar.png", and "bar.flv" are another)
-            foreach (db::build()
-               ->select_distinct([
-                                     'parent_base_name' =>
-                 db::expr("CONCAT(`parent_id`, ':', LOWER(SUBSTR(`name`, 1, LOCATE('.', `name`) - 1)))")
-                                 ])
-               ->select(['C' => 'COUNT("*")'])
-               ->from('items')
-               ->where('type', '<>', 'album')
-               ->having('C', '>', 1)
-               ->group_by('parent_base_name')
-               ->execute() as $conflict) {
+            foreach (db::build()->select_distinct([
+                                                      'parent_base_name' => db::expr("CONCAT(`parent_id`, ':', LOWER(SUBSTR(`name`, 1, LOCATE('.', `name`) - 1)))")
+                                                  ])->select(['C' => 'COUNT("*")'])->from('items')->where('type', '<>', 'album')->having('C', '>', 1)->group_by('parent_base_name')->execute() as $conflict) {
                 list($parent_id, $base_name) = explode(':', $conflict->parent_base_name, 2);
                 $base_name_escaped = Database::escape_for_like($base_name);
                 // Loop through the items for each conflict
-                foreach (db::build()
-                 ->from('items')
-                 ->select('id')
-                 ->where('type', '<>', 'album')
-                 ->where('parent_id', '=', $parent_id)
-                 ->where('name', 'LIKE', "{$base_name_escaped}.%")
-                 ->limit(1000000)  // required to satisfy SQL syntax (no offset without limit)
-                 ->offset(1)       // skips the 0th item
-                 ->execute() as $row) {
+                foreach (db::build()->from('items')->select('id')->where('type', '<>', 'album')->where('parent_id', '=', $parent_id)->where('name', 'LIKE', "{$base_name_escaped}.%")->limit(1000000)// required to satisfy SQL syntax (no offset without limit)
+                           ->offset(1)// skips the 0th item
+                           ->execute() as $row) {
                     set_time_limit(30);
-                    $item = ORM::factory('item', $row->id);
+                    $item       = ORM::factory('item', $row->id);
                     $item->name = $item->name;  // this will force Item_Model to check for conflicts on save
                     $item->save();
                 }
@@ -817,11 +755,7 @@ class gallery_installer
             // Cleanup possible instances where resize_dirty of albums or movies was set to 0.  This is
             // unlikely to have occurred, and doesn't currently matter much since albums and movies don't
             // have resize images anyway.  However, it may be useful to be consistent here going forward.
-            db::build()
-        ->update('items')
-        ->set('resize_dirty', 1)
-        ->where('type', '<>', 'photo')
-        ->execute();
+            db::build()->update('items')->set('resize_dirty', 1)->where('type', '<>', 'photo')->execute();
             module::set_version('gallery', $version = 57);
         }
 
@@ -831,14 +765,10 @@ class gallery_installer
             // pretty unlikely, as having backslashes would have probably already caused other issues for
             // users, but we should check anyway.  This might be slow, but if it times out it can just
             // pick up where it left off.
-            foreach (db::build()
-               ->from('items')
-               ->select('id')
-               ->where(db::expr("`name` REGEXP '\\\\\\\\'"), '=', 1)  // one \, 3x escaped
-               ->order_by('id', 'asc')
-               ->execute() as $row) {
+            foreach (db::build()->from('items')->select('id')->where(db::expr("`name` REGEXP '\\\\\\\\'"), '=', 1)// one \, 3x escaped
+                       ->order_by('id', 'asc')->execute() as $row) {
                 set_time_limit(30);
-                $item = ORM::factory('item', $row->id);
+                $item       = ORM::factory('item', $row->id);
                 $item->name = str_replace("\\", '_', $item->name);
                 $item->save();
             }
@@ -880,9 +810,7 @@ class gallery_installer
     public static function _protect_directory($dir)
     {
         $fp = @fopen("$dir/.htaccess", 'w+');
-        fwrite($fp, "DirectoryIndex .htaccess\nSetHandler Gallery_Security_Do_Not_Remove\n" .
-           "Options None\n<IfModule mod_rewrite.c>\nRewriteEngine off\n</IfModule>\n" .
-           "Order allow,deny\nDeny from all\n");
+        fwrite($fp, "DirectoryIndex .htaccess\nSetHandler Gallery_Security_Do_Not_Remove\n" . "Options None\n<IfModule mod_rewrite.c>\nRewriteEngine off\n</IfModule>\n" . "Order allow,deny\nDeny from all\n");
         fclose($fp);
     }
 }

@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -25,18 +26,12 @@ class rest_event
      */
     public static function user_before_delete($user)
     {
-        db::build()
-      ->delete('user_access_keys')
-       ->where('id', '=', $user->id)
-       ->execute();
+        db::build()->delete('user_access_keys')->where('id', '=', $user->id)->execute();
     }
-
 
     public static function change_provider($new_provider)
     {
-        db::build()
-      ->delete('user_access_keys')
-      ->execute();
+        db::build()->delete('user_access_keys')->execute();
     }
 
     /**
@@ -45,8 +40,8 @@ class rest_event
      */
     public static function user_add_form_admin_completed($user, $form)
     {
-        $key = ORM::factory('user_access_key');
-        $key->user_id = $user->id;
+        $key             = ORM::factory('user_access_key');
+        $key->user_id    = $user->id;
         $key->access_key = random::hash();
         $key->save();
     }
@@ -64,21 +59,15 @@ class rest_event
      */
     public static function _get_access_key_form($user, $form)
     {
-        $key = ORM::factory('user_access_key')
-      ->where('user_id', '=', $user->id)
-      ->find();
+        $key = ORM::factory('user_access_key')->where('user_id', '=', $user->id)->find();
 
         if (!$key->loaded()) {
-            $key->user_id = $user->id;
+            $key->user_id    = $user->id;
             $key->access_key = random::hash();
             $key->save();
         }
 
-        $form->edit_user->input('user_access_key')
-      ->value($key->access_key)
-      ->readonly('readonly')
-      ->class('g-form-static')
-      ->label(t('Remote access key'));
+        $form->edit_user->input('user_access_key')->value($key->access_key)->readonly('readonly')->class('g-form-static')->label(t('Remote access key'));
     }
 
     public static function show_user_profile($data)
@@ -94,16 +83,14 @@ class rest_event
         }
 
         $view = new View('user_profile_rest.html');
-        $key = ORM::factory('user_access_key')
-      ->where('user_id', '=', $data->user->id)
-      ->find();
+        $key  = ORM::factory('user_access_key')->where('user_id', '=', $data->user->id)->find();
 
         if (!$key->loaded()) {
-            $key->user_id = $data->user->id;
+            $key->user_id    = $data->user->id;
             $key->access_key = random::hash();
             $key->save();
         }
-        $view->rest_key = $key->access_key;
+        $view->rest_key  = $key->access_key;
         $data->content[] = (object)['title' => t('REST API'), 'view' => $view];
     }
 }

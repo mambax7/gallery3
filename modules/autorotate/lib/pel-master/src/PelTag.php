@@ -22,16 +22,17 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301 USA
  */
+
 namespace lsolesen\pel;
 
 /**
-     * Namespace for functions operating on Exif tags.
-     *
-     * @author Martin Geisler <mgeisler@users.sourceforge.net>
-     * @license http://www.gnu.org/licenses/gpl.html GNU General Public
-     *          License (GPL)
-     * @package PEL
-     */
+ * Namespace for functions operating on Exif tags.
+ *
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
+ * @license http://www.gnu.org/licenses/gpl.html GNU General Public
+ *          License (GPL)
+ * @package PEL
+ */
 
 /**
  * Class with static methods for Exif tags.
@@ -51,7 +52,7 @@ namespace lsolesen\pel;
  * All the methods in this class are static and should be called with
  * the Exif tag on which they should operate.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @package PEL
  */
 class PelTag
@@ -406,7 +407,7 @@ class PelTag
      * Format: {@link PelFormat::SHORT}
      *
      * Components: 1.
-    */
+     */
     const RATING = 0x4746;
 
     /**
@@ -1377,7 +1378,7 @@ class PelTag
     /**
      * Values for tags short names.
      */
-    protected static $exifTagsShort= [
+    protected static $exifTagsShort = [
         self::INTEROPERABILITY_INDEX         => 'InteroperabilityIndex',
         self::INTEROPERABILITY_VERSION       => 'InteroperabilityVersion',
         self::IMAGE_WIDTH                    => 'ImageWidth',
@@ -1657,15 +1658,15 @@ class PelTag
      * @param array $container
      *            {@link PelTag::EXIF_TAGS_SHORT}, {@link PelTag::EXIF_TAGS_TITLE},
      *            {@link PelTag::GPS_TAGS_SHORT} or {@link PelTag::GPS_TAGS_TITLE} container.
-     * @param int $tag
+     * @param int   $tag
      *            the tag.
      *
      * @return string short name or long name of the tag.
      */
     public static function getValue($container, $tag)
     {
-        if (isset($container[ $tag ])) {
-            return $container[ $tag ];
+        if (isset($container[$tag])) {
+            return $container[$tag];
         }
 
         return self::unknownTag($tag);

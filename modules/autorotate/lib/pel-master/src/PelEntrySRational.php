@@ -22,12 +22,13 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301 USA
  */
+
 namespace lsolesen\pel;
 
 /**
  * Classes used to manipulate rational numbers.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public
  *          License (GPL)
  * @package PEL
@@ -45,7 +46,7 @@ namespace lsolesen\pel;
  * rationals. The class will be used to manipulate any of the Exif
  * tags which can have format {@link PelFormat::SRATIONAL}.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @package PEL
  */
 class PelEntrySRational extends PelEntrySLong
@@ -55,27 +56,27 @@ class PelEntrySRational extends PelEntrySLong
      * Make a new entry that can hold a signed rational.
      *
      * @param
-     *            int the tag which this entry represents. This should
-     *            be one of the constants defined in {@link PelTag}, e.g., {@link
-     *            PelTag::SHUTTER_SPEED_VALUE}, or any other tag which can have
-     *            format {@link PelFormat::SRATIONAL}.
+     *                     int the tag which this entry represents. This should
+     *                     be one of the constants defined in {@link PelTag}, e.g., {@link
+     *                     PelTag::SHUTTER_SPEED_VALUE}, or any other tag which can have
+     *                     format {@link PelFormat::SRATIONAL}.
      *
-     * @param array $value...
-     *            the rational(s) that this entry will
-     *            represent. The arguments passed must obey the same rules as the
-     *            argument to {@link setValue}, namely that each argument should be
-     *            an array with two entries, both of which must be within range of
-     *            a signed long (32 bit), that is between -2147483648 and
-     *            2147483647 (inclusive). If not, then a {@link
-     *            PelOverflowException} will be thrown.
+     * @param array $value ...
+     *                     the rational(s) that this entry will
+     *                     represent. The arguments passed must obey the same rules as the
+     *                     argument to {@link setValue}, namely that each argument should be
+     *                     an array with two entries, both of which must be within range of
+     *                     a signed long (32 bit), that is between -2147483648 and
+     *                     2147483647 (inclusive). If not, then a {@link
+     *                     PelOverflowException} will be thrown.
      */
     public function __construct($tag, $value = null)
     {
-        $this->tag = $tag;
-        $this->format = PelFormat::SRATIONAL;
+        $this->tag       = $tag;
+        $this->format    = PelFormat::SRATIONAL;
         $this->dimension = 2;
-        $this->min = - 2147483648;
-        $this->max = 2147483647;
+        $this->min       = -2147483648;
+        $this->max       = 2147483647;
 
         $value = func_get_args();
         array_shift($value);
@@ -102,7 +103,7 @@ class PelEntrySRational extends PelEntrySLong
     {
         if ($number[1] < 0) {
             /* Turn output like 1/-2 into -1/2. */
-            return (- $number[0]) . '/' . (- $number[1]);
+            return (-$number[0]) . '/' . (-$number[1]);
         } else {
             return $number[0] . '/' . $number[1];
         }

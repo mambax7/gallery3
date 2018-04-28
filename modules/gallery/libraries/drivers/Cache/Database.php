@@ -20,6 +20,7 @@
 /*
  * Based on the Cache_Sqlite_Driver developed by the Kohana Team
  */
+
 class Cache_Database_Driver extends Cache_Driver
 {
     // Kohana database instance
@@ -33,7 +34,7 @@ class Cache_Database_Driver extends Cache_Driver
      * @param   integer  lifetime
      * @return  bool
      */
-    public function set($items, $tags=null, $lifetime=null)
+    public function set($items, $tags = null, $lifetime = null)
     {
         if (!empty($tags)) {
             // Escape the tags, adding brackets so the tag can be explicitly matched
@@ -47,10 +48,10 @@ class Cache_Database_Driver extends Cache_Driver
             $lifetime += time();
         }
 
-        $db = Database::instance();
+        $db   = Database::instance();
         $tags = $db->escape($tags);
         foreach ($items as $id => $data) {
-            $id = $db->escape($id);
+            $id   = $db->escape($id);
             $data = $db->escape(serialize($data));
             $db->query("INSERT INTO {caches} (`key`, `tags`, `expiration`, `cache`)
                   VALUES ('$id', '$tags', $lifetime, '$data')
@@ -68,9 +69,7 @@ class Cache_Database_Driver extends Cache_Driver
      */
     public function get_tag($tags)
     {
-        $db = db::build()
-      ->select()
-      ->from('caches');
+        $db = db::build()->select()->from('caches');
         foreach ($tags as $tag) {
             $db->where('tags', 'LIKE', '%' . Database::escape_for_like("<$tag>") . '%');
         }
@@ -99,14 +98,10 @@ class Cache_Database_Driver extends Cache_Driver
      * @param  string  cache id
      * @return mixed|NULL
      */
-    public function get($keys, $single=false)
+    public function get($keys, $single = false)
     {
-        $data = null;
-        $result = db::build()
-      ->select()
-      ->from('caches')
-      ->where('key', 'IN', $keys)
-      ->execute();
+        $data   = null;
+        $result = db::build()->select()->from('caches')->where('key', 'IN', $keys)->execute();
 
         if (count($result) > 0) {
             $cache = $result->current();
@@ -136,10 +131,9 @@ class Cache_Database_Driver extends Cache_Driver
      * @param  bool    delete a tag
      * @return bool
      */
-    public function delete($keys, $is_tag=false)
+    public function delete($keys, $is_tag = false)
     {
-        $db = db::build()
-      ->delete('caches');
+        $db = db::build()->delete('caches');
         if (true === $keys) {
             // Delete all caches
         } elseif (true === $is_tag) {

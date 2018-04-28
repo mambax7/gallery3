@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -17,7 +18,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
 class l10n_client_Core
 {
     private static function _server_url($path)
@@ -35,7 +35,7 @@ class l10n_client_Core
         return md5('l10n_client_client_token' . access::private_key());
     }
 
-    public static function api_key($api_key=null)
+    public static function api_key($api_key = null)
     {
         if (null !== $api_key) {
             module::set_var('gallery', 'l10n_client_key', $api_key);
@@ -43,14 +43,14 @@ class l10n_client_Core
         return module::get_var('gallery', 'l10n_client_key', '');
     }
 
-    public static function server_uid($api_key=null)
+    public static function server_uid($api_key = null)
     {
         $api_key = null == $api_key ? l10n_client::api_key() : $api_key;
-        $parts = explode(':', $api_key);
+        $parts   = explode(':', $api_key);
         return empty($parts) ? 0 : $parts[0];
     }
 
-    private static function _sign($payload, $api_key=null)
+    private static function _sign($payload, $api_key = null)
     {
         $api_key = null == $api_key ? l10n_client::api_key() : $api_key;
         return md5($api_key . $payload . l10n_client::client_token());
@@ -58,20 +58,17 @@ class l10n_client_Core
 
     public static function validate_api_key($api_key)
     {
-        $version = '1.0';
-        $url = self::_server_url('status');
+        $version   = '1.0';
+        $url       = self::_server_url('status');
         $signature = self::_sign($version, $api_key);
 
         try {
-            list($response_data, $response_status) = remote::post(
-                $url,
-                [
-              'version'      => $version,
-              'client_token' => l10n_client::client_token(),
-              'signature'    => $signature,
-              'uid'          => l10n_client::server_uid($api_key)
-                ]
-      );
+            list($response_data, $response_status) = remote::post($url, [
+                                                                          'version'      => $version,
+                                                                          'client_token' => l10n_client::client_token(),
+                                                                          'signature'    => $signature,
+                                                                          'uid'          => l10n_client::server_uid($api_key)
+                                                                      ]);
         } catch (ErrorException $e) {
             // Log the error, but then return a "can't make connection" error
             Kohana_Log::add('error', $e->getMessage() . "\n" . $e->getTraceAsString());
@@ -91,14 +88,14 @@ class l10n_client_Core
      * until 0 is returned (which is a countdown indicating progress).
      *
      * @param $num_fetched in/out parameter to specify which batch of
-     *     messages to fetch translations for.
+     *                     messages to fetch translations for.
      * @return The number of messages for which we didn't fetch
-     *     translations for.
+     *                     translations for.
      */
     public static function fetch_updates(&$num_fetched)
     {
-        $request = new stdClass();
-        $request->locales = [];
+        $request           = new stdClass();
+        $request->locales  = [];
         $request->messages = new stdClass();
 
         $locales = locales::installed();
@@ -108,15 +105,10 @@ class l10n_client_Core
 
         // See the server side code for how we arrive at this
         // number as a good limit for #locales * #messages.
-        $max_messages = 2000 / count($locales);
-        $num_messages = 0;
-        $rows = db::build()
-        ->select('key', 'locale', 'revision', 'translation')
-        ->from('incoming_translations')
-        ->order_by('key')
-        ->limit(1000000)  // ignore, just there to satisfy SQL syntax
-        ->offset($num_fetched)
-        ->execute();
+        $max_messages  = 2000 / count($locales);
+        $num_messages  = 0;
+        $rows          = db::build()->select('key', 'locale', 'revision', 'translation')->from('incoming_translations')->order_by('key')->limit(1000000)// ignore, just there to satisfy SQL syntax
+                           ->offset($num_fetched)->execute();
         $num_remaining = $rows->count();
         foreach ($rows as $row) {
             if (!isset($request->messages->{$row->key})) {
@@ -126,12 +118,12 @@ class l10n_client_Core
                 $request->messages->{$row->key} = 1;
                 $num_messages++;
             }
-            if (!empty($row->revision) && !empty($row->translation) &&
-          isset($locales[$row->locale])) {
+            if (!empty($row->revision) && !empty($row->translation)
+                && isset($locales[$row->locale])) {
                 if (!is_object($request->messages->{$row->key})) {
                     $request->messages->{$row->key} = new stdClass();
                 }
-                $request->messages->{$row->key}->{$row->locale} = (int) $row->revision;
+                $request->messages->{$row->key}->{$row->locale} = (int)$row->revision;
             }
             $num_fetched++;
             $num_remaining--;
@@ -143,7 +135,7 @@ class l10n_client_Core
         }
 
         $request_data = json_encode($request);
-        $url = self::_server_url('fetch');
+        $url          = self::_server_url('fetch');
         list($response_data, $response_status) = remote::post($url, ['data' => $request_data]);
         if (!remote::success($response_status)) {
             throw new Exception('@todo TRANSLATIONS_FETCH_REQUEST_FAILED ' . $response_status);
@@ -160,17 +152,18 @@ class l10n_client_Core
         //   ]
         foreach ($response as $message_data) {
             // @todo Better input validation
-            if (empty($message_data->key) || empty($message_data->translation) ||
-          empty($message_data->locale) || empty($message_data->rev)) {
+            if (empty($message_data->key) || empty($message_data->translation)
+                || empty($message_data->locale)
+                || empty($message_data->rev)) {
                 throw new Exception('@todo TRANSLATIONS_FETCH_REQUEST_FAILED: Invalid response data');
             }
-            $key = $message_data->key;
-            $locale = $message_data->locale;
-            $revision = $message_data->rev;
+            $key         = $message_data->key;
+            $locale      = $message_data->locale;
+            $revision    = $message_data->rev;
             $translation = json_decode($message_data->translation);
             if (!is_string($translation)) {
                 // Normalize stdclass to array
-                $translation = (array) $translation;
+                $translation = (array)$translation;
             }
             $translation = serialize($translation);
 
@@ -178,21 +171,15 @@ class l10n_client_Core
             // and incoming_translations(id, translation, locale, revision)? Or just allow
             // incoming_translations.message to be NULL?
             $locale = $message_data->locale;
-            $entry = ORM::factory('incoming_translation')
-        ->where('key', '=', $key)
-        ->where('locale', '=', $locale)
-        ->find();
+            $entry  = ORM::factory('incoming_translation')->where('key', '=', $key)->where('locale', '=', $locale)->find();
             if (!$entry->loaded()) {
                 // @todo Load a message key -> message (text) dict into memory outside of this loop
-                $root_entry = ORM::factory('incoming_translation')
-          ->where('key', '=', $key)
-          ->where('locale', '=', 'root')
-          ->find();
-                $entry->key = $key;
+                $root_entry     = ORM::factory('incoming_translation')->where('key', '=', $key)->where('locale', '=', 'root')->find();
+                $entry->key     = $key;
                 $entry->message = $root_entry->message;
-                $entry->locale = $locale;
+                $entry->locale  = $locale;
             }
-            $entry->revision = $revision;
+            $entry->revision    = $revision;
             $entry->translation = $translation;
             $entry->save();
         }
@@ -217,33 +204,27 @@ class l10n_client_Core
         // @todo Batch requests (max request size)
         // @todo include base_revision in submission / how to handle resubmissions / edit fights?
         $request = new stdClass();
-        foreach (db::build()
-             ->select('key', 'message', 'locale', 'base_revision', 'translation')
-             ->from('outgoing_translations')
-             ->execute() as $row) {
+        foreach (db::build()->select('key', 'message', 'locale', 'base_revision', 'translation')->from('outgoing_translations')->execute() as $row) {
             $key = $row->key;
             if (!isset($request->{$key})) {
-                $request->{$key} = new stdClass();
+                $request->{$key}               = new stdClass();
                 $request->{$key}->translations = new stdClass();
-                $request->{$key}->message = json_encode(unserialize($row->message));
+                $request->{$key}->message      = json_encode(unserialize($row->message));
             }
             $request->{$key}->translations->{$row->locale} = json_encode(unserialize($row->translation));
         }
 
         // @todo reduce memory consumption, e.g. free $request
         $request_data = json_encode($request);
-        $url = self::_server_url('submit');
-        $signature = self::_sign($request_data);
+        $url          = self::_server_url('submit');
+        $signature    = self::_sign($request_data);
 
-        list($response_data, $response_status) = remote::post(
-            $url,
-            [
-            'data'         => $request_data,
-            'client_token' => l10n_client::client_token(),
-            'signature'    => $signature,
-            'uid'          => l10n_client::server_uid()
-            ]
-    );
+        list($response_data, $response_status) = remote::post($url, [
+                                                                      'data'         => $request_data,
+                                                                      'client_token' => l10n_client::client_token(),
+                                                                      'signature'    => $signature,
+                                                                      'uid'          => l10n_client::server_uid()
+                                                                  ]);
 
         if (!remote::success($response_status)) {
             throw new Exception('@todo TRANSLATIONS_SUBMISSION_FAILED ' . $response_status);
@@ -254,12 +235,12 @@ class l10n_client_Core
 
         $response = json_decode($response_data);
         // Response format (JSON payload):
-    //   [{key:<key_1>, locale:<locale_1>, rev:<rev_1>, status:<rejected|accepted|pending>},
-    //    {key:<key_2>, ...}
-    //   ]
+        //   [{key:<key_1>, locale:<locale_1>, rev:<rev_1>, status:<rejected|accepted|pending>},
+        //    {key:<key_2>, ...}
+        //   ]
 
-    // @todo Move messages out of outgoing into incoming, using new rev?
-    // @todo show which messages have been rejected / are pending?
+        // @todo Move messages out of outgoing into incoming, using new rev?
+        // @todo show which messages have been rejected / are pending?
     }
 
     /**
@@ -267,75 +248,75 @@ class l10n_client_Core
      */
     public static function plural_forms($locale)
     {
-        $parts = explode('_', $locale);
+        $parts    = explode('_', $locale);
         $language = $parts[0];
 
         // Data from CLDR 1.6 (http://unicode.org/cldr/data/common/supplemental/plurals.xml).
         // Docs: http://www.unicode.org/cldr/data/charts/supplemental/language_plural_rules.html
         switch ($language) {
-      case 'az':
-      case 'fa':
-      case 'hu':
-      case 'ja':
-      case 'ko':
-      case 'my':
-      case 'to':
-      case 'tr':
-      case 'vi':
-      case 'yo':
-      case 'zh':
-      case 'bo':
-      case 'dz':
-      case 'id':
-      case 'jv':
-      case 'ka':
-      case 'km':
-      case 'kn':
-      case 'ms':
-      case 'th':
-        return ['other'];
+            case 'az':
+            case 'fa':
+            case 'hu':
+            case 'ja':
+            case 'ko':
+            case 'my':
+            case 'to':
+            case 'tr':
+            case 'vi':
+            case 'yo':
+            case 'zh':
+            case 'bo':
+            case 'dz':
+            case 'id':
+            case 'jv':
+            case 'ka':
+            case 'km':
+            case 'kn':
+            case 'ms':
+            case 'th':
+                return ['other'];
 
-      case 'ar':
-        return ['zero', 'one', 'two', 'few', 'many', 'other'];
+            case 'ar':
+                return ['zero', 'one', 'two', 'few', 'many', 'other'];
 
-      case 'lv':
-        return ['zero', 'one', 'other'];
+            case 'lv':
+                return ['zero', 'one', 'other'];
 
-      case 'ga':
-      case 'se':
-      case 'sma':
-      case 'smi':
-      case 'smj':
-      case 'smn':
-      case 'sms':
-        return ['one', 'two', 'other'];
+            case 'ga':
+            case 'se':
+            case 'sma':
+            case 'smi':
+            case 'smj':
+            case 'smn':
+            case 'sms':
+                return ['one', 'two', 'other'];
 
-      case 'ro':
-      case 'mo':
-      case 'lt':
-      case 'cs':
-      case 'sk':
-      case 'pl':
-        return ['one', 'few', 'other'];
+            case 'ro':
+            case 'mo':
+            case 'lt':
+            case 'cs':
+            case 'sk':
+            case 'pl':
+                return ['one', 'few', 'other'];
 
-      case 'hr':
-      case 'ru':
-      case 'sr':
-      case 'uk':
-      case 'be':
-      case 'bs':
-      case 'sh':
-      case 'mt':
-        return ['one', 'few', 'many', 'other'];
+            case 'hr':
+            case 'ru':
+            case 'sr':
+            case 'uk':
+            case 'be':
+            case 'bs':
+            case 'sh':
+            case 'mt':
+                return ['one', 'few', 'many', 'other'];
 
-      case 'sl':
-        return ['one', 'two', 'few', 'other'];
+            case 'sl':
+                return ['one', 'two', 'few', 'other'];
 
-      case 'cy':
-        return ['one', 'two', 'many', 'other'];
+            case 'cy':
+                return ['one', 'two', 'many', 'other'];
 
-      default: // en, de, etc.
-        return ['one', 'other'];
-    }
+            default: // en, de, etc.
+                return ['one', 'other'];
+        }
     }
 }

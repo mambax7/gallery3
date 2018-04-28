@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -17,7 +18,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
 class identity_Core
 {
     protected static $available;
@@ -88,8 +88,7 @@ class identity_Core
             }
         } catch (Exception $e) {
             // Log it, so we at least have so notification that we swallowed the exception.
-            Kohana_Log::add('error', 'load_user Exception: ' .
-                                     $e->getMessage() . "\n" . $e->getTraceAsString());
+            Kohana_Log::add('error', 'load_user Exception: ' . $e->getMessage() . "\n" . $e->getTraceAsString());
             try {
                 Session::instance()->destroy();
             } catch (Exception $e) {

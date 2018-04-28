@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -29,96 +30,49 @@ class Database_Test extends Gallery_Unit_Test_Case
 
     public function simple_where_test()
     {
-        $sql = db::build('mock')
-      ->select('some_column')
-      ->from('some_table')
-      ->where('a', '=', 1)
-      ->where('b', '=', 2)
-      ->compile();
+        $sql = db::build('mock')->select('some_column')->from('some_table')->where('a', '=', 1)->where('b', '=', 2)->compile();
         $sql = str_replace("\n", ' ', $sql);
         $this->assert_same('SELECT [some_column] FROM [some_table] WHERE [a] = [1] AND [b] = [2]', $sql);
     }
 
     public function compound_where_test()
     {
-        $sql = db::build('mock')
-      ->select()
-      ->where('outer1', '=', 1)
-      ->and_open()
-      ->where('inner1', '=', 1)
-      ->or_where('inner2', '=', 2)
-      ->close()
-      ->where('outer2', '=', 2)
-      ->compile();
+        $sql = db::build('mock')->select()->where('outer1', '=', 1)->and_open()->where('inner1', '=', 1)->or_where('inner2', '=', 2)->close()->where('outer2', '=', 2)->compile();
         $sql = str_replace("\n", ' ', $sql);
-        $this->assert_same(
-            'SELECT [*] WHERE [outer1] = [1] AND ([inner1] = [1] OR [inner2] = [2]) AND [outer2] = [2]',
-            $sql
-    );
+        $this->assert_same('SELECT [*] WHERE [outer1] = [1] AND ([inner1] = [1] OR [inner2] = [2]) AND [outer2] = [2]', $sql);
     }
 
     public function group_first_test()
     {
-        $sql = db::build('mock')
-      ->select()
-      ->and_open()
-      ->where('inner1', '=', 1)
-      ->or_where('inner2', '=', 2)
-      ->close()
-      ->where('outer1', '=', 1)
-      ->where('outer2', '=', 2)
-      ->compile();
+        $sql = db::build('mock')->select()->and_open()->where('inner1', '=', 1)->or_where('inner2', '=', 2)->close()->where('outer1', '=', 1)->where('outer2', '=', 2)->compile();
         $sql = str_replace("\n", ' ', $sql);
-        $this->assert_same(
-            'SELECT [*] WHERE ([inner1] = [1] OR [inner2] = [2]) AND [outer1] = [1] AND [outer2] = [2]',
-            $sql
-    );
+        $this->assert_same('SELECT [*] WHERE ([inner1] = [1] OR [inner2] = [2]) AND [outer1] = [1] AND [outer2] = [2]', $sql);
     }
 
     public function where_array_test()
     {
-        $sql = db::build('mock')
-      ->select()
-      ->where('outer1', '=', 1)
-      ->and_open()
-      ->where('inner1', '=', 1)
-      ->or_where('inner2', '=', 2)
-      ->or_where('inner3', '=', 3)
-      ->close()
-      ->compile();
+        $sql = db::build('mock')->select()->where('outer1', '=', 1)->and_open()->where('inner1', '=', 1)->or_where('inner2', '=', 2)->or_where('inner3', '=', 3)->close()->compile();
         $sql = str_replace("\n", ' ', $sql);
-        $this->assert_same(
-            'SELECT [*] WHERE [outer1] = [1] AND ([inner1] = [1] OR [inner2] = [2] OR [inner3] = [3])',
-            $sql
-    );
+        $this->assert_same('SELECT [*] WHERE [outer1] = [1] AND ([inner1] = [1] OR [inner2] = [2] OR [inner3] = [3])', $sql);
     }
 
     public function notlike_test()
     {
-        $sql = db::build('mock')
-      ->select()
-      ->where('outer1', '=', 1)
-      ->or_open()
-      ->where('inner1', 'NOT LIKE', '%1%')
-      ->close()
-      ->compile();
+        $sql = db::build('mock')->select()->where('outer1', '=', 1)->or_open()->where('inner1', 'NOT LIKE', '%1%')->close()->compile();
         $sql = str_replace("\n", ' ', $sql);
-        $this->assert_same(
-            'SELECT [*] WHERE [outer1] = [1] OR ([inner1] NOT LIKE [%1%])',
-            $sql
-    );
+        $this->assert_same('SELECT [*] WHERE [outer1] = [1] OR ([inner1] NOT LIKE [%1%])', $sql);
     }
 
     public function prefix_replacement_test()
     {
-        $db = Database::instance('mock');
+        $db        = Database::instance('mock');
         $converted = $db->add_table_prefixes('CREATE TABLE IF NOT EXISTS {test} (
                    `id` int(9) NOT NULL auto_increment,
                    `name` varchar(32) NOT NULL,
                    PRIMARY KEY (`id`),
                    UNIQUE KEY(`name`))
                  ENGINE=InnoDB DEFAULT CHARSET=utf8');
-        $expected = 'CREATE TABLE IF NOT EXISTS `g_test` (
+        $expected  = 'CREATE TABLE IF NOT EXISTS `g_test` (
                    `id` int(9) NOT NULL auto_increment,
                    `name` varchar(32) NOT NULL,
                    PRIMARY KEY (`id`),
@@ -137,20 +91,12 @@ class Database_Test extends Gallery_Unit_Test_Case
     public function prefix_replacement_for_rename_table_test()
     {
         $db = Database::instance('mock');
-        $this->assert_same(
-            'RENAME TABLE `g_test` TO `g_new_test`',
-            $db->add_table_prefixes('RENAME TABLE {test} TO {new_test}')
-    );
+        $this->assert_same('RENAME TABLE `g_test` TO `g_new_test`', $db->add_table_prefixes('RENAME TABLE {test} TO {new_test}'));
     }
 
     public function prefix_no_replacement_test()
     {
-        $sql = db::build('mock')
-      ->from('test_tables')
-      ->where('1', '=', '1')
-      ->set(['name' => 'Test Name'])
-      ->update()
-      ->compile();
+        $sql = db::build('mock')->from('test_tables')->where('1', '=', '1')->set(['name' => 'Test Name'])->update()->compile();
         $sql = str_replace("\n", ' ', $sql);
         $this->assert_same('UPDATE [test_tables] SET [name] = [Test Name] WHERE [1] = [1]', $sql);
     }
@@ -198,12 +144,12 @@ class Database_Mock extends Database
         return ['test'];
     }
 
-    public function quote_column($val, $alias=null)
+    public function quote_column($val, $alias = null)
     {
         return $alias ? "[$val,$alias]" : "[$val]";
     }
 
-    public function quote_table($val, $alias=null)
+    public function quote_table($val, $alias = null)
     {
         return $alias ? "[$val,$alias]" : "[$val]";
     }

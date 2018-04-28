@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * [Object Relational Mapping][ref-orm] (ORM) is a method of abstracting database
  * access to standard PHP calls. All table rows are represented as model objects,
@@ -8,10 +9,10 @@
  * [ref-orm]: http://wikipedia.org/wiki/Object-relational_mapping
  * [ref-act]: http://wikipedia.org/wiki/Active_record
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class ORM_Core
 {
@@ -31,13 +32,13 @@ class ORM_Core
     protected $changed = [];
     protected $related = [];
     protected $_valid  = false;
-    protected $_loaded  = false;
-    protected $_saved   = false;
+    protected $_loaded = false;
+    protected $_saved  = false;
     protected $sorting;
-    protected $rules = [];
+    protected $rules   = [];
 
     // Related objects
-    protected $object_relations = [];
+    protected $object_relations  = [];
     protected $changed_relations = [];
 
     // Model table information
@@ -63,7 +64,7 @@ class ORM_Core
     protected $reload_on_wakeup   = true;
 
     // Database configuration
-    protected $db = 'default';
+    protected $db         = 'default';
     protected $db_applied = [];
     protected $db_builder;
 
@@ -84,7 +85,7 @@ class ORM_Core
     public static function factory($model, $id = null)
     {
         // Set class name
-        $model = ucfirst($model).'_Model';
+        $model = ucfirst($model) . '_Model';
 
         return new $model($id);
     }
@@ -101,7 +102,7 @@ class ORM_Core
         $this->object_name   = strtolower(substr(get_class($this), 0, -6));
         $this->object_plural = inflector::plural($this->object_name);
 
-        if (! isset($this->sorting)) {
+        if (!isset($this->sorting)) {
             // Default sorting
             $this->sorting = [$this->primary_key => 'asc'];
         }
@@ -114,8 +115,8 @@ class ORM_Core
 
         if (is_object($id)) {
             // Load an object
-            $this->_load_values((array) $id);
-        } elseif (! empty($id)) {
+            $this->_load_values((array)$id);
+        } elseif (!empty($id)) {
             // Set the object's primary key, but don't load it until needed
             $this->object[$this->primary_key] = $id;
 
@@ -132,7 +133,7 @@ class ORM_Core
      */
     public function __initialize()
     {
-        if (! is_object($this->db)) {
+        if (!is_object($this->db)) {
             // Get database instance
             $this->db = Database::instance($this->db);
         }
@@ -227,32 +228,29 @@ class ORM_Core
                             // Support for things like reset_select, reset_write, list_tables
                             return $this->db_builder->$method();
                         }
-                    break;
+                        break;
                     case 1:
                         $this->db_builder->$method($args[0]);
-                    break;
+                        break;
                     case 2:
                         $this->db_builder->$method($args[0], $args[1]);
-                    break;
+                        break;
                     case 3:
                         $this->db_builder->$method($args[0], $args[1], $args[2]);
-                    break;
+                        break;
                     case 4:
                         $this->db_builder->$method($args[0], $args[1], $args[2], $args[3]);
-                    break;
+                        break;
                     default:
                         // Here comes the snail...
                         call_user_func_array([$this->db, $method], $args);
-                    break;
+                        break;
                 }
             }
 
             return $this;
         } else {
-            throw new Kohana_Exception(
-                'Invalid method :method called in :class',
-                [':method' => $method, ':class' => get_class($this)]
-            );
+            throw new Kohana_Exception('Invalid method :method called in :class', [':method' => $method, ':class' => get_class($this)]);
         }
     }
 
@@ -265,7 +263,7 @@ class ORM_Core
     public function __get($column)
     {
         if (array_key_exists($column, $this->object)) {
-            if (! $this->loaded() && ! $this->empty_primary_key()) {
+            if (!$this->loaded() && !$this->empty_primary_key()) {
                 // Column asked for but the object hasn't been loaded yet, so do it now
                 // Ignore loading of any columns that have been changed
                 $this->find($this->object[$this->primary_key], true);
@@ -275,7 +273,7 @@ class ORM_Core
         } elseif (isset($this->related[$column])) {
             return $this->related[$column];
         } elseif ('primary_key_value' === $column) {
-            if (! $this->loaded() and ! $this->empty_primary_key() and $this->unique_key($this->object[$this->primary_key]) !== $this->primary_key) {
+            if (!$this->loaded() and !$this->empty_primary_key() and $this->unique_key($this->object[$this->primary_key]) !== $this->primary_key) {
                 // Load if object hasn't been loaded and the key given isn't the primary_key
                 // that we need (i.e. passing an email address to ORM::factory rather than the id)
                 $this->find($this->object[$this->primary_key], true);
@@ -286,7 +284,7 @@ class ORM_Core
             // This handles the has_one and belongs_to relationships
 
             if (in_array($model->object_name, $this->belongs_to)) {
-                if (! $this->loaded() and ! $this->empty_primary_key()) {
+                if (!$this->loaded() and !$this->empty_primary_key()) {
                     // Load this object first so we know what id to look for in the foreign table
                     $this->find($this->object[$this->primary_key], true);
                 }
@@ -314,9 +312,7 @@ class ORM_Core
             $join_col2  = $model->foreign_key(true);
 
             // one<>alias:many relationship
-            return $model
-                ->join($join_table, $join_col1, $join_col2)
-                ->where($through->foreign_key($this->object_name, $join_table), '=', $this->primary_key_value);
+            return $model->join($join_table, $join_col1, $join_col2)->where($through->foreign_key($this->object_name, $join_table), '=', $this->primary_key_value);
         } elseif (isset($this->has_many[$column])) {
             // one<>many aliased relationship
             $model_name = $this->has_many[$column];
@@ -342,17 +338,24 @@ class ORM_Core
         } elseif (isset($this->ignored_columns[$column])) {
             return null;
         } elseif (in_array($column, [
-                'object_name', 'object_plural','_valid', // Object
-                'primary_key', 'primary_val', 'table_name', 'table_columns', // Table
-                'has_one', 'belongs_to', 'has_many', 'has_many_through', 'has_and_belongs_to_many', 'load_with' // Relationships
+            'object_name',
+            'object_plural',
+            '_valid', // Object
+            'primary_key',
+            'primary_val',
+            'table_name',
+            'table_columns', // Table
+            'has_one',
+            'belongs_to',
+            'has_many',
+            'has_many_through',
+            'has_and_belongs_to_many',
+            'load_with' // Relationships
         ])) {
             // Model meta information
             return $this->$column;
         } else {
-            throw new Kohana_Exception(
-                'The :property property does not exist in the :class class',
-                [':property' => $column, ':class' => get_class($this)]
-            );
+            throw new Kohana_Exception('The :property property does not exist in the :class class', [':property' => $column, ':class' => get_class($this)]);
         }
     }
 
@@ -363,7 +366,7 @@ class ORM_Core
      */
     public function loaded()
     {
-        if (! $this->_loaded and ! $this->empty_primary_key()) {
+        if (!$this->_loaded and !$this->empty_primary_key()) {
             // If returning the loaded member and no load has been attempted, do it now
             $this->find($this->object[$this->primary_key], true);
         }
@@ -405,7 +408,7 @@ class ORM_Core
             // Load relations
             $model = ORM::factory(inflector::singular($column));
 
-            if (! isset($this->object_relations[$column])) {
+            if (!isset($this->object_relations[$column])) {
                 // Load relations
                 $this->has($model);
             }
@@ -418,10 +421,7 @@ class ORM_Core
                 unset($this->related[$column]);
             }
         } else {
-            throw new Kohana_Exception(
-                'The :property: property does not exist in the :class: class',
-                [':property:' => $column, ':class:' => get_class($this)]
-            );
+            throw new Kohana_Exception('The :property: property does not exist in the :class: class', [':property:' => $column, ':class:' => get_class($this)]);
         }
     }
 
@@ -507,13 +507,13 @@ class ORM_Core
 
         // Split object parts
         $objects = explode(':', $target_path);
-        $target	 = $this;
+        $target  = $this;
         foreach ($objects as $object) {
             // Go down the line of objects to find the given target
             $parent = $target;
             $target = $parent->related_object($object);
 
-            if (! $target) {
+            if (!$target) {
                 // Can't find related object
                 return $this;
             }
@@ -529,7 +529,7 @@ class ORM_Core
             // Use this table name itself for the parent object
             $parent_path = $this->table_name;
         } else {
-            if (! isset($this->with_applied[$parent_path])) {
+            if (!isset($this->with_applied[$parent_path])) {
                 // If the parent object hasn't been joined yet, do it first (otherwise LEFT JOINs fail)
                 $this->with($parent_path);
             }
@@ -543,7 +543,7 @@ class ORM_Core
         // Use the keys of the empty object to determine the columns
         foreach (array_keys($target->object) as $column) {
             // Add the prefix so that load_result can determine the relationship
-            $select[$target_path.':'.$column] = $target_path.'.'.$column;
+            $select[$target_path . ':' . $column] = $target_path . '.' . $column;
         }
 
         // Select all of the prefixed keys in the object
@@ -585,7 +585,7 @@ class ORM_Core
                 $this->db_builder->where([$id]);
             } else {
                 // Search for a specific column
-                $this->db_builder->where($this->table_name.'.'.$this->unique_key($id), '=', $id);
+                $this->db_builder->where($this->table_name . '.' . $this->unique_key($id), '=', $id);
             }
         }
 
@@ -602,12 +602,12 @@ class ORM_Core
      */
     public function find_all($limit = null, $offset = null)
     {
-        if (null !== $limit and ! isset($this->db_applied['limit'])) {
+        if (null !== $limit and !isset($this->db_applied['limit'])) {
             // Set limit
             $this->limit($limit);
         }
 
-        if (null !== $offset and ! isset($this->db_applied['offset'])) {
+        if (null !== $offset and !isset($this->db_applied['offset'])) {
             // Set offset
             $this->offset($offset);
         }
@@ -634,7 +634,7 @@ class ORM_Core
         }
 
         // Return a select list from the results
-        return $this->select($this->table_name.'.'.$key, $this->table_name.'.'.$val)->find_all()->select_list($key, $val);
+        return $this->select($this->table_name . '.' . $key, $this->table_name . '.' . $val)->find_all()->select_list($key, $val);
     }
 
     /**
@@ -691,9 +691,9 @@ class ORM_Core
      */
     public function save()
     {
-        if (! empty($this->changed)) {
+        if (!empty($this->changed)) {
             // Require model validation before saving
-            if (! $this->_valid) {
+            if (!$this->_valid) {
                 $this->validate();
             }
 
@@ -703,7 +703,7 @@ class ORM_Core
                 $data[$column] = $this->object[$column];
             }
 
-            if (! $this->empty_primary_key() and ! isset($this->changed[$this->primary_key])) {
+            if (!$this->empty_primary_key() and !isset($this->changed[$this->primary_key])) {
                 // Primary key isn't empty and hasn't been changed so do an update
 
                 if (is_array($this->updated_column)) {
@@ -714,10 +714,7 @@ class ORM_Core
                     $data[$column] = $this->object[$column] = (true === $format) ? time() : date($format);
                 }
 
-                $query = db::update($this->table_name)
-                    ->set($data)
-                    ->where($this->primary_key, '=', $this->primary_key_value)
-                    ->execute($this->db);
+                $query = db::update($this->table_name)->set($data)->where($this->primary_key, '=', $this->primary_key_value)->execute($this->db);
 
                 // Object has been saved
                 $this->_saved = true;
@@ -730,10 +727,7 @@ class ORM_Core
                     $data[$column] = $this->object[$column] = (true === $format) ? time() : date($format);
                 }
 
-                $result = db::insert($this->table_name)
-                    ->columns(array_keys($data))
-                    ->values(array_values($data))
-                    ->execute($this->db);
+                $result = db::insert($this->table_name)->columns(array_keys($data))->values(array_values($data))->execute($this->db);
 
                 if ($result->count() > 0) {
                     if (empty($this->object[$this->primary_key])) {
@@ -752,7 +746,7 @@ class ORM_Core
             }
         }
 
-        if (true === $this->saved() and ! empty($this->changed_relations)) {
+        if (true === $this->saved() and !empty($this->changed_relations)) {
             foreach ($this->changed_relations as $column => $values) {
                 // All values that were added
                 $added = array_diff($values, $this->object_relations[$column]);
@@ -784,21 +778,15 @@ class ORM_Core
                 $object_fk  = $this->foreign_key($join_table);
                 $related_fk = $model->foreign_key($join_table);
 
-                if (! empty($added)) {
+                if (!empty($added)) {
                     foreach ($added as $id) {
                         // Insert the new relationship
-                        db::insert($join_table)
-                            ->columns($object_fk, $related_fk)
-                            ->values($this->primary_key_value, $id)
-                            ->execute($this->db);
+                        db::insert($join_table)->columns($object_fk, $related_fk)->values($this->primary_key_value, $id)->execute($this->db);
                     }
                 }
 
-                if (! empty($removed)) {
-                    db::delete($join_table)
-                        ->where($object_fk, '=', $this->primary_key_value)
-                        ->where($related_fk, 'IN', $removed)
-                        ->execute($this->db);
+                if (!empty($removed)) {
+                    db::delete($join_table)->where($object_fk, '=', $this->primary_key_value)->where($related_fk, 'IN', $removed)->execute($this->db);
                 }
 
                 // Clear all relations for this column
@@ -833,9 +821,7 @@ class ORM_Core
         }
 
         // Delete this object
-        db::delete($this->table_name)
-            ->where($this->primary_key, '=', $id)
-            ->execute($this->db);
+        db::delete($this->table_name)->where($this->primary_key, '=', $id)->execute($this->db);
 
         // Clear the per-request database cache
         $this->db->clear_cache(null, Database::PER_REQUEST);
@@ -855,13 +841,10 @@ class ORM_Core
     {
         if (is_array($ids)) {
             // Delete only given ids
-            db::delete($this->table_name)
-                ->where($this->primary_key, 'IN', $ids)
-                ->execute($this->db);
+            db::delete($this->table_name)->where($this->primary_key, 'IN', $ids)->execute($this->db);
         } elseif (null === $ids) {
             // Delete all records
-            db::delete($this->table_name)
-                ->execute($this->db);
+            db::delete($this->table_name)->execute($this->db);
         } else {
             // Do nothing - safeguard
             return $this;
@@ -949,22 +932,22 @@ class ORM_Core
             $join_table = $model->join_table($this->table_name);
         }
 
-        if (! isset($this->object_relations[$related])) {
+        if (!isset($this->object_relations[$related])) {
             // Load the object relationships
             $this->changed_relations[$related] = $this->object_relations[$related] = $this->load_relations($join_table, $model);
         }
 
-        if (! $model->loaded() and ! $model->empty_primary_key()) {
+        if (!$model->loaded() and !$model->empty_primary_key()) {
             // Load the related model if it hasn't already been
             $model->find($model->object[$model->primary_key]);
         }
 
-        if (! $model->empty_primary_key()) {
+        if (!$model->empty_primary_key()) {
             // Check if a specific object exists
             return in_array($model->primary_key_value, $this->changed_relations[$related]);
         } elseif ($any) {
             // Check if any relations to given model exist
-            return ! empty($this->changed_relations[$related]);
+            return !empty($this->changed_relations[$related]);
         } else {
             return false;
         }
@@ -1004,7 +987,7 @@ class ORM_Core
      */
     public function remove(ORM $model)
     {
-        if (! $this->has($model)) {
+        if (!$this->has($model)) {
             return false;
         }
 
@@ -1090,10 +1073,10 @@ class ORM_Core
         if (true === $table) {
             if (is_string($prefix_table)) {
                 // Use prefix table name and this table's PK
-                return $prefix_table.'.'.$this->primary_key;
+                return $prefix_table . '.' . $this->primary_key;
             } else {
                 // Return the name of this table's PK
-                return $this->table_name.'.'.$this->primary_key;
+                return $this->table_name . '.' . $this->primary_key;
             }
         }
 
@@ -1106,7 +1089,7 @@ class ORM_Core
             // Use the defined foreign key name, no magic here!
             $foreign_key = $this->foreign_key[$table];
         } else {
-            if (! is_string($table) || ! array_key_exists($table.'_'.$this->primary_key, $this->object)) {
+            if (!is_string($table) || !array_key_exists($table . '_' . $this->primary_key, $this->object)) {
                 // Use this table
                 $table = $this->table_name;
 
@@ -1121,10 +1104,10 @@ class ORM_Core
                 }
             }
 
-            $foreign_key = $table.'_'.$this->primary_key;
+            $foreign_key = $table . '_' . $this->primary_key;
         }
 
-        return $prefix_table.$foreign_key;
+        return $prefix_table . $foreign_key;
     }
 
     /**
@@ -1142,9 +1125,9 @@ class ORM_Core
     public function join_table($table)
     {
         if ($this->table_name > $table) {
-            $table = $table.'_'.$this->table_name;
+            $table = $table . '_' . $this->table_name;
         } else {
-            $table = $this->table_name.'_'.$table;
+            $table = $this->table_name . '_' . $table;
         }
 
         return $table;
@@ -1185,7 +1168,7 @@ class ORM_Core
 
         foreach ($values as $column => $value) {
             if (false === strpos($column, ':')) {
-                if (! isset($this->changed[$column])) {
+                if (!isset($this->changed[$column])) {
                     if (isset($this->table_columns[$column])) {
                         //Update the column, respects __get()
                         $this->$column = $value;
@@ -1198,7 +1181,7 @@ class ORM_Core
             }
         }
 
-        if (! empty($related)) {
+        if (!empty($related)) {
             foreach ($related as $object => $values) {
                 // Load the related objects with the values in the result
                 $this->related[$object] = $this->related_object($object)->load_values($values);
@@ -1219,7 +1202,7 @@ class ORM_Core
     public function _load_values(array $values, $ignore_changed = false)
     {
         if (array_key_exists($this->primary_key, $values)) {
-            if (! $ignore_changed) {
+            if (!$ignore_changed) {
                 // Replace the object and reset the object status
                 $this->object = $this->changed = $this->related = [];
             }
@@ -1233,7 +1216,7 @@ class ORM_Core
 
         foreach ($values as $column => $value) {
             if (false === strpos($column, ':')) {
-                if (! $ignore_changed or ! isset($this->changed[$column])) {
+                if (!$ignore_changed or !isset($this->changed[$column])) {
                     $this->object[$column] = $value;
                 }
             } else {
@@ -1243,7 +1226,7 @@ class ORM_Core
             }
         }
 
-        if (! empty($related)) {
+        if (!empty($related)) {
             foreach ($related as $object => $values) {
                 // Load the related objects with the values in the result
                 $this->related[$object] = $this->related_object($object)->_load_values($values);
@@ -1272,12 +1255,12 @@ class ORM_Core
             $this->db_builder->limit(1);
         }
 
-        if (! isset($this->db_applied['select'])) {
+        if (!isset($this->db_applied['select'])) {
             // Select all columns by default
-            $this->db_builder->select($this->table_name.'.*');
+            $this->db_builder->select($this->table_name . '.*');
         }
 
-        if (! empty($this->load_with)) {
+        if (!empty($this->load_with)) {
             foreach ($this->load_with as $alias => $object) {
                 // Join each object into the results
                 if (is_string($alias)) {
@@ -1290,13 +1273,13 @@ class ORM_Core
             }
         }
 
-        if (! isset($this->db_applied['order_by']) and ! empty($this->sorting)) {
+        if (!isset($this->db_applied['order_by']) and !empty($this->sorting)) {
             $sorting = [];
             foreach ($this->sorting as $column => $direction) {
                 if (false === strpos($column, '.')) {
                     // Keeps sorting working properly when using JOINs on
                     // tables with columns of the same name
-                    $column = $this->table_name.'.'.$column;
+                    $column = $this->table_name . '.' . $column;
                 }
 
                 $sorting[$column] = $direction;
@@ -1307,7 +1290,7 @@ class ORM_Core
         }
 
         // Load the result
-        $result = $this->db_builder->execute($this->db);
+        $result           = $this->db_builder->execute($this->db);
         $this->db_applied = [];
 
         if (true === $array) {
@@ -1335,11 +1318,7 @@ class ORM_Core
      */
     protected function load_relations($table, ORM $model)
     {
-        $result = db::select(['id' => $model->foreign_key($table)])
-            ->from($table)
-            ->where($this->foreign_key($table, $table), '=', $this->primary_key_value)
-            ->execute($this->db)
-            ->as_object();
+        $result = db::select(['id' => $model->foreign_key($table)])->from($table)->where($this->foreign_key($table, $table), '=', $this->primary_key_value)->execute($this->db)->as_object();
 
         $relations = [];
         foreach ($result as $row) {

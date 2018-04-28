@@ -17,6 +17,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
+
 /**
  * Implement Modified Preorder Tree Traversal on top of ORM.
  *
@@ -35,7 +36,7 @@ class ORM_MPTT_Core extends ORM
 {
     private $model_name = null;
 
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
         parent::__construct($id);
         $this->model_name = inflector::singular($this->table_name);
@@ -55,23 +56,15 @@ class ORM_MPTT_Core extends ORM
 
             try {
                 // Make a hole in the parent for this new item
-                db::build()
-          ->update($this->table_name)
-          ->set('left_ptr', db::expr('`left_ptr` + 2'))
-          ->where('left_ptr', '>=', $parent->right_ptr)
-          ->execute();
-                db::build()
-          ->update($this->table_name)
-          ->set('right_ptr', db::expr('`right_ptr` + 2'))
-          ->where('right_ptr', '>=', $parent->right_ptr)
-          ->execute();
+                db::build()->update($this->table_name)->set('left_ptr', db::expr('`left_ptr` + 2'))->where('left_ptr', '>=', $parent->right_ptr)->execute();
+                db::build()->update($this->table_name)->set('right_ptr', db::expr('`right_ptr` + 2'))->where('right_ptr', '>=', $parent->right_ptr)->execute();
                 $parent->right_ptr += 2;
 
                 // Insert this item into the hole
-                $this->left_ptr = $parent->right_ptr - 2;
+                $this->left_ptr  = $parent->right_ptr - 2;
                 $this->right_ptr = $parent->right_ptr - 1;
                 $this->parent_id = $parent->id;
-                $this->level = $parent->level + 1;
+                $this->level     = $parent->level + 1;
             } catch (Exception $e) {
                 $this->unlock();
                 throw $e;
@@ -88,7 +81,7 @@ class ORM_MPTT_Core extends ORM
     /**
      * Delete this node and all of its children.
      */
-    public function delete($ignored_id=null)
+    public function delete($ignored_id = null)
     {
         $children = $this->children();
         if ($children) {
@@ -111,16 +104,8 @@ class ORM_MPTT_Core extends ORM
         }
 
         try {
-            db::build()
-        ->update($this->table_name)
-        ->set('left_ptr', db::expr('`left_ptr` - 2'))
-        ->where('left_ptr', '>', $this->right_ptr)
-        ->execute();
-            db::build()
-        ->update($this->table_name)
-        ->set('right_ptr', db::expr('`right_ptr` - 2'))
-        ->where('right_ptr', '>', $this->right_ptr)
-        ->execute();
+            db::build()->update($this->table_name)->set('left_ptr', db::expr('`left_ptr` - 2'))->where('left_ptr', '>', $this->right_ptr)->execute();
+            db::build()->update($this->table_name)->set('right_ptr', db::expr('`right_ptr` - 2'))->where('right_ptr', '>', $this->right_ptr)->execute();
         } catch (Exception $e) {
             $this->unlock();
             throw $e;
@@ -158,15 +143,9 @@ class ORM_MPTT_Core extends ORM
      *
      * @return array ORM
      */
-    public function parents($where=null)
+    public function parents($where = null)
     {
-        return $this
-      ->merge_where($where)
-      ->where('left_ptr', '<=', $this->left_ptr)
-      ->where('right_ptr', '>=', $this->right_ptr)
-      ->where('id', '<>', $this->id)
-      ->order_by('left_ptr', 'ASC')
-      ->find_all();
+        return $this->merge_where($where)->where('left_ptr', '<=', $this->left_ptr)->where('right_ptr', '>=', $this->right_ptr)->where('id', '<>', $this->id)->order_by('left_ptr', 'ASC')->find_all();
     }
 
     /**
@@ -179,13 +158,9 @@ class ORM_MPTT_Core extends ORM
      * @param   array    order_by
      * @return array ORM
      */
-    public function children($limit=null, $offset=null, $where=null, $order_by= ['id' => 'ASC'])
+    public function children($limit = null, $offset = null, $where = null, $order_by = ['id' => 'ASC'])
     {
-        return $this
-      ->merge_where($where)
-      ->where('parent_id', '=', $this->id)
-      ->order_by($order_by)
-      ->find_all($limit, $offset);
+        return $this->merge_where($where)->where('parent_id', '=', $this->id)->order_by($order_by)->find_all($limit, $offset);
     }
 
     /**
@@ -195,12 +170,9 @@ class ORM_MPTT_Core extends ORM
      * @param   array    additional where clauses
      * @return array ORM
      */
-    public function children_count($where=null)
+    public function children_count($where = null)
     {
-        return $this
-      ->merge_where($where)
-      ->where('parent_id', '=', $this->id)
-      ->count_all();
+        return $this->merge_where($where)->where('parent_id', '=', $this->id)->count_all();
     }
 
     /**
@@ -212,14 +184,9 @@ class ORM_MPTT_Core extends ORM
      * @param   array    order_by
      * @return object ORM_Iterator
      */
-    public function descendants($limit=null, $offset=null, $where=null, $order_by= ['id' => 'ASC'])
+    public function descendants($limit = null, $offset = null, $where = null, $order_by = ['id' => 'ASC'])
     {
-        return $this
-      ->merge_where($where)
-      ->where('left_ptr', '>', $this->left_ptr)
-      ->where('right_ptr', '<=', $this->right_ptr)
-      ->order_by($order_by)
-      ->find_all($limit, $offset);
+        return $this->merge_where($where)->where('left_ptr', '>', $this->left_ptr)->where('right_ptr', '<=', $this->right_ptr)->order_by($order_by)->find_all($limit, $offset);
     }
 
     /**
@@ -228,13 +195,9 @@ class ORM_MPTT_Core extends ORM
      * @param    array    additional where clauses
      * @return   integer  child count
      */
-    public function descendants_count($where=null)
+    public function descendants_count($where = null)
     {
-        return $this
-      ->merge_where($where)
-      ->where('left_ptr', '>', $this->left_ptr)
-      ->where('right_ptr', '<=', $this->right_ptr)
-      ->count_all();
+        return $this->merge_where($where)->where('left_ptr', '>', $this->left_ptr)->where('right_ptr', '<=', $this->right_ptr)->count_all();
     }
 
     /**
@@ -254,72 +217,41 @@ class ORM_MPTT_Core extends ORM
         $this->reload();  // Assume that the prior lock holder may have changed this entry
         $target->reload();
 
-        $number_to_move = (int)(($this->right_ptr - $this->left_ptr) / 2 + 1);
-        $size_of_hole = $number_to_move * 2;
-        $original_left_ptr = $this->left_ptr;
+        $number_to_move     = (int)(($this->right_ptr - $this->left_ptr) / 2 + 1);
+        $size_of_hole       = $number_to_move * 2;
+        $original_left_ptr  = $this->left_ptr;
         $original_right_ptr = $this->right_ptr;
-        $target_right_ptr = $target->right_ptr;
-        $level_delta = ($target->level + 1) - $this->level;
+        $target_right_ptr   = $target->right_ptr;
+        $level_delta        = ($target->level + 1) - $this->level;
 
         try {
             if ($level_delta) {
                 // Update the levels for the to-be-moved items
-                db::build()
-          ->update($this->table_name)
-          ->set('level', db::expr("`level` + $level_delta"))
-          ->where('left_ptr', '>=', $original_left_ptr)
-          ->where('right_ptr', '<=', $original_right_ptr)
-          ->execute();
+                db::build()->update($this->table_name)->set('level', db::expr("`level` + $level_delta"))->where('left_ptr', '>=', $original_left_ptr)->where('right_ptr', '<=', $original_right_ptr)->execute();
             }
 
             // Make a hole in the target for the move
-            db::build()
-        ->update($this->table_name)
-        ->set('left_ptr', db::expr("`left_ptr` + $size_of_hole"))
-        ->where('left_ptr', '>=', $target_right_ptr)
-        ->execute();
-            db::build()
-        ->update($this->table_name)
-        ->set('right_ptr', db::expr("`right_ptr` + $size_of_hole"))
-        ->where('right_ptr', '>=', $target_right_ptr)
-        ->execute();
+            db::build()->update($this->table_name)->set('left_ptr', db::expr("`left_ptr` + $size_of_hole"))->where('left_ptr', '>=', $target_right_ptr)->execute();
+            db::build()->update($this->table_name)->set('right_ptr', db::expr("`right_ptr` + $size_of_hole"))->where('right_ptr', '>=', $target_right_ptr)->execute();
 
             // Change the parent.
-            db::build()
-        ->update($this->table_name)
-        ->set('parent_id', $target->id)
-        ->where('id', '=', $this->id)
-        ->execute();
+            db::build()->update($this->table_name)->set('parent_id', $target->id)->where('id', '=', $this->id)->execute();
 
             // If the source is to the right of the target then we just adjusted its left_ptr and
             // right_ptr above.
-            $left_ptr = $original_left_ptr;
+            $left_ptr  = $original_left_ptr;
             $right_ptr = $original_right_ptr;
             if ($original_left_ptr > $target_right_ptr) {
-                $left_ptr += $size_of_hole;
+                $left_ptr  += $size_of_hole;
                 $right_ptr += $size_of_hole;
             }
 
             $new_offset = $target->right_ptr - $left_ptr;
-            db::build()
-        ->update($this->table_name)
-        ->set('left_ptr', db::expr("`left_ptr` + $new_offset"))
-        ->set('right_ptr', db::expr("`right_ptr` + $new_offset"))
-        ->where('left_ptr', '>=', $left_ptr)
-        ->where('right_ptr', '<=', $right_ptr)
-        ->execute();
+            db::build()->update($this->table_name)->set('left_ptr', db::expr("`left_ptr` + $new_offset"))->set('right_ptr', db::expr("`right_ptr` + $new_offset"))->where('left_ptr', '>=', $left_ptr)->where('right_ptr', '<=', $right_ptr)->execute();
 
             // Close the hole in the source's parent after the move
-            db::build()
-        ->update($this->table_name)
-        ->set('left_ptr', db::expr("`left_ptr` - $size_of_hole"))
-        ->where('left_ptr', '>', $right_ptr)
-        ->execute();
-            db::build()
-        ->update($this->table_name)
-        ->set('right_ptr', db::expr("`right_ptr` - $size_of_hole"))
-        ->where('right_ptr', '>', $right_ptr)
-        ->execute();
+            db::build()->update($this->table_name)->set('left_ptr', db::expr("`left_ptr` - $size_of_hole"))->where('left_ptr', '>', $right_ptr)->execute();
+            db::build()->update($this->table_name)->set('right_ptr', db::expr("`right_ptr` - $size_of_hole"))->where('right_ptr', '>', $right_ptr)->execute();
         } catch (Exception $e) {
             $this->unlock();
             throw $e;
@@ -339,7 +271,7 @@ class ORM_MPTT_Core extends ORM
     protected function lock()
     {
         $timeout = module::get_var('gallery', 'lock_timeout', 1);
-        $result = $this->db->query("SELECT GET_LOCK('{$this->table_name}', $timeout) AS l")->current();
+        $result  = $this->db->query("SELECT GET_LOCK('{$this->table_name}', $timeout) AS l")->current();
         if (empty($result->l)) {
             throw new Exception('@todo UNABLE_TO_LOCK_EXCEPTION');
         }

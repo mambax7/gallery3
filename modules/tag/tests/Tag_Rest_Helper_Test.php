@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -32,28 +33,25 @@ class Tag_Rest_Helper_Test extends Gallery_Unit_Test_Case
     {
         $tag = tag::add(item::root(), 'tag1')->reload();
 
-        $request = new stdClass();
+        $request      = new stdClass();
         $request->url = rest::url('tag', $tag);
-        $this->assert_equal_array(
-            [
-          'url'           => rest::url('tag', $tag),
-          'entity'        => $tag->as_array(),
-          'relationships' => [
-              'items' => [
-                  'url'     => rest::url('tag_items', $tag),
-                  'members' => [
-                  rest::url('tag_item', $tag, item::root())
-                  ]
-              ]
-          ]
-            ],
-            tag_rest::get($request)
-    );
+        $this->assert_equal_array([
+                                      'url'           => rest::url('tag', $tag),
+                                      'entity'        => $tag->as_array(),
+                                      'relationships' => [
+                                          'items' => [
+                                              'url'     => rest::url('tag_items', $tag),
+                                              'members' => [
+                                                  rest::url('tag_item', $tag, item::root())
+                                              ]
+                                          ]
+                                      ]
+                                  ], tag_rest::get($request));
     }
 
     public function get_with_invalid_url_test()
     {
-        $request = new stdClass();
+        $request      = new stdClass();
         $request->url = 'bogus';
         try {
             tag_rest::get($request);
@@ -67,30 +65,27 @@ class Tag_Rest_Helper_Test extends Gallery_Unit_Test_Case
     {
         $tag = test::random_tag();
 
-        $request = new stdClass();
+        $request      = new stdClass();
         $request->url = rest::url('tag', $tag);
-        $this->assert_equal_array(
-            [
-          'url'           => rest::url('tag', $tag),
-          'entity'        => $tag->as_array(),
-          'relationships' => [
-              'items' => [
-                  'url'     => rest::url('tag_items', $tag),
-                  'members' => []
-              ]
-          ]
-            ],
-            tag_rest::get($request)
-    );
+        $this->assert_equal_array([
+                                      'url'           => rest::url('tag', $tag),
+                                      'entity'        => $tag->as_array(),
+                                      'relationships' => [
+                                          'items' => [
+                                              'url'     => rest::url('tag_items', $tag),
+                                              'members' => []
+                                          ]
+                                      ]
+                                  ], tag_rest::get($request));
     }
 
     public function put_test()
     {
-        $tag = test::random_tag();
-        $request = new stdClass();
-        $request->url = rest::url('tag', $tag);
-        $request->params = new stdClass();
-        $request->params->entity = new stdClass();
+        $tag                           = test::random_tag();
+        $request                       = new stdClass();
+        $request->url                  = rest::url('tag', $tag);
+        $request->params               = new stdClass();
+        $request->params->entity       = new stdClass();
         $request->params->entity->name = 'new name';
 
         tag_rest::put($request);
@@ -99,8 +94,8 @@ class Tag_Rest_Helper_Test extends Gallery_Unit_Test_Case
 
     public function delete_tag_test()
     {
-        $tag = test::random_tag();
-        $request = new stdClass();
+        $tag          = test::random_tag();
+        $request      = new stdClass();
         $request->url = rest::url('tag', $tag);
         tag_rest::delete($request);
 
@@ -111,9 +106,6 @@ class Tag_Rest_Helper_Test extends Gallery_Unit_Test_Case
     {
         $tag = test::random_tag();
 
-        $this->assert_equal(
-      $tag->as_array(),
-      rest::resolve(rest::url('tag', $tag))->as_array()
-    );
+        $this->assert_equal($tag->as_array(), rest::resolve(rest::url('tag', $tag))->as_array());
     }
 }

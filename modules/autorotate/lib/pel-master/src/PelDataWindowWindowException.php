@@ -22,12 +22,13 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301 USA
  */
+
 namespace lsolesen\pel;
 
 /**
  * A container for bytes with a limited window of accessible bytes.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL)
  * @package PEL
  */
@@ -35,7 +36,7 @@ namespace lsolesen\pel;
 /**
  * An exception thrown when an invalid window is encountered.
  *
- * @package PEL
+ * @package    PEL
  * @subpackage Exception
  */
 class PelDataWindowWindowException extends PelException

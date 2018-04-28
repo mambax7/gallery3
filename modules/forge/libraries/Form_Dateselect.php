@@ -1,13 +1,14 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * FORGE dateselect input library.
  *
  * $Id: Form_Dateselect.php 3326 2008-08-09 21:24:30Z Shadowhand $
  *
- * @package    Forge
- * @author     Kohana Team
+ * @package        Forge
+ * @author         Kohana Team
  * @copyright  (c) 2007-2008 Kohana Team
- * @license    http://kohanaphp.com/license.html
+ * @license        http://kohanaphp.com/license.html
  */
 class Form_Dateselect_Core extends Form_Input
 {
@@ -20,14 +21,14 @@ class Form_Dateselect_Core extends Form_Input
 
     // Precision for the parts, you can use @ to insert a literal @ symbol
     protected $parts = [
-        'month'   => [],
-        'day'     => [1],
-        'year'    => [],
+        'month'  => [],
+        'day'    => [1],
+        'year'   => [],
         ' @ ',
-        'hour'    => [],
+        'hour'   => [],
         ':',
-        'minute'  => [5],
-        'am_pm'   => [],
+        'minute' => [5],
+        'am_pm'  => [],
     ];
 
     public function __construct($name)
@@ -70,7 +71,7 @@ class Form_Dateselect_Core extends Form_Input
             }
 
             // Set this input name
-            $data['name'] = $this->data['name'].'['.$type.']';
+            $data['name'] = $this->data['name'] . '[' . $type . ']';
 
             // Set the selected option
             $selected = $time[$type];
@@ -94,10 +95,7 @@ class Form_Dateselect_Core extends Form_Input
 
     protected function time_array($timestamp)
     {
-        $time = array_combine(
-            ['month', 'day', 'year', 'hour', 'minute', 'am_pm'],
-            explode('--', date('n--j--Y--g--i--A', $timestamp))
-        );
+        $time = array_combine(['month', 'day', 'year', 'hour', 'minute', 'am_pm'], explode('--', date('n--j--Y--g--i--A', $timestamp)));
 
         // Minutes should always be in 5 minute increments
         $time['minute'] = num::round($time['minute'], current($this->parts['minute']));
@@ -116,13 +114,6 @@ class Form_Dateselect_Core extends Form_Input
         // Make sure all the required inputs keys are set
         $time += $this->time_array(time());
 
-        $this->data['value'] = mktime(
-            date::adjust($time['hour'], $time['am_pm']),
-            $time['minute'],
-            0,
-            $time['month'],
-            $time['day'],
-            $time['year']
-        );
+        $this->data['value'] = mktime(date::adjust($time['hour'], $time['am_pm']), $time['minute'], 0, $time['month'], $time['day'], $time['year']);
     }
 } // End Form Dateselect

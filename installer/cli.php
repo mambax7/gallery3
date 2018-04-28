@@ -99,25 +99,25 @@ function parse_cli_params()
     $argv = $_SERVER['argv'];
     for ($i = 1; $i < count($argv); $i++) {
         switch (strtolower($argv[$i])) {
-    case '-d':
-        $config['dbname'] = $argv[++$i];
-      break;
-    case '-h':
-      list($config['host'], $config['port']) = explode(':', $argv[++$i]);
-      break;
-    case '-u':
-        $config['user'] = $argv[++$i];
-      break;
-    case '-p':
-        $config['password'] = $argv[++$i];
-      break;
-    case '-x':
-        $config['prefix'] = $argv[++$i];
-      break;
-    case '-g3p':
-        $config['g3_password'] = $argv[++$i];
-      break;
-    }
+            case '-d':
+                $config['dbname'] = $argv[++$i];
+                break;
+            case '-h':
+                list($config['host'], $config['port']) = explode(':', $argv[++$i]);
+                break;
+            case '-u':
+                $config['user'] = $argv[++$i];
+                break;
+            case '-p':
+                $config['password'] = $argv[++$i];
+                break;
+            case '-x':
+                $config['prefix'] = $argv[++$i];
+                break;
+            case '-g3p':
+                $config['g3_password'] = $argv[++$i];
+                break;
+        }
     }
 
     return $config;

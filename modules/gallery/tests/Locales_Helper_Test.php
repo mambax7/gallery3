@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -25,7 +26,7 @@ class Locales_Helper_Test extends Gallery_Unit_Test_Case
     public function setup()
     {
         self::$installed_locales = locales::installed();
-        self::$default_locale = module::get_var('gallery', 'default_locale');
+        self::$default_locale    = module::get_var('gallery', 'default_locale');
         locales::update_installed(array_keys(locales::available()));
         module::set_var('gallery', 'default_locale', 'no_NO');
     }

@@ -47,7 +47,7 @@ class group_Core
 
     /**
      * Look up a group by id.
-     * @param integer      $id the user id
+     * @param integer $id the user id
      * @return Group_Definition  the group object, or null if the id was invalid.
      */
     public static function lookup($id)
@@ -57,7 +57,7 @@ class group_Core
 
     /**
      * Look up a group by name.
-     * @param integer      $id the group name
+     * @param integer $id the group name
      * @return Group_Definition  the group object, or null if the name was invalid.
      */
     public static function lookup_by_name($name)
@@ -67,8 +67,8 @@ class group_Core
 
     /**
      * Search the groups by the field and value.
-     * @param string      $field_name column to look up the user by
-     * @param string      $value value to match
+     * @param string $field_name column to look up the user by
+     * @param string $value      value to match
      * @return Group_Definition  the group object, or null if the name was invalid.
      */
     private static function _lookup_by_field($field_name, $value)

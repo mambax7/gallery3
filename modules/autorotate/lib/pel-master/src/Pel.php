@@ -22,6 +22,7 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301 USA
  */
+
 namespace lsolesen\pel;
 
 /**
@@ -33,7 +34,7 @@ namespace lsolesen\pel;
  * Debugging output from PEL can be turned on and off by assigning
  * true or false to {@link Pel::$debug}.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @package PEL
  */
 class Pel
@@ -253,7 +254,7 @@ class Pel
      * @param string $format
      *            the format string.
      *
-     * @param mixed ...$args
+     * @param mixed  ...$args
      *            any number of arguments can be given. The
      *            arguments will be available for the format string as usual with
      *            sprintf().
@@ -262,7 +263,7 @@ class Pel
     {
         if (self::$debug) {
             $args = func_get_args();
-            $str = array_shift($args);
+            $str  = array_shift($args);
             vprintf($str . "\n", $args);
         }
     }
@@ -278,7 +279,7 @@ class Pel
      * @param string $format
      *            the format string.
      *
-     * @param mixed ...$args
+     * @param mixed  ...$args
      *            any number of arguments can be given. The
      *            arguments will be available for the format string as usual with
      *            sprintf().
@@ -287,7 +288,7 @@ class Pel
     {
         if (self::$debug) {
             $args = func_get_args();
-            $str = array_shift($args);
+            $str  = array_shift($args);
             vprintf('Warning: ' . $str . "\n", $args);
         }
     }
@@ -325,7 +326,7 @@ class Pel
      *            the format string. This will be translated
      *            before being used as a format string.
      *
-     * @param mixed ...$args
+     * @param mixed  ...$args
      *            any number of arguments can be given. The
      *            arguments will be available for the format string as usual with
      *            sprintf().
@@ -336,7 +337,7 @@ class Pel
     public static function fmt($format)
     {
         $args = func_get_args();
-        $str = array_shift($args);
+        $str  = array_shift($args);
         return vsprintf(self::dgettextWrapper('pel', $str), $args);
     }
 

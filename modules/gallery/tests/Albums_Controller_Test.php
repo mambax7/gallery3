@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -32,7 +33,7 @@ class Albums_Controller_Test extends Gallery_Unit_Test_Case
     public function change_album_test()
     {
         $controller = new Albums_Controller();
-        $album = test::random_album();
+        $album      = test::random_album();
 
         // Randomize to avoid conflicts.
         $new_name = 'new_name_' . test::random_string(6);
@@ -61,7 +62,7 @@ class Albums_Controller_Test extends Gallery_Unit_Test_Case
     public function change_album_no_csrf_fails_test()
     {
         $controller = new Albums_Controller();
-        $album = test::random_album();
+        $album      = test::random_album();
 
         $_POST['name']        = 'new name';
         $_POST['title']       = 'new title';

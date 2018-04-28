@@ -86,8 +86,8 @@ class IdentityProvider_Core
 
             module::set_var('gallery', 'identity_provider', $new_provider);
 
-            if (class_exists("{$new_provider}_installer") &&
-          method_exists("{$new_provider}_installer", 'initialize')) {
+            if (class_exists("{$new_provider}_installer")
+                && method_exists("{$new_provider}_installer", 'initialize')) {
                 call_user_func("{$new_provider}_installer::initialize");
             }
 
@@ -111,8 +111,7 @@ class IdentityProvider_Core
                 try {
                     module::uninstall($new_provider);
                 } catch (Exception $e2) {
-                    Kohana_Log::add('error', "Error uninstalling failed new provider\n" .
-                                             $e2->getMessage() . "\n" . $e2->getTraceAsString());
+                    Kohana_Log::add('error', "Error uninstalling failed new provider\n" . $e2->getMessage() . "\n" . $e2->getTraceAsString());
                 }
 
                 try {
@@ -122,16 +121,10 @@ class IdentityProvider_Core
                     IdentityProvider::change_provider($current_provider);
                     module::activate($current_provider);
                 } catch (Exception $e2) {
-                    Kohana_Log::add('error', "Error restoring original identity provider\n" .
-                                             $e2->getMessage() . "\n" . $e2->getTraceAsString());
+                    Kohana_Log::add('error', "Error restoring original identity provider\n" . $e2->getMessage() . "\n" . $e2->getTraceAsString());
                 }
 
-                message::error(
-          t(
-              'Error attempting to enable "%new_provider" identity provider, reverted to "%old_provider" identity provider',
-              ['new_provider' => $new_provider, 'old_provider' => $current_provider]
-          )
-        );
+                message::error(t('Error attempting to enable "%new_provider" identity provider, reverted to "%old_provider" identity provider', ['new_provider' => $new_provider, 'old_provider' => $current_provider]));
 
                 $restore_already_running = false;
             }
@@ -144,7 +137,7 @@ class IdentityProvider_Core
      *
      * @return  void
      */
-    public function __construct($config=null)
+    public function __construct($config = null)
     {
         if (empty($config)) {
             $config = module::get_var('gallery', 'identity_provider', 'user');
@@ -159,12 +152,8 @@ class IdentityProvider_Core
         $driver = 'IdentityProvider_' . ucfirst($this->config['driver']) . '_Driver';
 
         // Load the driver
-        if (! Kohana::auto_load($driver)) {
-            throw new Kohana_Exception(
-                'core.driver_not_found',
-                $this->config['driver'],
-                get_class($this)
-      );
+        if (!Kohana::auto_load($driver)) {
+            throw new Kohana_Exception('core.driver_not_found', $this->config['driver'], get_class($this));
         }
 
         // Initialize the driver
@@ -172,11 +161,7 @@ class IdentityProvider_Core
 
         // Validate the driver
         if (!($this->driver instanceof IdentityProvider_Driver)) {
-            throw new Kohana_Exception(
-                'core.driver_implements',
-                $this->config['driver'],
-                get_class($this), 'IdentityProvider_Driver'
-      );
+            throw new Kohana_Exception('core.driver_implements', $this->config['driver'], get_class($this), 'IdentityProvider_Driver');
         }
 
         Kohana_Log::add('debug', 'Identity Library initialized');

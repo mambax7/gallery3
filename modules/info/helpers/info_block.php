@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -28,67 +29,63 @@ class info_block_Core
     {
         $block = '';
         switch ($block_id) {
-    case 'metadata':
-      if ($theme->item()) {
-          $block = new Block();
-          $block->css_id = 'g-metadata';
-          $block->title = $theme->item()->is_album() ? t('Album info') :
-          ($theme->item()->is_movie() ? t('Movie info') : t('Photo info'));
-          $block->content = new View('info_block.html');
-          if ($theme->item->title && module::get_var('info', 'show_title')) {
-              $info['title'] = [
-                  'label' => t('Title:'),
-                  'value' => html::purify($theme->item->title)
-              ];
-          }
-          if ($theme->item->description && module::get_var('info', 'show_description')) {
-              $info['description'] = [
-                  'label' => t('Description:'),
-                  'value' => nl2br(html::purify($theme->item->description))
-              ];
-          }
-          if (!$theme->item->is_album() && module::get_var('info', 'show_name')) {
-              $info['file_name'] = [
-                  'label' => t('File name:'),
-                  'value' => html::clean($theme->item->name)
-              ];
-          }
-          if ($theme->item->captured && module::get_var('info', 'show_captured')) {
-              $info['captured'] = [
-                  'label' => t('Captured:'),
-                  'value' => gallery::date_time($theme->item->captured)
-              ];
-          }
-          if ($theme->item->owner && module::get_var('info', 'show_owner')) {
-              $display_name = $theme->item->owner->display_name();
-              if ($theme->item->owner->url) {
-                  $info['owner'] = [
-                      'label' => t('Owner:'),
-                      'value' => html::anchor(
-                html::clean($theme->item->owner->url),
-                html::clean($display_name)
-              )
-                  ];
-              } else {
-                  $info['owner'] = [
-                      'label' => t('Owner:'),
-                      'value' => html::clean($display_name)
-                  ];
-              }
-          }
-          if (($theme->item->width && $theme->item->height) && module::get_var('info', 'show_dimensions')) {
-              $info['size'] = [
-                  'label' => t('Dimensions:'),
-                  'value' => t('%width x %height px', ['width' => $theme->item->width, 'height' => $theme->item->height])
-              ];
-          }
+            case 'metadata':
+                if ($theme->item()) {
+                    $block          = new Block();
+                    $block->css_id  = 'g-metadata';
+                    $block->title   = $theme->item()->is_album() ? t('Album info') : ($theme->item()->is_movie() ? t('Movie info') : t('Photo info'));
+                    $block->content = new View('info_block.html');
+                    if ($theme->item->title && module::get_var('info', 'show_title')) {
+                        $info['title'] = [
+                            'label' => t('Title:'),
+                            'value' => html::purify($theme->item->title)
+                        ];
+                    }
+                    if ($theme->item->description && module::get_var('info', 'show_description')) {
+                        $info['description'] = [
+                            'label' => t('Description:'),
+                            'value' => nl2br(html::purify($theme->item->description))
+                        ];
+                    }
+                    if (!$theme->item->is_album() && module::get_var('info', 'show_name')) {
+                        $info['file_name'] = [
+                            'label' => t('File name:'),
+                            'value' => html::clean($theme->item->name)
+                        ];
+                    }
+                    if ($theme->item->captured && module::get_var('info', 'show_captured')) {
+                        $info['captured'] = [
+                            'label' => t('Captured:'),
+                            'value' => gallery::date_time($theme->item->captured)
+                        ];
+                    }
+                    if ($theme->item->owner && module::get_var('info', 'show_owner')) {
+                        $display_name = $theme->item->owner->display_name();
+                        if ($theme->item->owner->url) {
+                            $info['owner'] = [
+                                'label' => t('Owner:'),
+                                'value' => html::anchor(html::clean($theme->item->owner->url), html::clean($display_name))
+                            ];
+                        } else {
+                            $info['owner'] = [
+                                'label' => t('Owner:'),
+                                'value' => html::clean($display_name)
+                            ];
+                        }
+                    }
+                    if (($theme->item->width && $theme->item->height) && module::get_var('info', 'show_dimensions')) {
+                        $info['size'] = [
+                            'label' => t('Dimensions:'),
+                            'value' => t('%width x %height px', ['width' => $theme->item->width, 'height' => $theme->item->height])
+                        ];
+                    }
 
-          $block->content->metadata = $info;
+                    $block->content->metadata = $info;
 
-          module::event('info_block_get_metadata', $block, $theme->item);
-      }
-      break;
-    }
+                    module::event('info_block_get_metadata', $block, $theme->item);
+                }
+                break;
+        }
         return $block;
     }
 }

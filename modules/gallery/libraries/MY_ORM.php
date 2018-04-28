@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -20,15 +21,15 @@
 class ORM extends ORM_Core
 {
 
-  /**
-   * Make sure that we're only using integer ids.
-   */
-    public static function factory($model, $id=null)
+    /**
+     * Make sure that we're only using integer ids.
+     */
+    public static function factory($model, $id = null)
     {
         if ($id && !is_int($id) && !is_string($id)) {
             throw new Exception('@todo ORM::factory requires integer ids');
         }
-        return ORM_Core::factory($model, (int) $id);
+        return ORM_Core::factory($model, (int)$id);
     }
 
     public function save()

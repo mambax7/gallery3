@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -31,8 +32,8 @@ class comments_rest_Core
     {
         $comments = [];
 
-        $p = $request->params;
-        $num = isset($p->num) ? min((int)$p->num, 100) : 10;
+        $p     = $request->params;
+        $num   = isset($p->num) ? min((int)$p->num, 100) : 10;
         $start = isset($p->start) ? (int)$p->start : 0;
 
         foreach (ORM::factory('comment')->viewable()->find_all($num, $start) as $comment) {
@@ -44,7 +45,6 @@ class comments_rest_Core
         ];
     }
 
-
     public static function post($request)
     {
         $entity = $request->params->entity;
@@ -52,10 +52,10 @@ class comments_rest_Core
         $item = rest::resolve($entity->item);
         access::required('edit', $item);
 
-        $comment = ORM::factory('comment');
+        $comment            = ORM::factory('comment');
         $comment->author_id = identity::active_user()->id;
-        $comment->item_id = $item->id;
-        $comment->text = $entity->text;
+        $comment->item_id   = $item->id;
+        $comment->text      = $entity->text;
         $comment->save();
 
         return ['url' => rest::url('comment', $comment)];

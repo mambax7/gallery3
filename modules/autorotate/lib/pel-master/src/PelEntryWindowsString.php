@@ -22,6 +22,7 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301 USA
  */
+
 namespace lsolesen\pel;
 
 /**
@@ -30,7 +31,7 @@ namespace lsolesen\pel;
  * PelEntryWindowsString} class is used to manipulate strings in the
  * format Windows XP needs.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public
  *          License (GPL)
  * @package PEL
@@ -67,7 +68,7 @@ namespace lsolesen\pel;
  * $ifd->addEntry($title);
  * </code>
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @package PEL
  */
 class PelEntryWindowsString extends PelEntry
@@ -87,7 +88,7 @@ class PelEntryWindowsString extends PelEntry
     /**
      * Make a new PelEntry that can hold a Windows XP specific string.
      *
-     * @param int $tag
+     * @param int    $tag
      *            the tag which this entry represents. This should be
      *            one of {@link PelTag::XP_TITLE}, {@link PelTag::XP_COMMENT},
      *            {@link PelTag::XP_AUTHOR}, {@link PelTag::XP_KEYWORD}, and {@link
@@ -101,7 +102,7 @@ class PelEntryWindowsString extends PelEntry
      */
     public function __construct($tag, $str = '')
     {
-        $this->tag = $tag;
+        $this->tag    = $tag;
         $this->format = PelFormat::BYTE;
         $this->setValue($str);
     }
@@ -121,9 +122,9 @@ class PelEntryWindowsString extends PelEntry
         $l = strlen($str);
 
         $this->components = 2 * ($l + 1);
-        $this->str = $str;
-        $this->bytes = '';
-        for ($i = 0; $i < $l; $i ++) {
+        $this->str        = $str;
+        $this->bytes      = '';
+        for ($i = 0; $i < $l; $i++) {
             $this->bytes .= $str{$i} . chr(0x00);
         }
 

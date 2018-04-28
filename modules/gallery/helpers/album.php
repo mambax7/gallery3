@@ -27,101 +27,87 @@ class album_Core
 {
     public static function get_add_form($parent)
     {
-        $form = new Forge("albums/create/{$parent->id}", '', 'post', ['id' => 'g-add-album-form']);
-        $group = $form->group('add_album')
-      ->label(t('Add an album to %album_title', ['album_title' => $parent->title]));
-        $group->input('title')->label(t('Title'))
-              ->error_messages('required', t('You must provide a title'))
-              ->error_messages('length', t('Your title is too long'));
+        $form  = new Forge("albums/create/{$parent->id}", '', 'post', ['id' => 'g-add-album-form']);
+        $group = $form->group('add_album')->label(t('Add an album to %album_title', ['album_title' => $parent->title]));
+        $group->input('title')->label(t('Title'))->error_messages('required', t('You must provide a title'))->error_messages('length', t('Your title is too long'));
         $group->textarea('description')->label(t('Description'));
-        $group->input('name')->label(t('Directory name'))
-              ->error_messages('no_slashes', t("The directory name can't contain a \"/\""))
-              ->error_messages('no_backslashes', t("The directory name can't contain a \"\\\""))
-              ->error_messages('no_trailing_period', t("The directory name can't end in \".\""))
-              ->error_messages('required', t('You must provide a directory name'))
-              ->error_messages('length', t('Your directory name is too long'))
-              ->error_messages('conflict', t('There is already a movie, photo or album with this name'));
-        $group->input('slug')->label(t('Internet Address'))
-              ->error_messages(
-                  'conflict',
-                  t('There is already a movie, photo or album with this internet address')
-      )
-              ->error_messages(
-                  'reserved',
-                  t("This address is reserved and can't be used.")
-      )
-              ->error_messages(
-                  'not_url_safe',
-                  t('The internet address should contain only letters, numbers, hyphens and underscores')
-      )
-              ->error_messages('required', t('You must provide an internet address'))
-              ->error_messages('length', t('Your internet address is too long'));
+        $group->input('name')->label(t('Directory name'))->error_messages('no_slashes', t("The directory name can't contain a \"/\""))->error_messages('no_backslashes', t("The directory name can't contain a \"\\\""))->error_messages(
+            'no_trailing_period',
+                                                                                                                                                                                                                                         t("The directory name can't end in \".\"")
+        )->error_messages(
+                                                                                                                                                                                                                                             'required',
+                                                                                                                                                                                                                                                                                                     t('You must provide a directory name')
+                                                                                                                                                                                                                                         )->error_messages(
+                                                                                                                                                                                                                                                                                                         'length',
+                                                                                                                                                                                                                                                                                                                                                             t('Your directory name is too long')
+                                                                                                                                                                                                                                                                                                     )->error_messages(
+                                                                                                                                                                                                                                                                                                                                                                 'conflict',
+                                                                                                                                                                                                                                                                                                                                                                                                                   t('There is already a movie, photo or album with this name')
+                                                                                                                                                                                                                                                                                                                                                             );
+        $group->input('slug')->label(t('Internet Address'))->error_messages('conflict', t('There is already a movie, photo or album with this internet address'))->error_messages('reserved', t("This address is reserved and can't be used."))->error_messages(
+            'not_url_safe',
+                                                                                                                                                                                                                                                                t('The internet address should contain only letters, numbers, hyphens and underscores')
+        )->error_messages(
+                                                                                                                                                                                                                                                                    'required',
+                                                                                                                                                                                                                                                                                                                                                                         t('You must provide an internet address')
+                                                                                                                                                                                                                                                                )->error_messages(
+                                                                                                                                                                                                                                                                                                                                                                             'length',
+                                                                                                                                                                                                                                                                                                                                                                                                                                    t('Your internet address is too long')
+                                                                                                                                                                                                                                                                                                                                                                         );
         $group->hidden('type')->value('album');
 
         module::event('album_add_form', $parent, $form);
 
         $group->submit('')->value(t('Create'));
-        $form->script('')
-      ->url(url::abs_file('modules/gallery/js/albums_form_add.js'));
+        $form->script('')->url(url::abs_file('modules/gallery/js/albums_form_add.js'));
 
         return $form;
     }
 
     public static function get_edit_form($parent)
     {
-        $form = new Forge(
-            "albums/update/{$parent->id}", '', 'post',
-            ['id' => 'g-edit-album-form']
-    );
+        $form = new Forge("albums/update/{$parent->id}", '', 'post', ['id' => 'g-edit-album-form']);
         $form->hidden('from_id')->value($parent->id);
         $group = $form->group('edit_item')->label(t('Edit Album'));
 
-        $group->input('title')->label(t('Title'))->value($parent->title)
-              ->error_messages('required', t('You must provide a title'))
-              ->error_messages('length', t('Your title is too long'));
+        $group->input('title')->label(t('Title'))->value($parent->title)->error_messages('required', t('You must provide a title'))->error_messages('length', t('Your title is too long'));
         $group->textarea('description')->label(t('Description'))->value($parent->description);
         if (1 != $parent->id) {
-            $group->input('name')->label(t('Directory Name'))->value($parent->name)
-                  ->error_messages('conflict', t('There is already a movie, photo or album with this name'))
-                  ->error_messages('no_slashes', t("The directory name can't contain a \"/\""))
-                  ->error_messages('no_backslashes', t("The directory name can't contain a \"\\\""))
-                  ->error_messages('no_trailing_period', t("The directory name can't end in \".\""))
-                  ->error_messages('required', t('You must provide a directory name'))
-                  ->error_messages('length', t('Your directory name is too long'));
-            $group->input('slug')->label(t('Internet Address'))->value($parent->slug)
-                  ->error_messages(
-                      'conflict',
-                      t('There is already a movie, photo or album with this internet address')
-        )
-                  ->error_messages(
-                      'reserved',
-                      t("This address is reserved and can't be used.")
-        )
-                  ->error_messages(
-                      'not_url_safe',
-                      t('The internet address should contain only letters, numbers, hyphens and underscores')
-        )
-                  ->error_messages('required', t('You must provide an internet address'))
-                  ->error_messages('length', t('Your internet address is too long'));
+            $group->input('name')->label(t('Directory Name'))->value($parent->name)->error_messages('conflict', t('There is already a movie, photo or album with this name'))->error_messages('no_slashes', t("The directory name can't contain a \"/\""))->error_messages(
+                'no_backslashes',
+                                                                                                                                                                                                                                                                           t("The directory name can't contain a \"\\\"")
+            )->error_messages(
+                                                                                                                                                                                                                                                                               'no_trailing_period',
+                                                                                                                                                                                                                                                                                                                                           t("The directory name can't end in \".\"")
+                                                                                                                                                                                                                                                                           )->error_messages(
+                                                                                                                                                                                                                                                                                                                                               'required',
+                                                                                                                                                                                                                                                                                                                                                                                                       t('You must provide a directory name')
+                                                                                                                                                                                                                                                                                                                                           )->error_messages(
+                                                                                                                                                                                                                                                                                                                                                                                                           'length',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                               t('Your directory name is too long')
+                                                                                                                                                                                                                                                                                                                                                                                                       );
+            $group->input('slug')->label(t('Internet Address'))->value($parent->slug)->error_messages('conflict', t('There is already a movie, photo or album with this internet address'))->error_messages('reserved', t("This address is reserved and can't be used."))->error_messages(
+                'not_url_safe',
+                                                                                                                                                                                                                                                                                          t('The internet address should contain only letters, numbers, hyphens and underscores')
+            )->error_messages(
+                                                                                                                                                                                                                                                                                              'required',
+                                                                                                                                                                                                                                                                                                                                                                                                   t('You must provide an internet address')
+                                                                                                                                                                                                                                                                                          )->error_messages(
+                                                                                                                                                                                                                                                                                                                                                                                                       'length',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                              t('Your internet address is too long')
+                                                                                                                                                                                                                                                                                                                                                                                                   );
         } else {
             $group->hidden('name')->value($parent->name);
             $group->hidden('slug')->value($parent->slug);
         }
 
-        $sort_order = $group->group('sort_order', ['id' => 'g-album-sort-order'])
-      ->label(t('Sort Order'));
+        $sort_order = $group->group('sort_order', ['id' => 'g-album-sort-order'])->label(t('Sort Order'));
 
-        $sort_order->dropdown('column', ['id' => 'g-album-sort-column'])
-      ->label(t('Sort by'))
-      ->options(album::get_sort_order_options())
-      ->selected($parent->sort_column);
-        $sort_order->dropdown('direction', ['id' => 'g-album-sort-direction'])
-      ->label(t('Order'))
-      ->options([
-                    'ASC'  => t('Ascending'),
-                    'DESC' => t('Descending')
-                ])
-      ->selected($parent->sort_order);
+        $sort_order->dropdown('column', ['id' => 'g-album-sort-column'])->label(t('Sort by'))->options(album::get_sort_order_options())->selected($parent->sort_column);
+        $sort_order->dropdown('direction', ['id' => 'g-album-sort-direction'])->label(t('Order'))->options([
+                                                                                                               'ASC'  => t('Ascending'),
+                                                                                                               'DESC' => t('Descending')
+                                                                                                           ])->selected($parent->sort_order);
 
         module::event('item_edit_form', $parent, $form);
 

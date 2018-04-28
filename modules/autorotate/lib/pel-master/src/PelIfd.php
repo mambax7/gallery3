@@ -22,12 +22,13 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301 USA
  */
+
 namespace lsolesen\pel;
 
 /**
  * Classes for dealing with Exif IFDs.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public
  *          License (GPL)
  * @package PEL
@@ -40,7 +41,7 @@ namespace lsolesen\pel;
  * Directories, IFDs for short. Each IFD contains a number of {@link
  * PelEntry entries}, some data and finally a link to the next IFD.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @package PEL
  */
 class PelIfd implements \IteratorAggregate, \ArrayAccess
@@ -154,8 +155,8 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
      */
     public function __construct($type)
     {
-        if ($type != self::IFD0 && $type != self::IFD1 && $type != self::EXIF && $type != self::GPS &&
-            $type != self::INTEROPERABILITY) {
+        if ($type != self::IFD0 && $type != self::IFD1 && $type != self::EXIF && $type != self::GPS
+            && $type != self::INTEROPERABILITY) {
             throw new PelIfdException('Unknown IFD type: %d', $type);
         }
 
@@ -168,7 +169,7 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
      * @param PelDataWindow $d
      *            the data window that will provide the data.
      *
-     * @param int $offset
+     * @param int           $offset
      *            the offset within the window where the directory will
      *            be found.
      */
@@ -191,16 +192,10 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
             Pel::maybeThrow(new PelIfdException('Adjusted to: %d.', $n));
         }
 
-        for ($i = 0; $i < $n; $i ++) {
+        for ($i = 0; $i < $n; $i++) {
             // TODO: increment window start instead of using offsets.
             $tag = $d->getShort($offset + 12 * $i);
-            Pel::debug(
-                'Loading entry with tag 0x%04X: %s (%d of %d)...',
-                $tag,
-                PelTag::getName($this->type, $tag),
-                $i + 1,
-                $n
-            );
+            Pel::debug('Loading entry with tag 0x%04X: %s (%d of %d)...', $tag, PelTag::getName($this->type, $tag), $i + 1, $n);
 
             switch ($tag) {
                 case PelTag::EXIF_IFD_POINTER:
@@ -230,7 +225,7 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
                     $this->safeSetThumbnail($d, $thumb_offset, $thumb_length);
                     break;
                 default:
-                    $format = $d->getShort($offset + 12 * $i + 2);
+                    $format     = $d->getShort($offset + 12 * $i + 2);
                     $components = $d->getLong($offset + 12 * $i + 4);
 
                     /*
@@ -310,13 +305,13 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
      * requirements for a given tag (if any) can be found in the
      * documentation for {@link PelTag}.
      *
-     * @param integer $tag
+     * @param integer       $tag
      *            the tag of the entry as defined in {@link PelTag}.
      *
-     * @param integer $format
+     * @param integer       $format
      *            the format of the entry as defined in {@link PelFormat}.
      *
-     * @param int $components
+     * @param int           $components
      *            the components in the entry.
      *
      * @param PelDataWindow $data
@@ -348,14 +343,14 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
                             throw new PelWrongComponentCountException($this->type, $tag, $components, 20);
                         }
                         // TODO: handle timezones.
-                        return new PelEntryTime($tag, $data->getBytes(0, - 1), PelEntryTime::EXIF_STRING);
+                        return new PelEntryTime($tag, $data->getBytes(0, -1), PelEntryTime::EXIF_STRING);
 
                     case PelTag::COPYRIGHT:
                         if ($format != PelFormat::ASCII) {
                             throw new PelUnexpectedFormatException($this->type, $tag, $format, PelFormat::ASCII);
                         }
                         $v = explode("\0", trim($data->getBytes(), ' '));
-                        if (! isset($v[1])) {
+                        if (!isset($v[1])) {
                             Pel::maybeThrow(new PelException('Invalid copyright: %s', $data->getBytes()));
                             // when not in strict mode, set empty copyright and continue
                             $v[1] = '';
@@ -390,7 +385,7 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
                             throw new PelUnexpectedFormatException($this->type, $tag, $format, PelFormat::BYTE);
                         }
                         $v = '';
-                        for ($i = 0; $i < $components; $i ++) {
+                        for ($i = 0; $i < $components; $i++) {
                             $b = $data->getByte($i);
                             /*
                              * Convert the byte to a character if it is non-null ---
@@ -414,14 +409,14 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
                 switch ($format) {
                     case PelFormat::BYTE:
                         $v = new PelEntryByte($tag);
-                        for ($i = 0; $i < $components; $i ++) {
+                        for ($i = 0; $i < $components; $i++) {
                             $v->addNumber($data->getByte($i));
                         }
                         return $v;
 
                     case PelFormat::SBYTE:
                         $v = new PelEntrySByte($tag);
-                        for ($i = 0; $i < $components; $i ++) {
+                        for ($i = 0; $i < $components; $i++) {
                             $v->addNumber($data->getSByte($i));
                         }
                         return $v;
@@ -431,42 +426,42 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
 
                     case PelFormat::SHORT:
                         $v = new PelEntryShort($tag);
-                        for ($i = 0; $i < $components; $i ++) {
+                        for ($i = 0; $i < $components; $i++) {
                             $v->addNumber($data->getShort($i * 2));
                         }
                         return $v;
 
                     case PelFormat::SSHORT:
                         $v = new PelEntrySShort($tag);
-                        for ($i = 0; $i < $components; $i ++) {
+                        for ($i = 0; $i < $components; $i++) {
                             $v->addNumber($data->getSShort($i * 2));
                         }
                         return $v;
 
                     case PelFormat::LONG:
                         $v = new PelEntryLong($tag);
-                        for ($i = 0; $i < $components; $i ++) {
+                        for ($i = 0; $i < $components; $i++) {
                             $v->addNumber($data->getLong($i * 4));
                         }
                         return $v;
 
                     case PelFormat::SLONG:
                         $v = new PelEntrySLong($tag);
-                        for ($i = 0; $i < $components; $i ++) {
+                        for ($i = 0; $i < $components; $i++) {
                             $v->addNumber($data->getSLong($i * 4));
                         }
                         return $v;
 
                     case PelFormat::RATIONAL:
                         $v = new PelEntryRational($tag);
-                        for ($i = 0; $i < $components; $i ++) {
+                        for ($i = 0; $i < $components; $i++) {
                             $v->addNumber($data->getRational($i * 8));
                         }
                         return $v;
 
                     case PelFormat::SRATIONAL:
                         $v = new PelEntrySRational($tag);
-                        for ($i = 0; $i < $components; $i ++) {
+                        for ($i = 0; $i < $components; $i++) {
                             $v->addNumber($data->getSRational($i * 8));
                         }
                         return $v;
@@ -495,10 +490,10 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
      *            the data from which the thumbnail will be
      *            extracted.
      *
-     * @param int $offset
+     * @param int           $offset
      *            the offset into the data.
      *
-     * @param int $length
+     * @param int           $length
      *            the length of the thumbnail.
      */
     private function safeSetThumbnail(PelDataWindow $d, $offset, $length)
@@ -513,13 +508,7 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
              * check the length before we store the thumbnail.
              */
             if ($offset + $length > $d->getSize()) {
-                Pel::maybeThrow(
-                    new PelIfdException(
-                        'Thumbnail length %d bytes ' . 'adjusted to %d bytes.',
-                        $length,
-                        $d->getSize() - $offset
-                    )
-                );
+                Pel::maybeThrow(new PelIfdException('Thumbnail length %d bytes ' . 'adjusted to %d bytes.', $length, $d->getSize() - $offset));
                 $length = $d->getSize() - $offset;
             }
 
@@ -545,7 +534,7 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
         $size = $d->getSize();
         /* Now move backwards until we find the EOI JPEG marker. */
         while (0xFF != $d->getByte($size - 2) || $d->getByte($size - 1) != PelJpegMarker::EOI) {
-            $size --;
+            $size--;
         }
 
         if ($size != $d->getSize()) {
@@ -885,7 +874,7 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
      * Note that the actual array index passed is ignored! Instead the
      * {@link PelTag} from the entry is used.
      *
-     * @param int $tag
+     * @param int      $tag
      *            unused.
      *
      * @param PelEntry $e
@@ -894,7 +883,7 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
     public function offsetSet($tag, $e)
     {
         if ($e instanceof PelEntry) {
-            $tag = $e->getTag();
+            $tag                 = $e->getTag();
             $this->entries[$tag] = $e;
         } else {
             throw new PelInvalidArgumentException('Argument "%s" must be a PelEntry.', $e);
@@ -1089,7 +1078,7 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
      */
     public function getBytes($offset, $order)
     {
-        $bytes = '';
+        $bytes       = '';
         $extra_bytes = '';
 
         Pel::debug('Bytes from IDF will start at offset %d within Exif data', $offset);
@@ -1124,12 +1113,12 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
              * the entry but somewhere else.
              */
             $data = $entry->getBytes($order);
-            $s = strlen($data);
+            $s    = strlen($data);
             if ($s > 4) {
                 Pel::debug('Data size %d too big, storing at offset %d instead.', $s, $end);
-                $bytes .= PelConvert::longToBytes($end, $order);
+                $bytes       .= PelConvert::longToBytes($end, $order);
                 $extra_bytes .= $data;
-                $end += $s;
+                $end         += $s;
             } else {
                 Pel::debug('Data size %d fits.', $s);
                 /*
@@ -1155,7 +1144,7 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
             $bytes .= PelConvert::longToBytes($end, $order);
 
             $extra_bytes .= $this->thumb_data->getBytes();
-            $end += $this->thumb_data->getSize();
+            $end         += $this->thumb_data->getSize();
         }
 
         /* Find bytes from sub IFDs. */
@@ -1178,12 +1167,12 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
             /* There is only one component. */
             $bytes .= PelConvert::longToBytes(1, $order);
 
-            $data = $sub->getBytes($end, $order);
-            $s = strlen($data);
+            $data      = $sub->getBytes($end, $order);
+            $s         = strlen($data);
             $sub_bytes .= $data;
 
             $bytes .= PelConvert::longToBytes($end, $order);
-            $end += $s;
+            $end   += $s;
         }
 
         /* Make link to next IFD, if any */
@@ -1199,7 +1188,7 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
 
         $bytes .= $extra_bytes . $sub_bytes;
 
-        if (! $this->isLastIfd()) {
+        if (!$this->isLastIfd()) {
             $bytes .= $this->next->getBytes($end, $order);
         }
         return $bytes;

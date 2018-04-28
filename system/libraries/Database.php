@@ -1,20 +1,21 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Database wrapper.
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2008-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 abstract class Database_Core
 {
-    const SELECT          =  1;
-    const INSERT          =  2;
-    const UPDATE          =  3;
-    const DELETE          =  4;
-    const CROSS_REQUEST   =  5;
-    const PER_REQUEST     =  6;
+    const SELECT = 1;
+    const INSERT = 2;
+    const UPDATE = 3;
+    const DELETE = 4;
+    const CROSS_REQUEST = 5;
+    const PER_REQUEST = 6;
 
     protected static $instances = [];
 
@@ -47,9 +48,9 @@ abstract class Database_Core
      */
     public static function instance($name = 'default')
     {
-        if (! isset(Database::$instances[$name])) {
+        if (!isset(Database::$instances[$name])) {
             // Load the configuration for this database group
-            $config = Kohana::config('database.'.$name);
+            $config = Kohana::config('database.' . $name);
 
             if (is_string($config['connection'])) {
                 // Parse the DSN into connection array
@@ -57,7 +58,7 @@ abstract class Database_Core
             }
 
             // Set the driver class name
-            $driver = 'Database_'.ucfirst($config['connection']['type']);
+            $driver = 'Database_' . ucfirst($config['connection']['type']);
 
             // Create the database connection instance
             Database::$instances[$name] = new $driver($config);
@@ -178,7 +179,7 @@ abstract class Database_Core
             // Strip leading slash
             $db['database'] = substr($connection, 1);
         } else {
-            $connection = parse_url('http://'.$connection);
+            $connection = parse_url('http://' . $connection);
 
             if (isset($connection['user'])) {
                 $db['user'] = $connection['user'];
@@ -268,7 +269,7 @@ abstract class Database_Core
      */
     public function query_cache($sql, $ttl)
     {
-        if (! $this->cache instanceof Cache) {
+        if (!$this->cache instanceof Cache) {
             throw new Database_Exception('Database :name has not been configured to use the Cache library.');
         }
 
@@ -354,7 +355,7 @@ abstract class Database_Core
      */
     public function quote($value)
     {
-        if (! $this->config['escape']) {
+        if (!$this->config['escape']) {
             return $value;
         }
 
@@ -365,15 +366,15 @@ abstract class Database_Core
         } elseif (false === $value) {
             return 'FALSE';
         } elseif (is_int($value)) {
-            return (int) $value;
+            return (int)$value;
         } elseif ($value instanceof Database_Expression) {
-            return (string) $value;
+            return (string)$value;
         } elseif (is_float($value)) {
             // Convert to non-locale aware float to prevent possible commas
             return sprintf('%F', $value);
         }
 
-        return '\''.$this->escape($value).'\'';
+        return '\'' . $this->escape($value) . '\'';
     }
 
     /**
@@ -397,30 +398,30 @@ abstract class Database_Core
         if ($table instanceof Database_Expression) {
             if ($alias) {
                 if ($this->config['escape']) {
-                    $alias = $this->quote.$alias.$this->quote;
+                    $alias = $this->quote . $alias . $this->quote;
                 }
 
-                return $table.' AS '.$alias;
+                return $table . ' AS ' . $alias;
             }
 
-            return (string) $table;
+            return (string)$table;
         }
 
         if ($this->config['table_prefix']) {
-            $table = $this->config['table_prefix'].$table;
+            $table = $this->config['table_prefix'] . $table;
         }
 
         if ($alias) {
             if ($this->config['escape']) {
-                $table = $this->quote.$table.$this->quote;
-                $alias = $this->quote.$alias.$this->quote;
+                $table = $this->quote . $table . $this->quote;
+                $alias = $this->quote . $alias . $this->quote;
             }
 
-            return $table.' AS '.$alias;
+            return $table . ' AS ' . $alias;
         }
 
         if ($this->config['escape']) {
-            $table = $this->quote.$table.$this->quote;
+            $table = $this->quote . $table . $this->quote;
         }
 
         return $table;
@@ -448,43 +449,43 @@ abstract class Database_Core
         if ($column instanceof Database_Expression) {
             if ($alias) {
                 if ($this->config['escape']) {
-                    $alias = $this->quote.$alias.$this->quote;
+                    $alias = $this->quote . $alias . $this->quote;
                 }
 
-                return $column.' AS '.$alias;
+                return $column . ' AS ' . $alias;
             }
 
-            return (string) $column;
+            return (string)$column;
         }
 
         if ($this->config['table_prefix'] && false !== strpos($column, '.')) {
             if (false !== strpos($column, '"')) {
                 // Find "table.column" and replace them with "[prefix]table.column"
-                $column = preg_replace('/"([^.]++)\.([^"]++)"/', '"'.$this->config['table_prefix'].'$1.$2"', $column);
+                $column = preg_replace('/"([^.]++)\.([^"]++)"/', '"' . $this->config['table_prefix'] . '$1.$2"', $column);
             } else {
                 // Attach table prefix if table.column format
-                $column = $this->config['table_prefix'].$column;
+                $column = $this->config['table_prefix'] . $column;
             }
         }
 
         if ($this->config['escape']) {
             if (false === strpos($column, '"')) {
                 // Quote the column
-                $column = $this->quote.$column.$this->quote;
+                $column = $this->quote . $column . $this->quote;
             } elseif ('"' !== $this->quote) {
                 // Replace double quotes
                 $column = str_replace('"', $this->quote, $column);
             }
 
             // Replace . with "."
-            $column = str_replace('.', $this->quote.'.'.$this->quote, $column);
+            $column = str_replace('.', $this->quote . '.' . $this->quote, $column);
 
             // Unescape any asterisks
-            $column = str_replace($this->quote.'*'.$this->quote, '*', $column);
+            $column = str_replace($this->quote . '*' . $this->quote, '*', $column);
 
             if ($alias) {
                 // Quote the alias
-                return $column.' AS '.$this->quote.$alias.$this->quote;
+                return $column . ' AS ' . $this->quote . $alias . $this->quote;
             }
 
             return $column;
@@ -494,7 +495,7 @@ abstract class Database_Core
         $column = str_replace('"', '', $column);
 
         if ($alias) {
-            return $column.' AS '.$alias;
+            return $column . ' AS ' . $alias;
         }
 
         return $column;
@@ -543,7 +544,7 @@ abstract class Database_Core
             $length = substr($str, $open + 1, $close - 1 - $open);
 
             // Type without the length
-            $type = substr($str, 0, $open).substr($str, $close + 1);
+            $type = substr($str, 0, $open) . substr($str, $close + 1);
         } else {
             // No length
             $type = $str;

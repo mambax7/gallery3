@@ -22,6 +22,7 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301 USA
  */
+
 namespace lsolesen\pel;
 
 use \lsolesen\pel\PelDataWindow;
@@ -29,7 +30,7 @@ use \lsolesen\pel\PelDataWindow;
 /**
  * Class representing content in a JPEG file.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public
  *          License (GPL)
  * @package PEL
@@ -45,7 +46,7 @@ use \lsolesen\pel\PelDataWindow;
  * object. The {@link PelExif} class is an example of more
  * specialized JPEG content.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @package PEL
  */
 class PelJpegContent

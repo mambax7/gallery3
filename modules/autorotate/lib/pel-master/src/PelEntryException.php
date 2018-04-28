@@ -22,6 +22,7 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301 USA
  */
+
 namespace lsolesen\pel;
 
 /**
@@ -33,7 +34,7 @@ namespace lsolesen\pel;
  * descendants of the {@link PelEntry} class --- the class itself is
  * abstract and so it cannot be instantiated.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public
  *          License (GPL)
  * @package PEL
@@ -42,8 +43,8 @@ namespace lsolesen\pel;
 /**
  * Exception indicating a problem with an entry.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
- * @package PEL
+ * @author     Martin Geisler <mgeisler@users.sourceforge.net>
+ * @package    PEL
  * @subpackage Exception
  */
 class PelEntryException extends PelException

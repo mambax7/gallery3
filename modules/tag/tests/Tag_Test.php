@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -48,7 +49,7 @@ class Tag_Test extends Gallery_Unit_Test_Case
         tag::add($album1, 'tag1');
         tag::add($album2, 'tag2');
 
-        $tag1 = ORM::factory('tag')->where('name', '=', 'tag1')->find();
+        $tag1       = ORM::factory('tag')->where('name', '=', 'tag1')->find();
         $tag1->name = 'tag2';
         $tag1->save();
 
@@ -68,7 +69,7 @@ class Tag_Test extends Gallery_Unit_Test_Case
         tag::add($album, 'tag1');
         tag::add($album, 'tag2');
 
-        $tag1 = ORM::factory('tag')->where('name', '=', 'tag1')->find();
+        $tag1       = ORM::factory('tag')->where('name', '=', 'tag1')->find();
         $tag1->name = 'tag2';
         $tag1->save();
 

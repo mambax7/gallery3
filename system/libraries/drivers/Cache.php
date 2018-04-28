@@ -1,13 +1,14 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Cache driver abstract class.
  *
  * $Id$
  *
- * @package    Cache
- * @author     Kohana Team
+ * @package        Cache
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 abstract class Cache_Driver
 {

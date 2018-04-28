@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -52,11 +53,11 @@ class Photos_Controller extends Items_Controller
 
         $form = photo::get_edit_form($photo);
         try {
-            $valid = $form->validate();
-            $photo->title = $form->edit_item->title->value;
+            $valid              = $form->validate();
+            $photo->title       = $form->edit_item->title->value;
             $photo->description = $form->edit_item->description->value;
-            $photo->slug = $form->edit_item->slug->value;
-            $photo->name = $form->edit_item->inputs['name']->value;
+            $photo->slug        = $form->edit_item->slug->value;
+            $photo->name        = $form->edit_item->inputs['name']->value;
             $photo->validate();
         } catch (ORM_Validation_Exception $e) {
             // Translate ORM validation errors into form error messages
@@ -71,9 +72,7 @@ class Photos_Controller extends Items_Controller
             module::event('item_edit_form_completed', $photo, $form);
 
             log::success('content', 'Updated photo', "<a href=\"{$photo->url()}\">view</a>");
-            message::success(
-        t('Saved photo %photo_title', ['photo_title' => html::purify($photo->title)])
-      );
+            message::success(t('Saved photo %photo_title', ['photo_title' => html::purify($photo->title)]));
 
             if ($form->from_id->value == $photo->id) {
                 // Use the new url; it might have changed.

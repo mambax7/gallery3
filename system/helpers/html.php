@@ -1,11 +1,12 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * HTML helper class.
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class html_Core
 {
@@ -53,13 +54,10 @@ class html_Core
             $site_url = $uri;
         }
 
-        return
-        // Parsed URL
-        '<a href="'.htmlspecialchars($site_url, ENT_QUOTES, Kohana::CHARSET, false).'"'
-        // Attributes empty? Use an empty string
-        .(is_array($attributes) ? html::attributes($attributes) : '').'>'
-        // Title empty? Use the parsed URL
-        .($escape_title ? htmlspecialchars(((null === $title) ? $site_url : $title), ENT_QUOTES, Kohana::CHARSET, false) : ((null === $title) ? $site_url : $title)) . '</a>';
+        return // Parsed URL
+            '<a href="' . htmlspecialchars($site_url, ENT_QUOTES, Kohana::CHARSET, false) . '"' // Attributes empty? Use an empty string
+            . (is_array($attributes) ? html::attributes($attributes) : '') . '>' // Title empty? Use the parsed URL
+            . ($escape_title ? htmlspecialchars(((null === $title) ? $site_url : $title), ENT_QUOTES, Kohana::CHARSET, false) : ((null === $title) ? $site_url : $title)) . '</a>';
     }
 
     /**
@@ -73,13 +71,10 @@ class html_Core
      */
     public static function file_anchor($file, $title = null, $attributes = null, $protocol = null)
     {
-        return
-        // Base URL + URI = full URL
-        '<a href="'.htmlspecialchars(url::base(false, $protocol).$file, ENT_QUOTES, Kohana::CHARSET, false).'"'
-        // Attributes empty? Use an empty string
-        .(is_array($attributes) ? html::attributes($attributes) : '').'>'
-        // Title empty? Use the filename part of the URI
-        .((null === $title) ? end(explode('/', $file)) : $title) . '</a>';
+        return // Base URL + URI = full URL
+            '<a href="' . htmlspecialchars(url::base(false, $protocol) . $file, ENT_QUOTES, Kohana::CHARSET, false) . '"' // Attributes empty? Use an empty string
+            . (is_array($attributes) ? html::attributes($attributes) : '') . '>' // Title empty? Use the filename part of the URI
+            . ((null === $title) ? end(explode('/', $file)) : $title) . '</a>';
     }
 
     /**
@@ -94,11 +89,16 @@ class html_Core
         foreach (str_split($email) as $letter) {
             switch (('@' === $letter) ? rand(1, 2) : rand(1, 3)) {
                 // HTML entity code
-                case 1: $safe .= '&#'.ord($letter).';'; break;
+                case 1:
+                    $safe .= '&#' . ord($letter) . ';';
+                    break;
                 // Hex character code
-                case 2: $safe .= '&#x'.dechex(ord($letter)).';'; break;
+                case 2:
+                    $safe .= '&#x' . dechex(ord($letter)) . ';';
+                    break;
                 // Raw (no) encoding
-                case 3: $safe .= $letter;
+                case 3:
+                    $safe .= $letter;
             }
         }
 
@@ -125,7 +125,7 @@ class html_Core
             list($email, $params) = explode('?', $email, 2);
 
             // Make the params into a query string, replacing spaces
-            $params = '?'.str_replace(' ', '%20', $params);
+            $params = '?' . str_replace(' ', '%20', $params);
         } else {
             // No parameters
             $params = '';
@@ -141,7 +141,7 @@ class html_Core
         empty($attributes) || $attributes = html::attributes($attributes);
 
         // Encoded start of the href="" is a static encoded version of 'mailto:'
-        return '<a href="&#109;&#097;&#105;&#108;&#116;&#111;&#058;'.$safe.$params.'"'.$attributes.'>'.$title.'</a>';
+        return '<a href="&#109;&#097;&#105;&#108;&#116;&#111;&#058;' . $safe . $params . '"' . $attributes . '>' . $title . '</a>';
     }
 
     /**
@@ -156,12 +156,9 @@ class html_Core
 
         $array = [];
         while ($segment = array_pop($segments)) {
-            $array[] = html::anchor(
-                // Complete URI for the URL
-                implode('/', $segments).'/'.$segment,
-                // Title for the current segment
-                ucwords(inflector::humanize($segment))
-            );
+            $array[] = html::anchor(// Complete URI for the URL
+                implode('/', $segments) . '/' . $segment, // Title for the current segment
+                ucwords(inflector::humanize($segment)));
         }
 
         // Retrun the array of all the segments
@@ -191,7 +188,7 @@ class html_Core
         // Set the meta attribute value
         $attr = in_array(strtolower($tag), Kohana::config('http.meta_equiv')) ? 'http-equiv' : 'name';
 
-        return '<meta '.$attr.'="'.$tag.'" content="'.$value.'" />';
+        return '<meta ' . $attr . '="' . $tag . '" content="' . $value . '" />';
     }
 
     /**
@@ -232,24 +229,24 @@ class html_Core
         } else {
             if (false === strpos($href, '://')) {
                 // Make the URL absolute
-                $href = url::base($index).$href;
+                $href = url::base($index) . $href;
             }
 
             $attr = [
-                'rel' => $rel,
+                'rel'  => $rel,
                 'type' => $type,
                 'href' => $href,
             ];
 
-            if (! empty($media)) {
+            if (!empty($media)) {
                 // Add the media type to the attributes
                 $attr['media'] = $media;
             }
 
-            $compiled = '<link'.html::attributes($attr).' />';
+            $compiled = '<link' . html::attributes($attr) . ' />';
         }
 
-        return $compiled."\n";
+        return $compiled . "\n";
     }
 
     /**
@@ -270,13 +267,13 @@ class html_Core
         } else {
             if (false === strpos($script, '://')) {
                 // Add the suffix only when it's not already present
-                $script = url::base((bool) $index).$script;
+                $script = url::base((bool)$index) . $script;
             }
 
-            $compiled = '<script type="text/javascript" src="'.$script.'"></script>';
+            $compiled = '<script type="text/javascript" src="' . $script . '"></script>';
         }
 
-        return $compiled."\n";
+        return $compiled . "\n";
     }
 
     /**
@@ -294,17 +291,17 @@ class html_Core
 
         if (is_array($alt)) {
             $attributes += $alt;
-        } elseif (! empty($alt)) {
+        } elseif (!empty($alt)) {
             // Add alt to attributes
             $attributes['alt'] = $alt;
         }
 
         if (false === strpos($attributes['src'], '://')) {
             // Make the src attribute into an absolute URL
-            $attributes['src'] = url::base($index).$attributes['src'];
+            $attributes['src'] = url::base($index) . $attributes['src'];
         }
 
-        return '<img'.html::attributes($attributes).' />';
+        return '<img' . html::attributes($attributes) . ' />';
     }
 
     /**
@@ -320,12 +317,12 @@ class html_Core
         }
 
         if (is_string($attrs)) {
-            return ' '.$attrs;
+            return ' ' . $attrs;
         }
 
         $compiled = '';
         foreach ($attrs as $key => $val) {
-            $compiled .= ' '.$key.'="'.htmlspecialchars($val, ENT_QUOTES, Kohana::CHARSET).'"';
+            $compiled .= ' ' . $key . '="' . htmlspecialchars($val, ENT_QUOTES, Kohana::CHARSET) . '"';
         }
 
         return $compiled;

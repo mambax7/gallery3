@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -37,28 +38,25 @@ class task_Core
         return $tasks;
     }
 
-    public static function start($task_callback, $context= [])
+    public static function start($task_callback, $context = [])
     {
         $tasks = task::get_definitions();
-        $task = task::create($tasks[$task_callback], []);
+        $task  = task::create($tasks[$task_callback], []);
 
-        $task->log(t(
-                       'Task %task_name started (task id %task_id)',
-                       ['task_name' => $task->name, 'task_id' => $task->id]
-    ));
+        $task->log(t('Task %task_name started (task id %task_id)', ['task_name' => $task->name, 'task_id' => $task->id]));
         return $task;
     }
 
     public static function create($task_def, $context)
     {
-        $task = ORM::factory('task');
-        $task->callback = $task_def->callback;
-        $task->name = $task_def->name;
+        $task                   = ORM::factory('task');
+        $task->callback         = $task_def->callback;
+        $task->name             = $task_def->name;
         $task->percent_complete = 0;
-        $task->status = '';
-        $task->state = 'started';
-        $task->owner_id = identity::active_user()->id;
-        $task->context = serialize($context);
+        $task->status           = '';
+        $task->state            = 'started';
+        $task->owner_id         = identity::active_user()->id;
+        $task->context          = serialize($context);
         $task->save();
 
         return $task;
@@ -70,12 +68,9 @@ class task_Core
         if (!$task->loaded()) {
             throw new Exception('@todo MISSING_TASK');
         }
-        $task->done = 1;
+        $task->done  = 1;
         $task->state = 'cancelled';
-        $task->log(t(
-                       'Task %task_name cancelled (task id %task_id)',
-                       ['task_name' => $task->name, 'task_id' => $task->id]
-    ));
+        $task->log(t('Task %task_name cancelled (task id %task_id)', ['task_name' => $task->name, 'task_id' => $task->id]));
         $task->save();
 
         return $task;
@@ -113,8 +108,8 @@ class task_Core
             }
 
             $task->log((string)$e);
-            $task->state = 'error';
-            $task->done = true;
+            $task->state  = 'error';
+            $task->done   = true;
             $task->status = substr($e->getMessage(), 0, 255);
             $task->save();
         }

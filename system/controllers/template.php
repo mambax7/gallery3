@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Allows a template to be automatically loaded and displayed. Display can be
  * dynamically turned off in the controller methods, and the template file
@@ -9,10 +10,10 @@
  *
  * $Id: template.php 4729 2009-12-29 20:35:19Z isaiah $
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 abstract class Template_Controller extends Controller
 {

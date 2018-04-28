@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -137,7 +138,7 @@ class Access_Helper_Test extends Gallery_Unit_Test_Case
 
     public function can_allow_deny_and_reset_intent_test()
     {
-        $album = test::random_album();
+        $album  = test::random_album();
         $intent = ORM::factory('access_intent')->where('item_id', '=', $album->id)->find();
 
         // Allow
@@ -146,24 +147,15 @@ class Access_Helper_Test extends Gallery_Unit_Test_Case
 
         // Deny
         access::deny(identity::everybody(), 'view', $album);
-        $this->assert_same(
-      access::DENY,
-      ORM::factory('access_intent')->where('item_id', '=', $album->id)->find()->view_1
-    );
+        $this->assert_same(access::DENY, ORM::factory('access_intent')->where('item_id', '=', $album->id)->find()->view_1);
 
         // Allow again.  If the initial value was allow, then the first Allow clause above may not
         // have actually changed any values.
         access::allow(identity::everybody(), 'view', $album);
-        $this->assert_same(
-      access::ALLOW,
-      ORM::factory('access_intent')->where('item_id', '=', $album->id)->find()->view_1
-    );
+        $this->assert_same(access::ALLOW, ORM::factory('access_intent')->where('item_id', '=', $album->id)->find()->view_1);
 
         access::reset(identity::everybody(), 'view', $album);
-        $this->assert_same(
-      null,
-      ORM::factory('access_intent')->where('item_id', '=', $album->id)->find()->view_1
-    );
+        $this->assert_same(null, ORM::factory('access_intent')->where('item_id', '=', $album->id)->find()->view_1);
     }
 
     public function cant_reset_root_item_test()
@@ -193,7 +185,7 @@ class Access_Helper_Test extends Gallery_Unit_Test_Case
 
     public function cant_view_child_of_hidden_parent_test()
     {
-        $root = item::root();
+        $root  = item::root();
         $album = test::random_album();
 
         $root->reload();
@@ -256,7 +248,7 @@ class Access_Helper_Test extends Gallery_Unit_Test_Case
 
     public function revoked_view_permissions_cant_be_allowed_lower_down_test()
     {
-        $root = item::root();
+        $root   = item::root();
         $album1 = test::random_album($root);
         $album2 = test::random_album($album1);
 
@@ -289,10 +281,10 @@ class Access_Helper_Test extends Gallery_Unit_Test_Case
 
     public function non_view_permissions_can_be_revoked_lower_down_test()
     {
-        $outer = test::random_album();
+        $outer       = test::random_album();
         $outer_photo = test::random_photo($outer);
 
-        $inner = test::random_album($outer);
+        $inner       = test::random_album($outer);
         $inner_photo = test::random_photo($inner);
 
         $outer->reload();

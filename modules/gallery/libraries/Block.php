@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -20,10 +21,10 @@
 class Block_Core
 {
     public $content = null;
-    public $css_id = null;
-    public $id = null;
-    public $title = null;
-    public $anchor = null;
+    public $css_id  = null;
+    public $id      = null;
+    public $title   = null;
+    public $anchor  = null;
 
     public function __toString()
     {

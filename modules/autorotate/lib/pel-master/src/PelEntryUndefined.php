@@ -22,6 +22,7 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301 USA
  */
+
 namespace lsolesen\pel;
 
 /**
@@ -33,7 +34,7 @@ namespace lsolesen\pel;
  * PelEntryVersion} which is used to manage entries with version
  * information.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public
  *          License (GPL)
  * @package PEL
@@ -44,7 +45,7 @@ namespace lsolesen\pel;
  *
  * This class can hold bytes of undefined format.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
+ * @author  Martin Geisler <mgeisler@users.sourceforge.net>
  * @package PEL
  */
 class PelEntryUndefined extends PelEntry
@@ -60,13 +61,13 @@ class PelEntryUndefined extends PelEntry
      *            PelTag::MAKER_NOTE} or any other tag with format {@link
      *            PelFormat::UNDEFINED}.
      *
-     * @param string $data
+     * @param string  $data
      *            the data that this entry will be holding. Since
      *            the format is undefined, no checking will be done on the data. If no data are given, a empty string will be stored
      */
     public function __construct($tag, $data = '')
     {
-        $this->tag = $tag;
+        $this->tag    = $tag;
         $this->format = PelFormat::UNDEFINED;
         $this->setValue($data);
     }
@@ -81,7 +82,7 @@ class PelEntryUndefined extends PelEntry
     public function setValue($data)
     {
         $this->components = strlen($data);
-        $this->bytes = $data;
+        $this->bytes      = $data;
     }
 
     /**
@@ -129,7 +130,7 @@ class PelEntryUndefined extends PelEntry
             case PelTag::COMPONENTS_CONFIGURATION:
                 // CC (e->components, 4, v);
                 $v = '';
-                for ($i = 0; $i < 4; $i ++) {
+                for ($i = 0; $i < 4; $i++) {
                     switch (ord($this->bytes{$i})) {
                         case 0:
                             $v .= '-';

@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -28,21 +29,21 @@ class tag_block_Core
     {
         $block = '';
         switch ($block_id) {
-    case 'tag':
-      $block = new Block();
-      $block->css_id = 'g-tag';
-      $block->title = t('Popular tags');
-      $block->content = new View('tag_block.html');
-      $block->content->cloud = tag::cloud(module::get_var('tag', 'tag_cloud_size', 30));
+            case 'tag':
+                $block                 = new Block();
+                $block->css_id         = 'g-tag';
+                $block->title          = t('Popular tags');
+                $block->content        = new View('tag_block.html');
+                $block->content->cloud = tag::cloud(module::get_var('tag', 'tag_cloud_size', 30));
 
-      if ($theme->item() && 'tag' != $theme->page_subtype() && access::can('edit', $theme->item())) {
-          $controller = new Tags_Controller();
-          $block->content->form = tag::get_add_form($theme->item());
-      } else {
-          $block->content->form = '';
-      }
-      break;
-    }
+                if ($theme->item() && 'tag' != $theme->page_subtype() && access::can('edit', $theme->item())) {
+                    $controller           = new Tags_Controller();
+                    $block->content->form = tag::get_add_form($theme->item());
+                } else {
+                    $block->content->form = '';
+                }
+                break;
+        }
         return $block;
     }
 }

@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -17,24 +18,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.
  */
-
 class Gallery_I18n_Test extends Gallery_Unit_Test_Case
 {
     private $i18n;
 
     public function setup()
     {
-        $config = [
-        'root_locale' => 'en',
-        'default_locale' => 'te_ST',
-        'locale_dir' => VARPATH . 'locale/'
+        $config     = [
+            'root_locale'    => 'en',
+            'default_locale' => 'te_ST',
+            'locale_dir'     => VARPATH . 'locale/'
         ];
         $this->i18n = Gallery_I18n::instance($config);
 
-        db::build()
-      ->delete('incoming_translations')
-      ->where('locale', '=', 'te_ST')
-      ->execute();
+        db::build()->delete('incoming_translations')->where('locale', '=', 'te_ST')->execute();
 
         $messages_te_ST = [
             ['Hello world', 'Hallo Welt'],
@@ -53,12 +50,12 @@ class Gallery_I18n_Test extends Gallery_Unit_Test_Case
 
         foreach ($messages_te_ST as $data) {
             list($message, $translation) = $data;
-            $entry = ORM::factory('incoming_translation');
-            $entry->key = Gallery_I18n::get_message_key($message);
-            $entry->message = serialize($message);
+            $entry              = ORM::factory('incoming_translation');
+            $entry->key         = Gallery_I18n::get_message_key($message);
+            $entry->message     = serialize($message);
             $entry->translation = serialize($translation);
-            $entry->locale = 'te_ST';
-            $entry->revision = null;
+            $entry->locale      = 'te_ST';
+            $entry->revision    = null;
             $entry->save();
         }
     }
@@ -90,25 +87,19 @@ class Gallery_I18n_Test extends Gallery_Unit_Test_Case
 
     public function translate_plural_other_test()
     {
-        $result = $this->i18n->translate(
-            [
-                'one'   => 'One item has been added',
-                'other' => '%count elements have been added'
-            ],
-            ['count' => 5]
-    );
+        $result = $this->i18n->translate([
+                                             'one'   => 'One item has been added',
+                                             'other' => '%count elements have been added'
+                                         ], ['count' => 5]);
         $this->assert_equal('5 Elemente wurden hinzugefuegt.', $result);
     }
 
     public function translate_plural_one_test()
     {
-        $result = $this->i18n->translate(
-            [
-                'one'   => 'One item has been added',
-                'other' => '%count elements have been added'
-            ],
-            ['count' => 1]
-    );
+        $result = $this->i18n->translate([
+                                             'one'   => 'One item has been added',
+                                             'other' => '%count elements have been added'
+                                         ], ['count' => 1]);
         $this->assert_equal('Ein Element wurde hinzugefuegt.', $result);
     }
 
@@ -128,13 +119,10 @@ class Gallery_I18n_Test extends Gallery_Unit_Test_Case
     {
         // te_ST has the same plural rules as en and de.
         // For count 0, plural form "other" should be used.
-        $result = $this->i18n->translate(
-            [
-                'one'   => 'One item has been added',
-                'other' => '%count elements have been added'
-            ],
-            ['count' => 0]
-    );
+        $result = $this->i18n->translate([
+                                             'one'   => 'One item has been added',
+                                             'other' => '%count elements have been added'
+                                         ], ['count' => 0]);
         $this->assert_equal('0 Elemente wurden hinzugefuegt.', $result);
     }
 }

@@ -23,17 +23,12 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
 {
     public function no_trailing_closing_php_tag_test()
     {
-        $dir = new GalleryCodeFilterIterator(
-      new RecursiveIteratorIterator(new RecursiveDirectoryIterator(DOCROOT))
-    );
+        $dir   = new GalleryCodeFilterIterator(new RecursiveIteratorIterator(new RecursiveDirectoryIterator(DOCROOT)));
         $count = 0;
         foreach ($dir as $file) {
             $count++;
             if (!preg_match("|\.html\.php$|", $file->getPathname())) {
-                $this->assert_false(
-          preg_match('/\?\>\s*$/', file_get_contents($file)),
-          "{$file->getPathname()} ends in ?>"
-        );
+                $this->assert_false(preg_match('/\?\>\s*$/', file_get_contents($file)), "{$file->getPathname()} ends in ?>");
             }
         }
 
@@ -43,28 +38,21 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
 
     public function view_files_correct_suffix_test()
     {
-        $dir = new GalleryCodeFilterIterator(
-      new RecursiveIteratorIterator(new RecursiveDirectoryIterator(DOCROOT))
-    );
+        $dir = new GalleryCodeFilterIterator(new RecursiveIteratorIterator(new RecursiveDirectoryIterator(DOCROOT)));
         foreach ($dir as $file) {
             if (strpos($file, 'views/kohana/error.php')) {
                 continue;
             }
 
             if (strpos($file, 'views')) {
-                $this->assert_true(
-          preg_match("#/views/.*?\.(html|mrss|txt|json)\.php$#", $file->getPathname()),
-          "{$file->getPathname()} should end in .{html,mrss,txt,json}.php"
-        );
+                $this->assert_true(preg_match("#/views/.*?\.(html|mrss|txt|json)\.php$#", $file->getPathname()), "{$file->getPathname()} should end in .{html,mrss,txt,json}.php");
             }
         }
     }
 
     public function no_windows_line_endings_test()
     {
-        $dir = new GalleryCodeFilterIterator(
-      new RecursiveIteratorIterator(new RecursiveDirectoryIterator(DOCROOT))
-    );
+        $dir = new GalleryCodeFilterIterator(new RecursiveIteratorIterator(new RecursiveDirectoryIterator(DOCROOT)));
         foreach ($dir as $file) {
             if (preg_match("/\.(php|css|html|js)$/", $file)) {
                 foreach (file($file) as $line) {
@@ -80,7 +68,7 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
         // The preamble for views is a single line that prevents direct script access
         if (0 === strpos($path, SYSPATH)) {
             // Kohana preamble
-            $expected = "<?php defined('SYSPATH') || die('No direct access allowed.'); ?>\n";
+            $expected   = "<?php defined('SYSPATH') || die('No direct access allowed.'); ?>\n";
             $expected_2 = "<?php defined('SYSPATH') || die('No direct access allowed.');\n";  // error.php
         } else {
             // Gallery preamble
@@ -88,7 +76,7 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
             $expected = "<?php defined(\"SYSPATH\") || die(\"No direct script access.\") ?>\n";
         }
 
-        $fp = fopen($path, 'r');
+        $fp     = fopen($path, 'r');
         $actual = fgets($fp);
         fclose($fp);
 
@@ -103,51 +91,44 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
         $expected_3 = null;
         $expected_4 = null;
         if (0 === strpos($path, SYSPATH)
-            ||
-            0 === strpos($path, MODPATH . 'unit_test')) {
+            || 0 === strpos($path, MODPATH . 'unit_test')) {
             // Kohana: we only care about the first line
-            $fp = fopen($path, 'r');
+            $fp     = fopen($path, 'r');
             $actual = [fgets($fp)];
             fclose($fp);
-            $expected = ["<?php defined('SYSPATH') || die('No direct script access.');\n"];
+            $expected   = ["<?php defined('SYSPATH') || die('No direct script access.');\n"];
             $expected_2 = ["<?php defined('SYSPATH') || die('No direct access allowed.');\n"];
             $expected_3 = ["<?php defined('SYSPATH') || die('No direct access allowed.');\n"];
             $expected_4 = ["<?php defined('SYSPATH') || die('No direct script access.');\n"];
         } elseif (0 === strpos($path, MODPATH . 'forge')
-                  ||
-                  0 === strpos($path, MODPATH . 'exif/lib')
-                  ||
-                  0 === strpos($path, MODPATH . 'gallery/vendor/joomla')
-                  ||
-                  0 === strpos($path, MODPATH . 'gallery_unit_test/vendor')
-                  ||
-                  0 === strpos($path, MODPATH . 'gallery/lib/HTMLPurifier')
-                  ||
-               $path == MODPATH . 'user/lib/PasswordHash.php'
-                  ||
-               $path == DOCROOT . 'var/database.php') {
+                  || 0 === strpos($path, MODPATH . 'exif/lib')
+                  || 0 === strpos($path, MODPATH . 'gallery/vendor/joomla')
+                  || 0 === strpos($path, MODPATH . 'gallery_unit_test/vendor')
+                  || 0 === strpos($path, MODPATH . 'gallery/lib/HTMLPurifier')
+                  || $path == MODPATH . 'user/lib/PasswordHash.php'
+                  || $path == DOCROOT . 'var/database.php') {
             // 3rd party module security-only preambles, similar to Gallery's
-            $expected = ["<?php defined(\"SYSPATH\") || die(\"No direct access allowed.\");\n"];
+            $expected   = ["<?php defined(\"SYSPATH\") || die(\"No direct access allowed.\");\n"];
             $expected_2 = ["<?php defined('SYSPATH') || die('No direct access allowed.');\n"];
             $expected_3 = ["<?php defined(\"SYSPATH\") || die(\"No direct script access.\");\n"];
-            $fp = fopen($path, 'r');
-            $actual = [fgets($fp)];
+            $fp         = fopen($path, 'r');
+            $actual     = [fgets($fp)];
             fclose($fp);
         } elseif (0 === strpos($path, DOCROOT . 'var/logs')) {
             // var/logs has the kohana one-liner preamble
             $expected = ["<?php defined('SYSPATH') || die('No direct script access.'); ?>\n"];
-            $fp = fopen($path, 'r');
-            $actual = [fgets($fp)];
+            $fp       = fopen($path, 'r');
+            $actual   = [fgets($fp)];
             fclose($fp);
         } elseif (0 === strpos($path, DOCROOT . 'var')) {
             // Anything else under var has the Gallery one-liner
             $expected = ["<?php defined(\"SYSPATH\") || die(\"No direct script access.\") ?>\n"];
-            $fp = fopen($path, 'r');
-            $actual = [fgets($fp)];
+            $fp       = fopen($path, 'r');
+            $actual   = [fgets($fp)];
             fclose($fp);
         } else {
             // Gallery: we care about the entire copyright
-            $actual = $this->_get_preamble($path);
+            $actual   = $this->_get_preamble($path);
             $expected = [
                 '<?php defined("SYSPATH") || die("No direct script access.");',
                 '/**',
@@ -171,49 +152,46 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
             ];
         }
         if ($expected != $actual && $expected_2 != $actual && $expected_3 != $actual && $expected_4 != $actual) {
-            $errors[] = "$path:1\n  expected\n\t" . implode("\n\t", $expected) .
-                        "\n  actual:\n\t" . implode("\n\t", $actual);
+            $errors[] = "$path:1\n  expected\n\t" . implode("\n\t", $expected) . "\n  actual:\n\t" . implode("\n\t", $actual);
         }
     }
 
     public function code_files_start_with_preamble_test()
     {
-        $dir = new PhpCodeFilterIterator(
-        new RecursiveIteratorIterator(new RecursiveDirectoryIterator(DOCROOT))
-    );
+        $dir = new PhpCodeFilterIterator(new RecursiveIteratorIterator(new RecursiveDirectoryIterator(DOCROOT)));
 
         $errors = [];
         foreach ($dir as $file) {
             $path = $file->getPathname();
             switch ($path) {
-      case DOCROOT . 'installer/database_config.php':
-      case DOCROOT . 'installer/init_var.php':
-        // Special case views
-        $this->_check_view_preamble($path, $errors);
-        break;
+                case DOCROOT . 'installer/database_config.php':
+                case DOCROOT . 'installer/init_var.php':
+                    // Special case views
+                    $this->_check_view_preamble($path, $errors);
+                    break;
 
-      case DOCROOT . 'index.php':
-      case DOCROOT . 'installer/index.php':
-        // Front controllers
-        break;
+                case DOCROOT . 'index.php':
+                case DOCROOT . 'installer/index.php':
+                    // Front controllers
+                    break;
 
-      case DOCROOT . 'lib/uploadify/uploadify.swf.php':
-      case DOCROOT . 'lib/uploadify/uploadify.allglyphs.swf.php':
-      case DOCROOT . 'lib/mediaelementjs/flashmediaelement.swf.php':
-        // SWF wrappers - directly accessible
-        break;
+                case DOCROOT . 'lib/uploadify/uploadify.swf.php':
+                case DOCROOT . 'lib/uploadify/uploadify.allglyphs.swf.php':
+                case DOCROOT . 'lib/mediaelementjs/flashmediaelement.swf.php':
+                    // SWF wrappers - directly accessible
+                    break;
 
-      case DOCROOT . 'local.php':
-        // Special case optional file, not part of the codebase
-        break;
+                case DOCROOT . 'local.php':
+                    // Special case optional file, not part of the codebase
+                    break;
 
-      default:
-        if (preg_match('/views/', $path)) {
-            $this->_check_view_preamble($path, $errors);
-        } else {
-            $this->_check_php_preamble($path, $errors);
-        }
-      }
+                default:
+                    if (preg_match('/views/', $path)) {
+                        $this->_check_view_preamble($path, $errors);
+                    } else {
+                        $this->_check_php_preamble($path, $errors);
+                    }
+            }
         }
 
         if ($errors) {
@@ -223,13 +201,7 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
 
     public function no_tabs_in_our_code_test()
     {
-        $dir = new PhpCodeFilterIterator(
-      new GalleryCodeFilterIterator(
-        new RecursiveIteratorIterator(
-          new RecursiveDirectoryIterator(DOCROOT)
-        )
-      )
-    );
+        $dir    = new PhpCodeFilterIterator(new GalleryCodeFilterIterator(new RecursiveIteratorIterator(new RecursiveDirectoryIterator(DOCROOT))));
         $errors = [];
         foreach ($dir as $file) {
             $file_as_string = file_get_contents($file);
@@ -250,7 +222,7 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
     private function _get_preamble($file)
     {
         $lines = file($file);
-        $copy = [];
+        $copy  = [];
         for ($i = 0; $i < count($lines); $i++) {
             $copy[] = rtrim($lines[$i]);
             if (!strncmp($lines[$i], ' */', 3)) {
@@ -262,22 +234,12 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
 
     public function helpers_are_static_test()
     {
-        $dir = new PhpCodeFilterIterator(
-      new GalleryCodeFilterIterator(
-        new RecursiveIteratorIterator(
-          new RecursiveDirectoryIterator(DOCROOT)
-        )
-      )
-    );
+        $dir = new PhpCodeFilterIterator(new GalleryCodeFilterIterator(new RecursiveIteratorIterator(new RecursiveDirectoryIterator(DOCROOT))));
         foreach ($dir as $file) {
             if ('helpers' == basename(dirname($file))) {
                 foreach (file($file) as $line) {
-                    $this->assert_true(
-            !preg_match("/\sfunction\s.*\(/", $line) ||
-            preg_match("/^\s*(private static function _|static function)/", $line),
-            "should be \"static function foo\" or \"private static function _foo\":\n" .
-            "$file\n$line\n"
-          );
+                    $this->assert_true(!preg_match("/\sfunction\s.*\(/", $line)
+                                       || preg_match("/^\s*(private static function _|static function)/", $line), "should be \"static function foo\" or \"private static function _foo\":\n" . "$file\n$line\n");
                 }
             }
         }
@@ -285,10 +247,7 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
 
     public function module_info_is_well_formed_test()
     {
-        $info_files = array_merge(
-      glob('modules/*/module.info'),
-      glob('themes/*/module.info')
-    );
+        $info_files = array_merge(glob('modules/*/module.info'), glob('themes/*/module.info'));
 
         $errors = [];
         foreach ($info_files as $file) {
@@ -327,13 +286,7 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
     public function all_public_functions_in_test_files_end_in_test()
     {
         // Who tests the tests?  :-)   (ref: http://www.xkcd.com/1163)
-        $dir = new PhpCodeFilterIterator(
-      new GalleryCodeFilterIterator(
-        new RecursiveIteratorIterator(
-          new RecursiveDirectoryIterator(DOCROOT)
-        )
-      )
-    );
+        $dir = new PhpCodeFilterIterator(new GalleryCodeFilterIterator(new RecursiveIteratorIterator(new RecursiveDirectoryIterator(DOCROOT))));
         foreach ($dir as $file) {
             $scan = 0;
             if ('tests' == basename(dirname($file))) {
@@ -350,10 +303,7 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
 
                     if ($scan) {
                         if (preg_match("/^\s*public\s+function/", $line)) {
-                            $this->assert_true(
-                preg_match("/^\s*public\s+function (setup|teardown|.*_test)\(\) {/", $line),
-                "public functions must end in _test:\n$file\n$line\n"
-              );
+                            $this->assert_true(preg_match("/^\s*public\s+function (setup|teardown|.*_test)\(\) {/", $line), "public functions must end in _test:\n$file\n$line\n");
                         }
                     }
                 }
@@ -363,9 +313,7 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
 
     public function no_extra_spaces_at_end_of_line_test()
     {
-        $dir = new GalleryCodeFilterIterator(
-      new RecursiveIteratorIterator(new RecursiveDirectoryIterator(DOCROOT))
-    );
+        $dir    = new GalleryCodeFilterIterator(new RecursiveIteratorIterator(new RecursiveDirectoryIterator(DOCROOT)));
         $errors = '';
         foreach ($dir as $file) {
             if (preg_match("/\.(php|css|html|js)$/", $file)) {

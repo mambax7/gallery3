@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -19,25 +20,15 @@
  */
 class Gallery_Unit_Test_Case extends Unit_Test_Case
 {
-    public function assert_equal_array($expected, $actual, $debug=null)
+    public function assert_equal_array($expected, $actual, $debug = null)
     {
         if ($expected !== $actual) {
-            throw new Kohana_Unit_Test_Exception(
-        sprintf(
-            "Expected (%s) %s but received (%s) %s\n Diff: %s",
-                gettype($expected),
-            var_export($expected, true),
-                gettype($actual),
-            var_export($actual, true),
-                test::diff(var_export($expected, true), var_export($actual, true))
-        ),
-        $debug
-      );
+            throw new Kohana_Unit_Test_Exception(sprintf("Expected (%s) %s but received (%s) %s\n Diff: %s", gettype($expected), var_export($expected, true), gettype($actual), var_export($actual, true), test::diff(var_export($expected, true), var_export($actual, true))), $debug);
         }
         return $this;
     }
 
-    public function assert_array_equal_to_json($expected_array, $actual_json, $debug=null)
+    public function assert_array_equal_to_json($expected_array, $actual_json, $debug = null)
     {
         return $this->assert_equal_array($expected_array, json_decode($actual_json, true), $debug);
     }

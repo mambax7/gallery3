@@ -1,11 +1,12 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Simple benchmarking.
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 final class Benchmark
 {
@@ -25,7 +26,7 @@ final class Benchmark
             throw new Kohana_Exception('A benchmark named :name is already running.', [':name' => $name]);
         }
 
-        if (! isset(self::$marks[$name])) {
+        if (!isset(self::$marks[$name])) {
             self::$marks[$name] = [];
         }
 
@@ -48,7 +49,7 @@ final class Benchmark
     public static function stop($name)
     {
         if (isset(self::$marks[$name]) and false === self::$marks[$name][0]['stop']) {
-            self::$marks[$name][0]['stop'] = microtime(true);
+            self::$marks[$name][0]['stop']        = microtime(true);
             self::$marks[$name][0]['memory_stop'] = self::memory_usage();
         }
     }
@@ -75,7 +76,7 @@ final class Benchmark
             return $times;
         }
 
-        if (! isset(self::$marks[$name])) {
+        if (!isset(self::$marks[$name])) {
             return false;
         }
 
@@ -88,7 +89,7 @@ final class Benchmark
         // Properly reading a float requires using number_format or sprintf
         $time = $memory = 0;
         for ($i = 0; $i < count(self::$marks[$name]); $i++) {
-            $time += self::$marks[$name][$i]['stop'] - self::$marks[$name][$i]['start'];
+            $time   += self::$marks[$name][$i]['stop'] - self::$marks[$name][$i]['start'];
             $memory += self::$marks[$name][$i]['memory_stop'] - self::$marks[$name][$i]['memory_start'];
         }
 

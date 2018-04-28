@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -19,20 +20,20 @@
  */
 class InPlaceEdit_Core
 {
-    private $rules = [];
+    private $rules    = [];
     private $messages = [];
     private $callback = [];
     private $initial_value;
-    private $action = '';
+    private $action   = '';
     private $errors;
     private $form;
 
     public static function factory($initial_value)
     {
-        $instance = new InPlaceEdit();
+        $instance                = new InPlaceEdit();
         $instance->initial_value = $initial_value;
-        $instance->form = ['input' => $initial_value];
-        $instance->errors = ['input' => ''];
+        $instance->form          = ['input' => $initial_value];
+        $instance->errors        = ['input' => ''];
 
         return $instance;
     }
@@ -73,17 +74,17 @@ class InPlaceEdit_Core
             $post->add_rules('input', $rule);
         }
 
-        $valid = $post->validate();
-        $this->form = array_merge($this->form, $post->as_array());
+        $valid        = $post->validate();
+        $this->form   = array_merge($this->form, $post->as_array());
         $this->errors = array_merge($this->errors, $post->errors());
         return $valid;
     }
 
     public function render()
     {
-        $v = new View('in_place_edit.html');
+        $v         = new View('in_place_edit.html');
         $v->action = $this->action;
-        $v->form = $this->form;
+        $v->form   = $this->form;
         $v->errors = $this->errors;
         foreach ($v->errors as $key => $error) {
             if (!empty($error)) {

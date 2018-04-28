@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -31,7 +32,7 @@ class block_manager_Core
 
     public static function add($location, $module_name, $block_id)
     {
-        $blocks = block_manager::get_active($location);
+        $blocks                = block_manager::get_active($location);
         $blocks[random::int()] = [$module_name, $block_id];
 
         block_manager::set_active($location, $blocks);
@@ -109,7 +110,7 @@ class block_manager_Core
         return $blocks;
     }
 
-    public static function get_html($location, $theme=null)
+    public static function get_html($location, $theme = null)
     {
         $active = block_manager::get_active($location);
         $result = '';
@@ -118,7 +119,7 @@ class block_manager_Core
                 $block = call_user_func(["$desc[0]_block", 'get'], $desc[1], $theme);
                 if (!empty($block)) {
                     $block->id = $id;
-                    $result .= $block;
+                    $result    .= $block;
                 }
             }
         }

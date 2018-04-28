@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -20,13 +21,13 @@
 class message_Core
 {
     const SUCCESS = 1;
-    const INFO    = 2;
+    const INFO = 2;
     const WARNING = 3;
-    const ERROR   = 4;
+    const ERROR = 4;
 
     /**
      * Report a successful event.
-     * @param string  $msg           a detailed message
+     * @param string $msg a detailed message
      */
     public static function success($msg)
     {
@@ -35,7 +36,7 @@ class message_Core
 
     /**
      * Report an informational event.
-     * @param string  $msg           a detailed message
+     * @param string $msg a detailed message
      */
     public static function info($msg)
     {
@@ -44,7 +45,7 @@ class message_Core
 
     /**
      * Report that something went wrong, not fatal, but worth investigation.
-     * @param string  $msg           a detailed message
+     * @param string $msg a detailed message
      */
     public static function warning($msg)
     {
@@ -53,7 +54,7 @@ class message_Core
 
     /**
      * Report that something went wrong that should be fixed.
-     * @param string  $msg           a detailed message
+     * @param string $msg a detailed message
      */
     public static function error($msg)
     {
@@ -62,13 +63,13 @@ class message_Core
 
     /**
      * Save a message in the session for our next page load.
-     * @param string  $msg           a detailed message
-     * @param integer $severity      one of the severity constants
+     * @param string  $msg      a detailed message
+     * @param integer $severity one of the severity constants
      */
     private static function _add($msg, $severity)
     {
-        $session = Session::instance();
-        $status = $session->get('messages');
+        $session  = Session::instance();
+        $status   = $session->get('messages');
         $status[] = [$msg, $severity];
         $session->set('messages', $status);
     }
@@ -86,7 +87,7 @@ class message_Core
         $messages = Session::instance()->get_once('messages', []);
         foreach ($messages as $msg) {
             $msg[0] = str_replace('__CSRF__', access::csrf_token(), $msg[0]);
-            $buf[] = '<li class="' . message::severity_class($msg[1]) . "\">$msg[0]</li>";
+            $buf[]  = '<li class="' . message::severity_class($msg[1]) . "\">$msg[0]</li>";
         }
         if ($buf) {
             return '<ul id="g-action-status" class="g-message-block">' . implode('', $buf) . '</ul>';
@@ -101,17 +102,17 @@ class message_Core
     public static function severity_class($severity)
     {
         switch ($severity) {
-    case message::SUCCESS:
-      return 'g-success';
+            case message::SUCCESS:
+                return 'g-success';
 
-    case message::INFO:
-      return 'g-info';
+            case message::INFO:
+                return 'g-info';
 
-    case message::WARNING:
-      return 'g-warning';
+            case message::WARNING:
+                return 'g-warning';
 
-    case message::ERROR:
-      return 'g-error';
-    }
+            case message::ERROR:
+                return 'g-error';
+        }
     }
 }

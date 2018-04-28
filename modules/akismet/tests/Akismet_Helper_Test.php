@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -30,13 +31,13 @@ class Akismet_Helper_Test extends Gallery_Unit_Test_Case
 
     private function _make_comment()
     {
-        $comment = ORM::factory('comment');
-        $comment->item_id = item::root()->id;
-        $comment->author_id = identity::guest()->id;
-        $comment->text = 'This is a comment';
-        $comment->guest_name = 'John Doe';
+        $comment              = ORM::factory('comment');
+        $comment->item_id     = item::root()->id;
+        $comment->author_id   = identity::guest()->id;
+        $comment->text        = 'This is a comment';
+        $comment->guest_name  = 'John Doe';
         $comment->guest_email = 'john@gallery2.org';
-        $comment->guest_url = 'http://gallery2.org';
+        $comment->guest_url   = 'http://gallery2.org';
         $comment->save();
 
         // Set the server fields to a known placeholder
@@ -50,7 +51,7 @@ class Akismet_Helper_Test extends Gallery_Unit_Test_Case
 
     public function build_verify_request_test()
     {
-        $request = akismet::_build_verify_request('TEST_KEY');
+        $request  = akismet::_build_verify_request('TEST_KEY');
         $expected =
       "POST /1.1/verify-key HTTP/1.0\r\n" .
       "Host: rest.akismet.com\r\n" .
@@ -62,13 +63,14 @@ class Akismet_Helper_Test extends Gallery_Unit_Test_Case
 
     public function build_comment_check_request_test()
     {
-        $comment = $this->_make_comment();
-        $request = akismet::_build_request('comment-check', $comment);
-        $expected = "POST /1.1/comment-check HTTP/1.0\r\n" .
-      "Host: TEST_KEY.rest.akismet.com\r\n" .
-      "Content-Type: application/x-www-form-urlencoded; charset=UTF-8\r\n" .
-      "Content-Length: 645\r\n" .
-      "User-Agent: Gallery/3 | Akismet/1\r\n\r\n" . 'HTTP_ACCEPT=http_accept&HTTP_ACCEPT_ENCODING=http_accept_encoding&'
+        $comment  = $this->_make_comment();
+        $request  = akismet::_build_request('comment-check', $comment);
+        $expected = "POST /1.1/comment-check HTTP/1.0\r\n"
+                    . "Host: TEST_KEY.rest.akismet.com\r\n"
+                    . "Content-Type: application/x-www-form-urlencoded; charset=UTF-8\r\n"
+                    . "Content-Length: 645\r\n"
+                    . "User-Agent: Gallery/3 | Akismet/1\r\n\r\n"
+                    . 'HTTP_ACCEPT=http_accept&HTTP_ACCEPT_ENCODING=http_accept_encoding&'
                     . 'HTTP_ACCEPT_LANGUAGE=http_accept_language&HTTP_CONNECTION=http_connection&'
                     . 'HTTP_HOST=http_host&HTTP_USER_AGENT=http_user_agent&'
                     . 'QUERY_STRING=query_string&REMOTE_ADDR=remote_addr&'
@@ -76,54 +78,54 @@ class Akismet_Helper_Test extends Gallery_Unit_Test_Case
                     . 'SERVER_HTTP_ACCEPT_CHARSET=http_accept_charset&'
                     . 'blog=http%3A%2F%2F.%2F&comment_author=John+Doe&comment_author_email=john%40gallery2.org&'
                     . 'comment_author_url=http%3A%2F%2Fgallery2.org&comment_content=This+is+a+comment&'
-                    .
-      "comment_type=comment&permalink=http%3A%2F%2F.%2Findex.php%2Fcomments%2F{$comment->id}&" . 'referrer=http_referer&user_agent=http_user_agent&user_ip=remote_addr';
+                    . "comment_type=comment&permalink=http%3A%2F%2F.%2Findex.php%2Fcomments%2F{$comment->id}&"
+                    . 'referrer=http_referer&user_agent=http_user_agent&user_ip=remote_addr';
 
         $this->assert_equal($expected, $request);
     }
 
     public function build_submit_spam_request_test()
     {
-        $comment = $this->_make_comment();
-        $request = akismet::_build_request('submit-spam', $comment);
-        $expected =
-      "POST /1.1/submit-spam HTTP/1.0\r\n" .
-      "Host: TEST_KEY.rest.akismet.com\r\n" .
-      "Content-Type: application/x-www-form-urlencoded; charset=UTF-8\r\n" .
-      "Content-Length: 645\r\n" .
-      "User-Agent: Gallery/3 | Akismet/1\r\n\r\n" . 'HTTP_ACCEPT=http_accept&HTTP_ACCEPT_ENCODING=http_accept_encoding&'
-      . 'HTTP_ACCEPT_LANGUAGE=http_accept_language&HTTP_CONNECTION=http_connection&'
-      . 'HTTP_HOST=http_host&HTTP_USER_AGENT=http_user_agent&'
-      . 'QUERY_STRING=query_string&REMOTE_ADDR=remote_addr&'
-      . 'REMOTE_HOST=remote_host&REMOTE_PORT=remote_port&'
-      . 'SERVER_HTTP_ACCEPT_CHARSET=http_accept_charset&'
-      . 'blog=http%3A%2F%2F.%2F&comment_author=John+Doe&comment_author_email=john%40gallery2.org&'
-      . 'comment_author_url=http%3A%2F%2Fgallery2.org&comment_content=This+is+a+comment&'
-      .
-      "comment_type=comment&permalink=http%3A%2F%2F.%2Findex.php%2Fcomments%2F{$comment->id}&" . 'referrer=http_referer&user_agent=http_user_agent&user_ip=remote_addr';
+        $comment  = $this->_make_comment();
+        $request  = akismet::_build_request('submit-spam', $comment);
+        $expected = "POST /1.1/submit-spam HTTP/1.0\r\n"
+                    . "Host: TEST_KEY.rest.akismet.com\r\n"
+                    . "Content-Type: application/x-www-form-urlencoded; charset=UTF-8\r\n"
+                    . "Content-Length: 645\r\n"
+                    . "User-Agent: Gallery/3 | Akismet/1\r\n\r\n"
+                    . 'HTTP_ACCEPT=http_accept&HTTP_ACCEPT_ENCODING=http_accept_encoding&'
+                    . 'HTTP_ACCEPT_LANGUAGE=http_accept_language&HTTP_CONNECTION=http_connection&'
+                    . 'HTTP_HOST=http_host&HTTP_USER_AGENT=http_user_agent&'
+                    . 'QUERY_STRING=query_string&REMOTE_ADDR=remote_addr&'
+                    . 'REMOTE_HOST=remote_host&REMOTE_PORT=remote_port&'
+                    . 'SERVER_HTTP_ACCEPT_CHARSET=http_accept_charset&'
+                    . 'blog=http%3A%2F%2F.%2F&comment_author=John+Doe&comment_author_email=john%40gallery2.org&'
+                    . 'comment_author_url=http%3A%2F%2Fgallery2.org&comment_content=This+is+a+comment&'
+                    . "comment_type=comment&permalink=http%3A%2F%2F.%2Findex.php%2Fcomments%2F{$comment->id}&"
+                    . 'referrer=http_referer&user_agent=http_user_agent&user_ip=remote_addr';
 
         $this->assert_equal($expected, $request);
     }
 
     public function build_submit_ham_request_test()
     {
-        $comment = $this->_make_comment();
-        $request = akismet::_build_request('submit-ham', $comment);
-        $expected =
-      "POST /1.1/submit-ham HTTP/1.0\r\n" .
-      "Host: TEST_KEY.rest.akismet.com\r\n" .
-      "Content-Type: application/x-www-form-urlencoded; charset=UTF-8\r\n" .
-      "Content-Length: 645\r\n" .
-      "User-Agent: Gallery/3 | Akismet/1\r\n\r\n" . 'HTTP_ACCEPT=http_accept&HTTP_ACCEPT_ENCODING=http_accept_encoding&'
-      . 'HTTP_ACCEPT_LANGUAGE=http_accept_language&HTTP_CONNECTION=http_connection&'
-      . 'HTTP_HOST=http_host&HTTP_USER_AGENT=http_user_agent&'
-      . 'QUERY_STRING=query_string&REMOTE_ADDR=remote_addr&'
-      . 'REMOTE_HOST=remote_host&REMOTE_PORT=remote_port&'
-      . 'SERVER_HTTP_ACCEPT_CHARSET=http_accept_charset&blog=http%3A%2F%2F.%2F&'
-      . 'comment_author=John+Doe&comment_author_email=john%40gallery2.org&'
-      . 'comment_author_url=http%3A%2F%2Fgallery2.org&comment_content=This+is+a+comment&'
-      .
-      "comment_type=comment&permalink=http%3A%2F%2F.%2Findex.php%2Fcomments%2F{$comment->id}&" . 'referrer=http_referer&user_agent=http_user_agent&user_ip=remote_addr';
+        $comment  = $this->_make_comment();
+        $request  = akismet::_build_request('submit-ham', $comment);
+        $expected = "POST /1.1/submit-ham HTTP/1.0\r\n"
+                    . "Host: TEST_KEY.rest.akismet.com\r\n"
+                    . "Content-Type: application/x-www-form-urlencoded; charset=UTF-8\r\n"
+                    . "Content-Length: 645\r\n"
+                    . "User-Agent: Gallery/3 | Akismet/1\r\n\r\n"
+                    . 'HTTP_ACCEPT=http_accept&HTTP_ACCEPT_ENCODING=http_accept_encoding&'
+                    . 'HTTP_ACCEPT_LANGUAGE=http_accept_language&HTTP_CONNECTION=http_connection&'
+                    . 'HTTP_HOST=http_host&HTTP_USER_AGENT=http_user_agent&'
+                    . 'QUERY_STRING=query_string&REMOTE_ADDR=remote_addr&'
+                    . 'REMOTE_HOST=remote_host&REMOTE_PORT=remote_port&'
+                    . 'SERVER_HTTP_ACCEPT_CHARSET=http_accept_charset&blog=http%3A%2F%2F.%2F&'
+                    . 'comment_author=John+Doe&comment_author_email=john%40gallery2.org&'
+                    . 'comment_author_url=http%3A%2F%2Fgallery2.org&comment_content=This+is+a+comment&'
+                    . "comment_type=comment&permalink=http%3A%2F%2F.%2Findex.php%2Fcomments%2F{$comment->id}&"
+                    . 'referrer=http_referer&user_agent=http_user_agent&user_ip=remote_addr';
 
         $this->assert_equal($expected, $request);
     }

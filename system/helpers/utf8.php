@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * A port of phputf8 to a unified file/class.
  *
@@ -7,24 +8,23 @@
  *
  * PCRE needs to be compiled with UTF-8 support (--enable-utf8).
  * Support for Unicode properties is highly recommended (--enable-unicode-properties).
- * @see http://php.net/manual/reference.pcre.pattern.modifiers.php
+ * @see            http://php.net/manual/reference.pcre.pattern.modifiers.php
  *
  * string functions.
- * @see http://php.net/mbstring
+ * @see            http://php.net/mbstring
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
  * @copyright  (c) 2005 Harry Fuecks
- * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt
+ * @license        http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt
  */
-
 class utf8_Core
 {
 
     /**
      * Replaces text within a portion of a UTF-8 string.
-     * @see http://php.net/substr_replace
+     * @see     http://php.net/substr_replace
      *
      * @author  Harry Fuecks <hfuecks@gmail.com>
      *
@@ -39,7 +39,7 @@ class utf8_Core
             return (null === $length) ? substr_replace($str, $replacement, $offset) : substr_replace($str, $replacement, $offset, $length);
         }
 
-        $length = (null === $length) ? mb_strlen($str) : (int) $length;
+        $length = (null === $length) ? mb_strlen($str) : (int)$length;
         preg_match_all('/./us', $str, $str_array);
         preg_match_all('/./us', $replacement, $replacement_array);
 
@@ -49,7 +49,7 @@ class utf8_Core
 
     /**
      * Makes a UTF-8 string's first character uppercase.
-     * @see http://php.net/ucfirst
+     * @see     http://php.net/ucfirst
      *
      * @author  Harry Fuecks <hfuecks@gmail.com>
      *
@@ -63,12 +63,12 @@ class utf8_Core
         }
 
         preg_match('/^(.?)(.*)$/us', $str, $matches);
-        return mb_strtoupper($matches[1]).$matches[2];
+        return mb_strtoupper($matches[1]) . $matches[2];
     }
 
     /**
      * Case-insensitive UTF-8 string comparison.
-     * @see http://php.net/strcasecmp
+     * @see     http://php.net/strcasecmp
      *
      * @author  Harry Fuecks <hfuecks@gmail.com>
      *
@@ -134,18 +134,18 @@ class utf8_Core
             return $str;
         }
 
-        $search = mb_strtolower($search);
+        $search    = mb_strtolower($search);
         $str_lower = mb_strtolower($str);
 
         $total_matched_strlen = 0;
-        $i = 0;
+        $i                    = 0;
 
-        while (preg_match('/(.*?)'.preg_quote($search, '/').'/s', $str_lower, $matches)) {
+        while (preg_match('/(.*?)' . preg_quote($search, '/') . '/s', $str_lower, $matches)) {
             $matched_strlen = strlen($matches[0]);
-            $str_lower = substr($str_lower, $matched_strlen);
+            $str_lower      = substr($str_lower, $matched_strlen);
 
             $offset = $total_matched_strlen + strlen($matches[1]) + ($i * (strlen($replace) - 1));
-            $str = substr_replace($str, $replace, $offset, strlen($search));
+            $str    = substr_replace($str, $replace, $offset, strlen($search));
 
             $total_matched_strlen += $matched_strlen;
             $i++;
@@ -158,7 +158,7 @@ class utf8_Core
     /**
      * Case-insenstive UTF-8 version of strstr. Returns all of input string
      * from the first occurrence of needle to the end.
-     * @see http://php.net/stristr
+     * @see    http://php.net/stristr
      *
      * @author Harry Fuecks <hfuecks@gmail.com>
      *
@@ -177,10 +177,10 @@ class utf8_Core
             return $str;
         }
 
-        $str_lower = mb_strtolower($str);
+        $str_lower    = mb_strtolower($str);
         $search_lower = mb_strtolower($search);
 
-        preg_match('/^(.*?)'.preg_quote($search, '/').'/s', $str_lower, $matches);
+        preg_match('/^(.*?)' . preg_quote($search, '/') . '/s', $str_lower, $matches);
 
         if (isset($matches[1])) {
             return substr($str, strlen($matches[1]));
@@ -191,7 +191,7 @@ class utf8_Core
 
     /**
      * Finds the length of the initial segment matching mask.
-     * @see http://php.net/strspn
+     * @see    http://php.net/strspn
      *
      * @author Harry Fuecks <hfuecks@gmail.com>
      *
@@ -218,14 +218,14 @@ class utf8_Core
         // Escape these characters:  - [ ] . : \ ^ /
         // The . and : are escaped to prevent possible warnings about POSIX regex elements
         $mask = preg_replace('#[-[\].:\\\\^/]#', '\\\\$0', $mask);
-        preg_match('/^[^'.$mask.']+/u', $str, $matches);
+        preg_match('/^[^' . $mask . ']+/u', $str, $matches);
 
         return isset($matches[0]) ? mb_strlen($matches[0]) : 0;
     }
 
     /**
      * Finds the length of the initial segment not matching mask.
-     * @see http://php.net/strcspn
+     * @see     http://php.net/strcspn
      *
      * @author  Harry Fuecks <hfuecks@gmail.com>
      *
@@ -252,14 +252,14 @@ class utf8_Core
         // Escape these characters:  - [ ] . : \ ^ /
         // The . and : are escaped to prevent possible warnings about POSIX regex elements
         $mask = preg_replace('#[-[\].:\\\\^/]#', '\\\\$0', $mask);
-        preg_match('/^[^'.$mask.']+/u', $str, $matches);
+        preg_match('/^[^' . $mask . ']+/u', $str, $matches);
 
         return isset($matches[0]) ? mb_strlen($matches[0]) : 0;
     }
 
     /**
      * Pads a UTF-8 string to a certain length with another string.
-     * @see http://php.net/str_pad
+     * @see     http://php.net/str_pad
      *
      * @author  Harry Fuecks <hfuecks@gmail.com>
      *
@@ -282,28 +282,28 @@ class utf8_Core
         }
 
         $pad_str_length = mb_strlen($pad_str);
-        $pad_length = $final_str_length - $str_length;
+        $pad_length     = $final_str_length - $str_length;
 
         if (STR_PAD_RIGHT == $pad_type) {
             $repeat = ceil($pad_length / $pad_str_length);
-            return mb_substr($str.str_repeat($pad_str, $repeat), 0, $final_str_length);
+            return mb_substr($str . str_repeat($pad_str, $repeat), 0, $final_str_length);
         }
 
         if (STR_PAD_LEFT == $pad_type) {
             $repeat = ceil($pad_length / $pad_str_length);
-            return mb_substr(str_repeat($pad_str, $repeat), 0, floor($pad_length)).$str;
+            return mb_substr(str_repeat($pad_str, $repeat), 0, floor($pad_length)) . $str;
         }
 
         if (STR_PAD_BOTH == $pad_type) {
-            $pad_length /= 2;
-            $pad_length_left = floor($pad_length);
+            $pad_length       /= 2;
+            $pad_length_left  = floor($pad_length);
             $pad_length_right = ceil($pad_length);
-            $repeat_left = ceil($pad_length_left / $pad_str_length);
-            $repeat_right = ceil($pad_length_right / $pad_str_length);
+            $repeat_left      = ceil($pad_length_left / $pad_str_length);
+            $repeat_right     = ceil($pad_length_right / $pad_str_length);
 
-            $pad_left = mb_substr(str_repeat($pad_str, $repeat_left), 0, $pad_length_left);
+            $pad_left  = mb_substr(str_repeat($pad_str, $repeat_left), 0, $pad_length_left);
             $pad_right = mb_substr(str_repeat($pad_str, $repeat_right), 0, $pad_length_left);
-            return $pad_left.$str.$pad_right;
+            return $pad_left . $str . $pad_right;
         }
 
         trigger_error('utf8::str_pad: Unknown padding type (' . $pad_type . ')', E_USER_ERROR);
@@ -311,7 +311,7 @@ class utf8_Core
 
     /**
      * Converts a UTF-8 string to an array.
-     * @see http://php.net/str_split
+     * @see     http://php.net/str_split
      *
      * @author  Harry Fuecks <hfuecks@gmail.com>
      *
@@ -321,7 +321,7 @@ class utf8_Core
      */
     public static function str_split($str, $split_length = 1)
     {
-        $split_length = (int) $split_length;
+        $split_length = (int)$split_length;
 
         if (text::is_ascii($str)) {
             return str_split($str, $split_length);
@@ -335,14 +335,14 @@ class utf8_Core
             return [$str];
         }
 
-        preg_match_all('/.{'.$split_length.'}|[^\x00]{1,'.$split_length.'}$/us', $str, $matches);
+        preg_match_all('/.{' . $split_length . '}|[^\x00]{1,' . $split_length . '}$/us', $str, $matches);
 
         return $matches[0];
     }
 
     /**
      * Reverses a UTF-8 string.
-     * @see http://php.net/strrev
+     * @see     http://php.net/strrev
      *
      * @author  Harry Fuecks <hfuecks@gmail.com>
      *
@@ -362,7 +362,7 @@ class utf8_Core
     /**
      * Strips whitespace (or other UTF-8 characters) from the beginning and
      * end of a string.
-     * @see http://php.net/trim
+     * @see     http://php.net/trim
      *
      * @author  Andreas Gohr <andi@splitbrain.org>
      *
@@ -381,7 +381,7 @@ class utf8_Core
 
     /**
      * Strips whitespace (or other UTF-8 characters) from the beginning of a string.
-     * @see http://php.net/ltrim
+     * @see     http://php.net/ltrim
      *
      * @author  Andreas Gohr <andi@splitbrain.org>
      *
@@ -401,12 +401,12 @@ class utf8_Core
 
         $charlist = preg_replace('#[-\[\]:\\\\^/]#', '\\\\$0', $charlist);
 
-        return preg_replace('/^['.$charlist.']+/u', '', $str);
+        return preg_replace('/^[' . $charlist . ']+/u', '', $str);
     }
 
     /**
      * Strips whitespace (or other UTF-8 characters) from the end of a string.
-     * @see http://php.net/rtrim
+     * @see     http://php.net/rtrim
      *
      * @author  Andreas Gohr <andi@splitbrain.org>
      *
@@ -426,12 +426,12 @@ class utf8_Core
 
         $charlist = preg_replace('#[-\[\]:\\\\^/]#', '\\\\$0', $charlist);
 
-        return preg_replace('/['.$charlist.']++$/uD', '', $str);
+        return preg_replace('/[' . $charlist . ']++$/uD', '', $str);
     }
 
     /**
      * Returns the unicode ordinal for a character.
-     * @see http://php.net/ord
+     * @see    http://php.net/ord
      *
      * @author Harry Fuecks <hfuecks@gmail.com>
      *
@@ -446,7 +446,7 @@ class utf8_Core
             return $ord0;
         }
 
-        if (! isset($chr[1])) {
+        if (!isset($chr[1])) {
             trigger_error('Short sequence - at least 2 bytes expected, only 1 seen', E_USER_WARNING);
             return false;
         }
@@ -457,7 +457,7 @@ class utf8_Core
             return ($ord0 - 192) * 64 + ($ord1 - 128);
         }
 
-        if (! isset($chr[2])) {
+        if (!isset($chr[2])) {
             trigger_error('Short sequence - at least 3 bytes expected, only 2 seen', E_USER_WARNING);
             return false;
         }
@@ -468,7 +468,7 @@ class utf8_Core
             return ($ord0 - 224) * 4096 + ($ord1 - 128) * 64 + ($ord2 - 128);
         }
 
-        if (! isset($chr[3])) {
+        if (!isset($chr[3])) {
             trigger_error('Short sequence - at least 4 bytes expected, only 3 seen', E_USER_WARNING);
             return false;
         }
@@ -476,10 +476,10 @@ class utf8_Core
         $ord3 = ord($chr[3]);
 
         if ($ord0 >= 240 && $ord0 <= 247) {
-            return ($ord0 - 240) * 262144 + ($ord1 - 128) * 4096 + ($ord2-128) * 64 + ($ord3 - 128);
+            return ($ord0 - 240) * 262144 + ($ord1 - 128) * 4096 + ($ord2 - 128) * 64 + ($ord3 - 128);
         }
 
-        if (! isset($chr[4])) {
+        if (!isset($chr[4])) {
             trigger_error('Short sequence - at least 5 bytes expected, only 4 seen', E_USER_WARNING);
             return false;
         }
@@ -487,10 +487,10 @@ class utf8_Core
         $ord4 = ord($chr[4]);
 
         if ($ord0 >= 248 && $ord0 <= 251) {
-            return ($ord0 - 248) * 16777216 + ($ord1-128) * 262144 + ($ord2 - 128) * 4096 + ($ord3 - 128) * 64 + ($ord4 - 128);
+            return ($ord0 - 248) * 16777216 + ($ord1 - 128) * 262144 + ($ord2 - 128) * 4096 + ($ord3 - 128) * 64 + ($ord4 - 128);
         }
 
-        if (! isset($chr[5])) {
+        if (!isset($chr[5])) {
             trigger_error('Short sequence - at least 6 bytes expected, only 5 seen', E_USER_WARNING);
             return false;
         }
@@ -500,7 +500,7 @@ class utf8_Core
         }
 
         if ($ord0 >= 254 && $ord0 <= 255) {
-            trigger_error('Invalid UTF-8 with surrogate ordinal '.$ord0, E_USER_WARNING);
+            trigger_error('Invalid UTF-8 with surrogate ordinal ' . $ord0, E_USER_WARNING);
             return false;
         }
     }
@@ -538,24 +538,24 @@ class utf8_Core
                 // multi-octet sequence.
                 if (0 == (0x80 & $in)) {
                     // US-ASCII, pass straight through.
-                    $out[] = $in;
+                    $out[]  = $in;
                     $mBytes = 1;
                 } elseif (0xC0 == (0xE0 & $in)) {
                     // First octet of 2 octet sequence
-                    $mUcs4 = $in;
-                    $mUcs4 = ($mUcs4 & 0x1F) << 6;
+                    $mUcs4  = $in;
+                    $mUcs4  = ($mUcs4 & 0x1F) << 6;
                     $mState = 1;
                     $mBytes = 2;
                 } elseif (0xE0 == (0xF0 & $in)) {
                     // First octet of 3 octet sequence
-                    $mUcs4 = $in;
-                    $mUcs4 = ($mUcs4 & 0x0F) << 12;
+                    $mUcs4  = $in;
+                    $mUcs4  = ($mUcs4 & 0x0F) << 12;
                     $mState = 2;
                     $mBytes = 3;
                 } elseif (0xF0 == (0xF8 & $in)) {
                     // First octet of 4 octet sequence
-                    $mUcs4 = $in;
-                    $mUcs4 = ($mUcs4 & 0x07) << 18;
+                    $mUcs4  = $in;
+                    $mUcs4  = ($mUcs4 & 0x07) << 18;
                     $mState = 3;
                     $mBytes = 4;
                 } elseif (0xF8 == (0xFC & $in)) {
@@ -566,19 +566,19 @@ class utf8_Core
                     // (b) outside the Unicode range of 0-0x10FFFF.
                     // Rather than trying to resynchronize, we will carry on until the end
                     // of the sequence and let the later error handling code catch it.
-                    $mUcs4 = $in;
-                    $mUcs4 = ($mUcs4 & 0x03) << 24;
+                    $mUcs4  = $in;
+                    $mUcs4  = ($mUcs4 & 0x03) << 24;
                     $mState = 4;
                     $mBytes = 5;
                 } elseif (0xFC == (0xFE & $in)) {
                     // First octet of 6 octet sequence, see comments for 5 octet sequence.
-                    $mUcs4 = $in;
-                    $mUcs4 = ($mUcs4 & 1) << 30;
+                    $mUcs4  = $in;
+                    $mUcs4  = ($mUcs4 & 1) << 30;
                     $mState = 5;
                     $mBytes = 6;
                 } else {
                     // Current octet is neither in the US-ASCII range nor a legal first octet of a multi-octet sequence.
-                    trigger_error('utf8::to_unicode: Illegal sequence identifier in UTF-8 at byte '.$i, E_USER_WARNING);
+                    trigger_error('utf8::to_unicode: Illegal sequence identifier in UTF-8 at byte ' . $i, E_USER_WARNING);
                     return false;
                 }
             } else {
@@ -586,8 +586,8 @@ class utf8_Core
                 if (0x80 == (0xC0 & $in)) {
                     // Legal continuation
                     $shift = ($mState - 1) * 6;
-                    $tmp = $in;
-                    $tmp = ($tmp & 0x0000003F) << $shift;
+                    $tmp   = $in;
+                    $tmp   = ($tmp & 0x0000003F) << $shift;
                     $mUcs4 |= $tmp;
 
                     // End of the multi-octet sequence. mUcs4 now contains the final Unicode codepoint to be output
@@ -595,15 +595,10 @@ class utf8_Core
                         // Check for illegal sequences and codepoints
 
                         // From Unicode 3.1, non-shortest form is illegal
-                        if (((2 == $mBytes) && ($mUcs4 < 0x0080)) or
-                            ((3 == $mBytes) && ($mUcs4 < 0x0800)) or
-                            ((4 == $mBytes) && ($mUcs4 < 0x10000)) or
-                            (4 < $mBytes) or
-                            // From Unicode 3.2, surrogate characters are illegal
-                            (0xD800 == ($mUcs4 & 0xFFFFF800)) or
-                            // Codepoints outside the Unicode range are illegal
+                        if (((2 == $mBytes) && ($mUcs4 < 0x0080)) or ((3 == $mBytes) && ($mUcs4 < 0x0800)) or ((4 == $mBytes) && ($mUcs4 < 0x10000)) or (4 < $mBytes) or // From Unicode 3.2, surrogate characters are illegal
+                            (0xD800 == ($mUcs4 & 0xFFFFF800)) or // Codepoints outside the Unicode range are illegal
                             ($mUcs4 > 0x10FFFF)) {
-                            trigger_error('utf8::to_unicode: Illegal sequence or codepoint in UTF-8 at byte '.$i, E_USER_WARNING);
+                            trigger_error('utf8::to_unicode: Illegal sequence or codepoint in UTF-8 at byte ' . $i, E_USER_WARNING);
                             return false;
                         }
 
@@ -620,7 +615,7 @@ class utf8_Core
                 } else {
                     // ((0xC0 & (*in) != 0x80) AND (mState != 0))
                     // Incomplete multi-octet sequence
-                    trigger_error('utf8::to_unicode: Incomplete multi-octet sequence in UTF-8 at byte '.$i, E_USER_WARNING);
+                    trigger_error('utf8::to_unicode: Incomplete multi-octet sequence in UTF-8 at byte ' . $i, E_USER_WARNING);
                     return false;
                 }
             }
@@ -654,38 +649,32 @@ class utf8_Core
             // ASCII range (including control chars)
             if (($arr[$k] >= 0) && ($arr[$k] <= 0x007f)) {
                 echo chr($arr[$k]);
-            }
-            // 2 byte sequence
+            } // 2 byte sequence
             elseif ($arr[$k] <= 0x07ff) {
                 echo chr(0xc0 | ($arr[$k] >> 6));
                 echo chr(0x80 | ($arr[$k] & 0x003f));
-            }
-            // Byte order mark (skip)
+            } // Byte order mark (skip)
             elseif (0xFEFF == $arr[$k]) {
                 // nop -- zap the BOM
-            }
-            // Test for illegal surrogates
+            } // Test for illegal surrogates
             elseif ($arr[$k] >= 0xD800 && $arr[$k] <= 0xDFFF) {
                 // Found a surrogate
-                trigger_error('utf8::from_unicode: Illegal surrogate at index: '.$k.', value: '.$arr[$k], E_USER_WARNING);
+                trigger_error('utf8::from_unicode: Illegal surrogate at index: ' . $k . ', value: ' . $arr[$k], E_USER_WARNING);
                 return false;
-            }
-            // 3 byte sequence
+            } // 3 byte sequence
             elseif ($arr[$k] <= 0xffff) {
                 echo chr(0xe0 | ($arr[$k] >> 12));
                 echo chr(0x80 | (($arr[$k] >> 6) & 0x003f));
                 echo chr(0x80 | ($arr[$k] & 0x003f));
-            }
-            // 4 byte sequence
+            } // 4 byte sequence
             elseif ($arr[$k] <= 0x10ffff) {
                 echo chr(0xf0 | ($arr[$k] >> 18));
                 echo chr(0x80 | (($arr[$k] >> 12) & 0x3f));
                 echo chr(0x80 | (($arr[$k] >> 6) & 0x3f));
                 echo chr(0x80 | ($arr[$k] & 0x3f));
-            }
-            // Out of range
+            } // Out of range
             else {
-                trigger_error('utf8::from_unicode: Codepoint out of Unicode range at index: '.$k.', value: '.$arr[$k], E_USER_WARNING);
+                trigger_error('utf8::from_unicode: Codepoint out of Unicode range at index: ' . $k . ', value: ' . $arr[$k], E_USER_WARNING);
                 return false;
             }
         }

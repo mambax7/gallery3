@@ -1,13 +1,14 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Provides a driver-based interface for finding, creating, and deleting cached
  * resources. Caches are identified by a unique string. Tagging of caches is
  * also supported, and caches can be found and deleted by id or tag.
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class Cache_Core
 {
@@ -27,7 +28,7 @@ class Cache_Core
      */
     public static function & instance($config = false)
     {
-        if (! isset(Cache::$instances[$config])) {
+        if (!isset(Cache::$instances[$config])) {
             // Create a new instance
             Cache::$instances[$config] = new Cache($config);
         }
@@ -64,25 +65,19 @@ class Cache_Core
         $this->config = $config;
 
         // Set driver name
-        $driver = 'Cache_'.ucfirst($this->config['driver']).'_Driver';
+        $driver = 'Cache_' . ucfirst($this->config['driver']) . '_Driver';
 
         // Load the driver
-        if (! Kohana::auto_load($driver)) {
-            throw new Cache_Exception(
-                'The :driver: driver for the :class: library could not be found',
-                [':driver:' => $this->config['driver'], ':class:' => get_class($this)]
-            );
+        if (!Kohana::auto_load($driver)) {
+            throw new Cache_Exception('The :driver: driver for the :class: library could not be found', [':driver:' => $this->config['driver'], ':class:' => get_class($this)]);
         }
 
         // Initialize the driver
         $this->driver = new $driver($this->config['params']);
 
         // Validate the driver
-        if (! ($this->driver instanceof Cache_Driver)) {
-            throw new Cache_Exception(
-                'The :driver: driver for the :library: library must implement the :interface: interface',
-                [':driver:' => $this->config['driver'], ':library:' => get_class($this), ':interface:' => 'Cache_Driver']
-            );
+        if (!($this->driver instanceof Cache_Driver)) {
+            throw new Cache_Exception('The :driver: driver for the :library: library must implement the :interface: interface', [':driver:' => $this->config['driver'], ':library:' => get_class($this), ':interface:' => 'Cache_Driver']);
         }
 
         Kohana_Log::add('debug', 'Cache Library initialized');
@@ -97,7 +92,7 @@ class Cache_Core
             $lifetime = $this->config['lifetime'];
         }
 
-        if (! is_array($key)) {
+        if (!is_array($key)) {
             $key = [$key => $value];
         }
 
@@ -119,15 +114,15 @@ class Cache_Core
     {
         $single = false;
 
-        if (! is_array($keys)) {
-            $keys = [$keys];
+        if (!is_array($keys)) {
+            $keys   = [$keys];
             $single = true;
         }
 
         if (null !== $this->config['prefix']) {
             $keys = $this->add_prefix($keys, false);
 
-            if (! $single) {
+            if (!$single) {
                 return $this->strip_prefix($this->driver->get($keys, $single));
             }
         }
@@ -140,7 +135,7 @@ class Cache_Core
      */
     public function get_tag($tags)
     {
-        if (! is_array($tags)) {
+        if (!is_array($tags)) {
             $tags = [$tags];
         }
 
@@ -157,7 +152,7 @@ class Cache_Core
      */
     public function delete($keys)
     {
-        if (! is_array($keys)) {
+        if (!is_array($keys)) {
             $keys = [$keys];
         }
 
@@ -173,7 +168,7 @@ class Cache_Core
      */
     public function delete_tag($tags)
     {
-        if (! is_array($tags)) {
+        if (!is_array($tags)) {
             $tags = [$tags];
         }
 
@@ -201,9 +196,9 @@ class Cache_Core
 
         foreach ($array as $key => $value) {
             if ($to_key) {
-                $out[$this->config['prefix'].$key] = $value;
+                $out[$this->config['prefix'] . $key] = $value;
             } else {
-                $out[$key] = $this->config['prefix'].$value;
+                $out[$key] = $this->config['prefix'] . $value;
             }
         }
 

@@ -1,11 +1,12 @@
 <?php defined('SYSPATH') || die('No direct access allowed.');
+
 /**
  * Text helper class.
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class text_Core
 {
@@ -20,7 +21,7 @@ class text_Core
      */
     public static function limit_words($str, $limit = 100, $end_char = null)
     {
-        $limit = (int) $limit;
+        $limit    = (int)$limit;
         $end_char = (null === $end_char) ? '…' : $end_char;
 
         if ('' === trim($str)) {
@@ -31,11 +32,11 @@ class text_Core
             return $end_char;
         }
 
-        preg_match('/^\s*+(?:\S++\s*+){1,'.$limit.'}/u', $str, $matches);
+        preg_match('/^\s*+(?:\S++\s*+){1,' . $limit . '}/u', $str, $matches);
 
         // Only attach the end character if the matched string is shorter
         // than the starting string.
-        return rtrim($matches[0]).(strlen($matches[0]) === strlen($str) ? '' : $end_char);
+        return rtrim($matches[0]) . (strlen($matches[0]) === strlen($str) ? '' : $end_char);
     }
 
     /**
@@ -51,7 +52,7 @@ class text_Core
     {
         $end_char = (null === $end_char) ? '…' : $end_char;
 
-        $limit = (int) $limit;
+        $limit = (int)$limit;
 
         if ('' === trim($str) || mb_strlen($str) <= $limit) {
             return $str;
@@ -62,12 +63,12 @@ class text_Core
         }
 
         if (false == $preserve_words) {
-            return rtrim(mb_substr($str, 0, $limit)).$end_char;
+            return rtrim(mb_substr($str, 0, $limit)) . $end_char;
         }
 
-        preg_match('/^.{'.($limit - 1).'}\S*/us', $str, $matches);
+        preg_match('/^.{' . ($limit - 1) . '}\S*/us', $str, $matches);
 
-        return rtrim($matches[0]).(strlen($matches[0]) == strlen($str) ? '' : $end_char);
+        return rtrim($matches[0]) . (strlen($matches[0]) == strlen($str) ? '' : $end_char);
     }
 
     /**
@@ -110,26 +111,26 @@ class text_Core
         switch ($type) {
             case 'alnum':
                 $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            break;
+                break;
             case 'alpha':
                 $pool = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            break;
+                break;
             case 'hexdec':
                 $pool = '0123456789abcdef';
-            break;
+                break;
             case 'numeric':
                 $pool = '0123456789';
-            break;
+                break;
             case 'nozero':
                 $pool = '123456789';
-            break;
+                break;
             case 'distinct':
                 $pool = '2345679ACDEFHJKLMNPRSTUVWXYZ';
-            break;
+                break;
             default:
-                $pool = (string) $type;
-                $utf8 = ! text::is_ascii($pool);
-            break;
+                $pool = (string)$type;
+                $utf8 = !text::is_ascii($pool);
+                break;
         }
 
         // Split the pool into an array of characters
@@ -180,18 +181,18 @@ class text_Core
      */
     public static function censor($str, $badwords, $replacement = '#', $replace_partial_words = true)
     {
-        foreach ((array) $badwords as $key => $badword) {
-            $badwords[$key] = str_replace('\*', '\S*?', preg_quote((string) $badword));
+        foreach ((array)$badwords as $key => $badword) {
+            $badwords[$key] = str_replace('\*', '\S*?', preg_quote((string)$badword));
         }
 
-        $regex = '('.implode('|', $badwords).')';
+        $regex = '(' . implode('|', $badwords) . ')';
 
         if (false === $replace_partial_words) {
             // Just using \b isn't sufficient when we need to replace a badword that already contains word boundaries itself
-            $regex = '(?<=\b|\s|^)'.$regex.'(?=\b|\s|$)';
+            $regex = '(?<=\b|\s|^)' . $regex . '(?=\b|\s|$)';
         }
 
-        $regex = '!'.$regex.'!ui';
+        $regex = '!' . $regex . '!ui';
 
         if (1 == mb_strlen($replacement)) {
             $regex .= 'e';
@@ -215,7 +216,7 @@ class text_Core
         for ($i = 0, $max = strlen($word); $i < $max; ++$i) {
             foreach ($words as $w) {
                 // Once a difference is found, break out of the loops
-                if (! isset($w[$i]) || $w[$i] !== $word[$i]) {
+                if (!isset($w[$i]) || $w[$i] !== $word[$i]) {
                     break 2;
                 }
             }
@@ -258,16 +259,16 @@ class text_Core
                 $cost = substr($string1, $i - 1, 1) == substr($string2, $j - 1, 1) ? 0 : 1;
 
                 $matrix[$i][$j] = min(
-                    $matrix[$i - 1][$j] + 1,		// deletion
-                    $matrix[$i][$j - 1] + 1,		// insertion
-                    $matrix[$i - 1][$j - 1] + $cost	// substitution
+                    $matrix[$i - 1][$j] + 1,        // deletion
+                                      $matrix[$i][$j - 1] + 1,        // insertion
+                                      $matrix[$i - 1][$j - 1] + $cost    // substitution
                 );
 
-                if ($i > 1 && $j > 1 &&	(substr($string1, $i - 1, 1) == substr($string2, $j - 2, 1))
+                if ($i > 1 && $j > 1 && (substr($string1, $i - 1, 1) == substr($string2, $j - 2, 1))
                     && (substr($string1, $i - 2, 1) == substr($string2, $j - 1, 1))) {
                     $matrix[$i][$j] = min(
                         $matrix[$i][$j],
-                        $matrix[$i - 2][$j - 2] + $cost	// transposition
+                        $matrix[$i - 2][$j - 2] + $cost    // transposition
                     );
                 }
             }
@@ -285,25 +286,31 @@ class text_Core
     public static function auto_link_urls($text)
     {
         $regex = '~\\b'
-                .'((?:ht|f)tps?://)?' // protocol
-                .'(?:[-a-zA-Z0-9]{1,63}\.)+' // host name
-                .'(?:[0-9]{1,3}|aero|asia|biz|cat|com|coop|edu|gov|info|int|jobs|mil|mobi|museum|name|net|org|pro|tel|travel|ac|ad|ae|af|ag|ai|al|am|an|ao|aq|ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cu|cv|cx|cy|cz|de|dj|dk|dm|do|dz|ec|ee|eg|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|io|iq|ir|is|it|je|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mg|mh|mk|ml|mm|mn|mo|mp|mq|mr|ms|mt|mu|mv|mw|mx|my|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|om|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sk|sl|sm|sn|so|sr|st|su|sv|sy|sz|tc|td|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw)' // tlds
-                .'(?:/[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]*?)?' // path
-                .'(?:\?[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?' // query
-                .'(?:#[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?' // fragment
-                .'(?=[?.!,;:"]?(?:\s|$))~'; // punctuation and url end
+                 . '((?:ht|f)tps?://)?'
+                 // protocol
+                 . '(?:[-a-zA-Z0-9]{1,63}\.)+'
+                 // host name
+                 . '(?:[0-9]{1,3}|aero|asia|biz|cat|com|coop|edu|gov|info|int|jobs|mil|mobi|museum|name|net|org|pro|tel|travel|ac|ad|ae|af|ag|ai|al|am|an|ao|aq|ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cu|cv|cx|cy|cz|de|dj|dk|dm|do|dz|ec|ee|eg|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|io|iq|ir|is|it|je|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mg|mh|mk|ml|mm|mn|mo|mp|mq|mr|ms|mt|mu|mv|mw|mx|my|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|om|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sk|sl|sm|sn|so|sr|st|su|sv|sy|sz|tc|td|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw)'
+                 // tlds
+                 . '(?:/[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]*?)?'
+                 // path
+                 . '(?:\?[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?'
+                 // query
+                 . '(?:#[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?'
+                 // fragment
+                 . '(?=[?.!,;:"]?(?:\s|$))~'; // punctuation and url end
 
-        $result = '';
+        $result   = '';
         $position = 0;
 
         while (preg_match($regex, $text, $match, PREG_OFFSET_CAPTURE, $position)) {
             list($url, $url_pos) = $match[0];
 
             // Add the text before the url
-            $result  .= substr($text, $position, $url_pos - $position);
+            $result .= substr($text, $position, $url_pos - $position);
 
             // Default to http://
-            $full_url = empty($match[1][0]) ? 'http://'.$url : $url;
+            $full_url = empty($match[1][0]) ? 'http://' . $url : $url;
 
             // Add the hyperlink.
             $result .= html::anchor($full_url, $url);
@@ -312,7 +319,7 @@ class text_Core
             $position = $url_pos + strlen($url);
         }
 
-        return $result.substr($text, $position);
+        return $result . substr($text, $position);
     }
 
     /**
@@ -363,19 +370,19 @@ class text_Core
             $no_p = '(?:p|div|h[1-6r]|ul|ol|li|blockquote|d[dlt]|pre|t[dhr]|t(?:able|body|foot|head)|c(?:aption|olgroup)|form|s(?:elect|tyle)|a(?:ddress|rea)|ma(?:p|th))';
 
             // Put at least two linebreaks before and after $no_p elements
-            $str = preg_replace('~^<'.$no_p.'[^>]*+>~im', "\n$0", $str);
-            $str = preg_replace('~</'.$no_p.'\s*+>$~im', "$0\n", $str);
+            $str = preg_replace('~^<' . $no_p . '[^>]*+>~im', "\n$0", $str);
+            $str = preg_replace('~</' . $no_p . '\s*+>$~im', "$0\n", $str);
         }
 
         // Do the <p> magic!
-        $str = '<p>'.trim($str).'</p>';
+        $str = '<p>' . trim($str) . '</p>';
         $str = preg_replace('~\n{2,}~', "</p>\n\n<p>", $str);
 
         // The following regexes only need to be executed if the string contains html
         if (false !== $html_found) {
             // Remove p tags around $no_p elements
-            $str = preg_replace('~<p>(?=</?'.$no_p.'[^>]*+>)~i', '', $str);
-            $str = preg_replace('~(</?'.$no_p.'[^>]*+>)</p>~i', '$1', $str);
+            $str = preg_replace('~<p>(?=</?' . $no_p . '[^>]*+>)~i', '', $str);
+            $str = preg_replace('~(</?' . $no_p . '[^>]*+>)</p>~i', '$1', $str);
         }
 
         // Convert single linebreaks to <br />
@@ -401,21 +408,20 @@ class text_Core
     public static function bytes($bytes, $force_unit = null, $format = null, $si = true)
     {
         // Format string
-        $format = (null === $format) ? '%01.2f %s' : (string) $format;
+        $format = (null === $format) ? '%01.2f %s' : (string)$format;
 
         // IEC prefixes (binary)
         if (false == $si || false !== strpos($force_unit, 'i')) {
             $units = [__('B'), __('KiB'), __('MiB'), __('GiB'), __('TiB'), __('PiB')];
             $mod   = 1024;
-        }
-        // SI prefixes (decimal)
+        } // SI prefixes (decimal)
         else {
             $units = [__('B'), __('kB'), __('MB'), __('GB'), __('TB'), __('PB')];
             $mod   = 1000;
         }
 
         // Determine unit to use
-        if (false === ($power = array_search((string) $force_unit, $units))) {
+        if (false === ($power = array_search((string)$force_unit, $units))) {
             $power = ($bytes > 0) ? floor(log($bytes, $mod)) : 0;
         }
 
@@ -431,11 +437,11 @@ class text_Core
      */
     public static function widont($str)
     {
-        $str = rtrim($str);
+        $str   = rtrim($str);
         $space = strrpos($str, ' ');
 
         if (false !== $space) {
-            $str = substr($str, 0, $space).'&nbsp;'.substr($str, $space + 1);
+            $str = substr($str, 0, $space) . '&nbsp;' . substr($str, $space + 1);
         }
 
         return $str;
@@ -445,26 +451,26 @@ class text_Core
      * Tests whether a string contains only 7bit ASCII bytes. This is used to
      * determine when to use native functions or UTF-8 functions.
      *
-     * @see http://sourceforge.net/projects/phputf8/
+     * @see            http://sourceforge.net/projects/phputf8/
      * @copyright  (c) 2007-2009 Kohana Team
      * @copyright  (c) 2005 Harry Fuecks
-     * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt
+     * @license        http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt
      *
      * @param   string  string to check
      * @return  bool
      */
     public static function is_ascii($str)
     {
-        return is_string($str) && ! preg_match('/[^\x00-\x7F]/S', $str);
+        return is_string($str) && !preg_match('/[^\x00-\x7F]/S', $str);
     }
 
     /**
      * Strips out device control codes in the ASCII range.
      *
-     * @see http://sourceforge.net/projects/phputf8/
+     * @see            http://sourceforge.net/projects/phputf8/
      * @copyright  (c) 2007-2009 Kohana Team
      * @copyright  (c) 2005 Harry Fuecks
-     * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt
+     * @license        http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt
      *
      * @param   string  string to clean
      * @return  string
@@ -477,10 +483,10 @@ class text_Core
     /**
      * Strips out all non-7bit ASCII bytes.
      *
-     * @see http://sourceforge.net/projects/phputf8/
+     * @see            http://sourceforge.net/projects/phputf8/
      * @copyright  (c) 2007-2009 Kohana Team
      * @copyright  (c) 2005 Harry Fuecks
-     * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt
+     * @license        http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt
      *
      * @param   string  string to clean
      * @return  string
@@ -493,11 +499,11 @@ class text_Core
     /**
      * Replaces special/accented UTF-8 characters by ASCII-7 'equivalents'.
      *
-     * @author  Andreas Gohr <andi@splitbrain.org>
-     * @see http://sourceforge.net/projects/phputf8/
+     * @author         Andreas Gohr <andi@splitbrain.org>
+     * @see            http://sourceforge.net/projects/phputf8/
      * @copyright  (c) 2007-2009 Kohana Team
      * @copyright  (c) 2005 Harry Fuecks
-     * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt
+     * @license        http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt
      *
      * @param   string   string to transliterate
      * @param   integer  -1 lowercase only, +1 uppercase only, 0 both cases
@@ -511,57 +517,227 @@ class text_Core
         if ($case <= 0) {
             if (null === $UTF8_LOWER_ACCENTS) {
                 $UTF8_LOWER_ACCENTS = [
-                    'à' => 'a',  'ô' => 'o',  'ď' => 'd',  'ḟ' => 'f',  'ë' => 'e',  'š' => 's',  'ơ' => 'o',
-                    'ß' => 'ss', 'ă' => 'a',  'ř' => 'r',  'ț' => 't',  'ň' => 'n',  'ā' => 'a',  'ķ' => 'k',
-                    'ŝ' => 's',  'ỳ' => 'y',  'ņ' => 'n',  'ĺ' => 'l',  'ħ' => 'h',  'ṗ' => 'p',  'ó' => 'o',
-                    'ú' => 'u',  'ě' => 'e',  'é' => 'e',  'ç' => 'c',  'ẁ' => 'w',  'ċ' => 'c',  'õ' => 'o',
-                    'ṡ' => 's',  'ø' => 'o',  'ģ' => 'g',  'ŧ' => 't',  'ș' => 's',  'ė' => 'e',  'ĉ' => 'c',
-                    'ś' => 's',  'î' => 'i',  'ű' => 'u',  'ć' => 'c',  'ę' => 'e',  'ŵ' => 'w',  'ṫ' => 't',
-                    'ū' => 'u',  'č' => 'c',  'ö' => 'o',  'è' => 'e',  'ŷ' => 'y',  'ą' => 'a',  'ł' => 'l',
-                    'ų' => 'u',  'ů' => 'u',  'ş' => 's',  'ğ' => 'g',  'ļ' => 'l',  'ƒ' => 'f',  'ž' => 'z',
-                    'ẃ' => 'w',  'ḃ' => 'b',  'å' => 'a',  'ì' => 'i',  'ï' => 'i',  'ḋ' => 'd',  'ť' => 't',
-                    'ŗ' => 'r',  'ä' => 'a',  'í' => 'i',  'ŕ' => 'r',  'ê' => 'e',  'ü' => 'u',  'ò' => 'o',
-                    'ē' => 'e',  'ñ' => 'n',  'ń' => 'n',  'ĥ' => 'h',  'ĝ' => 'g',  'đ' => 'd',  'ĵ' => 'j',
-                    'ÿ' => 'y',  'ũ' => 'u',  'ŭ' => 'u',  'ư' => 'u',  'ţ' => 't',  'ý' => 'y',  'ő' => 'o',
-                    'â' => 'a',  'ľ' => 'l',  'ẅ' => 'w',  'ż' => 'z',  'ī' => 'i',  'ã' => 'a',  'ġ' => 'g',
-                    'ṁ' => 'm',  'ō' => 'o',  'ĩ' => 'i',  'ù' => 'u',  'į' => 'i',  'ź' => 'z',  'á' => 'a',
-                    'û' => 'u',  'þ' => 'th', 'ð' => 'dh', 'æ' => 'ae', 'µ' => 'u',  'ĕ' => 'e',  'ı' => 'i',
+                    'à' => 'a',
+                    'ô' => 'o',
+                    'ď' => 'd',
+                    'ḟ' => 'f',
+                    'ë' => 'e',
+                    'š' => 's',
+                    'ơ' => 'o',
+                    'ß' => 'ss',
+                    'ă' => 'a',
+                    'ř' => 'r',
+                    'ț' => 't',
+                    'ň' => 'n',
+                    'ā' => 'a',
+                    'ķ' => 'k',
+                    'ŝ' => 's',
+                    'ỳ' => 'y',
+                    'ņ' => 'n',
+                    'ĺ' => 'l',
+                    'ħ' => 'h',
+                    'ṗ' => 'p',
+                    'ó' => 'o',
+                    'ú' => 'u',
+                    'ě' => 'e',
+                    'é' => 'e',
+                    'ç' => 'c',
+                    'ẁ' => 'w',
+                    'ċ' => 'c',
+                    'õ' => 'o',
+                    'ṡ' => 's',
+                    'ø' => 'o',
+                    'ģ' => 'g',
+                    'ŧ' => 't',
+                    'ș' => 's',
+                    'ė' => 'e',
+                    'ĉ' => 'c',
+                    'ś' => 's',
+                    'î' => 'i',
+                    'ű' => 'u',
+                    'ć' => 'c',
+                    'ę' => 'e',
+                    'ŵ' => 'w',
+                    'ṫ' => 't',
+                    'ū' => 'u',
+                    'č' => 'c',
+                    'ö' => 'o',
+                    'è' => 'e',
+                    'ŷ' => 'y',
+                    'ą' => 'a',
+                    'ł' => 'l',
+                    'ų' => 'u',
+                    'ů' => 'u',
+                    'ş' => 's',
+                    'ğ' => 'g',
+                    'ļ' => 'l',
+                    'ƒ' => 'f',
+                    'ž' => 'z',
+                    'ẃ' => 'w',
+                    'ḃ' => 'b',
+                    'å' => 'a',
+                    'ì' => 'i',
+                    'ï' => 'i',
+                    'ḋ' => 'd',
+                    'ť' => 't',
+                    'ŗ' => 'r',
+                    'ä' => 'a',
+                    'í' => 'i',
+                    'ŕ' => 'r',
+                    'ê' => 'e',
+                    'ü' => 'u',
+                    'ò' => 'o',
+                    'ē' => 'e',
+                    'ñ' => 'n',
+                    'ń' => 'n',
+                    'ĥ' => 'h',
+                    'ĝ' => 'g',
+                    'đ' => 'd',
+                    'ĵ' => 'j',
+                    'ÿ' => 'y',
+                    'ũ' => 'u',
+                    'ŭ' => 'u',
+                    'ư' => 'u',
+                    'ţ' => 't',
+                    'ý' => 'y',
+                    'ő' => 'o',
+                    'â' => 'a',
+                    'ľ' => 'l',
+                    'ẅ' => 'w',
+                    'ż' => 'z',
+                    'ī' => 'i',
+                    'ã' => 'a',
+                    'ġ' => 'g',
+                    'ṁ' => 'm',
+                    'ō' => 'o',
+                    'ĩ' => 'i',
+                    'ù' => 'u',
+                    'į' => 'i',
+                    'ź' => 'z',
+                    'á' => 'a',
+                    'û' => 'u',
+                    'þ' => 'th',
+                    'ð' => 'dh',
+                    'æ' => 'ae',
+                    'µ' => 'u',
+                    'ĕ' => 'e',
+                    'ı' => 'i',
                 ];
             }
 
-            $str = str_replace(
-                array_keys($UTF8_LOWER_ACCENTS),
-                array_values($UTF8_LOWER_ACCENTS),
-                $str
-            );
+            $str = str_replace(array_keys($UTF8_LOWER_ACCENTS), array_values($UTF8_LOWER_ACCENTS), $str);
         }
 
         if ($case >= 0) {
             if (null === $UTF8_UPPER_ACCENTS) {
                 $UTF8_UPPER_ACCENTS = [
-                    'À' => 'A',  'Ô' => 'O',  'Ď' => 'D',  'Ḟ' => 'F',  'Ë' => 'E',  'Š' => 'S',  'Ơ' => 'O',
-                    'Ă' => 'A',  'Ř' => 'R',  'Ț' => 'T',  'Ň' => 'N',  'Ā' => 'A',  'Ķ' => 'K',  'Ĕ' => 'E',
-                    'Ŝ' => 'S',  'Ỳ' => 'Y',  'Ņ' => 'N',  'Ĺ' => 'L',  'Ħ' => 'H',  'Ṗ' => 'P',  'Ó' => 'O',
-                    'Ú' => 'U',  'Ě' => 'E',  'É' => 'E',  'Ç' => 'C',  'Ẁ' => 'W',  'Ċ' => 'C',  'Õ' => 'O',
-                    'Ṡ' => 'S',  'Ø' => 'O',  'Ģ' => 'G',  'Ŧ' => 'T',  'Ș' => 'S',  'Ė' => 'E',  'Ĉ' => 'C',
-                    'Ś' => 'S',  'Î' => 'I',  'Ű' => 'U',  'Ć' => 'C',  'Ę' => 'E',  'Ŵ' => 'W',  'Ṫ' => 'T',
-                    'Ū' => 'U',  'Č' => 'C',  'Ö' => 'O',  'È' => 'E',  'Ŷ' => 'Y',  'Ą' => 'A',  'Ł' => 'L',
-                    'Ų' => 'U',  'Ů' => 'U',  'Ş' => 'S',  'Ğ' => 'G',  'Ļ' => 'L',  'Ƒ' => 'F',  'Ž' => 'Z',
-                    'Ẃ' => 'W',  'Ḃ' => 'B',  'Å' => 'A',  'Ì' => 'I',  'Ï' => 'I',  'Ḋ' => 'D',  'Ť' => 'T',
-                    'Ŗ' => 'R',  'Ä' => 'A',  'Í' => 'I',  'Ŕ' => 'R',  'Ê' => 'E',  'Ü' => 'U',  'Ò' => 'O',
-                    'Ē' => 'E',  'Ñ' => 'N',  'Ń' => 'N',  'Ĥ' => 'H',  'Ĝ' => 'G',  'Đ' => 'D',  'Ĵ' => 'J',
-                    'Ÿ' => 'Y',  'Ũ' => 'U',  'Ŭ' => 'U',  'Ư' => 'U',  'Ţ' => 'T',  'Ý' => 'Y',  'Ő' => 'O',
-                    'Â' => 'A',  'Ľ' => 'L',  'Ẅ' => 'W',  'Ż' => 'Z',  'Ī' => 'I',  'Ã' => 'A',  'Ġ' => 'G',
-                    'Ṁ' => 'M',  'Ō' => 'O',  'Ĩ' => 'I',  'Ù' => 'U',  'Į' => 'I',  'Ź' => 'Z',  'Á' => 'A',
-                    'Û' => 'U',  'Þ' => 'Th', 'Ð' => 'Dh', 'Æ' => 'Ae', 'İ' => 'I',
+                    'À' => 'A',
+                    'Ô' => 'O',
+                    'Ď' => 'D',
+                    'Ḟ' => 'F',
+                    'Ë' => 'E',
+                    'Š' => 'S',
+                    'Ơ' => 'O',
+                    'Ă' => 'A',
+                    'Ř' => 'R',
+                    'Ț' => 'T',
+                    'Ň' => 'N',
+                    'Ā' => 'A',
+                    'Ķ' => 'K',
+                    'Ĕ' => 'E',
+                    'Ŝ' => 'S',
+                    'Ỳ' => 'Y',
+                    'Ņ' => 'N',
+                    'Ĺ' => 'L',
+                    'Ħ' => 'H',
+                    'Ṗ' => 'P',
+                    'Ó' => 'O',
+                    'Ú' => 'U',
+                    'Ě' => 'E',
+                    'É' => 'E',
+                    'Ç' => 'C',
+                    'Ẁ' => 'W',
+                    'Ċ' => 'C',
+                    'Õ' => 'O',
+                    'Ṡ' => 'S',
+                    'Ø' => 'O',
+                    'Ģ' => 'G',
+                    'Ŧ' => 'T',
+                    'Ș' => 'S',
+                    'Ė' => 'E',
+                    'Ĉ' => 'C',
+                    'Ś' => 'S',
+                    'Î' => 'I',
+                    'Ű' => 'U',
+                    'Ć' => 'C',
+                    'Ę' => 'E',
+                    'Ŵ' => 'W',
+                    'Ṫ' => 'T',
+                    'Ū' => 'U',
+                    'Č' => 'C',
+                    'Ö' => 'O',
+                    'È' => 'E',
+                    'Ŷ' => 'Y',
+                    'Ą' => 'A',
+                    'Ł' => 'L',
+                    'Ų' => 'U',
+                    'Ů' => 'U',
+                    'Ş' => 'S',
+                    'Ğ' => 'G',
+                    'Ļ' => 'L',
+                    'Ƒ' => 'F',
+                    'Ž' => 'Z',
+                    'Ẃ' => 'W',
+                    'Ḃ' => 'B',
+                    'Å' => 'A',
+                    'Ì' => 'I',
+                    'Ï' => 'I',
+                    'Ḋ' => 'D',
+                    'Ť' => 'T',
+                    'Ŗ' => 'R',
+                    'Ä' => 'A',
+                    'Í' => 'I',
+                    'Ŕ' => 'R',
+                    'Ê' => 'E',
+                    'Ü' => 'U',
+                    'Ò' => 'O',
+                    'Ē' => 'E',
+                    'Ñ' => 'N',
+                    'Ń' => 'N',
+                    'Ĥ' => 'H',
+                    'Ĝ' => 'G',
+                    'Đ' => 'D',
+                    'Ĵ' => 'J',
+                    'Ÿ' => 'Y',
+                    'Ũ' => 'U',
+                    'Ŭ' => 'U',
+                    'Ư' => 'U',
+                    'Ţ' => 'T',
+                    'Ý' => 'Y',
+                    'Ő' => 'O',
+                    'Â' => 'A',
+                    'Ľ' => 'L',
+                    'Ẅ' => 'W',
+                    'Ż' => 'Z',
+                    'Ī' => 'I',
+                    'Ã' => 'A',
+                    'Ġ' => 'G',
+                    'Ṁ' => 'M',
+                    'Ō' => 'O',
+                    'Ĩ' => 'I',
+                    'Ù' => 'U',
+                    'Į' => 'I',
+                    'Ź' => 'Z',
+                    'Á' => 'A',
+                    'Û' => 'U',
+                    'Þ' => 'Th',
+                    'Ð' => 'Dh',
+                    'Æ' => 'Ae',
+                    'İ' => 'I',
                 ];
             }
 
-            $str = str_replace(
-                array_keys($UTF8_UPPER_ACCENTS),
-                array_values($UTF8_UPPER_ACCENTS),
-                $str
-            );
+            $str = str_replace(array_keys($UTF8_UPPER_ACCENTS), array_values($UTF8_UPPER_ACCENTS), $str);
         }
 
         return $str;

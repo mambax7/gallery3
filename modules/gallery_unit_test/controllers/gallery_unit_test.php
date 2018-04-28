@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -36,9 +37,9 @@ class Gallery_Unit_Test_Controller extends Controller
         $_SERVER['SCRIPT_FILENAME'] = 'index.php';
         $_SERVER['SCRIPT_NAME']     = './index.php';
 
-        $config = Kohana_Config::instance();
+        $config          = Kohana_Config::instance();
         $original_config = DOCROOT . 'var/database.php';
-        $test_config = VARPATH . 'database.php';
+        $test_config     = VARPATH . 'database.php';
         if (!file_exists($original_config)) {
             print "Please copy kohana/config/database.php to $original_config.\n";
             return;
@@ -47,7 +48,7 @@ class Gallery_Unit_Test_Controller extends Controller
             $db_config = Kohana::config('database');
             if (empty($db_config['unit_test'])) {
                 $default = $db_config['default'];
-                $conn = $default['connection'];
+                $conn    = $default['connection'];
                 $config->set('database.unit_test.benchmark', $default['benchmark']);
                 $config->set('database.unit_test.persistent', $default['persistent']);
                 $config->set('database.unit_test.connection.type', $conn['type']);
@@ -65,8 +66,7 @@ class Gallery_Unit_Test_Controller extends Controller
                 $db_config = Kohana::config('database');
             }
 
-            if ($db_config['default']['connection']['database'] ==
-          $db_config['unit_test']['connection']['database']) {
+            if ($db_config['default']['connection']['database'] == $db_config['unit_test']['connection']['database']) {
                 print "Don't use the default database for your unit tests or you'll lose all your data.\n";
                 return;
             }
@@ -100,8 +100,8 @@ class Gallery_Unit_Test_Controller extends Controller
             $active_modules = module::$active;
 
             // Reset our caches
-            module::$modules = [];
-            module::$active = [];
+            module::$modules   = [];
+            module::$active    = [];
             module::$var_cache = [];
             $db->clear_cache();
 
@@ -133,7 +133,7 @@ class Gallery_Unit_Test_Controller extends Controller
             // Trigger late-binding install actions (defined in gallery_event::user_login)
             graphics::choose_default_toolkit();
 
-            $filter = count($_SERVER['argv']) > 2 ? $_SERVER['argv'][2] : null;
+            $filter    = count($_SERVER['argv']) > 2 ? $_SERVER['argv'][2] : null;
             $unit_test = new Unit_Test($modules, $filter);
             print $unit_test;
         } catch (ORM_Validation_Exception $e) {

@@ -1,4 +1,5 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Gallery - a web based photo album viewer and editor
  * Copyright (C) 2000-2013 Bharat Mediratta
@@ -92,7 +93,7 @@ class comment_event_Core
 
     public static function show_user_profile($data)
     {
-        $view = new View('user_profile_comments.html');
+        $view           = new View('user_profile_comments.html');
         $view->comments = ORM::factory('comment')
       ->order_by('created', 'DESC')
       ->where('state', '=', 'published')

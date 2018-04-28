@@ -1,13 +1,14 @@
 <?php defined('SYSPATH') || die('No direct script access.');
+
 /**
  * Database query wrapper.
  *
  * $Id: Database_Query.php 4679 2009-11-10 01:45:52Z isaiah $
  *
- * @package    Kohana
- * @author     Kohana Team
+ * @package        Kohana
+ * @author         Kohana Team
  * @copyright  (c) 2008-2009 Kohana Team
- * @license    http://kohanaphp.com/license
+ * @license        http://kohanaphp.com/license
  */
 class Database_Query_Core
 {
@@ -49,7 +50,7 @@ class Database_Query_Core
 
     public function execute($db = 'default')
     {
-        if (! is_object($db)) {
+        if (!is_object($db)) {
             // Get the database instance
             $db = Database::instance($db);
         }
@@ -57,7 +58,7 @@ class Database_Query_Core
         // Import the SQL locally
         $sql = $this->sql;
 
-        if (! empty($this->params)) {
+        if (!empty($this->params)) {
             // Quote all of the values
             $params = array_map([$db, 'quote'], $this->params);
 

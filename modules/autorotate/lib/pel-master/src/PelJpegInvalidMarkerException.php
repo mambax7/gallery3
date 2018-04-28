@@ -21,6 +21,7 @@
  * Free Software Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA 02110-1301 USA
  */
+
 namespace lsolesen\pel;
 
 /**
@@ -29,9 +30,9 @@ namespace lsolesen\pel;
  * This exception is thrown when PEL expects to find a {@link
  * PelJpegMarker} and instead finds a byte that isn't a known marker.
  *
- * @author Martin Geisler <mgeisler@users.sourceforge.net>
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL)
- * @package PEL
+ * @author     Martin Geisler <mgeisler@users.sourceforge.net>
+ * @license    http://www.gnu.org/licenses/gpl.html GNU General Public License (GPL)
+ * @package    PEL
  * @subpackage Exception
  */
 class PelJpegInvalidMarkerException extends PelException
