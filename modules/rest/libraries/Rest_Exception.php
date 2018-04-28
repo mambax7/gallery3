@@ -19,9 +19,9 @@
  */
 class Rest_Exception_Core extends Kohana_Exception
 {
-    public $response = array();
+    public $response = [];
 
-    public function __construct($message, $code, $response=array())
+    public function __construct($message, $code, $response= [])
     {
         parent::__construct($message, null, $code);
         $this->response = $response;

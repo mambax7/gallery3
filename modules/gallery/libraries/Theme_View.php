@@ -44,17 +44,18 @@ class Theme_View_Core extends Gallery_View
         }
         $this->item = null;
         $this->tag = null;
-        $this->set_global(array(
+        $this->set_global([
                               'theme'        => $this,
                               'theme_info'   => theme::get_info($this->theme_name),
                               'user'         => identity::active_user(),
                               'page_type'    => $page_type,
                               'page_subtype' => $page_subtype,
-                              'page_title'   => null));
+                              'page_title'   => null
+                          ]);
 
         if (module::get_var('gallery', 'maintenance_mode', 0)) {
             if (identity::active_user()->admin) {
-                message::warning(t('This site is currently in maintenance mode.  Visit the <a href="%maintenance_url">maintenance page</a>', array('maintenance_url' => url::site('admin/maintenance'))));
+                message::warning(t('This site is currently in maintenance mode.  Visit the <a href="%maintenance_url">maintenance page</a>', ['maintenance_url' => url::site('admin/maintenance')]));
             } else {
                 message::warning(t('This site is currently in maintenance mode.'));
             }
@@ -75,7 +76,7 @@ class Theme_View_Core extends Gallery_View
      */
     public function thumb_proportion($item=null, $minimum_size=0, $dimension=null)
     {
-        if (!in_array($dimension, array('height', 'width'))) {
+        if (!in_array($dimension, ['height', 'width'])) {
             $dimension = null;
         }
 
@@ -83,10 +84,10 @@ class Theme_View_Core extends Gallery_View
         // interested in the size of the thumbnails in this album, not the thumbnail of the
         // album itself.
         if ($item && $item->is_album() && $item->children_count()) {
-            $orderBy = (null === $dimension) ? array()
-                                       : array('thumb_' . $dimension => 'desc');
+            $orderBy = (null === $dimension) ? []
+                                       : ['thumb_' . $dimension => 'desc'];
 
-            $item = $item->children(1, null, array(), $orderBy)->current();
+            $item = $item->children(1, null, [], $orderBy)->current();
         }
 
         // By default we have a globally fixed thumbnail size In core code, we just return a fixed
@@ -110,7 +111,7 @@ class Theme_View_Core extends Gallery_View
     {
         return call_user_func_array(
       $this->siblings_callback[0],
-      array_merge($this->siblings_callback[1], array($limit, $offset))
+      array_merge($this->siblings_callback[1], [$limit, $offset])
     );
     }
 
@@ -251,7 +252,7 @@ class Theme_View_Core extends Gallery_View
     case 'thumb_bottom':
     case 'thumb_info':
     case 'thumb_top':
-      $blocks = array();
+      $blocks = [];
       if (method_exists('gallery_theme', $function)) {
           switch (count($args)) {
         case 0:
@@ -265,8 +266,8 @@ class Theme_View_Core extends Gallery_View
           break;
         default:
           $blocks[] = call_user_func_array(
-            array('gallery_theme', $function),
-            array_merge(array($this), $args)
+              ['gallery_theme', $function],
+              array_merge([$this], $args)
           );
         }
       }
@@ -278,8 +279,8 @@ class Theme_View_Core extends Gallery_View
           $helper_class = "{$module->name}_theme";
           if (class_exists($helper_class) && method_exists($helper_class, $function)) {
               $blocks[] = call_user_func_array(
-            array($helper_class, $function),
-            array_merge(array($this), $args)
+                  [$helper_class, $function],
+                  array_merge([$this], $args)
           );
           }
       }
@@ -287,8 +288,8 @@ class Theme_View_Core extends Gallery_View
       $helper_class = theme::$site_theme_name . '_theme';
       if (class_exists($helper_class) && method_exists($helper_class, $function)) {
           $blocks[] = call_user_func_array(
-          array($helper_class, $function),
-          array_merge(array($this), $args)
+              [$helper_class, $function],
+              array_merge([$this], $args)
         );
       }
 

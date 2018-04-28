@@ -44,7 +44,7 @@ class Cache_Xcache_Driver extends Cache_Driver
 
     public function get($keys, $single = false)
     {
-        $items = array();
+        $items = [];
 
         foreach ($keys as $key) {
             if (xcache_isset($key)) {
@@ -57,7 +57,7 @@ class Cache_Xcache_Driver extends Cache_Driver
         if ($single) {
             return ($items === false or count($items) > 0) ? current($items) : null;
         } else {
-            return ($items === false) ? array() : $items;
+            return ($items === false) ? [] : $items;
         }
     }
 
@@ -116,9 +116,9 @@ class Cache_Xcache_Driver extends Cache_Driver
 
     private function auth($reverse = false)
     {
-        static $backup = array();
+        static $backup = [];
 
-        $keys = array('PHP_AUTH_USER', 'PHP_AUTH_PW');
+        $keys = ['PHP_AUTH_USER', 'PHP_AUTH_PW'];
 
         foreach ($keys as $key) {
             if ($reverse) {

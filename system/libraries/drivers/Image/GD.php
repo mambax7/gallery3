@@ -64,12 +64,12 @@ class Image_GD_Driver extends Image_Driver
 
         // Make sure the image type is supported for import
         if (empty($create) or ! function_exists($create)) {
-            throw new Kohana_Exception('The specified image, :type:, is not an allowed image type.', array(':type:' => $image['file']));
+            throw new Kohana_Exception('The specified image, :type:, is not an allowed image type.', [':type:' => $image['file']]);
         }
 
         // Make sure the image type is supported for saving
         if (empty($save) or ! function_exists($save)) {
-            throw new Kohana_Exception('The specified image, :type:, is not an allowed image type.', array(':type:' => $dir.$file));
+            throw new Kohana_Exception('The specified image, :type:, is not an allowed image type.', [':type:' => $dir . $file]);
         }
 
         // Load the image
@@ -292,18 +292,18 @@ class Image_GD_Driver extends Image_Driver
     {
         // Make sure that the sharpening function is available
         if (! function_exists('imageconvolution')) {
-            throw new Kohana_Exception('Your configured driver does not support the :method: image transformation.', array(':method:' => __FUNCTION__));
+            throw new Kohana_Exception('Your configured driver does not support the :method: image transformation.', [':method:' => __FUNCTION__]);
         }
 
         // Amount should be in the range of 18-10
         $amount = round(abs(-18 + ($amount * 0.08)), 2);
 
         // Gaussian blur matrix
-        $matrix = array(
-            array(-1,   -1,    -1),
-            array(-1, $amount, -1),
-            array(-1,   -1,    -1),
-        );
+        $matrix = [
+            [-1, -1, -1],
+            [-1, $amount, -1],
+            [-1, -1, -1],
+        ];
 
         // Perform the sharpen
         return imageconvolution($this->tmp_image, $matrix, $amount - 8, 0);
@@ -361,7 +361,7 @@ class Image_GD_Driver extends Image_Driver
 
     protected function properties()
     {
-        return array(imagesx($this->tmp_image), imagesy($this->tmp_image));
+        return [imagesx($this->tmp_image), imagesy($this->tmp_image)];
     }
 
     /**

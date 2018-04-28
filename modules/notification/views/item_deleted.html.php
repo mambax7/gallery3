@@ -10,7 +10,7 @@
         <td colspan="2">
           <?= t(
               'To view the changed album %title use the link below.',
-              array('title' => html::purify($item->parent()->title))
+              ['title' => html::purify($item->parent()->title)]
 ) ?>
         </td>
       </tr>

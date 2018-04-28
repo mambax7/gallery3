@@ -24,10 +24,10 @@ class tag_rss_Core
     {
         if ($tag) {
             $feeds["tag/tag/{$tag->id}"] =
-        t('Tag feed for %tag_name', array('tag_name' => $tag->name));
+        t('Tag feed for %tag_name', ['tag_name' => $tag->name]);
             return $feeds;
         }
-        return array();
+        return [];
     }
 
     public static function feed($feed_id, $offset, $limit, $id)
@@ -43,9 +43,9 @@ class tag_rss_Core
             $feed->max_pages = ceil($tag->count / $limit);
             $feed->title = t(
                 '%site_title - %tag_name',
-                array('site_title' => item::root()->title, 'tag_name' => $tag->name)
+                ['site_title' => item::root()->title, 'tag_name' => $tag->name]
       );
-            $feed->description = t('Photos related to %tag_name', array('tag_name' => $tag->name));
+            $feed->description = t('Photos related to %tag_name', ['tag_name' => $tag->name]);
 
             return $feed;
         }

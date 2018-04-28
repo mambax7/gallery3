@@ -26,7 +26,7 @@
  *        currently configured locale.
  * @return String The translated message string.
  */
-function t($message, $options=array())
+function t($message, $options= [])
 {
     return Gallery_I18n::instance()->translate($message, $options);
 }
@@ -43,20 +43,20 @@ function t($message, $options=array())
  *        currently configured locale.
  * @return String The translated message string.
  */
-function t2($singular, $plural, $count, $options=array())
+function t2($singular, $plural, $count, $options= [])
 {
     return Gallery_I18n::instance()->translate(
-      array('one' => $singular, 'other' => $plural),
-                                             array_merge($options, array('count' => $count))
+        ['one' => $singular, 'other' => $plural],
+        array_merge($options, ['count' => $count])
   );
 }
 
 class Gallery_I18n_Core
 {
     private static $_instance;
-    private $_config = array();
-    private $_call_log = array();
-    private $_cache = array();
+    private $_config = [];
+    private $_call_log = [];
+    private $_cache = [];
 
     private function __construct($config)
     {
@@ -85,14 +85,15 @@ class Gallery_I18n_Core
             list($php_locale, $unused) = explode('.', $php_locale . '.');
             if ($php_locale != $locale) {
                 // Attempt to set PHP's locale as well (for number formatting, collation, etc.)
-                $locale_prefs = array($locale);
+                $locale_prefs = [$locale];
                 // Try appending some character set names; some systems (like FreeBSD) need this.
                 // Some systems require a format with hyphen (eg. Gentoo) and others without (eg. FreeBSD).
-                $charsets = array('utf8', 'UTF-8', 'UTF8', 'ISO8859-1', 'ISO-8859-1');
+                $charsets = ['utf8', 'UTF-8', 'UTF8', 'ISO8859-1', 'ISO-8859-1'];
                 if (substr($locale, 0, 2) != 'en') {
-                    $charsets = array_merge($charsets, array(
+                    $charsets = array_merge($charsets, [
               'EUC', 'Big5', 'euc', 'ISO8859-2', 'ISO8859-5', 'ISO8859-7',
-              'ISO8859-9', 'ISO-8859-2', 'ISO-8859-5', 'ISO-8859-7', 'ISO-8859-9'));
+              'ISO8859-9', 'ISO-8859-2', 'ISO-8859-5', 'ISO-8859-7', 'ISO-8859-9'
+                    ]);
                 }
                 foreach ($charsets as $charset) {
                     $locale_prefs[] = $locale . '.' . $charset;
@@ -115,7 +116,7 @@ class Gallery_I18n_Core
         if (empty($is_rtl)) {
             $locale or $locale = $this->locale();
             list($language, $territory) = explode('_', $locale . '_');
-            $is_rtl = in_array($language, array('he', 'fa', 'ar'));
+            $is_rtl = in_array($language, ['he', 'fa', 'ar']);
         }
         return $is_rtl;
     }
@@ -135,7 +136,7 @@ class Gallery_I18n_Core
      *        the latter to override the currently configured locale.
      * @return String The translated message string.
      */
-    public function translate($message, $options=array())
+    public function translate($message, $options= [])
     {
         $locale = empty($options['locale']) ? $this->_config['default_locale'] : $options['locale'];
         $count = isset($options['count']) ? $options['count'] : null;
@@ -179,7 +180,7 @@ class Gallery_I18n_Core
         $cache = Cache::instance();
         $translations = $cache->get($cache_key);
         if (!isset($translations) || !is_array($translations)) {
-            $translations = array();
+            $translations = [];
             foreach (db::build()
                ->select('key', 'translation')
                ->from('incoming_translations')
@@ -197,7 +198,7 @@ class Gallery_I18n_Core
                 $translations[$row->key] = unserialize($row->translation);
             }
 
-            $cache->set($cache_key, $translations, array('translation'), 0);
+            $cache->set($cache_key, $translations, ['translation'], 0);
         }
         return $translations;
     }
@@ -245,8 +246,8 @@ class Gallery_I18n_Core
         // Replace x_y before replacing x.
         krsort($key_values, SORT_STRING);
 
-        $keys = array();
-        $values = array();
+        $keys = [];
+        $values = [];
         foreach ($key_values as $key => $value) {
             $keys[] = "%$key";
             $values[] = new SafeString($value);
@@ -278,7 +279,7 @@ class Gallery_I18n_Core
     private function log($message, $options)
     {
         $key = self::get_message_key($message);
-        isset($this->_call_log[$key]) or $this->_call_log[$key] = array($message, $options);
+        isset($this->_call_log[$key]) or $this->_call_log[$key] = [$message, $options];
     }
 
     public function call_log()

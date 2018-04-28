@@ -24,7 +24,7 @@ class item_comments_rest_Core
         $item = rest::resolve($request->url);
         access::required('view', $item);
 
-        $comments = array();
+        $comments = [];
         foreach (ORM::factory('comment')
              ->viewable()
              ->where('item_id', '=', $item->id)
@@ -33,9 +33,10 @@ class item_comments_rest_Core
             $comments[] = rest::url('comment', $comment);
         }
 
-        return array(
+        return [
             'url'     => $request->url,
-            'members' => $comments);
+            'members' => $comments
+        ];
     }
 
     public static function resolve($id)

@@ -27,19 +27,19 @@ class Image_Core
     const SQUARE    = 9;
 
     // Allowed image types
-    public static $allowed_types = array(
+    public static $allowed_types = [
         IMAGETYPE_GIF => 'gif',
         IMAGETYPE_JPEG => 'jpg',
         IMAGETYPE_PNG => 'png',
         IMAGETYPE_TIFF_II => 'tiff',
         IMAGETYPE_TIFF_MM => 'tiff',
-    );
+    ];
 
     // Driver instance
     protected $driver;
 
     // Driver actions
-    protected $actions = array();
+    protected $actions = [];
 
     // Reference to the current image filename
     protected $image = '';
@@ -77,7 +77,7 @@ class Image_Core
 
         // Check to make sure the image exists
         if (! is_file($image)) {
-            throw new Kohana_Exception('The specified image, :image:, was not found. Please verify that images exist by using file_exists() before manipulating them.', array(':image:' => $image));
+            throw new Kohana_Exception('The specified image, :image:, was not found. Please verify that images exist by using file_exists() before manipulating them.', [':image:' => $image]);
         }
 
         // Disable error reporting, to prevent PHP warnings
@@ -91,23 +91,23 @@ class Image_Core
 
         // Make sure that the image is readable and valid
         if (! is_array($image_info) or count($image_info) < 3) {
-            throw new Kohana_Exception('The file specified, :file:, is not readable or is not an image', array(':file:' => $image));
+            throw new Kohana_Exception('The file specified, :file:, is not readable or is not an image', [':file:' => $image]);
         }
 
         // Check to make sure the image type is allowed
         if (! isset(Image::$allowed_types[$image_info[2]])) {
-            throw new Kohana_Exception('The specified image, :type:, is not an allowed image type.', array(':type:' => $image));
+            throw new Kohana_Exception('The specified image, :type:, is not an allowed image type.', [':type:' => $image]);
         }
 
         // Image has been validated, load it
-        $this->image = array(
+        $this->image = [
             'file' => str_replace('\\', '/', realpath($image)),
             'width' => $image_info[0],
             'height' => $image_info[1],
             'type' => $image_info[2],
             'ext' => Image::$allowed_types[$image_info[2]],
             'mime' => $image_info['mime']
-        );
+        ];
 
         $this->determine_orientation();
 
@@ -121,7 +121,7 @@ class Image_Core
         if (! Kohana::auto_load($driver)) {
             throw new Kohana_Exception(
                 'The :driver: driver for the :library: library could not be found',
-                                       array(':driver:' => $this->config['driver'], ':library:' => get_class($this))
+                [':driver:' => $this->config['driver'], ':library:' => get_class($this)]
             );
         }
 
@@ -132,7 +132,7 @@ class Image_Core
         if (! ($this->driver instanceof Image_Driver)) {
             throw new Kohana_Exception(
                 'The :driver: driver for the :library: library must implement the :interface: interface',
-                                       array(':driver:' => $this->config['driver'], ':library:' => get_class($this), ':interface:' => 'Image_Driver')
+                [':driver:' => $this->config['driver'], ':library:' => get_class($this), ':interface:' => 'Image_Driver']
             );
         }
     }
@@ -173,7 +173,7 @@ class Image_Core
         } else {
             throw new Kohana_Exception(
                 'The :property: property does not exist in the :class: class.',
-                                       array(':property:' => $property, ':class:' => get_class($this))
+                [':property:' => $property, ':class:' => get_class($this)]
             );
         }
     }
@@ -193,15 +193,15 @@ class Image_Core
     public function resize($width, $height, $master = null)
     {
         if (! $this->valid_size('width', $width)) {
-            throw new Kohana_Exception('The width you specified, :width:, is not valid.', array(':width:' => $width));
+            throw new Kohana_Exception('The width you specified, :width:, is not valid.', [':width:' => $width]);
         }
 
         if (! $this->valid_size('height', $height)) {
-            throw new Kohana_Exception('The height you specified, :height:, is not valid.', array(':height:' => $height));
+            throw new Kohana_Exception('The height you specified, :height:, is not valid.', [':height:' => $height]);
         }
 
         if (empty($width) and empty($height)) {
-            throw new Kohana_Exception('The dimensions specified for :function: are not valid.', array(':function:' => __FUNCTION__));
+            throw new Kohana_Exception('The dimensions specified for :function: are not valid.', [':function:' => __FUNCTION__]);
         }
 
         if ($master === null) {
@@ -211,11 +211,11 @@ class Image_Core
             throw new Kohana_Exception('The master dimension specified is not valid.');
         }
 
-        $this->actions['resize'] = array(
+        $this->actions['resize'] = [
             'width'  => $width,
             'height' => $height,
             'master' => $master,
-        );
+        ];
 
         $this->determine_orientation();
 
@@ -237,31 +237,31 @@ class Image_Core
     public function crop($width, $height, $top = 'center', $left = 'center')
     {
         if (! $this->valid_size('width', $width)) {
-            throw new Kohana_Exception('The width you specified, :width:, is not valid.', array(':width:' => $width));
+            throw new Kohana_Exception('The width you specified, :width:, is not valid.', [':width:' => $width]);
         }
 
         if (! $this->valid_size('height', $height)) {
-            throw new Kohana_Exception('The height you specified, :height:, is not valid.', array(':height:' => $height));
+            throw new Kohana_Exception('The height you specified, :height:, is not valid.', [':height:' => $height]);
         }
 
         if (! $this->valid_size('top', $top)) {
-            throw new Kohana_Exception('The top offset you specified, :top:, is not valid.', array(':top:' => $top));
+            throw new Kohana_Exception('The top offset you specified, :top:, is not valid.', [':top:' => $top]);
         }
 
         if (! $this->valid_size('left', $left)) {
-            throw new Kohana_Exception('The left offset you specified, :left:, is not valid.', array(':left:' => $left));
+            throw new Kohana_Exception('The left offset you specified, :left:, is not valid.', [':left:' => $left]);
         }
 
         if (empty($width) and empty($height)) {
-            throw new Kohana_Exception('The dimensions specified for :function: are not valid.', array(':function:' => __FUNCTION__));
+            throw new Kohana_Exception('The dimensions specified for :function: are not valid.', [':function:' => __FUNCTION__]);
         }
 
-        $this->actions['crop'] = array(
+        $this->actions['crop'] = [
             'width'  => $width,
             'height' => $height,
             'top'    => $top,
             'left'   => $left,
-        );
+        ];
 
         $this->determine_orientation();
 
@@ -313,16 +313,16 @@ class Image_Core
 
         // Check to make sure the image type is allowed
         if (! isset(Image::$allowed_types[$image_info[2]])) {
-            throw new Kohana_Exception('The specified image, :type:, is not an allowed image type.', array(':type:' => $overlay_file));
+            throw new Kohana_Exception('The specified image, :type:, is not an allowed image type.', [':type:' => $overlay_file]);
         }
 
-        $this->actions['composite'] = array(
+        $this->actions['composite'] = [
             'overlay_file'  => $overlay_file,
             'mime'          => $image_info['mime'],
             'x'             => $x,
             'y'             => $y,
             'transparency'  => $transparency
-        );
+        ];
 
         return $this;
     }
@@ -393,7 +393,7 @@ class Image_Core
         $dir = str_replace('\\', '/', realpath($dir)).'/';
 
         if (! is_writable($dir)) {
-            throw new Kohana_Exception('The specified directory, :dir:, is not writable.', array(':dir:' => $dir));
+            throw new Kohana_Exception('The specified directory, :dir:, is not writable.', [':dir:' => $dir]);
         }
 
         if ($status = $this->driver->process($this->image, $this->actions, $dir, $file, false, $background)) {
@@ -405,7 +405,7 @@ class Image_Core
 
         if ($keep_actions !== true) {
             // Reset actions. Subsequent save() or render() will not apply previous actions.
-            $this->actions = array();
+            $this->actions = [];
         }
 
         return $status;
@@ -433,7 +433,7 @@ class Image_Core
 
         if ($keep_actions !== true) {
             // Reset actions. Subsequent save() or render() will not apply previous actions.
-            $this->actions = array();
+            $this->actions = [];
         }
 
         return $status;
@@ -470,7 +470,7 @@ class Image_Core
             break;
             case 'top':
                 if (is_string($value) and ! ctype_digit($value)) {
-                    if (! in_array($value, array('top', 'bottom', 'center'))) {
+                    if (! in_array($value, ['top', 'bottom', 'center'])) {
                         return false;
                     }
                 } else {
@@ -479,7 +479,7 @@ class Image_Core
             break;
             case 'left':
                 if (is_string($value) and ! ctype_digit($value)) {
-                    if (! in_array($value, array('left', 'right', 'center'))) {
+                    if (! in_array($value, ['left', 'right', 'center'])) {
                         return false;
                     }
                 } else {

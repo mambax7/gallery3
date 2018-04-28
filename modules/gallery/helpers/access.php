@@ -483,7 +483,7 @@ class access_Core
         if (module::is_active(module::get_var('gallery', 'identity_provider', 'user'))) {
             return identity::groups();
         } else {
-            return array();
+            return [];
         }
     }
 
@@ -580,7 +580,7 @@ class access_Core
       ->execute();
 
         $query = ORM::factory('access_intent')
-      ->select(array("access_intents.$field", 'items.left_ptr', 'items.right_ptr', 'items.id'))
+      ->select(["access_intents.$field", 'items.left_ptr', 'items.right_ptr', 'items.id'])
       ->join('items', 'items.id', 'access_intents.item_id')
       ->where('left_ptr', '>=', $item->left_ptr)
       ->where('right_ptr', '<=', $item->right_ptr)
@@ -660,7 +660,7 @@ class access_Core
         // With non-view permissions, each level can override any permissions that came above it
         // so start at the top and work downwards, overlaying permissions as we go.
         $query = ORM::factory('access_intent')
-      ->select(array("access_intents.$field", 'items.left_ptr', 'items.right_ptr'))
+      ->select(["access_intents.$field", 'items.left_ptr', 'items.right_ptr'])
       ->join('items', 'items.id', 'access_intents.item_id')
       ->where('left_ptr', '>=', $item->left_ptr)
       ->where('right_ptr', '<=', $item->right_ptr)
@@ -701,7 +701,7 @@ class access_Core
             return;
         }
 
-        $dirs = array($album->file_path());
+        $dirs = [$album->file_path()];
         if ($perm_name == 'view') {
             $dirs[] = dirname($album->resize_path());
             $dirs[] = dirname($album->thumb_path());
@@ -772,7 +772,7 @@ class access_Core
 
             // Proxy our authorization headers so that if the entire Gallery is covered by Basic Auth
             // this callback will still work.
-            $headers = array();
+            $headers = [];
             if (function_exists('apache_request_headers')) {
                 $arh = apache_request_headers();
                 if (!empty($arh['Authorization'])) {

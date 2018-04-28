@@ -46,30 +46,32 @@ class Tag_Controller extends Controller
 
         // Make sure that the page references a valid offset
         if ($page < 1) {
-            url::redirect(url::merge(array('page' => 1)));
+            url::redirect(url::merge(['page' => 1]));
         } elseif ($page > $max_pages) {
-            url::redirect(url::merge(array('page' => $max_pages)));
+            url::redirect(url::merge(['page' => $max_pages]));
         }
 
         $root = item::root();
         $template = new Theme_View('page.html', 'collection', 'tag');
         $template->set_global(
-      array(
-          'page'           => $page,
-          'max_pages'      => $max_pages,
-          'page_size'      => $page_size,
-          'tag'            => $tag,
-          'children'       => $tag->items($page_size, $offset),
-          'breadcrumbs'    => array(
+            [
+                'page'           => $page,
+                'max_pages'      => $max_pages,
+                'page_size'      => $page_size,
+                'tag'            => $tag,
+                'children'       => $tag->items($page_size, $offset),
+                'breadcrumbs'    => [
               Breadcrumb::instance($root->title, $root->url())->set_first(),
               Breadcrumb::instance(
-                  t('Tag: %tag_name', array('tag_name' => $tag->name)),
+                  t('Tag: %tag_name', ['tag_name' => $tag->name]),
                                    $tag->url()
-              )->set_last()),
-          'children_count' => $children_count)
+              )->set_last()
+                ],
+                'children_count' => $children_count
+            ]
     );
         $template->content = new View('dynamic.html');
-        $template->content->title = t('Tag: %tag_name', array('tag_name' => $tag->name));
+        $template->content->title = t('Tag: %tag_name', ['tag_name' => $tag->name]);
         print $template;
 
         item::set_display_context_callback('Tag_Controller::get_display_context', $tag->id);
@@ -78,7 +80,7 @@ class Tag_Controller extends Controller
     public static function get_display_context($item, $tag_id)
     {
         $tag = ORM::factory('tag', $tag_id);
-        $where = array(array('type', '!=', 'album'));
+        $where = [['type', '!=', 'album']];
 
         $position = tag::get_position($tag, $item, $where);
         if ($position > 1) {
@@ -89,18 +91,20 @@ class Tag_Controller extends Controller
         }
 
         $root = item::root();
-        return array(
+        return [
             'position'          => $position,
             'previous_item'     => $previous_item,
             'next_item'         => $next_item,
             'sibling_count'     => $tag->items_count($where),
-            'siblings_callback' => array(array($tag, 'items'), array()),
-            'breadcrumbs'       => array(
+            'siblings_callback' => [[$tag, 'items'], []],
+            'breadcrumbs'       => [
                    Breadcrumb::instance($root->title, $root->url())->set_first(),
                    Breadcrumb::instance(
-                       t('Tag: %tag_name', array('tag_name' => $tag->name)),
+                       t('Tag: %tag_name', ['tag_name' => $tag->name]),
                                         $tag->url("show={$item->id}")
                    ),
-                   Breadcrumb::instance($item->title, $item->url())->set_last()));
+                   Breadcrumb::instance($item->title, $item->url())->set_last()
+            ]
+        ];
     }
 }

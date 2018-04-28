@@ -149,7 +149,7 @@ class user_Core
      * @param mixed      filters (@see Database.php
      * @return array     the user list.
      */
-    public static function get_user_list($filter=array())
+    public static function get_user_list($filter= [])
     {
         $user = ORM::factory('user');
 

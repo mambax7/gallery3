@@ -71,10 +71,10 @@ class Task_Model_Core extends ORM
         // Save for 30 days.
         $log .= !empty($log) ? "\n" : '';
         Cache::instance()->set(
-        $key,
-        "$log{$msg}",
-                           array('task', 'log', 'import'),
-        2592000
+            $key,
+            "$log{$msg}",
+            ['task', 'log', 'import'],
+            2592000
     );
     }
 

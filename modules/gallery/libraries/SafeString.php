@@ -128,9 +128,11 @@ class SafeString_Core
     {
         $string = (string) $this->for_html();
         return strtr(
-        $string,
-                 array("'"=> '&#039;',
-                       '"'=>'&quot;')
+            $string,
+            [
+                "'" => '&#039;',
+                '"' =>'&quot;'
+            ]
     );
     }
 

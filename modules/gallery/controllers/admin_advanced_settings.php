@@ -54,11 +54,11 @@ class Admin_Advanced_Settings_Controller extends Admin_Controller
             message::success(
         t(
             'Saved value for %var (%module_name)',
-            array('var' => $var_name, 'module_name' => $module_name)
+            ['var' => $var_name, 'module_name' => $module_name]
         )
       );
 
-            json::reply(array('result' => 'success'));
+            json::reply(['result' => 'success']);
         }
     }
 }

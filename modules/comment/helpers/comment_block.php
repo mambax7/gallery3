@@ -21,7 +21,7 @@ class comment_block_Core
 {
     public static function get_admin_list()
     {
-        return array('recent_comments' => t('Recent comments'));
+        return ['recent_comments' => t('Recent comments')];
     }
 
     public static function get($block_id)

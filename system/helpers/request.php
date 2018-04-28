@@ -11,7 +11,7 @@ class request_Core
 {
 
     // Possible HTTP methods
-    protected static $http_methods = array('get', 'head', 'options', 'post', 'put', 'delete');
+    protected static $http_methods = ['get', 'head', 'options', 'post', 'put', 'delete'];
 
     // Character sets from client's HTTP Accept-Charset request header
     protected static $accept_charsets;
@@ -89,7 +89,7 @@ class request_Core
         $method = strtolower($_SERVER['REQUEST_METHOD']);
 
         if (! in_array($method, request::$http_methods)) {
-            throw new Kohana_Exception('Invalid request method :method:', array(':method:' => $method));
+            throw new Kohana_Exception('Invalid request method :method:', [':method:' => $method]);
         }
 
         return $method;
@@ -118,7 +118,7 @@ class request_Core
         }
 
         if (! is_array(request::$user_agent)) {
-            request::$user_agent = array();
+            request::$user_agent = [];
             request::$user_agent['agent'] = isset($_SERVER['HTTP_USER_AGENT']) ? trim($_SERVER['HTTP_USER_AGENT']) : '';
 
             // Parse the user agent and extract basic information
@@ -478,10 +478,10 @@ class request_Core
      */
     protected static function parse_accept_header($header)
     {
-        $result = array();
+        $result = [];
 
         // Remove linebreaks and parse the HTTP Accept header
-        foreach (explode(',', str_replace(array("\r", "\n"), '', strtolower($header))) as $entry) {
+        foreach (explode(',', str_replace(["\r", "\n"], '', strtolower($header))) as $entry) {
             // Explode each entry in content type and possible quality factor
             $entry = explode(';', trim($entry), 2);
 
@@ -530,7 +530,7 @@ class request_Core
             // Accept everything
             request::$accept_types['*']['*'] = 1;
         } else {
-            request::$accept_types = array();
+            request::$accept_types = [];
 
             foreach (request::parse_accept_header($_SERVER['HTTP_ACCEPT']) as $type => $q) {
                 // Explode each content type (e.g. "text/html")
@@ -583,7 +583,7 @@ class request_Core
             // Accept everything
             request::$accept_languages['*'] = 1;
         } else {
-            request::$accept_languages = array();
+            request::$accept_languages = [];
 
             foreach (request::parse_accept_header($_SERVER['HTTP_ACCEPT_LANGUAGE']) as $tag => $q) {
                 // Explode each language (e.g. "en-us")

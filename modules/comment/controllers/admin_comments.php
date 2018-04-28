@@ -53,27 +53,30 @@ class Admin_Comments_Controller extends Admin_Controller
     {
         $form = new Forge(
             'admin/comments/save', '', 'post',
-            array('id' => 'g-comments-admin-form')
+            ['id' => 'g-comments-admin-form']
     );
         $comment_settings = $form->group('comment_settings')->label(t('Permissions'));
         $comment_settings->dropdown('access_permissions')
       ->label(t('Who can leave comments?'))
-      ->options(array(
+      ->options([
                     'everybody'        => t('Everybody'),
-                    'registered_users' => t('Only registered users')))
+                    'registered_users' => t('Only registered users')
+                ])
       ->selected(module::get_var('comment', 'access_permissions'));
         $comment_settings->dropdown('initial_state')
       ->label(t('Are new comments published or unpublished by default?'))
-      ->options(array(
+      ->options([
                     'published'   => t('Published'),
-                    'unpublished' => t('Unpublished')))
+                    'unpublished' => t('Unpublished')
+                ])
       ->selected(module::get_var('comment', 'initial_state'));
         $comment_settings->dropdown('rss_visible')
       ->label(t('Which RSS feeds can users see?'))
-      ->options(array(
+      ->options([
                     'all'      => t('All comment feeds'),
                     'newest'   => t('New comments feed only'),
-                    'per_item' => t('Comments on photos, movies and albums only')))
+                    'per_item' => t('Comments on photos, movies and albums only')
+                ])
       ->selected(module::get_var('comment', 'rss_visible'));
         $comment_settings->submit('save')->value(t('Save'));
         return $form;

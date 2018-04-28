@@ -29,7 +29,7 @@ class tags_rest_Core
      */
     public static function get($request)
     {
-        $tags = array();
+        $tags = [];
 
         $num = 10;
         $start = 0;
@@ -42,9 +42,10 @@ class tags_rest_Core
         foreach (ORM::factory('tag')->find_all($num, $start) as $tag) {
             $tags[] = rest::url('tag', $tag);
         }
-        return array(
+        return [
             'url'     => rest::url('tags'),
-            'members' => $tags);
+            'members' => $tags
+        ];
     }
 
     public static function post($request)
@@ -72,7 +73,7 @@ class tags_rest_Core
             $tag->save();
         }
 
-        return array('url' => rest::url('tag', $tag));
+        return ['url' => rest::url('tag', $tag)];
     }
 
     public static function url()

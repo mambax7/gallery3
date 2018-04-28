@@ -21,7 +21,7 @@ class user_installer
 {
     public static function can_activate()
     {
-        return array('warn' => array(IdentityProvider::confirmation_message()));
+        return ['warn' => [IdentityProvider::confirmation_message()]];
     }
 
     public static function activate()

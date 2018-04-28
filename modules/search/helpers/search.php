@@ -51,10 +51,10 @@ class search_Core
         $data = $db->query($query);
         $count = $db->query('SELECT FOUND_ROWS() as c')->current()->c;
 
-        return array($count, new ORM_Iterator(ORM::factory('item'), $data));
+        return [$count, new ORM_Iterator(ORM::factory('item'), $data)];
     }
 
-    private static function _build_query_base($q, $album, $where=array())
+    private static function _build_query_base($q, $album, $where= [])
     {
         $db = Database::instance();
         $q = $db->escape($q);
@@ -94,7 +94,7 @@ class search_Core
             site_status::warning(
         t(
             'Your search index needs to be updated.  <a href="%url" class="g-dialog-link">Fix this now</a>',
-          array('url' => html::mark_clean(url::site('admin/maintenance/start/search_task::update_index?csrf=__CSRF__')))
+            ['url' => html::mark_clean(url::site('admin/maintenance/start/search_task::update_index?csrf=__CSRF__'))]
         ), 'search_index_out_of_date'
       );
         }
@@ -129,7 +129,7 @@ class search_Core
         $total = ORM::factory('item')->count_all();
         $percent = round(100 * ($total - $remaining) / $total);
 
-        return array($remaining, $total, $percent);
+        return [$remaining, $total, $percent];
     }
 
     public static function get_position($item, $q)
@@ -140,7 +140,7 @@ class search_Core
     public static function get_position_within_album($item, $q, $album)
     {
         $page_size = module::get_var('gallery', 'page_size', 9);
-        $query = self::_build_query_base($q, $album, array('{items}.id = ' . $item->id)) . ' ORDER BY `score` DESC';
+        $query = self::_build_query_base($q, $album, ['{items}.id = ' . $item->id]) . ' ORDER BY `score` DESC';
         $db = Database::instance();
 
         // Truncate the score by two decimal places as this resolves the issues

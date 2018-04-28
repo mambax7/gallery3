@@ -39,7 +39,7 @@ class slideshow_installer
 
     public static function can_activate()
     {
-        $messages = array();
+        $messages = [];
         if (!module::is_active('rss')) {
             $messages['warn'][] = t('The Slideshow module requires the RSS module.');
         }

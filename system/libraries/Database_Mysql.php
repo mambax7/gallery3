@@ -45,8 +45,10 @@ class Database_Mysql_Core extends Database
             // Unable to connect to the database
             throw new Database_Exception(
                 '#:errno: :error',
-                array(':error' => mysql_error(),
-                ':errno' => mysql_errno())
+                [
+                    ':error' => mysql_error(),
+                    ':errno' => mysql_errno()
+                ]
             );
         }
 
@@ -54,8 +56,10 @@ class Database_Mysql_Core extends Database
             // Unable to select database
             throw new Database_Exception(
                 '#:errno: :error',
-                array(':error' => mysql_error($this->connection),
-                ':errno' => mysql_errno($this->connection))
+                [
+                    ':error' => mysql_error($this->connection),
+                    ':errno' => mysql_errno($this->connection)
+                ]
             );
         }
 
@@ -99,8 +103,10 @@ class Database_Mysql_Core extends Database
             // Unable to set charset
             throw new Database_Exception(
                 '#:errno: :error',
-                array(':error' => mysql_error($this->connection),
-                ':errno' => mysql_errno($this->connection))
+                [
+                    ':error' => mysql_error($this->connection),
+                    ':errno' => mysql_errno($this->connection)
+                ]
             );
         }
     }
@@ -126,8 +132,10 @@ class Database_Mysql_Core extends Database
         if (($value = mysql_real_escape_string($value, $this->connection)) === false) {
             throw new Database_Exception(
                 '#:errno: :error',
-                array(':error' => mysql_error($this->connection),
-                ':errno' => mysql_errno($this->connection))
+                [
+                    ':error' => mysql_error($this->connection),
+                    ':errno' => mysql_errno($this->connection)
+                ]
             );
         }
 
@@ -137,7 +145,7 @@ class Database_Mysql_Core extends Database
     public function list_constraints($table)
     {
         $prefix = strlen($this->table_prefix());
-        $result = array();
+        $result = [];
 
         $constraints = $this->query('
 			SELECT c.constraint_name, c.constraint_type, k.column_name, k.referenced_table_name, k.referenced_column_name
@@ -156,7 +164,7 @@ class Database_Mysql_Core extends Database
                         $result[$row['constraint_name']][1][] = $row['column_name'];
                         $result[$row['constraint_name']][3][] = $row['referenced_column_name'];
                     } else {
-                        $result[$row['constraint_name']] = array($row['constraint_type'], array($row['column_name']), substr($row['referenced_table_name'], $prefix), array($row['referenced_column_name']));
+                        $result[$row['constraint_name']] = [$row['constraint_type'], [$row['column_name']], substr($row['referenced_table_name'], $prefix), [$row['referenced_column_name']]];
                     }
                 break;
                 case 'PRIMARY KEY':
@@ -164,7 +172,7 @@ class Database_Mysql_Core extends Database
                     if (isset($result[$row['constraint_name']])) {
                         $result[$row['constraint_name']][1][] = $row['column_name'];
                     } else {
-                        $result[$row['constraint_name']] = array($row['constraint_type'], array($row['column_name']));
+                        $result[$row['constraint_name']] = [$row['constraint_type'], [$row['column_name']]];
                     }
                 break;
             }
@@ -175,7 +183,7 @@ class Database_Mysql_Core extends Database
 
     public function list_fields($table)
     {
-        $result = array();
+        $result = [];
 
         foreach ($this->query('SHOW COLUMNS FROM '.$this->quote_table($table))->as_array() as $row) {
             $column = $this->sql_type($row['Type']);
@@ -197,7 +205,7 @@ class Database_Mysql_Core extends Database
     public function list_tables()
     {
         $prefix = strlen($this->table_prefix());
-        $tables = array();
+        $tables = [];
 
         foreach ($this->query('SHOW TABLES LIKE '.$this->quote($this->table_prefix().'%'))->as_array() as $row) {
             // The value is the table name

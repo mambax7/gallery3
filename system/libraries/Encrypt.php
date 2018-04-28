@@ -53,7 +53,7 @@ class Encrypt_Core
 
             // Test the config group name
             if (($config = Kohana::config('encryption.'.$config)) === null) {
-                throw new Kohana_Exception('The :name: group is not defined in your configuration.', array(':name:' => $name));
+                throw new Kohana_Exception('The :name: group is not defined in your configuration.', [':name:' => $name]);
             }
         }
 

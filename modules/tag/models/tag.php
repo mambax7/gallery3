@@ -19,7 +19,7 @@
  */
 class Tag_Model_Core extends ORM
 {
-    protected $has_and_belongs_to_many = array('items');
+    protected $has_and_belongs_to_many = ['items'];
 
     public function __construct($id=null)
     {
@@ -38,11 +38,11 @@ class Tag_Model_Core extends ORM
      * @param string   $where   an array of arrays, each compatible with ORM::where()
      * @return ORM_Iterator
      */
-    public function items($limit=null, $offset=null, $where=array())
+    public function items($limit=null, $offset=null, $where= [])
     {
         if (is_scalar($where)) {
             // backwards compatibility
-            $where = array(array('items.type', '=', $where));
+            $where = [['items.type', '=', $where]];
         }
         return ORM::factory('item')
       ->viewable()
@@ -58,11 +58,11 @@ class Tag_Model_Core extends ORM
      * @param string   $where   an array of arrays, each compatible with ORM::where()
      * @return integer
      */
-    public function items_count($where=array())
+    public function items_count($where= [])
     {
         if (is_scalar($where)) {
             // backwards compatibility
-            $where = array(array('items.type', '=', $where));
+            $where = [['items.type', '=', $where]];
         }
         return $model = ORM::factory('item')
       ->viewable()
@@ -123,7 +123,7 @@ class Tag_Model_Core extends ORM
      */
     public function delete($ignored_id=null)
     {
-        $related_item_ids = array();
+        $related_item_ids = [];
         foreach (db::build()
              ->select('item_id')
              ->from('items_tags')

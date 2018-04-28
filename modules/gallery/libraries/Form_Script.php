@@ -19,12 +19,12 @@
  */
 class Form_Script_Core extends Forge
 {
-    protected $data = array(
+    protected $data = [
         'name' => false,
         'type' => 'script',
         'url'  => '',
         'text' => ''
-    );
+    ];
 
     public function __construct($name)
     {
@@ -58,7 +58,7 @@ class Form_Script_Core extends Forge
 
     public function render($template= 'forge_template', $custom=false)
     {
-        $script = array();
+        $script = [];
         if (!empty($this->data['url'])) {
             $script[] = html::script($this->data['url']);
         }

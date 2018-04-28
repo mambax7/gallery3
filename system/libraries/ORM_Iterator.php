@@ -38,7 +38,7 @@ class ORM_Iterator_Core implements Iterator, ArrayAccess, Countable
      */
     public function as_array($objects = true, $key = null)
     {
-        $array = array();
+        $array = [];
 
         // Import class name
         $class = $this->class_name;
@@ -59,7 +59,7 @@ class ORM_Iterator_Core implements Iterator, ArrayAccess, Countable
             // This could be done by creating a new ORM object and calling as_array on it, but this is much faster
             foreach ($this->result as $data) {
                 // Have to do a bit of magic here to handle any relationships and generate a nested array for them
-                $temp = array();
+                $temp = [];
 
                 foreach ($data as $key => $val) {
                     $ptr = & $temp;
@@ -89,7 +89,7 @@ class ORM_Iterator_Core implements Iterator, ArrayAccess, Countable
      */
     public function primary_key_array()
     {
-        $ids = array();
+        $ids = [];
         foreach ($this->result as $row) {
             $ids[] = $row->{$this->primary_key};
         }
@@ -115,7 +115,7 @@ class ORM_Iterator_Core implements Iterator, ArrayAccess, Countable
             $val = $this->primary_val;
         }
 
-        $array = array();
+        $array = [];
         foreach ($this->result as $row) {
             $array[$row->$key] = $row->$val;
         }
@@ -132,7 +132,7 @@ class ORM_Iterator_Core implements Iterator, ArrayAccess, Countable
     public function range($start, $end)
     {
         // Array of objects
-        $array = array();
+        $array = [];
 
         if ($this->result->offsetExists($start)) {
             // Import the class name

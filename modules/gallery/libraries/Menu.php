@@ -188,7 +188,7 @@ class Menu_Core extends Menu_Element
     public function __construct($type)
     {
         parent::__construct($type);
-        $this->elements = array();
+        $this->elements = [];
         $this->is_root = $type == 'root';
     }
 
@@ -206,7 +206,7 @@ class Menu_Core extends Menu_Element
      */
     public function add_after($target_id, $new_menu_element)
     {
-        $copy = array();
+        $copy = [];
         foreach ($this->elements as $id => $menu_element) {
             $copy[$id] = $menu_element;
             if ($id == $target_id) {
@@ -222,7 +222,7 @@ class Menu_Core extends Menu_Element
      */
     public function add_before($target_id, $new_menu_element)
     {
-        $copy = array();
+        $copy = [];
         foreach ($this->elements as $id => $menu_element) {
             if ($id == $target_id) {
                 $copy[$new_menu_element->id] = $new_menu_element;

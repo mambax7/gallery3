@@ -156,7 +156,7 @@
 
 function intel2Moto($intel)
 {
-    static $cache = array();
+    static $cache = [];
     if (isset($cache[$intel])) {
         return $cache[$intel];
     }

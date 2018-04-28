@@ -77,7 +77,7 @@ abstract class Database extends Database_Core
 
         if (!isset($this->_table_names)) {
             // This should only run once on the first query
-            $this->_table_names = array();
+            $this->_table_names = [];
             foreach ($this->list_tables() as $table_name) {
                 $this->_table_names["{{$table_name}}"] = "`{$prefix}{$table_name}`";
             }

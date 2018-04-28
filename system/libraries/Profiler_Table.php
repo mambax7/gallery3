@@ -9,8 +9,8 @@
  */
 class Profiler_Table_Core
 {
-    protected $columns = array();
-    protected $rows = array();
+    protected $columns = [];
+    protected $rows = [];
 
     /**
      * Get styles for table.
@@ -37,7 +37,7 @@ class Profiler_Table_Core
      */
     public function add_column($class = '', $style = '')
     {
-        $this->columns[] = array('class' => $class, 'style' => $style);
+        $this->columns[] = ['class' => $class, 'style' => $style];
     }
 
     /**
@@ -49,7 +49,7 @@ class Profiler_Table_Core
      */
     public function add_row($data, $class = '', $style = '')
     {
-        $this->rows[] = array('data' => $data, 'class' => $class, 'style' => $style);
+        $this->rows[] = ['data' => $data, 'class' => $class, 'style' => $style];
     }
 
     /**

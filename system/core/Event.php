@@ -14,10 +14,10 @@ abstract class Event_Core
 {
 
     // Event callbacks
-    protected static $events = array();
+    protected static $events = [];
 
     // Cache of events that have been run
-    protected static $has_run = array();
+    protected static $has_run = [];
 
     // Data that can be processed during events
     public static $data;
@@ -34,7 +34,7 @@ abstract class Event_Core
     {
         if (! isset(Event::$events[$name])) {
             // Create an empty event if it is not yet defined
-            Event::$events[$name] = array();
+            Event::$events[$name] = [];
         } elseif ($unique and in_array($callback, Event::$events[$name], true)) {
             // The event already exists
             return false;
@@ -103,7 +103,7 @@ abstract class Event_Core
             // Events before the key
             array_slice(Event::$events[$name], 0, $key),
             // New event callback
-            array($callback),
+            [$callback],
             // Events after the key
             array_slice(Event::$events[$name], $key)
         );
@@ -147,7 +147,7 @@ abstract class Event_Core
      */
     public static function get($name)
     {
-        return empty(Event::$events[$name]) ? array() : Event::$events[$name];
+        return empty(Event::$events[$name]) ? [] : Event::$events[$name];
     }
 
     /**
@@ -160,7 +160,7 @@ abstract class Event_Core
     public static function clear($name, $callback = false)
     {
         if ($callback === false) {
-            Event::$events[$name] = array();
+            Event::$events[$name] = [];
         } elseif (isset(Event::$events[$name])) {
             // Loop through each of the event callbacks and compare it to the
             // callback requested for removal. The callback is removed if it
@@ -188,7 +188,7 @@ abstract class Event_Core
             $callbacks  =  Event::get($name);
 
             foreach ($callbacks as $callback) {
-                call_user_func_array($callback, array(&$data));
+                call_user_func_array($callback, [&$data]);
             }
 
             // Do this to prevent data from getting 'stuck'

@@ -13,7 +13,7 @@
     <?php if (comment::can_comment()): ?>
     <?= t(
             'No comments yet. Be the first to <a %attrs>comment</a>!',
-            array('attrs' => html::mark_clean('href="' . url::site("form/add/comments/{$item->id}") . '" class="showCommentForm"'))
+            ['attrs' => html::mark_clean('href="' . url::site("form/add/comments/{$item->id}") . '" class="showCommentForm"')]
 ) ?>
     <?php else: ?>
     <?= t('No comments yet.') ?>
@@ -38,18 +38,20 @@
         </a>
         <?php if ($comment->author()->guest): ?>
         <?= t(
-              'on %date %name said',
-            array(
+                'on %date %name said',
+                [
                 'date' => gallery::date_time($comment->created),
-                'name' => html::clean($comment->author_name()))
+                'name' => html::clean($comment->author_name())
+                ]
           ); ?>
         <?php else: ?>
         <?= t(
-                      'on %date <a href="%url">%name</a> said',
-              array(
+                'on %date <a href="%url">%name</a> said',
+                [
                   'date' => gallery::date_time($comment->created),
                   'url'  => user_profile::url($comment->author_id),
-                  'name' => html::clean($comment->author_name()))
+                  'name' => html::clean($comment->author_name())
+                ]
                   ); ?>
         <?php endif ?>
       </p>

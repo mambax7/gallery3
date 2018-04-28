@@ -148,7 +148,7 @@ class Database_Test extends Gallery_Unit_Test_Case
         $sql = db::build('mock')
       ->from('test_tables')
       ->where('1', '=', '1')
-      ->set(array('name' => 'Test Name'))
+      ->set(['name' => 'Test Name'])
       ->update()
       ->compile();
         $sql = str_replace("\n", ' ', $sql);
@@ -195,7 +195,7 @@ class Database_Mock extends Database
 
     public function list_tables()
     {
-        return array('test');
+        return ['test'];
     }
 
     public function quote_column($val, $alias=null)

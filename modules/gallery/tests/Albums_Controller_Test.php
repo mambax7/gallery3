@@ -21,7 +21,7 @@ class Albums_Controller_Test extends Gallery_Unit_Test_Case
 {
     public function setup()
     {
-        $this->_save = array($_POST, $_SERVER);
+        $this->_save = [$_POST, $_SERVER];
     }
 
     public function teardown()
@@ -52,7 +52,7 @@ class Albums_Controller_Test extends Gallery_Unit_Test_Case
         $results = ob_get_contents();
         ob_end_clean();
 
-        $this->assert_equal(json_encode(array('result' => 'success')), $results);
+        $this->assert_equal(json_encode(['result' => 'success']), $results);
         $this->assert_equal($new_name, $album->name);
         $this->assert_equal('new title', $album->title);
         $this->assert_equal('new description', $album->description);

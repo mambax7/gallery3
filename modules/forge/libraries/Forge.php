@@ -13,19 +13,19 @@ class Forge_Core
 {
 
     // Template variables
-    protected $template = array(
+    protected $template = [
         'title' => '',
         'class' => '',
         'open'  => '',
         'close' => '',
-    );
+    ];
 
     // Form attributes
-    protected $attr = array();
+    protected $attr = [];
 
     // Form inputs and hidden inputs
-    public $inputs = array();
-    public $hidden = array();
+    public $inputs = [];
+    public $hidden = [];
 
     // Error message format, only used with custom templates
     public $error_format = '<p class="error">{message}</p>';
@@ -36,7 +36,7 @@ class Forge_Core
      *
      * @return  void
      */
-    public function __construct($action = null, $title = '', $method = null, $attr = array())
+    public function __construct($action = null, $title = '', $method = null, $attr = [])
     {
         // Set form attributes
         $this->attr['action'] = $action;
@@ -46,10 +46,10 @@ class Forge_Core
         $this->template['title'] = $title;
 
         // Empty attributes sets the class to "form"
-        empty($attr) and $attr = array('class' => 'form');
+        empty($attr) and $attr = ['class' => 'form'];
 
         // String attributes is the class name
-        is_string($attr) and $attr = array('class' => $attr);
+        is_string($attr) and $attr = ['class' => $attr];
 
         // Extend the template with the attributes
         $this->attr += $attr;
@@ -163,7 +163,7 @@ class Forge_Core
      */
     public function as_array()
     {
-        $data = array();
+        $data = [];
         foreach (array_merge($this->hidden, $this->inputs) as $input) {
             if (is_object($input->name)) { // It's a Forge_Group object (hopefully)
                 foreach ($input->inputs as $group_input) {
@@ -217,7 +217,7 @@ class Forge_Core
         if ($custom) {
             // Using a custom view
 
-            $data = array();
+            $data = [];
             foreach (array_merge($this->hidden, $this->inputs) as $input) {
                 $data[$input->name] = $input;
 
@@ -244,7 +244,7 @@ class Forge_Core
             // Using a template view
 
             $form->set($this->template);
-            $hidden = array();
+            $hidden = [];
             if (! empty($this->hidden)) {
                 foreach ($this->hidden as $input) {
                     $hidden['name'] = $input->name;
@@ -254,14 +254,14 @@ class Forge_Core
 
             $form_type = 'open';
             // See if we need a multipart form
-            $check_inputs = array($this->inputs);
+            $check_inputs = [$this->inputs];
             while ($check_inputs) {
                 foreach (array_shift($check_inputs) as $input) {
                     if ($input instanceof Form_Upload) {
                         $form_type = 'open_multipart';
                     }
                     if ($input instanceof Form_Group) {
-                        $check_inputs += array($input->inputs);
+                        $check_inputs += [$input->inputs];
                     }
                 }
             }

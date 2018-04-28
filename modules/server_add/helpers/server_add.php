@@ -28,7 +28,7 @@ class server_add_Core
             site_status::warning(
         t(
             'Server Add needs configuration. <a href="%url">Configure it now!</a>',
-            array('url' => html::mark_clean(url::site('admin/server_add')))
+            ['url' => html::mark_clean(url::site('admin/server_add'))]
         ), 'server_add_configuration'
       );
         } else {

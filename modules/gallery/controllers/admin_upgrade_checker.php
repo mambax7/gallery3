@@ -27,7 +27,7 @@ class Admin_Upgrade_Checker_Controller extends Admin_Controller
         if ($message) {
             $message .= t(
                 ' <a href="%hide-url"><i>(remind me later)</i></a>',
-                array('hide-url' => url::site('admin/upgrade_checker/remind_me_later?csrf=__CSRF__'))
+                ['hide-url' => url::site('admin/upgrade_checker/remind_me_later?csrf=__CSRF__')]
       );
             site_status::info($message, 'upgrade_checker');
         } else {

@@ -24,11 +24,11 @@ class task_Core
      */
     public static function get_definitions()
     {
-        $tasks = array();
+        $tasks = [];
         foreach (module::active() as $module) {
             $class_name = "{$module->name}_task";
             if (class_exists($class_name) && method_exists($class_name, 'available_tasks')) {
-                foreach (call_user_func(array($class_name, 'available_tasks')) as $task) {
+                foreach (call_user_func([$class_name, 'available_tasks']) as $task) {
                     $tasks[$task->callback] = $task;
                 }
             }
@@ -37,14 +37,14 @@ class task_Core
         return $tasks;
     }
 
-    public static function start($task_callback, $context=array())
+    public static function start($task_callback, $context= [])
     {
         $tasks = task::get_definitions();
-        $task = task::create($tasks[$task_callback], array());
+        $task = task::create($tasks[$task_callback], []);
 
         $task->log(t(
                        'Task %task_name started (task id %task_id)',
-                       array('task_name' => $task->name, 'task_id' => $task->id)
+                       ['task_name' => $task->name, 'task_id' => $task->id]
     ));
         return $task;
     }
@@ -74,7 +74,7 @@ class task_Core
         $task->state = 'cancelled';
         $task->log(t(
                        'Task %task_name cancelled (task id %task_id)',
-                       array('task_name' => $task->name, 'task_id' => $task->id)
+                       ['task_name' => $task->name, 'task_id' => $task->id]
     ));
         $task->save();
 
@@ -98,7 +98,7 @@ class task_Core
 
         try {
             $task->state = 'running';
-            call_user_func_array($task->callback, array(&$task));
+            call_user_func_array($task->callback, [&$task]);
             if ($task->done) {
                 $task->log($task->status);
             }

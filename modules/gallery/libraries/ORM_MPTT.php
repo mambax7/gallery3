@@ -179,7 +179,7 @@ class ORM_MPTT_Core extends ORM
      * @param   array    order_by
      * @return array ORM
      */
-    public function children($limit=null, $offset=null, $where=null, $order_by=array('id' => 'ASC'))
+    public function children($limit=null, $offset=null, $where=null, $order_by= ['id' => 'ASC'])
     {
         return $this
       ->merge_where($where)
@@ -212,7 +212,7 @@ class ORM_MPTT_Core extends ORM
      * @param   array    order_by
      * @return object ORM_Iterator
      */
-    public function descendants($limit=null, $offset=null, $where=null, $order_by=array('id' => 'ASC'))
+    public function descendants($limit=null, $offset=null, $where=null, $order_by= ['id' => 'ASC'])
     {
         return $this
       ->merge_where($where)

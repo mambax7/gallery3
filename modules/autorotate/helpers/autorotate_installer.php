@@ -41,7 +41,7 @@ class autorotate_installer
 
     public static function can_activate()
     {
-        $messages = array();
+        $messages = [];
         if (!module::is_active('exif')) {
             $messages['warn'][] = t('The autorotate module requires the EXIF module.');
         }

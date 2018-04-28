@@ -22,16 +22,17 @@ class tag_items_rest_Core
     public static function get($request)
     {
         $tag = rest::resolve($request->url);
-        $items = array();
+        $items = [];
         foreach ($tag->items() as $item) {
             if (access::can('view', $item)) {
                 $items[] = rest::url('tag_item', $tag, $item);
             }
         }
 
-        return array(
+        return [
             'url'     => $request->url,
-            'members' => $items);
+            'members' => $items
+        ];
     }
 
     public static function post($request)
@@ -45,11 +46,13 @@ class tag_items_rest_Core
         }
 
         tag::add($item, $tag->name);
-        return array(
+        return [
             'url'     => rest::url('tag_item', $tag, $item),
-            'members' => array(
+            'members' => [
                 'tag'  => rest::url('tag', $tag),
-                'item' => rest::url('item', $item)));
+                'item' => rest::url('item', $item)
+            ]
+        ];
     }
 
     public static function delete($request)

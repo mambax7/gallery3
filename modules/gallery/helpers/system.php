@@ -19,7 +19,7 @@
  */
 class system_Core
 {
-    private static $files_marked_for_deletion = array();
+    private static $files_marked_for_deletion = [];
 
     /**
      * Return the path to an executable version of the named binary, or null.
@@ -40,9 +40,9 @@ class system_Core
         $bin_path = DOCROOT . 'bin';
 
         if ($priority_path) {
-            $paths = array($priority_path, $bin_path);
+            $paths = [$priority_path, $bin_path];
         } else {
-            $paths = array($bin_path);
+            $paths = [$bin_path];
         }
         $paths = array_merge(
         $paths,

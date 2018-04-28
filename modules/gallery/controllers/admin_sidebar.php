@@ -37,13 +37,13 @@ class Admin_Sidebar_Controller extends Admin_Controller
 
         $available_blocks = block_manager::get_available_site_blocks();
 
-        $active_blocks = array();
-        foreach (Input::instance()->get('block', array()) as $block_id) {
+        $active_blocks = [];
+        foreach (Input::instance()->get('block', []) as $block_id) {
             $active_blocks[md5($block_id)] = explode(':', (string) $block_id);
         }
         block_manager::set_active('site_sidebar', $active_blocks);
 
-        $result = array('result' => 'success');
+        $result = ['result' => 'success'];
         list($available, $active) = $this->_get_blocks();
         $v                   = new View('admin_sidebar_blocks.html');
         $v->blocks           = $available;
@@ -58,7 +58,7 @@ class Admin_Sidebar_Controller extends Admin_Controller
 
     private function _get_blocks()
     {
-        $active_blocks = array();
+        $active_blocks = [];
         $available_blocks = block_manager::get_available_site_blocks();
         foreach (block_manager::get_active('site_sidebar') as $block) {
             $id = "{$block[0]}:{$block[1]}";
@@ -67,6 +67,6 @@ class Admin_Sidebar_Controller extends Admin_Controller
                 unset($available_blocks[$id]);
             }
         }
-        return array($available_blocks, $active_blocks);
+        return [$available_blocks, $active_blocks];
     }
 }

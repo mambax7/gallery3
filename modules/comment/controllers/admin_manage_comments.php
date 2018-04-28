@@ -26,7 +26,7 @@ class Admin_Manage_Comments_Controller extends Admin_Controller
         // Get rid of old deleted/spam comments once in a while
         db::build()
       ->delete('comments')
-      ->where('state', 'IN', array('deleted', 'spam'))
+      ->where('state', 'IN', ['deleted', 'spam'])
       ->where('updated', '<', db::expr('UNIX_TIMESTAMP() - 86400 * 7'))
       ->execute();
 
@@ -39,10 +39,12 @@ class Admin_Manage_Comments_Controller extends Admin_Controller
     public function menu_labels()
     {
         $menu = $this->_menu($this->_counts());
-        json::reply(array((string) $menu->get('unpublished')->label,
-                          (string) $menu->get('published')->label,
-                          (string) $menu->get('spam')->label,
-                          (string) $menu->get('deleted')->label));
+        json::reply([
+                        (string) $menu->get('unpublished')->label,
+                        (string) $menu->get('published')->label,
+                        (string) $menu->get('spam')->label,
+                        (string) $menu->get('deleted')->label
+                    ]);
     }
 
     public function queue($state)
@@ -121,7 +123,7 @@ class Admin_Manage_Comments_Controller extends Admin_Controller
         $counts->deleted = 0;
         foreach (db::build()
              ->select('state')
-             ->select(array('c' => 'COUNT("*")'))
+             ->select(['c' => 'COUNT("*")'])
              ->from('comments')
              ->group_by('state')
              ->execute() as $row) {

@@ -30,10 +30,10 @@
  *  - cache         - Enable or disable query caching
  *  - escape        - Enable automatic query builder escaping
  */
-$config['default'] = array(
+$config['default'] = [
     'benchmark'     => false,
     'persistent'    => false,
-    'connection'    => array(
+    'connection'    => [
         'type'     => 'mysql',
         'user'     => 'dbuser',
         'pass'     => 'p@ssw0rd',
@@ -42,10 +42,10 @@ $config['default'] = array(
         'socket'   => false,
         'database' => 'kohana',
         'params'   => null,
-    ),
+    ],
     'character_set' => 'utf8',
     'table_prefix'  => '',
     'object'        => true,
     'cache'         => false,
     'escape'        => true
-);
+];

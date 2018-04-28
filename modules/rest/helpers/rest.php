@@ -21,7 +21,7 @@ class rest_Core
 {
     const API_VERSION = '3.0';
 
-    public static function reply($data=array())
+    public static function reply($data= [])
     {
         Session::instance()->abort_save();
 
@@ -36,7 +36,7 @@ class rest_Core
           throw new Rest_Exception(
               'Bad Request',
               400,
-              array('errors' => array('callback' => 'missing'))
+              ['errors' => ['callback' => 'missing']]
         );
       }
 
@@ -47,7 +47,7 @@ class rest_Core
           throw new Rest_Exception(
               'Bad Request',
               400,
-              array('errors' => array('callback' => 'invalid'))
+              ['errors' => ['callback' => 'invalid']]
         );
       }
       break;
@@ -159,7 +159,7 @@ class rest_Core
             throw new Kohana_404_Exception($url);
         }
 
-        return call_user_func(array($class, 'resolve'), !empty($components[2]) ? $components[2] : null);
+        return call_user_func([$class, 'resolve'], !empty($components[2]) ? $components[2] : null);
     }
 
     /**
@@ -178,7 +178,7 @@ class rest_Core
             throw new Rest_Exception('Bad Request', 400);
         }
 
-        $url = call_user_func_array(array($class, 'url'), $args);
+        $url = call_user_func_array([$class, 'url'], $args);
         if (Input::instance()->get('output') == 'html') {
             if (strpos($url, '?') === false) {
                 $url .= '?output=html';
@@ -191,12 +191,12 @@ class rest_Core
 
     public static function relationships($resource_type, $resource)
     {
-        $results = array();
+        $results = [];
         foreach (module::active() as $module) {
             foreach (glob(MODPATH . "{$module->name}/helpers/*_rest.php") as $filename) {
                 $class = str_replace('.php', '', basename($filename));
                 if (class_exists($class) && method_exists($class, 'relationships')) {
-                    if ($tmp = call_user_func(array($class, 'relationships'), $resource_type, $resource)) {
+                    if ($tmp = call_user_func([$class, 'relationships'], $resource_type, $resource)) {
                         $results = array_merge($results, $tmp);
                     }
                 }

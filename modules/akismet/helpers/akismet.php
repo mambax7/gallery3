@@ -23,7 +23,7 @@ class akismet_Core
 
     public static function get_configure_form()
     {
-        $form = new Forge('admin/akismet', '', 'post', array('id' => 'g-configure-akismet-form'));
+        $form = new Forge('admin/akismet', '', 'post', ['id' => 'g-configure-akismet-form']);
         $group = $form->group('configure_akismet')->label(t('Configure Akismet'));
         $group->input('api_key')->label(t('API Key'))->value(module::get_var('akismet', 'api_key'))
               ->callback('akismet::validate_key')
@@ -107,7 +107,7 @@ class akismet_Core
             site_status::warning(
         t(
             'Akismet is not quite ready!  Please provide an <a href="%url">API Key</a>',
-            array('url' => html::mark_clean(url::site('admin/akismet')))
+            ['url' => html::mark_clean(url::site('admin/akismet'))]
         ), 'akismet_config'
       );
         } else {
@@ -135,7 +135,7 @@ class akismet_Core
 
     public static function _build_request($function, $comment)
     {
-        $comment_data                               = array();
+        $comment_data                               = [];
         $comment_data['HTTP_ACCEPT']                = $comment->server_http_accept;
         $comment_data['HTTP_ACCEPT_ENCODING']       = $comment->server_http_accept_encoding;
         $comment_data['HTTP_ACCEPT_LANGUAGE']       = $comment->server_http_accept_language;
@@ -158,7 +158,7 @@ class akismet_Core
         $comment_data['user_agent']                 = $comment->server_http_user_agent;
         $comment_data['user_ip']                    = $comment->server_remote_addr;
 
-        $query_string = array();
+        $query_string = [];
         foreach ($comment_data as $key => $data) {
             $query_string[] = "$key=" . urlencode($data);
         }
@@ -194,8 +194,8 @@ class akismet_Core
             $headers = explode("\r\n", $headers);
             $body = explode("\r\n", $body);
             $response = new ArrayObject(
-        array('headers' => $headers, 'body' => $body),
-          ArrayObject::ARRAY_AS_PROPS
+                ['headers' => $headers, 'body' => $body],
+                ArrayObject::ARRAY_AS_PROPS
       );
         } else {
             throw new Exception('@todo CONNECTION TO SPAM SERVICE FAILED');

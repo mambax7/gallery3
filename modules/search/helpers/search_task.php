@@ -28,19 +28,21 @@ class search_task_Core
       ->execute();
 
         list($remaining, $total, $percent) = search::stats();
-        return array(Task_Definition::factory()
-                 ->callback('search_task::update_index')
-                 ->name(t('Update Search Index'))
-                 ->description(
+        return [
+            Task_Definition::factory()
+                           ->callback('search_task::update_index')
+                           ->name(t('Update Search Index'))
+                           ->description(
                    $remaining
                    ? t2(
                        '1 photo or album needs to be scanned', '%count (%percent%) of your photos and albums need to be scanned',
                        $remaining,
-                       array('percent' => (100 - $percent))
+                       ['percent' => (100 - $percent)]
                    )
                    : t('Search data is up-to-date')
                  )
-                 ->severity($remaining ? log::WARNING : log::SUCCESS));
+                           ->severity($remaining ? log::WARNING : log::SUCCESS)
+        ];
     }
 
     public static function update_index($task)
@@ -81,7 +83,7 @@ class search_task_Core
             $task->status = t2(
                 'one record updated, index is %percent% up-to-date', '%count records updated, index is %percent% up-to-date',
                 $completed,
-                array('percent' => $percent)
+                ['percent' => $percent]
       );
         } catch (Exception $e) {
             $task->done = true;

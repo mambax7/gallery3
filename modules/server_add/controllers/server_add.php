@@ -37,7 +37,7 @@ class Server_Add_Controller extends Admin_Controller
         $view->item = $item;
         $view->tree = new View('server_add_tree.html');
         $view->tree->files = $files;
-        $view->tree->parents = array();
+        $view->tree->parents = [];
         print $view;
     }
 
@@ -46,8 +46,8 @@ class Server_Add_Controller extends Admin_Controller
         $path = Input::instance()->get('path');
 
         $tree = new View('server_add_tree.html');
-        $tree->files = array();
-        $tree->parents = array();
+        $tree->files = [];
+        $tree->parents = [];
 
         // Make a tree with the parents back up to the authorized path, and all the children under the
         // current path.
@@ -57,7 +57,7 @@ class Server_Add_Controller extends Admin_Controller
                 array_unshift($tree->parents, dirname($tree->parents[0]));
             }
 
-            $glob_path = str_replace(array('{', '}', '[', ']'), array("\{", "\}", "\[", "\]"), $path);
+            $glob_path = str_replace(['{', '}', '[', ']'], ["\{", "\}", "\[", "\]"], $path);
             foreach (glob("$glob_path/*") as $file) {
                 if (!is_readable($file)) {
                     continue;
@@ -93,7 +93,7 @@ class Server_Add_Controller extends Admin_Controller
       ->callback('Server_Add_Controller::add')
       ->description(t('Add photos or movies from the local server'))
       ->name(t('Add from server'));
-        $task = task::create($task_def, array('item_id' => $item->id));
+        $task = task::create($task_def, ['item_id' => $item->id]);
 
         foreach (Input::instance()->post('paths') as $path) {
             if (server_add::is_valid_path($path)) {
@@ -107,10 +107,11 @@ class Server_Add_Controller extends Admin_Controller
         }
 
         json::reply(
-      array(
+            [
           'result' => 'started',
           'status' => (string)$task->status,
-          'url'    => url::site("server_add/run/$task->id?csrf=" . access::csrf_token()))
+          'url'    => url::site("server_add/run/$task->id?csrf=" . access::csrf_token())
+            ]
     );
     }
 
@@ -129,10 +130,11 @@ class Server_Add_Controller extends Admin_Controller
         $task = task::run($task_id);
         // Prevent the JavaScript code from breaking by forcing a period as
         // decimal separator for all locales with sprintf("%F", $value).
-        json::reply(array(
+        json::reply([
                         'done'             => (bool)$task->done,
                         'status'           => (string)$task->status,
-                        'percent_complete' => sprintf('%F', $task->percent_complete)));
+                        'percent_complete' => sprintf('%F', $task->percent_complete)
+                    ]);
     }
 
     /**
@@ -305,9 +307,10 @@ class Server_Add_Controller extends Admin_Controller
       $task->set('completed_files', $completed_files);
       $task->status = t(
           'Adding photos / albums (%completed of %total)',
-          array(
+          [
               'completed' => $completed_files,
-              'total'     => $total_files)
+              'total'     => $total_files
+          ]
       );
       $task->percent_complete = $total_files ? 10 + 100 * ($completed_files / $total_files) : 100;
       break;

@@ -16,10 +16,10 @@ abstract class Database_Core
     const CROSS_REQUEST   =  5;
     const PER_REQUEST     =  6;
 
-    protected static $instances = array();
+    protected static $instances = [];
 
     // Global benchmarks
-    public static $benchmarks = array();
+    public static $benchmarks = [];
 
     // Last execute query
     protected $last_query;
@@ -28,7 +28,7 @@ abstract class Database_Core
     protected $config;
 
     // Required configuration keys
-    protected $config_required = array();
+    protected $config_required = [];
 
     // Raw server connection
     protected $connection;
@@ -83,7 +83,7 @@ abstract class Database_Core
                 $this->cache = new Cache($this->config['cache']);
             } elseif ($this->config['cache'] === true) {
                 // Use array
-                $this->cache = array();
+                $this->cache = [];
             }
         }
     }
@@ -161,7 +161,7 @@ abstract class Database_Core
      */
     public static function parse_dsn($dsn)
     {
-        $db = array(
+        $db = [
             'type'     => false,
             'user'     => false,
             'pass'     => false,
@@ -169,7 +169,7 @@ abstract class Database_Core
             'port'     => false,
             'socket'   => false,
             'database' => false
-        );
+        ];
 
         // Get the protocol and arguments
         list($db['type'], $connection) = explode('://', $dsn, 2);
@@ -253,7 +253,7 @@ abstract class Database_Core
 
         if ($this->config['benchmark'] === true) {
             // Benchmark the query
-            Database::$benchmarks[] = array('query' => $sql, 'time' => $stop - $start, 'rows' => count($result));
+            Database::$benchmarks[] = ['query' => $sql, 'time' => $stop - $start, 'rows' => count($result)];
         }
 
         return $result;
@@ -299,7 +299,7 @@ abstract class Database_Core
 
         if ($this->config['benchmark'] === true) {
             // Benchmark the query
-            Database::$benchmarks[] = array('query' => $sql, 'time' => $stop - $start, 'rows' => count($result));
+            Database::$benchmarks[] = ['query' => $sql, 'time' => $stop - $start, 'rows' => count($result)];
         }
 
         return $result;
@@ -341,7 +341,7 @@ abstract class Database_Core
             } elseif (is_string($sql)) {
                 unset($this->cache[$this->query_hash($sql)]);
             } else {
-                $this->cache = array();
+                $this->cache = [];
             }
         }
     }
@@ -550,7 +550,7 @@ abstract class Database_Core
         }
 
         if (empty($sql_types[$type])) {
-            throw new Database_Exception('Undefined field type :type', array(':type' => $str));
+            throw new Database_Exception('Undefined field type :type', [':type' => $str]);
         }
 
         // Fetch the field definition

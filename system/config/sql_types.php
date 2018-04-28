@@ -12,57 +12,57 @@
 /**
  * Database sql types
  */
-$config = array(
+$config = [
     // SQL-92
-    'bit'                   => array('type' => 'string', 'exact' => true),
-    'bit varying'           => array('type' => 'string'),
-    'character'             => array('type' => 'string', 'exact' => true),
-    'character varying'     => array('type' => 'string'),
-    'date'                  => array('type' => 'string'),
-    'decimal'               => array('type' => 'float', 'exact' => true),
-    'double precision'      => array('type' => 'float'),
-    'float'                 => array('type' => 'float'),
-    'integer'               => array('type' => 'int', 'min' => -2147483648, 'max' => 2147483647),
-    'interval'              => array('type' => 'string'),
-    'national character'    => array('type' => 'string', 'exact' => true),
-    'national character varying' => array('type' => 'string'),
-    'numeric'               => array('type' => 'float', 'exact' => true),
-    'real'                  => array('type' => 'float'),
-    'smallint'              => array('type' => 'int', 'min' => -32768, 'max' => 32767),
-    'time'                  => array('type' => 'string'),
-    'time with time zone'   => array('type' => 'string'),
-    'timestamp'             => array('type' => 'string'),
-    'timestamp with time zone' => array('type' => 'string'),
+    'bit'                   => ['type' => 'string', 'exact' => true],
+    'bit varying'           => ['type' => 'string'],
+    'character'             => ['type' => 'string', 'exact' => true],
+    'character varying'     => ['type' => 'string'],
+    'date'                  => ['type' => 'string'],
+    'decimal'               => ['type' => 'float', 'exact' => true],
+    'double precision'      => ['type' => 'float'],
+    'float'                 => ['type' => 'float'],
+    'integer'               => ['type' => 'int', 'min' => -2147483648, 'max' => 2147483647],
+    'interval'              => ['type' => 'string'],
+    'national character'    => ['type' => 'string', 'exact' => true],
+    'national character varying' => ['type' => 'string'],
+    'numeric'               => ['type' => 'float', 'exact' => true],
+    'real'                  => ['type' => 'float'],
+    'smallint'              => ['type' => 'int', 'min' => -32768, 'max' => 32767],
+    'time'                  => ['type' => 'string'],
+    'time with time zone'   => ['type' => 'string'],
+    'timestamp'             => ['type' => 'string'],
+    'timestamp with time zone' => ['type' => 'string'],
 
     // SQL:1999
     //'array','ref','row'
-    'binary large object'   => array('type' => 'string', 'binary' => true),
-    'boolean'               => array('type' => 'boolean'),
-    'character large object' => array('type' => 'string'),
-    'national character large object' => array('type' => 'string'),
+    'binary large object'   => ['type' => 'string', 'binary' => true],
+    'boolean'               => ['type' => 'boolean'],
+    'character large object' => ['type' => 'string'],
+    'national character large object' => ['type' => 'string'],
 
     // SQL:2003
-    'bigint'    => array('type' => 'int', 'min' => -9223372036854775808, 'max' => 9223372036854775807),
+    'bigint'    => ['type' => 'int', 'min' => -9223372036854775808, 'max' => 9223372036854775807],
 
     // SQL:2008
-    'binary'            => array('type' => 'string', 'binary' => true, 'exact' => true),
-    'binary varying'    => array('type' => 'string', 'binary' => true),
+    'binary'            => ['type' => 'string', 'binary' => true, 'exact' => true],
+    'binary varying'    => ['type' => 'string', 'binary' => true],
 
     // MySQL
-    'bigint unsigned'   => array('type' => 'int', 'min' => 0, 'max' => 18446744073709551615),
-    'decimal unsigned'  => array('type' => 'float', 'exact' => true, 'min' => 0.0),
-    'double unsigned'   => array('type' => 'float', 'min' => 0.0),
-    'float unsigned'    => array('type' => 'float', 'min' => 0.0),
-    'integer unsigned'  => array('type' => 'int', 'min' => 0, 'max' => 4294967295),
-    'mediumint'         => array('type' => 'int', 'min' => -8388608, 'max' => 8388607),
-    'mediumint unsigned' => array('type' => 'int', 'min' => 0, 'max' => 16777215),
-    'real unsigned'     => array('type' => 'float', 'min' => 0.0),
-    'smallint unsigned' => array('type' => 'int', 'min' => 0, 'max' => 65535),
-    'text'              => array('type' => 'string'),
-    'tinyint'           => array('type' => 'int', 'min' => -128, 'max' => 127),
-    'tinyint unsigned'  => array('type' => 'int', 'min' => 0, 'max' => 255),
-    'year'              => array('type' => 'string'),
-);
+    'bigint unsigned'   => ['type' => 'int', 'min' => 0, 'max' => 18446744073709551615],
+    'decimal unsigned'  => ['type' => 'float', 'exact' => true, 'min' => 0.0],
+    'double unsigned'   => ['type' => 'float', 'min' => 0.0],
+    'float unsigned'    => ['type' => 'float', 'min' => 0.0],
+    'integer unsigned'  => ['type' => 'int', 'min' => 0, 'max' => 4294967295],
+    'mediumint'         => ['type' => 'int', 'min' => -8388608, 'max' => 8388607],
+    'mediumint unsigned' => ['type' => 'int', 'min' => 0, 'max' => 16777215],
+    'real unsigned'     => ['type' => 'float', 'min' => 0.0],
+    'smallint unsigned' => ['type' => 'int', 'min' => 0, 'max' => 65535],
+    'text'              => ['type' => 'string'],
+    'tinyint'           => ['type' => 'int', 'min' => -128, 'max' => 127],
+    'tinyint unsigned'  => ['type' => 'int', 'min' => 0, 'max' => 255],
+    'year'              => ['type' => 'string'],
+];
 
 // SQL-92
 $config['char'] = $config['character'];

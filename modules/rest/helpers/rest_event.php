@@ -104,6 +104,6 @@ class rest_event
             $key->save();
         }
         $view->rest_key = $key->access_key;
-        $data->content[] = (object)array('title' => t('REST API'), 'view' => $view);
+        $data->content[] = (object)['title' => t('REST API'), 'view' => $view];
     }
 }

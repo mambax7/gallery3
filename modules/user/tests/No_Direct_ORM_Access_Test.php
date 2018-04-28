@@ -32,7 +32,7 @@ class No_Direct_ORM_Access_Test extends Gallery_Unit_Test_Case
         )
       )
     );
-        $errors = array();
+        $errors = [];
         foreach ($dir as $file) {
             //if (basename(dirname($file)) == "helpers") {
             $file_as_string = file_get_contents($file);
@@ -61,7 +61,7 @@ class No_Direct_ORM_Access_Test extends Gallery_Unit_Test_Case
         )
       )
     );
-        $errors = array();
+        $errors = [];
         foreach ($dir as $file) {
             $file_as_string = file_get_contents($file);
             if (preg_match("/ORM::factory\\(\"group\"/", $file_as_string)) {

@@ -44,7 +44,7 @@ class Session_Cache_Driver implements Session_Driver
 
             // Test the config group name
             if (($config = Kohana::config('cache.'.$config)) === null) {
-                throw new Kohana_Exception('The :group: group is not defined in your configuration.', array(':group:' => $name));
+                throw new Kohana_Exception('The :group: group is not defined in your configuration.', [':group:' => $name]);
             }
         }
 

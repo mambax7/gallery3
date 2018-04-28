@@ -73,7 +73,7 @@ class tag_Core
             if (!$cloud->max_count) {
                 return;
             }
-            usort($tags, array('tag', 'sort_by_name'));
+            usort($tags, ['tag', 'sort_by_name']);
             $cloud->tags = $tags;
             return $cloud;
         }
@@ -110,7 +110,7 @@ class tag_Core
 
     public static function get_add_form($item)
     {
-        $form = new Forge("tags/create/{$item->id}", '', 'post', array('id' => 'g-add-tag-form', 'class' => 'g-short-form'));
+        $form = new Forge("tags/create/{$item->id}", '', 'post', ['id' => 'g-add-tag-form', 'class' => 'g-short-form']);
         $label = $item->is_album() ?
       t('Add tag to album') :
       ($item->is_photo() ? t('Add tag to photo') : t('Add tag to movie'));
@@ -124,9 +124,9 @@ class tag_Core
 
     public static function get_delete_form($tag)
     {
-        $form = new Forge("admin/tags/delete/$tag->id", '', 'post', array('id' => 'g-delete-tag-form'));
+        $form = new Forge("admin/tags/delete/$tag->id", '', 'post', ['id' => 'g-delete-tag-form']);
         $group = $form->group('delete_tag')
-      ->label(t('Really delete tag %tag_name?', array('tag_name' => $tag->name)));
+      ->label(t('Really delete tag %tag_name?', ['tag_name' => $tag->name]));
         $group->submit('')->value(t('Delete Tag'));
         return $form;
     }
@@ -181,7 +181,7 @@ class tag_Core
      * @param array      $where an array of arrays, each compatible with ORM::where()
      * @return
      */
-    public static function get_position($tag, $item, $where=array())
+    public static function get_position($tag, $item, $where= [])
     {
         return ORM::factory('item')
       ->viewable()

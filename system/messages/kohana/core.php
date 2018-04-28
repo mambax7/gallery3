@@ -7,8 +7,8 @@
  * @copyright  (c) 2009 Kohana Team
  * @license    http://kohanaphp.com/license
  */
-$messages = array(
-    'errors' => array(
+$messages = [
+    'errors' => [
         E_KOHANA             => 'Framework Error',
         E_PAGE_NOT_FOUND     => 'Page Not Found',
         E_DATABASE_ERROR     => 'Database Error',
@@ -25,8 +25,8 @@ $messages = array(
         E_STRICT             => 'Strict Mode Error',
         E_NOTICE             => 'Runtime Message',
         E_USER_NOTICE        => 'Runtime Message',
-    ),
-);
+    ],
+];
 
 // E_DEPRECATED is only defined in PHP >= 5.3.0
 if (defined('E_DEPRECATED')) {

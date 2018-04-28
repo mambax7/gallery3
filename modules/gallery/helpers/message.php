@@ -69,7 +69,7 @@ class message_Core
     {
         $session = Session::instance();
         $status = $session->get('messages');
-        $status[] = array($msg, $severity);
+        $status[] = [$msg, $severity];
         $session->set('messages', $status);
     }
 
@@ -81,9 +81,9 @@ class message_Core
      */
     public static function get()
     {
-        $buf = array();
+        $buf = [];
 
-        $messages = Session::instance()->get_once('messages', array());
+        $messages = Session::instance()->get_once('messages', []);
         foreach ($messages as $msg) {
             $msg[0] = str_replace('__CSRF__', access::csrf_token(), $msg[0]);
             $buf[] = '<li class="' . message::severity_class($msg[1]) . "\">$msg[0]</li>";

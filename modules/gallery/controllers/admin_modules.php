@@ -37,8 +37,8 @@ class Admin_Modules_Controller extends Admin_Controller
     {
         access::verify_csrf();
 
-        $messages = array('error' => array(), 'warn' => array());
-        $desired_list = array();
+        $messages = ['error' => [], 'warn' => []];
+        $desired_list = [];
         foreach (module::available() as $module_name => $info) {
             if ($info->locked) {
                 continue;
@@ -78,10 +78,10 @@ class Admin_Modules_Controller extends Admin_Controller
     private function _do_save()
     {
         $changes = new stdClass();
-        $changes->activate = array();
-        $changes->deactivate = array();
-        $activated_names = array();
-        $deactivated_names = array();
+        $changes->activate = [];
+        $changes->deactivate = [];
+        $activated_names = [];
+        $deactivated_names = [];
         foreach (module::available() as $module_name => $info) {
             if ($info->locked) {
                 continue;
@@ -106,7 +106,7 @@ class Admin_Modules_Controller extends Admin_Controller
             } catch (Exception $e) {
                 message::warning(t(
                                      'An error occurred while installing the <b>%module_name</b> module',
-                                     array('module_name' => $info->name)
+                                     ['module_name' => $info->name]
         ));
                 Kohana_Log::add('error', (string)$e);
             }
@@ -116,10 +116,10 @@ class Admin_Modules_Controller extends Admin_Controller
 
         // @todo this type of collation is questionable from an i18n perspective
         if ($activated_names) {
-            message::success(t('Activated: %names', array('names' => implode(', ', $activated_names))));
+            message::success(t('Activated: %names', ['names' => implode(', ', $activated_names)]));
         }
         if ($deactivated_names) {
-            message::success(t('Deactivated: %names', array('names' => implode(', ', $deactivated_names))));
+            message::success(t('Deactivated: %names', ['names' => implode(', ', $deactivated_names)]));
         }
     }
 }

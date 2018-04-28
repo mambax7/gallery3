@@ -141,26 +141,27 @@ $config['extension_prefix'] = 'MY_';
  * An optional list of Config Drivers to use, they "fallback" to the one below them if they
  * dont work so the first driver is tried then so on until it hits the built in "array" driver and fails
  */
-$config['config_drivers'] = array();
+$config['config_drivers'] = [];
 
 /**
  * Additional resource paths, or "modules". Each path can either be absolute
  * or relative to the docroot. Modules can include any resource that can exist
  * in your application directory, configuration files, controllers, views, etc.
  */
-$config['modules'] = array(
+$config['modules'] = [
     MODPATH . 'forge',
     MODPATH . 'kohana23_compat',
     MODPATH . 'gallery',  // gallery must be *last* in the order
-);
+];
 
 if (TEST_MODE) {
     array_splice(
         $config['modules'],
-      0,
-      0,
-               array(MODPATH . 'gallery_unit_test',
+        0,
+        0,
+        [
+            MODPATH . 'gallery_unit_test',
                      MODPATH . 'unit_test'
-        )
+        ]
   );
 }

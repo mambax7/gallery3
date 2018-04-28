@@ -94,7 +94,7 @@
           <li><?= t('Make sure the target language is installed and up to date (check above).') ?></li>
           <li><?= t(
                   'Make sure you have selected the right target language (currently %default_locale).',
-                  array('default_locale' => locales::display_name())
+                  ['default_locale' => locales::display_name()]
 ) ?></li>
           <li><?= t('Start the translation mode and the translation interface will appear at the bottom of each Gallery page.') ?></li>
         </ol>

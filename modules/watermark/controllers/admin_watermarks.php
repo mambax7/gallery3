@@ -54,12 +54,13 @@ class Admin_Watermarks_Controller extends Admin_Controller
             log::success('watermark', t('Watermark changed'));
             message::success(t('Watermark changed'));
             json::reply(
-        array(
+                [
             'result'   => 'success',
-            'location' => url::site('admin/watermarks'))
+            'location' => url::site('admin/watermarks')
+                ]
       );
         } else {
-            json::reply(array('result' => 'error', 'html' => (string)$form));
+            json::reply(['result' => 'error', 'html' => (string)$form]);
         }
         // Override the application/json mime type for iframe compatibility.  See ticket #2022.
         header('Content-Type: text/plain; charset=' . Kohana::CHARSET);
@@ -89,9 +90,9 @@ class Admin_Watermarks_Controller extends Admin_Controller
                 log::success('watermark', t('Watermark deleted'));
                 message::success(t('Watermark deleted'));
             }
-            json::reply(array('result' => 'success', 'location' => url::site('admin/watermarks')));
+            json::reply(['result' => 'success', 'location' => url::site('admin/watermarks')]);
         } else {
-            json::reply(array('result' => 'error', 'html' => (string)$form));
+            json::reply(['result' => 'error', 'html' => (string)$form]);
         }
         // Override the application/json mime type for iframe compatibility.  See ticket #2022.
         header('Content-Type: text/plain; charset=' . Kohana::CHARSET);
@@ -138,9 +139,9 @@ class Admin_Watermarks_Controller extends Admin_Controller
 
             message::success(t('Watermark saved'));
             log::success('watermark', t('Watermark saved'));
-            json::reply(array('result' => 'success', 'location' => url::site('admin/watermarks')));
+            json::reply(['result' => 'success', 'location' => url::site('admin/watermarks')]);
         } else {
-            json::reply(array('result' => 'error', 'html' => (string)$form));
+            json::reply(['result' => 'error', 'html' => (string)$form]);
         }
         // Override the application/json mime type for iframe compatibility.  See ticket #2022.
         header('Content-Type: text/plain; charset=' . Kohana::CHARSET);
@@ -150,16 +151,17 @@ class Admin_Watermarks_Controller extends Admin_Controller
     {
         graphics::remove_rules('watermark');
         if ($name = module::get_var('watermark', 'name')) {
-            foreach (array('thumb', 'resize') as $target) {
+            foreach (['thumb', 'resize'] as $target) {
                 graphics::add_rule(
                     'watermark',
                     $target, 'gallery_graphics::composite',
-                    array(
+                    [
                         'file'         => VARPATH . "modules/watermark/$name",
                         'width'        => module::get_var('watermark', 'width'),
                         'height'       => module::get_var('watermark', 'height'),
                         'position'     => module::get_var('watermark', 'position'),
-                        'transparency' => 101 - module::get_var('watermark', 'transparency')),
+                        'transparency' => 101 - module::get_var('watermark', 'transparency')
+                    ],
                     1000
         );
             }

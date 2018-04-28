@@ -32,7 +32,7 @@ class slideshow_event_Core
             site_status::warning(
         t(
             'The Slideshow module requires the RSS module.  <a href="%url">Activate the RSS module now</a>',
-            array('url' => html::mark_clean(url::site('admin/modules')))
+            ['url' => html::mark_clean(url::site('admin/modules'))]
         ), 'slideshow_needs_rss'
       );
         } else {
@@ -43,7 +43,7 @@ class slideshow_event_Core
     public static function album_menu($menu, $theme)
     {
         $max_scale = module::get_var('slideshow', 'max_scale');
-        if ($theme->item()->descendants_count(array(array('type', '=', 'photo')))) {
+        if ($theme->item()->descendants_count([['type', '=', 'photo']])) {
             $menu->append(Menu::factory('link')
                     ->id('slideshow')
                     ->label(t('View slideshow'))

@@ -17,28 +17,28 @@ class ORM_Core
 {
 
     // Current relationships
-    protected $has_one                 = array();
-    protected $belongs_to              = array();
-    protected $has_many                = array();
-    protected $has_and_belongs_to_many = array();
-    protected $has_many_through        = array();
+    protected $has_one                 = [];
+    protected $belongs_to              = [];
+    protected $has_many                = [];
+    protected $has_and_belongs_to_many = [];
+    protected $has_many_through        = [];
 
     // Relationships that should always be joined
-    protected $load_with = array();
+    protected $load_with = [];
 
     // Current object
-    protected $object  = array();
-    protected $changed = array();
-    protected $related = array();
+    protected $object  = [];
+    protected $changed = [];
+    protected $related = [];
     protected $_valid  = false;
     protected $_loaded  = false;
     protected $_saved   = false;
     protected $sorting;
-    protected $rules = array();
+    protected $rules = [];
 
     // Related objects
-    protected $object_relations = array();
-    protected $changed_relations = array();
+    protected $object_relations = [];
+    protected $changed_relations = [];
 
     // Model table information
     protected $object_name;
@@ -56,7 +56,7 @@ class ORM_Core
     protected $primary_val = 'name';
 
     // Array of foreign key name overloads
-    protected $foreign_key = array();
+    protected $foreign_key = [];
 
     // Model configuration
     protected $table_names_plural = true;
@@ -64,14 +64,14 @@ class ORM_Core
 
     // Database configuration
     protected $db = 'default';
-    protected $db_applied = array();
+    protected $db_applied = [];
     protected $db_builder;
 
     // With calls already applied
-    protected $with_applied = array();
+    protected $with_applied = [];
 
     // Stores column information for ORM models
-    protected static $column_cache = array();
+    protected static $column_cache = [];
 
     /**
      * Creates and returns a new model.
@@ -103,7 +103,7 @@ class ORM_Core
 
         if (! isset($this->sorting)) {
             // Default sorting
-            $this->sorting = array($this->primary_key => 'asc');
+            $this->sorting = [$this->primary_key => 'asc'];
         }
 
         // Initialize database
@@ -168,7 +168,7 @@ class ORM_Core
     public function __sleep()
     {
         // Store only information about the object
-        return array('object_name', 'object', 'changed', '_loaded', '_saved', 'sorting');
+        return ['object_name', 'object', 'changed', '_loaded', '_saved', 'sorting'];
     }
 
     /**
@@ -199,7 +199,7 @@ class ORM_Core
     public function __call($method, array $args)
     {
         if (method_exists($this->db_builder, $method)) {
-            if (in_array($method, array('execute', 'insert', 'update', 'delete'))) {
+            if (in_array($method, ['execute', 'insert', 'update', 'delete'])) {
                 throw new Kohana_Exception('Query methods cannot be used through ORM');
             }
 
@@ -220,7 +220,7 @@ class ORM_Core
 
                 switch ($num_args) {
                     case 0:
-                        if (in_array($method, array('open', 'and_open', 'or_open', 'close', 'cache'))) {
+                        if (in_array($method, ['open', 'and_open', 'or_open', 'close', 'cache'])) {
                             // Should return ORM, not Database
                             $this->db_builder->$method();
                         } else {
@@ -242,7 +242,7 @@ class ORM_Core
                     break;
                     default:
                         // Here comes the snail...
-                        call_user_func_array(array($this->db, $method), $args);
+                        call_user_func_array([$this->db, $method], $args);
                     break;
                 }
             }
@@ -251,7 +251,7 @@ class ORM_Core
         } else {
             throw new Kohana_Exception(
                 'Invalid method :method called in :class',
-                array(':method' => $method, ':class' => get_class($this))
+                [':method' => $method, ':class' => get_class($this)]
             );
         }
     }
@@ -292,10 +292,10 @@ class ORM_Core
                 }
 
                 // Foreign key lies in this table (this model belongs_to target model)
-                $where = array($model->foreign_key(true), '=', $this->object[$this->foreign_key($column)]);
+                $where = [$model->foreign_key(true), '=', $this->object[$this->foreign_key($column)]];
             } else {
                 // Foreign key lies in the target table (this model has_one target model)
-                $where = array($this->foreign_key($column, $model->table_name), '=', $this->primary_key_value);
+                $where = [$this->foreign_key($column, $model->table_name), '=', $this->primary_key_value];
             }
 
             // one<>alias:one relationship
@@ -341,17 +341,17 @@ class ORM_Core
             }
         } elseif (isset($this->ignored_columns[$column])) {
             return null;
-        } elseif (in_array($column, array(
+        } elseif (in_array($column, [
                 'object_name', 'object_plural','_valid', // Object
                 'primary_key', 'primary_val', 'table_name', 'table_columns', // Table
                 'has_one', 'belongs_to', 'has_many', 'has_many_through', 'has_and_belongs_to_many', 'load_with' // Relationships
-            ))) {
+        ])) {
             // Model meta information
             return $this->$column;
         } else {
             throw new Kohana_Exception(
                 'The :property property does not exist in the :class class',
-                array(':property' => $column, ':class' => get_class($this))
+                [':property' => $column, ':class' => get_class($this)]
             );
         }
     }
@@ -420,7 +420,7 @@ class ORM_Core
         } else {
             throw new Kohana_Exception(
                 'The :property: property does not exist in the :class: class',
-                array(':property:' => $column, ':class:' => get_class($this))
+                [':property:' => $column, ':class:' => get_class($this)]
             );
         }
     }
@@ -474,7 +474,7 @@ class ORM_Core
      */
     public function as_array()
     {
-        $object = array();
+        $object = [];
 
         foreach ($this->object as $key => $val) {
             // Reconstruct the array (calls __get)
@@ -538,7 +538,7 @@ class ORM_Core
         // Add to with_applied to prevent duplicate joins
         $this->with_applied[$target_path] = true;
 
-        $select = array();
+        $select = [];
 
         // Use the keys of the empty object to determine the columns
         foreach (array_keys($target->object) as $column) {
@@ -560,7 +560,7 @@ class ORM_Core
         }
 
         // This trick allows for models to use different table prefixes (sharing the same database)
-        $join_table = array($this->db->quote_table($target_path) => $target->db->quote_table($target->table_name));
+        $join_table = [$this->db->quote_table($target_path) => $target->db->quote_table($target->table_name)];
 
         // Join the related object into the result
         // Use Database_Expression to disable prefixing
@@ -582,7 +582,7 @@ class ORM_Core
         if ($id !== null) {
             if (is_array($id)) {
                 // Search for all clauses
-                $this->db_builder->where(array($id));
+                $this->db_builder->where([$id]);
             } else {
                 // Search for a specific column
                 $this->db_builder->where($this->table_name.'.'.$this->unique_key($id), '=', $id);
@@ -660,12 +660,12 @@ class ORM_Core
                             $array->pre_filter($value, $field);
                             break;
                         case 'rules':
-                            $rules = array_merge(array($field), $value);
-                            call_user_func_array(array($array,'add_rules'), $rules);
+                            $rules = array_merge([$field], $value);
+                            call_user_func_array([$array, 'add_rules'], $rules);
                             break;
                         case 'callbacks':
-                            $callbacks = array_merge(array($field), $value);
-                            call_user_func_array(array($array,'add_callbacks'), $callbacks);
+                            $callbacks = array_merge([$field], $value);
+                            call_user_func_array([$array, 'add_callbacks'], $callbacks);
                             break;
                     }
                 }
@@ -697,7 +697,7 @@ class ORM_Core
                 $this->validate();
             }
 
-            $data = array();
+            $data = [];
             foreach ($this->changed as $column) {
                 // Compile changed data
                 $data[$column] = $this->object[$column];
@@ -748,7 +748,7 @@ class ORM_Core
 
             if ($this->saved() === true) {
                 // All changes have been saved
-                $this->changed = array();
+                $this->changed = [];
             }
         }
 
@@ -1061,7 +1061,7 @@ class ORM_Core
         // Proxy to database
         $this->db->clear_cache($sql, $type);
 
-        ORM::$column_cache = array();
+        ORM::$column_cache = [];
 
         return $this;
     }
@@ -1181,7 +1181,7 @@ class ORM_Core
     public function load_values(array $values)
     {
         // Related objects
-        $related = array();
+        $related = [];
 
         foreach ($values as $column => $value) {
             if (strpos($column, ':') === false) {
@@ -1221,7 +1221,7 @@ class ORM_Core
         if (array_key_exists($this->primary_key, $values)) {
             if (! $ignore_changed) {
                 // Replace the object and reset the object status
-                $this->object = $this->changed = $this->related = array();
+                $this->object = $this->changed = $this->related = [];
             }
 
             // Set the loaded and saved object status based on the primary key
@@ -1229,7 +1229,7 @@ class ORM_Core
         }
 
         // Related objects
-        $related = array();
+        $related = [];
 
         foreach ($values as $column => $value) {
             if (strpos($column, ':') === false) {
@@ -1291,7 +1291,7 @@ class ORM_Core
         }
 
         if (! isset($this->db_applied['order_by']) and ! empty($this->sorting)) {
-            $sorting = array();
+            $sorting = [];
             foreach ($this->sorting as $column => $direction) {
                 if (strpos($column, '.') === false) {
                     // Keeps sorting working properly when using JOINs on
@@ -1308,7 +1308,7 @@ class ORM_Core
 
         // Load the result
         $result = $this->db_builder->execute($this->db);
-        $this->db_applied = array();
+        $this->db_applied = [];
 
         if ($array === true) {
             // Return an iterated result
@@ -1335,13 +1335,13 @@ class ORM_Core
      */
     protected function load_relations($table, ORM $model)
     {
-        $result = db::select(array('id' => $model->foreign_key($table)))
+        $result = db::select(['id' => $model->foreign_key($table)])
             ->from($table)
             ->where($this->foreign_key($table, $table), '=', $this->primary_key_value)
             ->execute($this->db)
             ->as_object();
 
-        $relations = array();
+        $relations = [];
         foreach ($result as $row) {
             $relations[] = $row->id;
         }

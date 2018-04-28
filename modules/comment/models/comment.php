@@ -66,14 +66,14 @@ class Comment_Model_Core extends ORM
     {
         // validate() is recursive, only modify the rules on the outermost call.
         if (!$array) {
-            $this->rules = array(
-                'guest_name'  => array('callbacks' => array(array($this, 'valid_author'))),
-                'guest_email' => array('callbacks' => array(array($this, 'valid_email'))),
-                'guest_url'   => array('rules' => array('url')),
-                'item_id'     => array('callbacks' => array(array($this, 'valid_item'))),
-                'state'       => array('rules' => array('Comment_Model::valid_state')),
-                'text'        => array('rules' => array('required')),
-      );
+            $this->rules = [
+                'guest_name'  => ['callbacks' => [[$this, 'valid_author']]],
+                'guest_email' => ['callbacks' => [[$this, 'valid_email']]],
+                'guest_url'   => ['rules' => ['url']],
+                'item_id'     => ['callbacks' => [[$this, 'valid_item']]],
+                'state'       => ['rules' => ['Comment_Model::valid_state']],
+                'text'        => ['rules' => ['required']],
+            ];
         }
 
         parent::validate($array);
@@ -186,7 +186,7 @@ class Comment_Model_Core extends ORM
      */
     public static function valid_state($value)
     {
-        return in_array($value, array('published', 'unpublished', 'spam', 'deleted'));
+        return in_array($value, ['published', 'unpublished', 'spam', 'deleted']);
     }
 
     /**
@@ -194,7 +194,7 @@ class Comment_Model_Core extends ORM
      */
     public function as_restful_array()
     {
-        $data = array();
+        $data = [];
         foreach ($this->as_array() as $key => $value) {
             if (strncmp($key, 'server_', 7)) {
                 $data[$key] = $value;

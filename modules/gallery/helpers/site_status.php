@@ -106,7 +106,7 @@ class site_status_Core
         if (!identity::active_user()->admin) {
             return;
         }
-        $buf = array();
+        $buf = [];
         foreach (ORM::factory('message')->find_all() as $msg) {
             $value = str_replace('__CSRF__', access::csrf_token(), $msg->value);
             $buf[] = '<li class="' . site_status::severity_class($msg->severity) . "\">$value</li>";

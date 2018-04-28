@@ -241,7 +241,7 @@ class text_Core
         $string2_length = strlen($string2);
 
         // Here we start building the table of values
-        $matrix = array();
+        $matrix = [];
 
         // String1 length + 1 = rows.
         for ($i = 0; $i <= $string1_length; ++$i) {
@@ -351,7 +351,7 @@ class text_Core
         }
 
         // Standardize newlines
-        $str = str_replace(array("\r\n", "\r"), "\n", $str);
+        $str = str_replace(["\r\n", "\r"], "\n", $str);
 
         // Trim whitespace on each line
         $str = preg_replace('~^[ \t]+~m', '', $str);
@@ -405,12 +405,12 @@ class text_Core
 
         // IEC prefixes (binary)
         if ($si == false or strpos($force_unit, 'i') !== false) {
-            $units = array(__('B'), __('KiB'), __('MiB'), __('GiB'), __('TiB'), __('PiB'));
+            $units = [__('B'), __('KiB'), __('MiB'), __('GiB'), __('TiB'), __('PiB')];
             $mod   = 1024;
         }
         // SI prefixes (decimal)
         else {
-            $units = array(__('B'), __('kB'), __('MB'), __('GB'), __('TB'), __('PB'));
+            $units = [__('B'), __('kB'), __('MB'), __('GB'), __('TB'), __('PB')];
             $mod   = 1000;
         }
 
@@ -510,7 +510,7 @@ class text_Core
 
         if ($case <= 0) {
             if ($UTF8_LOWER_ACCENTS === null) {
-                $UTF8_LOWER_ACCENTS = array(
+                $UTF8_LOWER_ACCENTS = [
                     'à' => 'a',  'ô' => 'o',  'ď' => 'd',  'ḟ' => 'f',  'ë' => 'e',  'š' => 's',  'ơ' => 'o',
                     'ß' => 'ss', 'ă' => 'a',  'ř' => 'r',  'ț' => 't',  'ň' => 'n',  'ā' => 'a',  'ķ' => 'k',
                     'ŝ' => 's',  'ỳ' => 'y',  'ņ' => 'n',  'ĺ' => 'l',  'ħ' => 'h',  'ṗ' => 'p',  'ó' => 'o',
@@ -526,7 +526,7 @@ class text_Core
                     'â' => 'a',  'ľ' => 'l',  'ẅ' => 'w',  'ż' => 'z',  'ī' => 'i',  'ã' => 'a',  'ġ' => 'g',
                     'ṁ' => 'm',  'ō' => 'o',  'ĩ' => 'i',  'ù' => 'u',  'į' => 'i',  'ź' => 'z',  'á' => 'a',
                     'û' => 'u',  'þ' => 'th', 'ð' => 'dh', 'æ' => 'ae', 'µ' => 'u',  'ĕ' => 'e',  'ı' => 'i',
-                );
+                ];
             }
 
             $str = str_replace(
@@ -538,7 +538,7 @@ class text_Core
 
         if ($case >= 0) {
             if ($UTF8_UPPER_ACCENTS === null) {
-                $UTF8_UPPER_ACCENTS = array(
+                $UTF8_UPPER_ACCENTS = [
                     'À' => 'A',  'Ô' => 'O',  'Ď' => 'D',  'Ḟ' => 'F',  'Ë' => 'E',  'Š' => 'S',  'Ơ' => 'O',
                     'Ă' => 'A',  'Ř' => 'R',  'Ț' => 'T',  'Ň' => 'N',  'Ā' => 'A',  'Ķ' => 'K',  'Ĕ' => 'E',
                     'Ŝ' => 'S',  'Ỳ' => 'Y',  'Ņ' => 'N',  'Ĺ' => 'L',  'Ħ' => 'H',  'Ṗ' => 'P',  'Ó' => 'O',
@@ -554,7 +554,7 @@ class text_Core
                     'Â' => 'A',  'Ľ' => 'L',  'Ẅ' => 'W',  'Ż' => 'Z',  'Ī' => 'I',  'Ã' => 'A',  'Ġ' => 'G',
                     'Ṁ' => 'M',  'Ō' => 'O',  'Ĩ' => 'I',  'Ù' => 'U',  'Į' => 'I',  'Ź' => 'Z',  'Á' => 'A',
                     'Û' => 'U',  'Þ' => 'Th', 'Ð' => 'Dh', 'Æ' => 'Ae', 'İ' => 'I',
-                );
+                ];
             }
 
             $str = str_replace(

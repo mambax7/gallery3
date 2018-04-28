@@ -106,12 +106,12 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
             strpos($path, MODPATH . 'unit_test') === 0) {
             // Kohana: we only care about the first line
             $fp = fopen($path, 'r');
-            $actual = array(fgets($fp));
+            $actual = [fgets($fp)];
             fclose($fp);
-            $expected = array("<?php defined('SYSPATH') OR die('No direct script access.');\n");
-            $expected_2 = array("<?php defined('SYSPATH') OR die('No direct access allowed.');\n");
-            $expected_3 = array("<?php defined('SYSPATH') or die('No direct access allowed.');\n");
-            $expected_4 = array("<?php defined('SYSPATH') or die('No direct script access.');\n");
+            $expected = ["<?php defined('SYSPATH') OR die('No direct script access.');\n"];
+            $expected_2 = ["<?php defined('SYSPATH') OR die('No direct access allowed.');\n"];
+            $expected_3 = ["<?php defined('SYSPATH') or die('No direct access allowed.');\n"];
+            $expected_4 = ["<?php defined('SYSPATH') or die('No direct script access.');\n"];
         } elseif (strpos($path, MODPATH . 'forge') === 0 ||
                   strpos($path, MODPATH . 'exif/lib') === 0 ||
                   strpos($path, MODPATH . 'gallery/vendor/joomla') === 0 ||
@@ -121,28 +121,28 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
                   ||
                $path == DOCROOT . 'var/database.php') {
             // 3rd party module security-only preambles, similar to Gallery's
-            $expected = array("<?php defined(\"SYSPATH\") or die(\"No direct access allowed.\");\n");
-            $expected_2 = array("<?php defined('SYSPATH') OR die('No direct access allowed.');\n");
-            $expected_3 = array("<?php defined(\"SYSPATH\") or die(\"No direct script access.\");\n");
+            $expected = ["<?php defined(\"SYSPATH\") or die(\"No direct access allowed.\");\n"];
+            $expected_2 = ["<?php defined('SYSPATH') OR die('No direct access allowed.');\n"];
+            $expected_3 = ["<?php defined(\"SYSPATH\") or die(\"No direct script access.\");\n"];
             $fp = fopen($path, 'r');
-            $actual = array(fgets($fp));
+            $actual = [fgets($fp)];
             fclose($fp);
         } elseif (strpos($path, DOCROOT . 'var/logs') === 0) {
             // var/logs has the kohana one-liner preamble
-            $expected = array("<?php defined('SYSPATH') or die('No direct script access.'); ?>\n");
+            $expected = ["<?php defined('SYSPATH') or die('No direct script access.'); ?>\n"];
             $fp = fopen($path, 'r');
-            $actual = array(fgets($fp));
+            $actual = [fgets($fp)];
             fclose($fp);
         } elseif (strpos($path, DOCROOT . 'var') === 0) {
             // Anything else under var has the Gallery one-liner
-            $expected = array("<?php defined(\"SYSPATH\") or die(\"No direct script access.\") ?>\n");
+            $expected = ["<?php defined(\"SYSPATH\") or die(\"No direct script access.\") ?>\n"];
             $fp = fopen($path, 'r');
-            $actual = array(fgets($fp));
+            $actual = [fgets($fp)];
             fclose($fp);
         } else {
             // Gallery: we care about the entire copyright
             $actual = $this->_get_preamble($path);
-            $expected = array(
+            $expected = [
                 '<?php defined("SYSPATH") or die("No direct script access.");',
                 '/**',
                 ' * Gallery - a web based photo album viewer and editor',
@@ -162,7 +162,7 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
                 ' * along with this program; if not, write to the Free Software',
                 ' * Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA  02110-1301, USA.',
                 ' */',
-      );
+            ];
         }
         if ($expected != $actual && $expected_2 != $actual && $expected_3 != $actual && $expected_4 != $actual) {
             $errors[] = "$path:1\n  expected\n\t" . implode("\n\t", $expected) .
@@ -176,7 +176,7 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
         new RecursiveIteratorIterator(new RecursiveDirectoryIterator(DOCROOT))
     );
 
-        $errors = array();
+        $errors = [];
         foreach ($dir as $file) {
             $path = $file->getPathname();
             switch ($path) {
@@ -224,7 +224,7 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
         )
       )
     );
-        $errors = array();
+        $errors = [];
         foreach ($dir as $file) {
             $file_as_string = file_get_contents($file);
             if (preg_match('/\t/', $file_as_string)) {
@@ -244,7 +244,7 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
     private function _get_preamble($file)
     {
         $lines = file($file);
-        $copy = array();
+        $copy = [];
         for ($i = 0; $i < count($lines); $i++) {
             $copy[] = rtrim($lines[$i]);
             if (!strncmp($lines[$i], ' */', 3)) {
@@ -284,7 +284,7 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
       glob('themes/*/module.info')
     );
 
-        $errors = array();
+        $errors = [];
         foreach ($info_files as $file) {
             foreach (file($file) as $line) {
                 $parts = explode('=', $line, 2);
@@ -295,7 +295,7 @@ class File_Structure_Test extends Gallery_Unit_Test_Case
 
             $module = dirname($file);
             // Certain keys must exist
-            foreach (array('name', 'description', 'version') as $key) {
+            foreach (['name', 'description', 'version'] as $key) {
                 if (!array_key_exists($key, $values)) {
                     $errors[] = "$module: missing key $key";
                 }

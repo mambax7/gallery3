@@ -145,10 +145,11 @@ class gallery_theme_Core
     );
         return '<li class="g-first">' .
                t(
-          module::get_var('gallery', 'credits'),
-        array(
+                   module::get_var('gallery', 'credits'),
+                   [
             'url'             => 'http://galleryproject.org',
-            'gallery_version' => $version_string)
+            'gallery_version' => $version_string
+                   ]
       ) . '</li>';
     }
 

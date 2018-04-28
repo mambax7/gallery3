@@ -10,7 +10,7 @@
  * @license    http://kohanaphp.com/license
  */
 
-$config['uncountable'] = array(
+$config['uncountable'] = [
     'access',
     'advice',
     'art',
@@ -50,9 +50,9 @@ $config['uncountable'] = array(
     'water',
     'weather',
     'work',
-);
+];
 
-$config['irregular'] = array(
+$config['irregular'] = [
     'child' => 'children',
     'clothes' => 'clothing',
     'man' => 'men',
@@ -65,4 +65,4 @@ $config['irregular'] = array(
     'leaf' => 'leaves',
     'course' => 'courses',
     'size' => 'sizes',
-);
+];

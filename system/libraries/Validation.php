@@ -11,25 +11,25 @@ class Validation_Core extends ArrayObject
 {
 
     // Filters
-    protected $pre_filters = array();
-    protected $post_filters = array();
+    protected $pre_filters = [];
+    protected $post_filters = [];
 
     // Rules and callbacks
-    protected $rules = array();
-    protected $callbacks = array();
+    protected $rules = [];
+    protected $callbacks = [];
 
     // Rules that are allowed to run on empty fields
-    protected $empty_rules = array('required', 'matches');
+    protected $empty_rules = ['required', 'matches'];
 
     // Errors
-    protected $errors = array();
-    protected $messages = array();
+    protected $errors = [];
+    protected $messages = [];
 
     // Field labels
-    protected $labels = array();
+    protected $labels = [];
 
     // Fields that are expected to be arrays
-    protected $array_fields = array();
+    protected $array_fields = [];
 
     /**
      * Creates a new Validation instance.
@@ -61,8 +61,8 @@ class Validation_Core extends ArrayObject
      */
     public function __clone()
     {
-        $this->errors = array();
-        $this->messages = array();
+        $this->errors = [];
+        $this->messages = [];
     }
 
     /**
@@ -97,7 +97,7 @@ class Validation_Core extends ArrayObject
         ));
 
         // Remove wildcard fields
-        $fields = array_diff($fields, array('*'));
+        $fields = array_diff($fields, ['*']);
 
         return $fields;
     }
@@ -128,7 +128,7 @@ class Validation_Core extends ArrayObject
         // Get field names
         $fields = $this->field_names();
 
-        $safe = array();
+        $safe = [];
         foreach ($fields as $field) {
             if ($choices === null or isset($choices[$field])) {
                 if (isset($this[$field])) {
@@ -218,10 +218,10 @@ class Validation_Core extends ArrayObject
                 $callback = $callback;
             } elseif (method_exists($this, $callback)) {
                 // The callback exists in Validation
-                $callback = array($this, $callback);
+                $callback = [$this, $callback];
             } elseif (method_exists('valid', $callback)) {
                 // The callback exists in valid::
-                $callback = array('valid', $callback);
+                $callback = ['valid', $callback];
             }
         }
 
@@ -239,7 +239,7 @@ class Validation_Core extends ArrayObject
                 $name = $callback;
             }
 
-            throw new Kohana_Exception('Callback %name% used for Validation is not callable', array('%name%' => $name));
+            throw new Kohana_Exception('Callback %name% used for Validation is not callable', ['%name%' => $name]);
         }
 
         return $callback;
@@ -258,7 +258,7 @@ class Validation_Core extends ArrayObject
     {
         if ($field === true or $field === '*') {
             // Use wildcard
-            $fields = array('*');
+            $fields = ['*'];
         } else {
             // Add the filter to specific inputs
             $fields = func_get_args();
@@ -289,7 +289,7 @@ class Validation_Core extends ArrayObject
     {
         if ($field === true) {
             // Use wildcard
-            $fields = array('*');
+            $fields = ['*'];
         } else {
             // Add the filter to specific inputs
             $fields = func_get_args();
@@ -370,7 +370,7 @@ class Validation_Core extends ArrayObject
             $rule = $this->callback($rule);
 
             // Add the rule, with args, to the field
-            $this->rules[$field][] = array($rule, $args, $false_rule);
+            $this->rules[$field][] = [$rule, $args, $false_rule];
         }
 
         return $this;
@@ -544,7 +544,7 @@ class Validation_Core extends ArrayObject
         $this->exchangeArray($array);
 
         // Return TRUE if there are no errors
-        return $this->errors === array();
+        return $this->errors === [];
     }
 
     /**
@@ -558,7 +558,7 @@ class Validation_Core extends ArrayObject
      */
     public function add_error($field, $name, $args = null)
     {
-        $this->errors[$field] = array($name, $args);
+        $this->errors[$field] = [$name, $args];
 
         return $this;
     }
@@ -572,20 +572,20 @@ class Validation_Core extends ArrayObject
     public function errors($file = null)
     {
         if ($file === null) {
-            $errors = array();
+            $errors = [];
             foreach ($this->errors as $field => $error) {
                 $errors[$field] = $error[0];
             }
             return $errors;
         } else {
-            $errors = array();
+            $errors = [];
             foreach ($this->errors as $input => $error) {
                 // Locations to check for error messages
-                $error_locations = array(
+                $error_locations = [
                     "validation/{$file}.{$input}.{$error[0]}",
                     "validation/{$file}.{$input}.default",
                     "validation/default.{$error[0]}"
-                );
+                ];
 
                 if (($message = Kohana::message($error_locations[0])) !== $error_locations[0]) {
                     // Found a message for this field and error
@@ -599,7 +599,7 @@ class Validation_Core extends ArrayObject
                 }
 
                 // Start the translation values list
-                $values = array(':field' => __($this->labels[$input]));
+                $values = [':field' => __($this->labels[$input])];
 
                 if (! empty($error[1])) {
                     foreach ($error[1] as $key => $value) {

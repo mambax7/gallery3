@@ -21,7 +21,7 @@ class DrawForm_Test extends Gallery_Unit_Test_Case
 {
     public function no_group_test()
     {
-        $form = new Forge('test/controller', '', 'post', array('id' => 'g-test-group-form'));
+        $form = new Forge('test/controller', '', 'post', ['id' => 'g-test-group-form']);
         $form->input('title')->label(t('Title'));
         $form->textarea('description')->label(t('Text Area'));
         $form->submit('')->value(t('Submit'));
@@ -48,7 +48,7 @@ class DrawForm_Test extends Gallery_Unit_Test_Case
 
     public function group_test()
     {
-        $form = new Forge('test/controller', '', 'post', array('id' => 'g-test-group-form'));
+        $form = new Forge('test/controller', '', 'post', ['id' => 'g-test-group-form']);
         $group = $form->group('test_group')->label(t('Test Group'));
         $group->input('title')->label(t('Title'));
         $group->textarea('description')->label(t('Text Area'));
@@ -79,7 +79,7 @@ class DrawForm_Test extends Gallery_Unit_Test_Case
 
     public function form_script_test()
     {
-        $form = new Forge('test/controller', '', 'post', array('id' => 'g-test-group-form'));
+        $form = new Forge('test/controller', '', 'post', ['id' => 'g-test-group-form']);
         $group = $form->group('test_group')->label(t('Test Group'));
         $group->input('title')->label(t('Title'));
         $group->textarea('description')->label(t('Text Area'));

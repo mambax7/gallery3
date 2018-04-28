@@ -268,7 +268,7 @@ function formatCanonData($type, $tag, $intel, $data, $exif, &$result)
             }
             $result['FlashDetails']=str_pad(base_convert(intel2Moto(substr($data, $place, 4)), 16, 2), 16, '0', STR_PAD_LEFT);
             $place+=4;//29
-            $flashDetails = array();
+            $flashDetails = [];
             if (substr($result['FlashDetails'], 1, 1) == 1) {
                 $flashDetails[] = (string) t('External E-TTL');
             }
@@ -342,7 +342,7 @@ function formatCanonData($type, $tag, $intel, $data, $exif, &$result)
             $place+=4;//13
             $result['AFPointUsed']=hexdec(intel2Moto(substr($data, $place, 4)));
             $place+=4;//14
-                $afPointUsed = array();
+                $afPointUsed = [];
             if ($result['AFPointUsed'] & 0x0001) {
                 $afPointUsed[] = (string) t('Right');
             } //bit 0

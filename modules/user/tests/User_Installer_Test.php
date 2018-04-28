@@ -35,8 +35,8 @@ class User_Installer_Test extends Gallery_Unit_Test_Case
         $this->assert_false($user->guest);
 
         $this->assert_equal(
-      array('Everybody', 'Registered Users'),
-      array_keys($user->groups->select_list('name'))
+            ['Everybody', 'Registered Users'],
+            array_keys($user->groups->select_list('name'))
     );
     }
 

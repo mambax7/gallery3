@@ -56,8 +56,8 @@ class theme_Core
         // If the site theme doesn't exist, fall back to wind.
         if (!file_exists(THEMEPATH . self::$site_theme_name . '/theme.info')) {
             site_status::error(t(
-          "Theme '%name' is missing.  Falling back to the Wind theme.",
-                           array('name' => self::$site_theme_name)
+                                   "Theme '%name' is missing.  Falling back to the Wind theme.",
+                                   ['name' => self::$site_theme_name]
       ), 'missing_site_theme');
             module::set_var('gallery', 'active_site_theme', self::$site_theme_name = 'wind');
         }
@@ -69,8 +69,8 @@ class theme_Core
             // If the admin theme doesn't exist, fall back to admin_wind.
             if (!file_exists(THEMEPATH . self::$admin_theme_name . '/theme.info')) {
                 site_status::error(t(
-            "Admin theme '%name' is missing!  Falling back to the Wind theme.",
-                             array('name' => self::$admin_theme_name)
+                                       "Admin theme '%name' is missing!  Falling back to the Wind theme.",
+                                       ['name' => self::$admin_theme_name]
         ), 'missing_admin_theme');
                 module::set_var('gallery', 'active_admin_theme', self::$admin_theme_name = 'admin_wind');
             }

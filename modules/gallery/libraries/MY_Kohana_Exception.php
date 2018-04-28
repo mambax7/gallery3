@@ -83,7 +83,7 @@ class Kohana_Exception extends Kohana_Exception_Core
             }
             return self::_sanitize_for_dump((array) $value, $key, $max_level - 1);
         } elseif (is_array($value)) {
-            $result = array();
+            $result = [];
             foreach ($value as $k => $v) {
                 $actual_key = $k;
                 $key_for_display = $k;

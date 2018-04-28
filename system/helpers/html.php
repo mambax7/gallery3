@@ -154,7 +154,7 @@ class html_Core
     {
         empty($segments) and $segments = Router::$segments;
 
-        $array = array();
+        $array = [];
         while ($segment = array_pop($segments)) {
             $array[] = html::anchor(
                 // Complete URI for the URL
@@ -178,7 +178,7 @@ class html_Core
     public static function meta($tag, $value = null)
     {
         if (is_array($tag)) {
-            $tags = array();
+            $tags = [];
             foreach ($tag as $t => $v) {
                 // Build each tag and add it to the array
                 $tags[] = html::meta($t, $v);
@@ -235,11 +235,11 @@ class html_Core
                 $href = url::base($index).$href;
             }
 
-            $attr = array(
+            $attr = [
                 'rel' => $rel,
                 'type' => $type,
                 'href' => $href,
-            );
+            ];
 
             if (! empty($media)) {
                 // Add the media type to the attributes
@@ -290,7 +290,7 @@ class html_Core
     public static function image($src = null, $alt = null, $index = false)
     {
         // Create attribute list
-        $attributes = is_array($src) ? $src : array('src' => $src);
+        $attributes = is_array($src) ? $src : ['src' => $src];
 
         if (is_array($alt)) {
             $attributes += $alt;

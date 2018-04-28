@@ -83,7 +83,7 @@ function formatGPSData($type, $tag, $intel, $data)
         }
     } elseif ($type == 'URATIONAL' || $type == 'SRATIONAL') {
         if ($tag == '0002' || $tag == '0004' || $tag == '0007') { //Latitude, Longitude, Time
-            $datum = array();
+            $datum = [];
             for ($i=0;$i<strlen($data);$i=$i+8) {
                 array_push($datum, substr($data, $i, 8));
             }

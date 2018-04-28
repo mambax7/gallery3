@@ -34,16 +34,18 @@ class g2_import_task_Core
         g2_import::restore_error_reporting();
 
         if (g2_import::is_initialized()) {
-            return array(Task_Definition::factory()
-                   ->callback('g2_import_task::import')
-                   ->name(t('Import from Gallery 2'))
-                   ->description(
-                     t('Gallery %version detected', array('version' => $version))
+            return [
+                Task_Definition::factory()
+                               ->callback('g2_import_task::import')
+                               ->name(t('Import from Gallery 2'))
+                               ->description(
+                     t('Gallery %version detected', ['version' => $version])
                    )
-                   ->severity(log::SUCCESS));
+                               ->severity(log::SUCCESS)
+            ];
         }
 
-        return array();
+        return [];
     }
 
     public static function import($task)
@@ -71,7 +73,7 @@ class g2_import_task_Core
             $completed = 0;
             $mode = 0;
 
-            $done = array();
+            $done = [];
             foreach (array_keys($stats) as $key) {
                 $done[$key] = 0;
             }
@@ -81,13 +83,13 @@ class g2_import_task_Core
             g2(GalleryCoreApi::compactAccessLists());
         }
 
-        $modes = array('groups', 'users', 'albums', 'items', 'comments', 'tags', 'highlights', 'done');
+        $modes = ['groups', 'users', 'albums', 'items', 'comments', 'tags', 'highlights', 'done'];
         while (!$task->done && microtime(true) - $start < 1.5) {
             if ($done[$modes[$mode]] == $stats[$modes[$mode]]) {
                 // Nothing left to do for this mode.  Advance.
                 $mode++;
                 $task->set('last_id', 0);
-                $queue = array();
+                $queue = [];
 
                 // Start the loop from the beginning again.  This way if we get to a mode that requires no
                 // actions (eg, if the G2 comments module isn't installed) we won't try to do any comments
@@ -109,7 +111,7 @@ class g2_import_task_Core
         }
         $task->status = t(
             'Importing groups (%count of %total)',
-            array('count' => $done['groups'] + 1, 'total' => $stats['groups'])
+            ['count' => $done['groups'] + 1, 'total' => $stats['groups']]
         );
         break;
 
@@ -124,7 +126,7 @@ class g2_import_task_Core
         }
         $task->status = t(
             'Importing users (%count of %total)',
-            array('count' => $done['users'] + 1, 'total' => $stats['users'])
+            ['count' => $done['users'] + 1, 'total' => $stats['users']]
         );
         break;
 
@@ -132,7 +134,7 @@ class g2_import_task_Core
         if (empty($queue)) {
             $g2_root_id = g2(GalleryCoreApi::getDefaultAlbumId());
             $tree = g2(GalleryCoreApi::fetchAlbumTree());
-            $task->set('queue', $queue = array($g2_root_id => $tree));
+            $task->set('queue', $queue = [$g2_root_id => $tree]);
 
             // Update the root album to reflect the Gallery2 root album.
             $root_album = item::root();
@@ -148,7 +150,7 @@ class g2_import_task_Core
         }
         $task->status = t(
             'Importing albums (%count of %total)',
-            array('count' => $done['albums'] + 1, 'total' => $stats['albums'])
+            ['count' => $done['albums'] + 1, 'total' => $stats['albums']]
         );
         break;
 
@@ -163,7 +165,7 @@ class g2_import_task_Core
         }
         $task->status = t(
             'Importing photos (%count of %total)',
-            array('count' => $done['items'] + 1, 'total' => $stats['items'])
+            ['count' => $done['items'] + 1, 'total' => $stats['items']]
         );
         break;
 
@@ -178,7 +180,7 @@ class g2_import_task_Core
         }
         $task->status = t(
             'Importing comments (%count of %total)',
-            array('count' => $done['comments'] + 1, 'total' => $stats['comments'])
+            ['count' => $done['comments'] + 1, 'total' => $stats['comments']]
         );
 
         break;
@@ -194,7 +196,7 @@ class g2_import_task_Core
         }
         $task->status = t(
             'Importing tags (%count of %total)',
-            array('count' => $done['tags'] + 1, 'total' => $stats['tags'])
+            ['count' => $done['tags'] + 1, 'total' => $stats['tags']]
         );
 
         break;
@@ -209,7 +211,7 @@ class g2_import_task_Core
         }
         $task->status = t(
             'Album highlights (%count of %total)',
-            array('count' => $done['highlights'] + 1, 'total' => $stats['highlights'])
+            ['count' => $done['highlights'] + 1, 'total' => $stats['highlights']]
         );
 
         break;

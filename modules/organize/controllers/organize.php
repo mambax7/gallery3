@@ -57,22 +57,24 @@ class Organize_Controller extends Controller
         $album = ORM::factory('item', $album_id);
         access::required('view', $album);
 
-        $data = array(
+        $data = [
             'sort_column' => $album->sort_column,
             'sort_order'  => $album->sort_order,
             'editable'    => access::can('edit', $album),
             'title'       => (string)html::clean($album->title),
-            'children'    => array());
+            'children'    => []
+        ];
 
         foreach ($album->viewable()->children() as $child) {
             $dims               = $child->scale_dimensions(120);
-            $data['children'][] = array(
+            $data['children'][] = [
                 'id'        => $child->id,
                 'thumb_url' => $child->has_thumb() ? $child->thumb_url() : null,
                 'width'     => $dims[1],
                 'height'    => $dims[0],
                 'type'      => $child->type,
-                'title'     => (string)html::clean($child->title));
+                'title'     => (string)html::clean($child->title)
+            ];
         }
         json::reply($data);
     }
@@ -111,7 +113,7 @@ class Organize_Controller extends Controller
         access::required('view', $album);
         access::required('edit', $album);
 
-        foreach (array('sort_column', 'sort_order') as $key) {
+        foreach (['sort_column', 'sort_order'] as $key) {
             if ($val = Input::instance()->post($key)) {
                 $album->$key = $val;
             }
@@ -212,21 +214,21 @@ class Organize_Controller extends Controller
 
     private function _get_tree($item, $selected)
     {
-        $tree = array();
+        $tree = [];
         $children = $item->viewable()
-      ->children(null, null, array(array('type', '=', 'album')))
+      ->children(null, null, [['type', '=', 'album']])
       ->as_array();
         foreach ($children as $child) {
-            $node = array(
+            $node = [
                 'allowDrag'  => false,
                 'allowDrop'  => access::can('edit', $child),
                 'editable'   => false,
                 'expandable' => false,
                 'id'         => $child->id,
-                'leaf'       => $child->children_count(array(array('type', '=', 'album'))) == 0,
+                'leaf'       => $child->children_count([['type', '=', 'album']]) == 0,
                 'text'       => (string)html::clean($child->title),
                 'nodeType'   => 'async'
-            );
+            ];
 
             // If the child is in the selected path, open it now.  Else, mark it async.
             if ($child->contains($selected)) {

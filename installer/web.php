@@ -25,25 +25,25 @@ if (installer::already_installed()) {
   case 'welcome':
     $errors = installer::check_environment();
     if ($errors) {
-        $content = render('environment_errors.html.php', array('errors' => $errors));
+        $content = render('environment_errors.html.php', ['errors' => $errors]);
     } else {
         $content = render('get_db_info.html.php');
     }
     break;
 
   case 'save_db_info':
-    $config = array(
+    $config = [
         'host'     => $_POST['dbhost'],
         'user'     => $_POST['dbuser'],
         'password' => $_POST['dbpass'],
         'dbname'   => $_POST['dbname'],
         'prefix'   => $_POST['prefix'],
         'type'     => function_exists('mysqli_set_charset') ? 'mysqli' : 'mysql',
-    );
+    ];
     list($config['host'], $config['port']) = explode(':', $config['host'] . ':');
     foreach ($config as $k => $v) {
         if ($k == 'password') {
-            $config[$k] = str_replace(array("'", "\\"), array("\\'", "\\\\"), $v);
+            $config[$k] = str_replace(["'", "\\"], ["\\'", "\\\\"], $v);
         } else {
             $config[$k] = strtr($v, "'`\\", '___');
         }
@@ -71,7 +71,7 @@ if (installer::already_installed()) {
         try {
             list($user, $password) = installer::create_admin($config);
             installer::create_admin_session($config);
-            $content = render('success.html.php', array('user' => $user, 'password' => $password));
+            $content = render('success.html.php', ['user' => $user, 'password' => $password]);
 
             installer::create_private_key($config);
         } catch (Exception $e) {
@@ -84,7 +84,7 @@ if (installer::already_installed()) {
 
 include('views/install.html.php');
 
-function render($view, $args=array())
+function render($view, $args= [])
 {
     ob_start();
     extract($args);
@@ -94,5 +94,5 @@ function render($view, $args=array())
 
 function oops($error)
 {
-    return render('oops.html.php', array('error' => $error));
+    return render('oops.html.php', ['error' => $error]);
 }

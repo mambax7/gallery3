@@ -50,7 +50,7 @@ class item_Core
         message::info(
           t(
               'Album <b>%old_name</b> renamed to <b>%new_name</b> to avoid a conflict',
-              array('old_name' => $orig_name, 'new_name' => $source->name)
+              ['old_name' => $orig_name, 'new_name' => $source->name]
           )
         );
         break;
@@ -59,7 +59,7 @@ class item_Core
         message::info(
           t(
               'Photo <b>%old_name</b> renamed to <b>%new_name</b> to avoid a conflict',
-              array('old_name' => $orig_name, 'new_name' => $source->name)
+              ['old_name' => $orig_name, 'new_name' => $source->name]
           )
         );
         break;
@@ -68,7 +68,7 @@ class item_Core
         message::info(
           t(
               'Movie <b>%old_name</b> renamed to <b>%new_name</b> to avoid a conflict',
-              array('old_name' => $orig_name, 'new_name' => $source->name)
+              ['old_name' => $orig_name, 'new_name' => $source->name]
           )
         );
         break;
@@ -102,7 +102,7 @@ class item_Core
         // album cover.  So find any parent albums that had the old item as their album cover and
         // switch them over to the new item.
         if ($old_album_cover_id) {
-            foreach ($item->parents(array(array('album_cover_item_id', '=', $old_album_cover_id)))
+            foreach ($item->parents([['album_cover_item_id', '=', $old_album_cover_id]])
                as $ancestor) {
                 if (access::can('edit', $ancestor)) {
                     $ancestor->album_cover_item_id = $parent->album_cover_item_id;
@@ -169,8 +169,8 @@ class item_Core
         $page_type = Input::instance()->get('page_type');
         $from_id = Input::instance()->get('from_id');
         $form = new Forge(
-      "quick/delete/$item->id?page_type=$page_type&from_id=$from_id", '', 'post',
-        array('id' => 'g-confirm-delete')
+            "quick/delete/$item->id?page_type=$page_type&from_id=$from_id", '', 'post',
+            ['id' => 'g-confirm-delete']
     );
         $group = $form->group('confirm_delete')->label(t('Confirm Deletion'));
         $group->submit('')->value(t('Delete'));
@@ -201,10 +201,10 @@ class item_Core
      */
     public static function viewable($model)
     {
-        $view_restrictions = array();
+        $view_restrictions = [];
         if (!identity::active_user()->admin) {
             foreach (identity::group_ids_for_active_user() as $id) {
-                $view_restrictions[] = array("items.view_$id", '=', access::ALLOW);
+                $view_restrictions[] = ["items.view_$id", '=', access::ALLOW];
             }
         }
 
@@ -376,7 +376,7 @@ class item_Core
      * @param array      $where an array of arrays, each compatible with ORM::where()
      * @return int
      */
-    public static function get_position($item, $where=array())
+    public static function get_position($item, $where= [])
     {
         $album = $item->parent();
 
@@ -419,7 +419,7 @@ class item_Core
                ->where('parent_id', '=', $album->id)
                ->where($sort_column, '=', $item->$sort_column)
                ->merge_where($where)
-               ->order_by(array('id' => 'ASC'))
+               ->order_by(['id' => 'ASC'])
                ->find_all() as $row) {
                 $position++;
                 if ($row->id == $item->id) {
@@ -435,7 +435,7 @@ class item_Core
             //
             // Reproduce the children() functionality here using Database directly to
             // avoid loading the whole ORM for each row.
-            $order_by = array($album->sort_column => $album->sort_order);
+            $order_by = [$album->sort_column => $album->sort_order];
             // Use id as a tie breaker
             if ($album->sort_column != 'id') {
                 $order_by['id'] = 'ASC';
@@ -468,7 +468,7 @@ class item_Core
             Cache::instance()->set(
                 'display_context_' . $sid = Session::instance()->id(),
                 $args,
-                array('display_context')
+                ['display_context']
       );
         }
     }
@@ -494,7 +494,7 @@ class item_Core
 
         if (empty($callback)) {
             $callback = 'Albums_Controller::get_display_context';
-            $args = array($item);
+            $args = [$item];
         }
         return call_user_func_array($callback, $args);
     }

@@ -22,20 +22,23 @@ class tag_rest_Core
     public static function get($request)
     {
         $tag = rest::resolve($request->url);
-        $tag_items = array();
+        $tag_items = [];
         foreach ($tag->items() as $item) {
             if (access::can('view', $item)) {
                 $tag_items[] = rest::url('tag_item', $tag, $item);
             }
         }
 
-        return array(
+        return [
             'url'           => $request->url,
             'entity'        => $tag->as_array(),
-            'relationships' => array(
-                'items' => array(
+            'relationships' => [
+                'items' => [
                     'url'     => rest::url('tag_items', $tag),
-                    'members' => $tag_items)));
+                    'members' => $tag_items
+                ]
+            ]
+        ];
     }
 
     public static function put($request)
@@ -67,14 +70,16 @@ class tag_rest_Core
     {
         switch ($resource_type) {
     case 'item':
-      $tags = array();
+      $tags = [];
       foreach (tag::item_tags($resource) as $tag) {
           $tags[] = rest::url('tag_item', $tag, $resource);
       }
-      return array(
-          'tags' => array(
+      return [
+          'tags' => [
               'url'     => rest::url('item_tags', $resource),
-              'members' => $tags));
+              'members' => $tags
+          ]
+      ];
     }
     }
 

@@ -31,17 +31,19 @@ class exif_task_Core
       ->execute();
 
         list($remaining, $total, $percent) = exif::stats();
-        return array(Task_Definition::factory()
-                 ->callback('exif_task::update_index')
-                 ->name(t('Extract Exif data'))
-                 ->description($remaining
+        return [
+            Task_Definition::factory()
+                           ->callback('exif_task::update_index')
+                           ->name(t('Extract Exif data'))
+                           ->description($remaining
                                ? t2(
-                         '1 photo needs to be scanned', '%count (%percent%) of your photos need to be scanned',
-                         $remaining,
-                         array('percent' => (100 - $percent))
+                                   '1 photo needs to be scanned', '%count (%percent%) of your photos need to be scanned',
+                                   $remaining,
+                                   ['percent' => (100 - $percent)]
                                )
                                : t('Exif data is up-to-date'))
-                 ->severity($remaining ? log::WARNING : log::SUCCESS));
+                           ->severity($remaining ? log::WARNING : log::SUCCESS)
+        ];
     }
 
     public static function update_index($task)
@@ -85,7 +87,7 @@ class exif_task_Core
             $task->status = t2(
                 'one record updated, index is %percent% up-to-date', '%count records updated, index is %percent% up-to-date',
                 $completed,
-                array('percent' => $percent)
+                ['percent' => $percent]
       );
         } catch (Exception $e) {
             $task->done = true;

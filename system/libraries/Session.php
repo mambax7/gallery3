@@ -16,7 +16,7 @@ class Session_Core
     protected static $instance;
 
     // Protected key names (cannot be set by the user)
-    protected static $protect = array('session_id', 'user_agent', 'last_activity', 'ip_address', 'total_hits', '_kf_flash_');
+    protected static $protect = ['session_id', 'user_agent', 'last_activity', 'ip_address', 'total_hits', '_kf_flash_'];
 
     // Configuration and driver
     protected static $config;
@@ -43,7 +43,7 @@ class Session_Core
             // Create a new instance
             new Session($session_id);
         } elseif (null !== $session_id and $session_id != session_id()) {
-            throw new Kohana_Exception('A session (SID: :session:) is already open, cannot open the specified session (SID: :new_session:).', array(':session:' => session_id(), ':new_session:' => $session_id));
+            throw new Kohana_Exception('A session (SID: :session:) is already open, cannot open the specified session (SID: :new_session:).', [':session:' => session_id(), ':new_session:' => $session_id]);
         }
 
         return Session::$instance;
@@ -91,7 +91,7 @@ class Session_Core
 
             // Close the session on system shutdown (run before sending the headers), so that
             // the session cookie(s) can be written.
-            Event::add('system.shutdown', array($this, 'write_close'));
+            Event::add('system.shutdown', [$this, 'write_close']);
 
             // Singleton instance
             Session::$instance = $this;
@@ -130,7 +130,7 @@ class Session_Core
             if (! Kohana::auto_load($driver)) {
                 throw new Kohana_Exception(
                     'The :driver: driver for the :library: library could not be found',
-                                           array(':driver:' => Session::$config['driver'], ':library:' => get_class($this))
+                    [':driver:' => Session::$config['driver'], ':library:' => get_class($this)]
                 );
             }
 
@@ -141,24 +141,24 @@ class Session_Core
             if (! (Session::$driver instanceof Session_Driver)) {
                 throw new Kohana_Exception(
                     'The :driver: driver for the :library: library must implement the :interface: interface',
-                                           array(':driver:' => Session::$config['driver'], ':library:' => get_class($this), ':interface:' => 'Session_Driver')
+                    [':driver:' => Session::$config['driver'], ':library:' => get_class($this), ':interface:' => 'Session_Driver']
                 );
             }
 
             // Register non-native driver as the session handler
             session_set_save_handler(
-                array(Session::$driver, 'open'),
-                array(Session::$driver, 'close'),
-                array(Session::$driver, 'read'),
-                array(Session::$driver, 'write'),
-                array(Session::$driver, 'destroy'),
-                array(Session::$driver, 'gc')
+                [Session::$driver, 'open'],
+                [Session::$driver, 'close'],
+                [Session::$driver, 'read'],
+                [Session::$driver, 'write'],
+                [Session::$driver, 'destroy'],
+                [Session::$driver, 'gc']
             );
         }
 
         // Validate the session name
         if (! preg_match('~^(?=.*[a-z])[a-z0-9_]++$~iD', Session::$config['name'])) {
-            throw new Kohana_Exception('The session_name, :session:, is invalid. It must contain only alphanumeric characters and underscores. Also at least one letter must be present.', array(':session:' => Session::$config['name']));
+            throw new Kohana_Exception('The session_name, :session:, is invalid. It must contain only alphanumeric characters and underscores. Also at least one letter must be present.', [':session:' => Session::$config['name']]);
         }
 
         // Name the session, this will also be the name of the cookie
@@ -194,7 +194,7 @@ class Session_Core
         // Set defaults
         if (! isset($_SESSION['_kf_flash_'])) {
             $_SESSION['total_hits'] = 0;
-            $_SESSION['_kf_flash_'] = array();
+            $_SESSION['_kf_flash_'] = [];
 
             $_SESSION['user_agent'] = request::user_agent();
             $_SESSION['ip_address'] = $this->input->ip_address();
@@ -288,7 +288,7 @@ class Session_Core
             session_destroy();
 
             // Re-initialize the array
-            $_SESSION = array();
+            $_SESSION = [];
 
             // Delete the session cookie
             cookie::delete($name);
@@ -332,7 +332,7 @@ class Session_Core
         }
 
         if (! is_array($keys)) {
-            $keys = array($keys => $val);
+            $keys = [$keys => $val];
         }
 
         foreach ($keys as $key => $val) {
@@ -359,7 +359,7 @@ class Session_Core
         }
 
         if (! is_array($keys)) {
-            $keys = array($keys => $val);
+            $keys = [$keys => $val];
         }
 
         foreach ($keys as $key => $val) {

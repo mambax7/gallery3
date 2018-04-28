@@ -30,7 +30,7 @@ class identity_Core
     public static function providers()
     {
         if (empty(self::$available)) {
-            $drivers = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
+            $drivers = new ArrayObject([], ArrayObject::ARRAY_AS_PROPS);
             foreach (module::available() as $module_name => $module) {
                 if (file_exists(MODPATH . "{$module_name}/config/identity.php")) {
                     $drivers->$module_name = $module->description;
@@ -79,7 +79,7 @@ class identity_Core
 
             // Cache the group ids for a day to trade off performance for security updates.
             if (!$session->get('group_ids') || $session->get('group_ids_timeout', 0) < time()) {
-                $ids = array();
+                $ids = [];
                 foreach ($user->groups() as $group) {
                     $ids[] = $group->id;
                 }
@@ -106,7 +106,7 @@ class identity_Core
      */
     public static function group_ids_for_active_user()
     {
-        return Session::instance()->get('group_ids', array(1));
+        return Session::instance()->get('group_ids', [1]);
     }
 
     /**

@@ -54,7 +54,7 @@ class item_rest_Core
             $p->scope = 'direct';
         }
 
-        if (!in_array($p->scope, array('direct', 'all'))) {
+        if (!in_array($p->scope, ['direct', 'all'])) {
             throw new Rest_Exception('Bad Request', 400);
         }
 
@@ -75,18 +75,19 @@ class item_rest_Core
 
         // Apply the item's sort order, using id as the tie breaker.
         // See Item_Model::children()
-        $order_by = array($item->sort_column => $item->sort_order);
+        $order_by = [$item->sort_column => $item->sort_order];
         if ($item->sort_column != 'id') {
             $order_by['id'] = 'ASC';
         }
         $orm->order_by($order_by);
 
-        $result = array(
+        $result = [
             'url'           => $request->url,
             'entity'        => $item->as_restful_array(),
-            'relationships' => rest::relationships('item', $item));
+            'relationships' => rest::relationships('item', $item)
+        ];
         if ($item->is_album()) {
-            $result['members'] = array();
+            $result['members'] = [];
             foreach ($orm->find_all() as $child) {
                 $result['members'][] = rest::url('item', $child);
             }
@@ -102,7 +103,7 @@ class item_rest_Core
 
         if ($entity = $request->params->entity) {
             // Only change fields from a whitelist.
-            foreach (array(
+            foreach ([
                          'album_cover',
                          'captured',
                          'description',
@@ -123,7 +124,7 @@ class item_rest_Core
                          'title',
                          'view_count',
                          'width'
-                     ) as $key) {
+                     ] as $key) {
                 switch ($key) {
         case 'album_cover':
           if (property_exists($entity, 'album_cover')) {
@@ -192,7 +193,7 @@ class item_rest_Core
           throw new Rest_Exception(
               'Bad Request',
               400,
-              array('errors' => array('file' => t('Upload failed')))
+              ['errors' => ['file' => t('Upload failed')]]
         );
       }
     $item->type = $entity->type;
@@ -209,11 +210,11 @@ class item_rest_Core
       throw new Rest_Exception(
           'Bad Request',
           400,
-          array('errors' => array('type' => 'invalid'))
+          ['errors' => ['type' => 'invalid']]
       );
     }
 
-        return array('url' => rest::url('item', $item));
+        return ['url' => rest::url('item', $item)];
     }
 
     public static function delete($request)

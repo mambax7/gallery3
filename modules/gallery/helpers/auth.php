@@ -21,7 +21,7 @@ class auth_Core
 {
     public static function get_login_form($url)
     {
-        $form = new Forge($url, '', 'post', array('id' => 'g-login-form'));
+        $form = new Forge($url, '', 'post', ['id' => 'g-login-form']);
         $form->set_attr('class', 'g-narrow');
         $form->hidden('continue_url')->value(Session::instance()->get('continue_url'));
         $group = $form->group('login')->label(t('Login'));
@@ -45,7 +45,7 @@ class auth_Core
             $user->last_login = time();
             $user->save();
         }
-        log::info('user', t('User %name logged in', array('name' => $user->name)));
+        log::info('user', t('User %name logged in', ['name' => $user->name]));
         module::event('user_login', $user);
     }
 
@@ -62,12 +62,13 @@ class auth_Core
         }
         log::info(
             'user',
-            t('User %name logged out', array('name' => $user->name)),
+            t('User %name logged out', ['name' => $user->name]),
             t(
-                  '<a href="%url">%user_name</a>',
-                array(
+                '<a href="%url">%user_name</a>',
+                [
                     'url'       => user_profile::url($user->id),
-                    'user_name' => html::clean($user->name))
+                    'user_name' => html::clean($user->name)
+                ]
               )
     );
     }

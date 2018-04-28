@@ -11,10 +11,10 @@
  */
 class Form_Radio_Core extends Form_Checkbox
 {
-    protected $data = array(
+    protected $data = [
         'type' => 'radio',
         'class' => 'radio',
         'value' => '1',
         'checked' => false,
-    );
+    ];
 } // End Form_Radio

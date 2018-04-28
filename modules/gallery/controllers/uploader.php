@@ -83,7 +83,7 @@ class Uploader_Controller extends Controller
             print t2(
                 'Uploaded %count photo (%error errors)', 'Uploaded %count photos (%error errors)',
                 (int)$success_count,
-                array('error' => (int)$error_count)
+                ['error' => (int)$error_count]
       );
         } else {
             print t2('Uploaded %count photo', 'Uploaded %count photos', $success_count);
@@ -94,14 +94,14 @@ class Uploader_Controller extends Controller
     {
         access::verify_csrf();
         batch::stop();
-        json::reply(array('result' => 'success'));
+        json::reply(['result' => 'success']);
     }
 
     private function _get_add_form($album)
     {
-        $form = new Forge('uploader/finish', '', 'post', array('id' => 'gAddPhotosForm', 'class' => 'dropzone'));
+        $form = new Forge('uploader/finish', '', 'post', ['id' => 'gAddPhotosForm', 'class' => 'dropzone']);
         $group = $form->group('add_photos')
-      ->label(t('Add photos to %album_title', array('album_title' => html::purify($album->title))));
+      ->label(t('Add photos to %album_title', ['album_title' => html::purify($album->title)]));
         $group->dropzone('dropzone')->album($album);
 
         $group_actions = $form->group('actions');
@@ -116,9 +116,9 @@ class Uploader_Controller extends Controller
 
     private function _get_add_form_uploadify($album)
     {
-        $form = new Forge('uploader/finish', '', 'post', array('id' => 'g-add-photos-form'));
+        $form = new Forge('uploader/finish', '', 'post', ['id' => 'g-add-photos-form']);
         $group = $form->group('add_photos')
-      ->label(t('Add photos to %album_title', array('album_title' => html::purify($album->title))));
+      ->label(t('Add photos to %album_title', ['album_title' => html::purify($album->title)]));
         $group->uploadify('uploadify')->album($album);
 
         $group_actions = $form->group('actions');
@@ -171,7 +171,7 @@ class Uploader_Controller extends Controller
         // Get uploaded filename.  This is different than tmp_name since it hasn't been uniquified.
         $name = $_FILES[$file]['name'];
 
-        return array($tmp_name, $name);
+        return [$tmp_name, $name];
     }
 
     /**

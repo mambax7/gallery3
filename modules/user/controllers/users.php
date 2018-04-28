@@ -56,11 +56,12 @@ class Users_Controller extends Controller
             $user->save();
             module::event('user_edit_form_completed', $user, $form);
             message::success(t('User information updated'));
-            json::reply(array(
+            json::reply([
                             'result'   => 'success',
-                            'resource' => url::site("users/{$user->id}")));
+                            'resource' => url::site("users/{$user->id}")
+                        ]);
         } else {
-            json::reply(array('result' => 'error', 'html' => (string)$form));
+            json::reply(['result' => 'error', 'html' => (string)$form]);
         }
     }
 
@@ -90,14 +91,15 @@ class Users_Controller extends Controller
             message::success(t('Password changed'));
             module::event('user_auth', $user);
             module::event('user_password_change', $user);
-            json::reply(array(
+            json::reply([
                             'result'   => 'success',
-                            'resource' => url::site("users/{$user->id}")));
+                            'resource' => url::site("users/{$user->id}")
+                        ]);
         } else {
-            log::warning('user', t('Failed password change for %name', array('name' => $user->name)));
+            log::warning('user', t('Failed password change for %name', ['name' => $user->name]));
             $name = $user->name;
             module::event('user_auth_failed', $name);
-            json::reply(array('result' => 'error', 'html' => (string)$form));
+            json::reply(['result' => 'error', 'html' => (string)$form]);
         }
     }
 
@@ -126,14 +128,15 @@ class Users_Controller extends Controller
             module::event('user_change_email_form_completed', $user, $form);
             message::success(t('Email address changed'));
             module::event('user_auth', $user);
-            json::reply(array(
+            json::reply([
                             'result'   => 'success',
-                            'resource' => url::site("users/{$user->id}")));
+                            'resource' => url::site("users/{$user->id}")
+                        ]);
         } else {
-            log::warning('user', t('Failed email change for %name', array('name' => $user->name)));
+            log::warning('user', t('Failed email change for %name', ['name' => $user->name]));
             $name = $user->name;
             module::event('user_auth_failed', $name);
-            json::reply(array('result' => 'error', 'html' => (string)$form));
+            json::reply(['result' => 'error', 'html' => (string)$form]);
         }
     }
 
@@ -170,8 +173,8 @@ class Users_Controller extends Controller
     private function _get_change_password_form($user)
     {
         $form = new Forge(
-      "users/change_password/$user->id", '', 'post',
-        array('id' => 'g-change-password-user-form')
+            "users/change_password/$user->id", '', 'post',
+            ['id' => 'g-change-password-user-form']
     );
         $group = $form->group('change_password')->label(t('Change your password'));
         $group->password('old_password')->label(t('Old password'))->id('g-password')
@@ -200,8 +203,8 @@ class Users_Controller extends Controller
     private function _get_change_email_form($user)
     {
         $form = new Forge(
-      "users/change_email/$user->id", '', 'post',
-        array('id' => 'g-change-email-user-form')
+            "users/change_email/$user->id", '', 'post',
+            ['id' => 'g-change-email-user-form']
     );
         $group = $form->group('change_email')->label(t('Change your email address'));
         $group->password('password')->label(t('Current password'))->id('g-password')
@@ -224,7 +227,7 @@ class Users_Controller extends Controller
 
     private function _get_edit_form($user)
     {
-        $form = new Forge("users/update/$user->id", '', 'post', array('id' => 'g-edit-user-form'));
+        $form = new Forge("users/update/$user->id", '', 'post', ['id' => 'g-edit-user-form']);
         $group = $form->group('edit_user')->label(t('Edit your profile'));
         $group->input('full_name')->label(t('Full Name'))->id('g-fullname')->value($user->full_name)
               ->error_messages('length', t('Your name is too long'));
@@ -250,7 +253,7 @@ class Users_Controller extends Controller
         }
 
         // Put "none" at the first position in the array
-        $locales = array_merge(array('' => t('« none »')), $locales);
+        $locales = array_merge(['' => t('« none »')], $locales);
         $selected_locale = ($user && $user->locale) ? $user->locale : '';
         $form->dropdown('locale')
       ->label(t('Language preference'))

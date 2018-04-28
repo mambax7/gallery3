@@ -20,7 +20,7 @@
 class graphics_Core
 {
     private static $init;
-    private static $_rules_cache = array();
+    private static $_rules_cache = [];
 
     /**
      * Add a new graphics rule.
@@ -142,7 +142,7 @@ class graphics_Core
           //    add de-interlacing arguments to ffmpeg... see movie helper for more info)
           // Note that the args are similar to those of the events in gallery_graphics
           $movie_options_wrapper = new stdClass();
-          $movie_options_wrapper->movie_options = array();
+          $movie_options_wrapper->movie_options = [];
           module::event(
               'movie_extract_frame',
               $working_file,
@@ -180,7 +180,7 @@ class graphics_Core
         case 'photo':
           // Run the graphics rules (for both movies and photos)
           foreach (self::_get_rules($target) as $rule) {
-              $args = array($working_file, $output_file, unserialize($rule->args), $item);
+              $args = [$working_file, $output_file, unserialize($rule->args), $item];
               call_user_func_array($rule->operation, $args);
               $working_file = $output_file;
           }
@@ -250,9 +250,9 @@ class graphics_Core
                 // Looks like get_file_metadata couldn't identify our placeholders.  We should never get
                 // here, but in the odd case we do, we need to do something.  Let's put in hardcoded values.
                 if ($item->is_photo()) {
-                    list($item->resize_width, $item->resize_height) = array(200, 200);
+                    list($item->resize_width, $item->resize_height) = [200, 200];
                 }
-                list($item->thumb_width, $item->thumb_height) = array(200, 200);
+                list($item->thumb_width, $item->thumb_height) = [200, 200];
             }
             $item->save();
             throw $e;
@@ -286,7 +286,7 @@ class graphics_Core
             $output_path = $item->resize_path();
             $size = module::get_var('gallery', 'resize_size', 640);
         }
-        $options = array('width' => $size, 'height' => $size, 'master' => Image::AUTO);
+        $options = ['width' => $size, 'height' => $size, 'master' => Image::AUTO];
 
         try {
             // Copy/convert/resize placeholder as needed.
@@ -312,7 +312,7 @@ class graphics_Core
     private static function _get_rules($target)
     {
         if (empty(self::$_rules_cache[$target])) {
-            $rules = array();
+            $rules = [];
             foreach (ORM::factory('graphics_rule')
                ->where('target', '=', $target)
                ->where('active', '=', true)
@@ -376,11 +376,12 @@ class graphics_Core
         t2(
             'One of your photos is out of date. <a %attrs>Click here to fix it</a>', '%count of your photos are out of date. <a %attrs>Click here to fix them</a>',
             $count,
-            array(
+            [
                 'attrs' => html::mark_clean(sprintf(
              'href="%s" class="g-dialog-link"',
              url::site('admin/maintenance/start/gallery_task::rebuild_dirty_images?csrf=__CSRF__')
-           )))
+           ))
+            ]
         ), 'graphics_dirty'
       );
         }
@@ -400,7 +401,7 @@ class graphics_Core
         $toolkits->graphicsmagick = new stdClass();
 
         // GD is special, it doesn't use exec()
-        $gd = function_exists('gd_info') ? gd_info() : array();
+        $gd = function_exists('gd_info') ? gd_info() : [];
         $toolkits->gd->name = 'GD';
         if (!isset($gd['GD Version'])) {
             $toolkits->gd->installed = false;
@@ -417,19 +418,19 @@ class graphics_Core
                 $toolkits->gd->error =
           t(
               'You have GD version %version, but it lacks image rotation and sharpening.',
-              array('version' => $gd['GD Version'])
+              ['version' => $gd['GD Version']]
           );
             } elseif (!$toolkits->gd->rotate) {
                 $toolkits->gd->error =
           t(
               'You have GD version %version, but it lacks image rotation.',
-              array('version' => $gd['GD Version'])
+              ['version' => $gd['GD Version']]
           );
             } elseif (!$toolkits->gd->sharpen) {
                 $toolkits->gd->error =
           t(
               'You have GD version %version, but it lacks image sharpening.',
-              array('version' => $gd['GD Version'])
+              ['version' => $gd['GD Version']]
           );
             }
         }
@@ -442,13 +443,16 @@ class graphics_Core
             $toolkits->graphicsmagick->error = t('GraphicsMagick requires the <b>exec</b> function');
         } else {
             // ImageMagick & GraphicsMagick
-            $magick_kits = array(
-                'imagemagick'    => array(
+            $magick_kits = [
+                'imagemagick'    => [
                     'name'          => 'ImageMagick', 'binary' => 'convert', 'version_arg' => '-version',
-                    'version_regex' => "/Version: \S+ (\S+)/"),
-                'graphicsmagick' => array(
+                    'version_regex' => "/Version: \S+ (\S+)/"
+                ],
+                'graphicsmagick' => [
                     'name'          => 'GraphicsMagick', 'binary' => 'gm', 'version_arg' => 'version',
-                    'version_regex' => "/\S+ (\S+)/"));
+                    'version_regex' => "/\S+ (\S+)/"
+                ]
+            ];
             // Loop through the kits
             foreach ($magick_kits as $index => $settings) {
                 $path = system::find_binary(
@@ -476,7 +480,7 @@ class graphics_Core
                         $toolkits->$index->error =
               t(
                   "%toolkit_name is installed, but PHP's open_basedir restriction prevents Gallery from using it.",
-                array('toolkit_name' => $settings['name'])
+                  ['toolkit_name' => $settings['name']]
               );
                     }
                 } else {
@@ -484,7 +488,7 @@ class graphics_Core
                     $toolkits->$index->error =
             t(
                 'We could not locate %toolkit_name on your system.',
-                array('toolkit_name' => $settings['name'])
+                ['toolkit_name' => $settings['name']]
             );
                 }
             }
@@ -500,7 +504,7 @@ class graphics_Core
     {
         // Detect a graphics toolkit
         $toolkits = graphics::detect_toolkits();
-        foreach (array('imagemagick', 'graphicsmagick', 'gd') as $tk) {
+        foreach (['imagemagick', 'graphicsmagick', 'gd'] as $tk) {
             if ($toolkits->$tk->installed) {
                 module::set_var('gallery', 'graphics_toolkit', $tk);
                 module::set_var('gallery', 'graphics_toolkit_path', $toolkits->$tk->dir);
@@ -512,7 +516,7 @@ class graphics_Core
             site_status::warning(
         t(
             'Graphics toolkit missing!  Please <a href="%url">choose a toolkit</a>',
-            array('url' => html::mark_clean(url::site('admin/graphics')))
+            ['url' => html::mark_clean(url::site('admin/graphics'))]
         ), 'missing_graphics_toolkit'
       );
         }
@@ -584,10 +588,10 @@ class graphics_Core
             // in the file.
             $max_filesize = $memory_limit_bytes / 4;
             $max_filesize_human_readable = num::convert_to_human_readable($max_filesize);
-            return array($max_filesize, $max_filesize_human_readable);
+            return [$max_filesize, $max_filesize_human_readable];
         }
 
         // Some arbitrarily large size
-        return array(1000000000, '1G');
+        return [1000000000, '1G'];
     }
 }

@@ -141,7 +141,7 @@ class notification_event_Core
         }
 
         $view = new View('user_profile_notification.html');
-        $view->subscriptions = array();
+        $view->subscriptions = [];
         foreach (ORM::factory('subscription')
             ->where('user_id', '=', $data->user->id)
             ->find_all() as $subscription) {
@@ -149,13 +149,14 @@ class notification_event_Core
           ->where('id', '=', $subscription->item_id)
           ->find();
             if ($item->loaded()) {
-                $view->subscriptions[] = (object)array(
+                $view->subscriptions[] = (object)[
                     'id'  => $subscription->id, 'title' => $item->title,
-                    'url' => $item->url());
+                    'url' => $item->url()
+                ];
             }
         }
         if (count($view->subscriptions) > 0) {
-            $data->content[] = (object)array('title' => t('Watching'), 'view' => $view);
+            $data->content[] = (object)['title' => t('Watching'), 'view' => $view];
         }
     }
 }

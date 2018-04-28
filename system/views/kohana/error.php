@@ -232,7 +232,7 @@ $error_id = uniqid('error');
 				<?php endforeach?>
 			</table>
 		</div>
-		<?php foreach (array('_SESSION', '_GET', '_POST', '_FILES', '_COOKIE', '_SERVER') as $var): ?>
+		<?php foreach (['_SESSION', '_GET', '_POST', '_FILES', '_COOKIE', '_SERVER'] as $var): ?>
 		<?php if (empty($GLOBALS[$var]) or ! is_array($GLOBALS[$var])) {
     continue;
 } ?>

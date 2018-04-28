@@ -181,7 +181,7 @@ class url_Core
             return false;
         }
 
-        $codes = array(
+        $codes = [
             'refresh' => 'Refresh',
             '300' => 'Multiple Choices',
             '301' => 'Moved Permanently',
@@ -190,7 +190,7 @@ class url_Core
             '304' => 'Not Modified',
             '305' => 'Use Proxy',
             '307' => 'Temporary Redirect'
-        );
+        ];
 
         // Validate the method and default to 302
         $method = isset($codes[$method]) ? (string) $method : '302';

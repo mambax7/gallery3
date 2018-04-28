@@ -27,7 +27,7 @@ class comment_Core
 {
     public static function get_add_form($item)
     {
-        $form = new Forge("comments/create/{$item->id}", '', 'post', array('id' => 'g-comment-form'));
+        $form = new Forge("comments/create/{$item->id}", '', 'post', ['id' => 'g-comment-form']);
         $group = $form->group('add_comment')->label(t('Add comment'));
         $group->input('name')
       ->label(t('Name'))

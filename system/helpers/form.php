@@ -19,7 +19,7 @@ class form_Core
      * @param   string  non-default protocol, eg: https
      * @return  string
      */
-    public static function open($action = null, $attr = array(), $hidden = null, $protocol = null)
+    public static function open($action = null, $attr = [], $hidden = null, $protocol = null)
     {
         // Make sure that the method is always set
         empty($attr['method']) and $attr['method'] = 'post';
@@ -57,7 +57,7 @@ class form_Core
      * @param   array   hidden fields to be created immediately after the form tag
      * @return  string
      */
-    public static function open_multipart($action = null, $attr = array(), $hidden = array())
+    public static function open_multipart($action = null, $attr = [], $hidden = [])
     {
         // Set multi-part form type
         $attr['enctype'] = 'multipart/form-data';
@@ -76,7 +76,7 @@ class form_Core
     public static function hidden($data, $value = '', $extra = '')
     {
         if (! is_array($data)) {
-            $data = array('name' => $data);
+            $data = ['name' => $data];
         }
 
         $data['type'] = 'hidden';
@@ -95,14 +95,14 @@ class form_Core
     public static function input($data, $value = '', $extra = '')
     {
         if (! is_array($data)) {
-            $data = array('name' => $data);
+            $data = ['name' => $data];
         }
 
         // Type and value are required attributes
-        $data += array(
+        $data += [
             'type'  => 'text',
             'value' => $value
-        );
+        ];
 
         return '<input'.form::attributes($data).' '.$extra.' />';
     }
@@ -118,7 +118,7 @@ class form_Core
     public static function password($data, $value = '', $extra = '')
     {
         if (! is_array($data)) {
-            $data = array('name' => $data);
+            $data = ['name' => $data];
         }
 
         $data['type'] = 'password';
@@ -137,7 +137,7 @@ class form_Core
     public static function upload($data, $value = '', $extra = '')
     {
         if (! is_array($data)) {
-            $data = array('name' => $data);
+            $data = ['name' => $data];
         }
 
         $data['type'] = 'file';
@@ -157,7 +157,7 @@ class form_Core
     public static function textarea($data, $value = '', $extra = '', $double_encode = true)
     {
         if (! is_array($data)) {
-            $data = array('name' => $data);
+            $data = ['name' => $data];
         }
 
         if (! isset($data['rows'])) {
@@ -189,7 +189,7 @@ class form_Core
     public static function dropdown($data, $options = null, $selected = null, $extra = '')
     {
         if (! is_array($data)) {
-            $data = array('name' => $data);
+            $data = ['name' => $data];
         } else {
             if (isset($data['options'])) {
                 // Use data options
@@ -207,7 +207,7 @@ class form_Core
             $data['multiple'] = 'multiple';
         } else {
             // Single selection (but converted to an array)
-            $selected = array($selected);
+            $selected = [$selected];
         }
 
         $input = '<select'.form::attributes($data, 'select').' '.$extra.'>'."\n";
@@ -247,7 +247,7 @@ class form_Core
     public static function checkbox($data, $value = '', $checked = false, $extra = '')
     {
         if (! is_array($data)) {
-            $data = array('name' => $data);
+            $data = ['name' => $data];
         }
 
         $data['type'] = 'checkbox';
@@ -273,7 +273,7 @@ class form_Core
     public static function radio($data = '', $value = '', $checked = false, $extra = '')
     {
         if (! is_array($data)) {
-            $data = array('name' => $data);
+            $data = ['name' => $data];
         }
 
         $data['type'] = 'radio';
@@ -298,7 +298,7 @@ class form_Core
     public static function submit($data = '', $value = '', $extra = '')
     {
         if (! is_array($data)) {
-            $data = array('name' => $data);
+            $data = ['name' => $data];
         }
 
         if (empty($data['name'])) {
@@ -322,7 +322,7 @@ class form_Core
     public static function button($data = '', $value = '', $extra = '')
     {
         if (! is_array($data)) {
-            $data = array('name' => $data);
+            $data = ['name' => $data];
         }
 
         if (empty($data['name'])) {
@@ -350,10 +350,10 @@ class form_Core
         if (! is_array($data)) {
             if (is_string($data)) {
                 // Specify the input this label is for
-                $data = array('for' => $data);
+                $data = ['for' => $data];
             } else {
                 // No input specified
-                $data = array();
+                $data = [];
             }
         }
 
@@ -378,7 +378,7 @@ class form_Core
             return '';
         }
 
-        $order = array(
+        $order = [
             'action',
             'method',
             'type',
@@ -402,9 +402,9 @@ class form_Core
             'checked',
             'readonly',
             'disabled'
-        );
+        ];
 
-        $sorted = array();
+        $sorted = [];
         foreach ($order as $key) {
             if (isset($attr[$key])) {
                 // Move the attribute to the sorted array

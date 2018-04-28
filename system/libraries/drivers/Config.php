@@ -50,7 +50,7 @@ abstract class Config_Driver
      *
      * @var     array
      */
-    protected $config = array();
+    protected $config = [];
 
     /**
      * The changed status of configuration values,
@@ -84,7 +84,7 @@ abstract class Config_Driver
             }
 
             // Add the save cache method to system.shutshut event
-            Event::add('system.shutdown', array($this, 'save_cache'));
+            Event::add('system.shutdown', [$this, 'save_cache']);
         }
     }
 
@@ -221,7 +221,7 @@ abstract class Config_Driver
 
         // If the configuration wasn't loaded from the cache
         if ($cached_config === null) {
-            $cached_config = array();
+            $cached_config = [];
         }
 
         // Return the cached config

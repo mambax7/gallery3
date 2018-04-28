@@ -19,20 +19,21 @@
  */
 class Form_Dropzone_Core extends Form_Input
 {
-    protected $data = array(
+    protected $data = [
         'name' => false,
         'type' => 'UNKNOWN',
         'url'  => '',
         'text' => ''
-    );
+    ];
 
     public function __construct($name)
     {
         parent::__construct($name);
-        $this->data['script_data'] = array(
+        $this->data['script_data'] = [
             'g3sid'      => Session::instance()->id(),
             'user_agent' => Input::instance()->server('HTTP_USER_AGENT'),
-            'csrf'       => access::csrf_token());
+            'csrf'       => access::csrf_token()
+        ];
     }
 
     public function album(Item_Model $album)

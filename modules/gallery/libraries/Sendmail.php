@@ -37,7 +37,7 @@ class Sendmail_Core
 
     public function __construct()
     {
-        $this->headers = array();
+        $this->headers = [];
         $this->from(module::get_var('gallery', 'email_from', ''));
         $this->reply_to(module::get_var('gallery', 'email_reply_to', ''));
         $this->line_length(module::get_var('gallery', 'email_line_length', 70));
@@ -54,7 +54,7 @@ class Sendmail_Core
     {
         switch ($key) {
     case 'to':
-      $this->to = is_array($value[0]) ? $value[0] : array($value[0]);
+      $this->to = is_array($value[0]) ? $value[0] : [$value[0]];
       break;
     case  'header':
       if (count($value) != 2) {
@@ -82,7 +82,7 @@ class Sendmail_Core
             throw new Exception('@todo TO_IS_REQUIRED_FOR_MAIL');
         }
         $to = implode(', ', $this->to);
-        $headers = array();
+        $headers = [];
         foreach ($this->headers as $key => $value) {
             $key = ucfirst($key);
             $headers[] = "$key: $value";

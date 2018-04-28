@@ -21,7 +21,7 @@ class Url_Security_Test extends Gallery_Unit_Test_Case
 {
     public function setup()
     {
-        $this->save = array(Router::$current_uri, Router::$complete_uri, $_GET);
+        $this->save = [Router::$current_uri, Router::$complete_uri, $_GET];
     }
 
     public function teardown()
@@ -41,8 +41,8 @@ class Url_Security_Test extends Gallery_Unit_Test_Case
     {
         Router::$current_uri = 'foo/<xss>/bar';
         Router::$complete_uri = 'foo/<xss>/bar?foo=bar';
-        $_GET = array('foo' => 'bar');
-        $this->assert_same('foo/&lt;xss&gt;/bar?foo=bar', url::merge(array()));
-        $this->assert_same('foo/&lt;xss&gt;/bar?foo=bar&amp;a=b', url::merge(array('a' => 'b')));
+        $_GET = ['foo' => 'bar'];
+        $this->assert_same('foo/&lt;xss&gt;/bar?foo=bar', url::merge([]));
+        $this->assert_same('foo/&lt;xss&gt;/bar?foo=bar&amp;a=b', url::merge(['a' => 'b']));
     }
 }

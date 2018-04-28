@@ -27,7 +27,7 @@ class tag_event_Core
      */
     public static function item_created($photo)
     {
-        $tags = array();
+        $tags = [];
         if ($photo->is_photo()) {
             $path = $photo->file_path();
             $size = getimagesize($photo->file_path(), $info);
@@ -74,7 +74,7 @@ class tag_event_Core
 
     public static function item_edit_form($item, $form)
     {
-        $tag_names = array();
+        $tag_names = [];
         foreach (tag::item_tags($item) as $tag) {
             $tag_names[] = $tag->name;
         }
@@ -137,17 +137,17 @@ class tag_event_Core
 
     public static function info_block_get_metadata($block, $item)
     {
-        $tags = array();
+        $tags = [];
         foreach (tag::item_tags($item) as $tag) {
             $tags[] = "<a href=\"{$tag->url()}\">" .
         html::clean($tag->name) . '</a>';
         }
         if ($tags) {
             $info                     = $block->content->metadata;
-            $info['tags']             = array(
+            $info['tags']             = [
                 'label' => t('Tags:'),
                 'value' => implode(', ', $tags)
-      );
+            ];
             $block->content->metadata = $info;
         }
     }

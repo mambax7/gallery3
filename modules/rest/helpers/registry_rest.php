@@ -21,7 +21,7 @@ class registry_rest_Core
 {
     public static function get($request)
     {
-        $results = array();
+        $results = [];
         foreach (module::active() as $module) {
             foreach (glob(MODPATH . "{$module->name}/helpers/*_rest.php") as $filename) {
                 $results[] = str_replace('_rest.php', '', basename($filename));

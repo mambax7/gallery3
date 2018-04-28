@@ -153,7 +153,7 @@ class URI_Core extends Router
             return $array;
         }
 
-        $associative = array();
+        $associative = [];
         $pairs       = array_chunk($array, 2);
 
         foreach ($pairs as $pair) {

@@ -81,7 +81,7 @@ class Input_Core
                     $_GET[$this->clean_input_keys($key)] = $this->clean_input_data($val);
                 }
             } else {
-                $_GET = array();
+                $_GET = [];
             }
 
             if (is_array($_POST)) {
@@ -90,7 +90,7 @@ class Input_Core
                     $_POST[$this->clean_input_keys($key)] = $this->clean_input_data($val);
                 }
             } else {
-                $_POST = array();
+                $_POST = [];
             }
 
             if (is_array($_COOKIE)) {
@@ -104,7 +104,7 @@ class Input_Core
                     $_COOKIE[$this->clean_input_keys($key)] = $this->clean_input_data($val);
                 }
             } else {
-                $_COOKIE = array();
+                $_COOKIE = [];
             }
 
             // Create a singleton
@@ -122,7 +122,7 @@ class Input_Core
      * @param   boolean  XSS clean the value
      * @return  mixed
      */
-    public function get($key = array(), $default = null, $xss_clean = false)
+    public function get($key = [], $default = null, $xss_clean = false)
     {
         return $this->search_array($_GET, $key, $default, $xss_clean);
     }
@@ -135,7 +135,7 @@ class Input_Core
      * @param   boolean  XSS clean the value
      * @return  mixed
      */
-    public function post($key = array(), $default = null, $xss_clean = false)
+    public function post($key = [], $default = null, $xss_clean = false)
     {
         return $this->search_array($_POST, $key, $default, $xss_clean);
     }
@@ -149,7 +149,7 @@ class Input_Core
      * @param   boolean  XSS clean the value
      * @return  mixed
      */
-    public function cookie($key = array(), $default = null, $xss_clean = false)
+    public function cookie($key = [], $default = null, $xss_clean = false)
     {
         return $this->search_array(cookie::get(), $key, $default, $xss_clean);
     }
@@ -162,7 +162,7 @@ class Input_Core
      * @param   boolean  XSS clean the value
      * @return  mixed
      */
-    public function server($key = array(), $default = null, $xss_clean = false)
+    public function server($key = [], $default = null, $xss_clean = false)
     {
         return $this->search_array($_SERVER, $key, $default, $xss_clean);
     }
@@ -178,7 +178,7 @@ class Input_Core
      */
     protected function search_array($array, $key, $default = null, $xss_clean = false)
     {
-        if ($key === array()) {
+        if ($key === []) {
             return $array;
         }
 
@@ -209,7 +209,7 @@ class Input_Core
         }
 
         // Server keys that could contain the client IP address
-        $keys = array('HTTP_X_FORWARDED_FOR', 'HTTP_CLIENT_IP', 'REMOTE_ADDR');
+        $keys = ['HTTP_X_FORWARDED_FOR', 'HTTP_CLIENT_IP', 'REMOTE_ADDR'];
 
         foreach ($keys as $key) {
             if ($ip = $this->server($key)) {
@@ -320,7 +320,7 @@ class Input_Core
             $old_data = $data;
 
             // Fix &entity\n;
-            $data = str_replace(array('&amp;','&lt;','&gt;'), array('&amp;amp;','&amp;lt;','&amp;gt;'), $data);
+            $data = str_replace(['&amp;', '&lt;', '&gt;'], ['&amp;amp;', '&amp;lt;', '&amp;gt;'], $data);
             $data = preg_replace('/(&#*\w+)[\x00-\x20]+;/u', '$1;', $data);
             $data = preg_replace('/(&#x*[0-9A-F]+);*/iu', '$1;', $data);
             $data = html_entity_decode($data, ENT_COMPAT, 'UTF-8');
@@ -408,7 +408,7 @@ class Input_Core
     public function clean_input_data($str)
     {
         if (is_array($str)) {
-            $new_array = array();
+            $new_array = [];
             foreach ($str as $key => $val) {
                 // Recursion!
                 $new_array[$this->clean_input_keys($key)] = $this->clean_input_data($val);
@@ -427,7 +427,7 @@ class Input_Core
 
         if (strpos($str, "\r") !== false) {
             // Standardize newlines
-            $str = str_replace(array("\r\n", "\r"), "\n", $str);
+            $str = str_replace(["\r\n", "\r"], "\n", $str);
         }
 
         return $str;

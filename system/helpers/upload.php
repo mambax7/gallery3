@@ -49,7 +49,7 @@ class upload_Core
         }
 
         if (! is_writable($directory)) {
-            throw new Kohana_Exception('The upload destination folder, :dir:, does not appear to be writable.', array(':dir:' => $directory));
+            throw new Kohana_Exception('The upload destination folder, :dir:, does not appear to be writable.', [':dir:' => $directory]);
         }
 
         if (is_uploaded_file($file['tmp_name']) and move_uploaded_file($file['tmp_name'], $filename = $directory.$filename)) {

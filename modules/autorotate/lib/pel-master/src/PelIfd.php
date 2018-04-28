@@ -94,7 +94,7 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
      *
      * @var array
      */
-    private $entries = array();
+    private $entries = [];
 
     /**
      * The type of this directory.
@@ -124,7 +124,7 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
      *
      * @var array
      */
-    private $sub = array();
+    private $sub = [];
 
     /**
      * The thumbnail data.
@@ -601,7 +601,7 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
         switch ($this->type) {
             case self::IFD0:
             case self::IFD1:
-                return array(
+                return [
                     PelTag::IMAGE_WIDTH,
                     PelTag::IMAGE_LENGTH,
                     PelTag::BITS_PER_SAMPLE,
@@ -643,10 +643,10 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
                     PelTag::XP_SUBJECT,
                     PelTag::RATING,
                     PelTag::RATING_PERCENT
-                );
+                ];
 
             case self::EXIF:
-                return array(
+                return [
                     PelTag::EXPOSURE_TIME,
                     PelTag::FNUMBER,
                     PelTag::EXPOSURE_PROGRAM,
@@ -707,10 +707,10 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
                     PelTag::IMAGE_UNIQUE_ID,
                     PelTag::INTEROPERABILITY_IFD_POINTER,
                     PelTag::GAMMA
-                );
+                ];
 
             case self::GPS:
-                return array(
+                return [
                     PelTag::GPS_VERSION_ID,
                     PelTag::GPS_LATITUDE_REF,
                     PelTag::GPS_LATITUDE,
@@ -742,16 +742,16 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
                     PelTag::GPS_AREA_INFORMATION,
                     PelTag::GPS_DATE_STAMP,
                     PelTag::GPS_DIFFERENTIAL
-                );
+                ];
 
             case self::INTEROPERABILITY:
-                return array(
+                return [
                     PelTag::INTEROPERABILITY_INDEX,
                     PelTag::INTEROPERABILITY_VERSION,
                     PelTag::RELATED_IMAGE_FILE_FORMAT,
                     PelTag::RELATED_IMAGE_WIDTH,
                     PelTag::RELATED_IMAGE_LENGTH
-                );
+                ];
 
             /*
              * TODO: Where do these tags belong?

@@ -99,7 +99,7 @@ class comment_event_Core
       ->where('author_id', '=', $data->user->id)
       ->find_all();
         if ($view->comments->count()) {
-            $data->content[] = (object)array('title' => t('Comments'), 'view' => $view);
+            $data->content[] = (object)['title' => t('Comments'), 'view' => $view];
         }
     }
 }

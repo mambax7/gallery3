@@ -9,10 +9,12 @@
  */
 class Log_Syslog_Driver extends Log_Driver
 {
-    protected $syslog_levels = array('error' => LOG_ERR,
-                                     'alert' => LOG_WARNING,
-                                     'info'  => LOG_INFO,
-                                     'debug' => LOG_DEBUG);
+    protected $syslog_levels = [
+        'error' => LOG_ERR,
+        'alert' => LOG_WARNING,
+        'info'  => LOG_INFO,
+        'debug' => LOG_DEBUG
+    ];
 
     public function save(array $messages)
     {

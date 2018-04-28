@@ -22,11 +22,13 @@ class tag_item_rest_Core
     public static function get($request)
     {
         list($tag, $item) = rest::resolve($request->url);
-        return array(
+        return [
             'url'    => $request->url,
-            'entity' => array(
+            'entity' => [
                 'tag'  => rest::url('tag', $tag),
-                'item' => rest::url('item', $item)));
+                'item' => rest::url('item', $item)
+            ]
+        ];
     }
 
     public static function delete($request)
@@ -46,7 +48,7 @@ class tag_item_rest_Core
             throw new Kohana_404_Exception();
         }
 
-        return array($tag, $item);
+        return [$tag, $item];
     }
 
     public static function url($tag, $item)

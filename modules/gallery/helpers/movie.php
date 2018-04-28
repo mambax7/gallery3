@@ -29,7 +29,7 @@ class movie_Core
 
     public static function get_edit_form($movie)
     {
-        $form = new Forge("movies/update/$movie->id", '', 'post', array('id' => 'g-edit-movie-form'));
+        $form = new Forge("movies/update/$movie->id", '', 'post', ['id' => 'g-edit-movie-form']);
         $form->hidden('from_id')->value($movie->id);
         $group = $form->group('edit_item')->label(t('Edit Movie'));
         $group->input('title')->label(t('Title'))->value($movie->title)
@@ -169,7 +169,7 @@ class movie_Core
     {
         $ffmpeg = movie::find_ffmpeg();
         if (empty($ffmpeg)) {
-            return array('', '');
+            return ['', ''];
         }
 
         // Find version using -h argument since -version wasn't available in early versions.
@@ -179,14 +179,14 @@ class movie_Core
         if (preg_match("/ffmpeg version (\S+)/i", $result, $matches_version)) {
             // Version number found - see if we can get the build date or copyright year as well.
             if (preg_match("/built on (\S+\s\S+\s\S+)/i", $result, $matches_build_date)) {
-                return array(trim($matches_version[1], ','), trim($matches_build_date[1], ','));
+                return [trim($matches_version[1], ','), trim($matches_build_date[1], ',')];
             } elseif (preg_match("/copyright \S*\s?2000-(\d{4})/i", $result, $matches_copyright_date)) {
-                return array(trim($matches_version[1], ','), $matches_copyright_date[1]);
+                return [trim($matches_version[1], ','), $matches_copyright_date[1]];
             } else {
-                return array(trim($matches_version[1], ','), '');
+                return [trim($matches_version[1], ','), ''];
             }
         }
-        return array('', '');
+        return ['', ''];
     }
 
     /**
@@ -229,9 +229,9 @@ class movie_Core
                     // (should always be int, but adding round to be sure)
                     $matches_res[1] = round($matches_res[2] * $matches_dar[1] / $matches_dar[2]);
                 }
-                list($metadata->width, $metadata->height) = array($matches_res[1], $matches_res[2]);
+                list($metadata->width, $metadata->height) = [$matches_res[1], $matches_res[2]];
             } else {
-                list($metadata->width, $metadata->height) = array(0, 0);
+                list($metadata->width, $metadata->height) = [0, 0];
             }
 
             if (preg_match("/Duration: (\d+:\d+:\d+\.\d+)/", $result, $matches)) {
@@ -269,8 +269,10 @@ class movie_Core
             throw new Exception('@todo ILLEGAL_OR_UNINDENTIFIABLE_FILE');
         }
 
-        return array($metadata->width, $metadata->height, $metadata->mime_type,
-                 $metadata->extension, $metadata->duration);
+        return [
+            $metadata->width, $metadata->height, $metadata->mime_type,
+            $metadata->extension, $metadata->duration
+        ];
     }
 
     /**

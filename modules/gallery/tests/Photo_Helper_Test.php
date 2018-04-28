@@ -23,8 +23,8 @@ class Photo_Helper_Test extends Gallery_Unit_Test_Case
     {
         $photo = test::random_photo();
         $this->assert_equal(
-        array(1024, 768, 'image/jpeg', 'jpg'),
-                        photo::get_file_metadata($photo->file_path())
+            [1024, 768, 'image/jpeg', 'jpg'],
+            photo::get_file_metadata($photo->file_path())
     );
     }
 
@@ -42,8 +42,8 @@ class Photo_Helper_Test extends Gallery_Unit_Test_Case
     {
         copy(MODPATH . 'gallery/tests/test.jpg', TMPPATH . 'test_jpg_with_no_extension');
         $this->assert_equal(
-        array(1024, 768, 'image/jpeg', 'jpg'),
-                        photo::get_file_metadata(TMPPATH . 'test_jpg_with_no_extension')
+            [1024, 768, 'image/jpeg', 'jpg'],
+            photo::get_file_metadata(TMPPATH . 'test_jpg_with_no_extension')
     );
         unlink(TMPPATH . 'test_jpg_with_no_extension');
     }
@@ -66,8 +66,8 @@ class Photo_Helper_Test extends Gallery_Unit_Test_Case
         // previously accepted without changing its extension, do not arise and cause security issues.
         copy(MODPATH . 'gallery/tests/test.jpg', TMPPATH . 'test_jpg_with_php_extension.php');
         $this->assert_equal(
-        array(1024, 768, 'image/jpeg', 'jpg'),
-                        photo::get_file_metadata(TMPPATH . 'test_jpg_with_php_extension.php')
+            [1024, 768, 'image/jpeg', 'jpg'],
+            photo::get_file_metadata(TMPPATH . 'test_jpg_with_php_extension.php')
     );
         unlink(TMPPATH . 'test_jpg_with_php_extension.php');
     }

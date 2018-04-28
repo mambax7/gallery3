@@ -29,8 +29,8 @@ class data_rest_Core
         $item = rest::resolve($request->url);
 
         $p = $request->params;
-        if (!isset($p->size) || !in_array($p->size, array('thumb', 'resize', 'full'))) {
-            throw new Rest_Exception('Bad Request', 400, array('errors' => array('size' => 'invalid')));
+        if (!isset($p->size) || !in_array($p->size, ['thumb', 'resize', 'full'])) {
+            throw new Rest_Exception('Bad Request', 400, ['errors' => ['size' => 'invalid']]);
         }
 
         // Note: this code is roughly duplicated in file_proxy, so if you modify this, please look to

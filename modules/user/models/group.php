@@ -19,7 +19,7 @@
  */
 class Group_Model_Core extends ORM implements Group_Definition
 {
-    protected $has_and_belongs_to_many = array('users');
+    protected $has_and_belongs_to_many = ['users'];
     protected $users_cache = null;
 
     /**
@@ -55,10 +55,12 @@ class Group_Model_Core extends ORM implements Group_Definition
     {
         // validate() is recursive, only modify the rules on the outermost call.
         if (!$array) {
-            $this->rules = array(
-                'name' => array(
-                    'rules'     => array('required', 'length[1,255]'),
-                    'callbacks' => array(array($this, 'valid_name'))));
+            $this->rules = [
+                'name' => [
+                    'rules'     => ['required', 'length[1,255]'],
+                    'callbacks' => [[$this, 'valid_name']]
+                ]
+            ];
         }
 
         parent::validate($array);

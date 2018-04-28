@@ -174,7 +174,7 @@ class installer
             throw new Exception(mysql_error());
         }
 
-        return array('admin', $password);
+        return ['admin', $password];
     }
 
     public static function create_admin_session($config)

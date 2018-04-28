@@ -54,7 +54,7 @@ class Kohana_Exception_Core extends Exception
     public static function enable()
     {
         if (! Kohana_Exception::$enabled) {
-            set_exception_handler(array('Kohana_Exception', 'handle'));
+            set_exception_handler(['Kohana_Exception', 'handle']);
 
             Kohana_Exception::$enabled = true;
         }
@@ -123,7 +123,7 @@ class Kohana_Exception_Core extends Exception
             if (Kohana::config('kohana/core.display_errors') === false) {
                 // Do not show the details
                 $file = $line = null;
-                $trace = array();
+                $trace = [];
 
                 $template = '_disabled';
             } else {
@@ -273,7 +273,7 @@ class Kohana_Exception_Core extends Exception
 
             return '<small>string</small><span>('.strlen($var).')</span> "'.$str.'"';
         } elseif (is_array($var)) {
-            $output = array();
+            $output = [];
 
             // Indentation for this variable
             $space = str_repeat($s = '    ', $level);
@@ -316,7 +316,7 @@ class Kohana_Exception_Core extends Exception
             // Copy the object as an array
             $array = (array) $var;
 
-            $output = array();
+            $output = [];
 
             // Indentation for this variable
             $space = str_repeat($s = '    ', $level);
@@ -324,7 +324,7 @@ class Kohana_Exception_Core extends Exception
             $hash = spl_object_hash($var);
 
             // Objects that are being dumped
-            static $objects = array();
+            static $objects = [];
 
             if (empty($var)) {
                 // Do nothing
@@ -401,7 +401,7 @@ class Kohana_Exception_Core extends Exception
     {
         // Make sure we can read the source file
         if (! is_readable($file)) {
-            return array();
+            return [];
         }
 
         // Open the file and set the line position
@@ -409,12 +409,12 @@ class Kohana_Exception_Core extends Exception
         $line = 0;
 
         // Set the reading range
-        $range = array('start' => $line_number - $padding, 'end' => $line_number + $padding);
+        $range = ['start' => $line_number - $padding, 'end' => $line_number + $padding];
 
         // Set the zero-padding amount for line numbers
         $format = '% '.strlen($range['end']).'d';
 
-        $source = array();
+        $source = [];
         while (($row = fgets($file)) !== false) {
             // Increment the line number
             if (++$line > $range['end']) {
@@ -446,9 +446,9 @@ class Kohana_Exception_Core extends Exception
         }
 
         // Non-standard function calls
-        $statements = array('include', 'include_once', 'require', 'require_once');
+        $statements = ['include', 'include_once', 'require', 'require_once'];
 
-        $output = array();
+        $output = [];
         foreach ($trace as $step) {
             if (! isset($step['function'])) {
                 // Invalid trace step
@@ -474,10 +474,10 @@ class Kohana_Exception_Core extends Exception
             if (in_array($step['function'], $statements)) {
                 if (empty($step['args'])) {
                     // No arguments
-                    $args = array();
+                    $args = [];
                 } else {
                     // Sanitize the file path
-                    $args = array($step['args'][0]);
+                    $args = [$step['args'][0]];
                 }
             } elseif (isset($step['args'])) {
                 if ($step['function'] === '{closure}') {
@@ -498,7 +498,7 @@ class Kohana_Exception_Core extends Exception
                     $params = $reflection->getParameters();
                 }
 
-                $args = array();
+                $args = [];
 
                 foreach ($step['args'] as $i => $arg) {
                     if (isset($params[$i])) {
@@ -516,13 +516,13 @@ class Kohana_Exception_Core extends Exception
                 $function = $step['class'].$step['type'].$step['function'];
             }
 
-            $output[] = array(
+            $output[] = [
                 'function' => $function,
                 'args'     => isset($args)   ? $args : null,
                 'file'     => isset($file)   ? $file : null,
                 'line'     => isset($line)   ? $line : null,
                 'source'   => isset($source) ? $source : null,
-            );
+            ];
 
             unset($function, $args, $file, $line, $source);
         }

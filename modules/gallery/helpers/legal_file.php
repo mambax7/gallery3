@@ -25,7 +25,7 @@ class legal_file_Core
     private static $movie_extensions;
     private static $photo_types;
     private static $movie_types;
-    private static $blacklist = array(
+    private static $blacklist = [
         'php',
         'php3',
         'php4',
@@ -41,7 +41,7 @@ class legal_file_Core
         'py',
         'c',
         'js'
-    );
+    ];
 
     /**
      * Create a default list of allowed photo MIME types paired with their extensions and then let
@@ -55,9 +55,9 @@ class legal_file_Core
     {
         if (empty(self::$photo_types_by_extension)) {
             $types_by_extension_wrapper = new stdClass();
-            $types_by_extension_wrapper->types_by_extension = array(
+            $types_by_extension_wrapper->types_by_extension = [
                 'jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg', 'gif' => 'image/gif', 'png' => 'image/png'
-            );
+            ];
             module::event('photo_types_by_extension', $types_by_extension_wrapper);
             foreach (self::$blacklist as $key) {
                 unset($types_by_extension_wrapper->types_by_extension[$key]);
@@ -90,10 +90,10 @@ class legal_file_Core
     {
         if (empty(self::$movie_types_by_extension)) {
             $types_by_extension_wrapper = new stdClass();
-            $types_by_extension_wrapper->types_by_extension = array(
+            $types_by_extension_wrapper->types_by_extension = [
                 'flv'  => 'video/x-flv', 'mp4' => 'video/mp4', 'm4v' => 'video/x-m4v',
                 'webm' => 'video/webm', 'ogv' => 'video/ogg'
-            );
+            ];
             module::event('movie_types_by_extension', $types_by_extension_wrapper);
             foreach (self::$blacklist as $key) {
                 unset($types_by_extension_wrapper->types_by_extension[$key]);
@@ -216,7 +216,7 @@ class legal_file_Core
      */
     public static function get_filters($without_asterisk=false)
     {
-        $filters = array();
+        $filters = [];
         $prefix = $without_asterisk ? '.' : '*.';
         foreach (legal_file::get_extensions() as $extension) {
             array_push($filters, $prefix . $extension, $prefix . strtoupper($extension));

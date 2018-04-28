@@ -22,14 +22,15 @@ class item_tags_rest_Core
     public static function get($request)
     {
         $item = rest::resolve($request->url);
-        $tags = array();
+        $tags = [];
         foreach (tag::item_tags($item) as $tag) {
             $tags[] = rest::url('tag_item', $tag, $item);
         }
 
-        return array(
+        return [
             'url'     => $request->url,
-            'members' => $tags);
+            'members' => $tags
+        ];
     }
 
     public static function post($request)
@@ -39,11 +40,13 @@ class item_tags_rest_Core
         access::required('view', $item);
 
         tag::add($item, $tag->name);
-        return array(
+        return [
             'url'     => rest::url('tag_item', $tag, $item),
-            'members' => array(
+            'members' => [
                 rest::url('tag', $tag),
-                rest::url('item', $item)));
+                rest::url('item', $item)
+            ]
+        ];
     }
 
     public static function delete($request)

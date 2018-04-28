@@ -34,7 +34,7 @@ class cookie_Core
         // Fetch default options
         $config = Kohana::config('cookie');
 
-        foreach (array('value', 'expire', 'domain', 'path', 'secure', 'httponly') as $item) {
+        foreach (['value', 'expire', 'domain', 'path', 'secure', 'httponly'] as $item) {
             if ($$item === null and isset($config[$item])) {
                 $$item = $config[$item];
             }
@@ -62,7 +62,7 @@ class cookie_Core
     {
         // Return an array of all the cookies if we don't have a name
         if ($name === null) {
-            $cookies = array();
+            $cookies = [];
 
             foreach ($_COOKIE as $key => $value) {
                 $cookies[$key] = cookie::get($key, $default, $xss_clean);

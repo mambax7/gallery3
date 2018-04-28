@@ -18,7 +18,7 @@ class View_Core
     protected $kohana_filetype = false;
 
     // View variable storage
-    protected $kohana_local_data = array();
+    protected $kohana_local_data = [];
 
     /**
      * Creates a new View using the given parameters.
@@ -83,7 +83,7 @@ class View_Core
         } else {
             // Check if the filetype is allowed by the configuration
             if (! in_array($type, Kohana::config('view.allowed_filetypes'))) {
-                throw new Kohana_Exception('The requested filetype, .:type:, is not allowed in your view configuration file', array(':type:' => $type));
+                throw new Kohana_Exception('The requested filetype, .:type:, is not allowed in your view configuration file', [':type:' => $type]);
             }
 
             // Load the filename and set the content type
@@ -136,7 +136,7 @@ class View_Core
         // If key is an array
         if (is_array($key)) {
             // Set the result to an array
-            $result = array();
+            $result = [];
 
             // Foreach key
             foreach ($key as $property) {
@@ -194,7 +194,7 @@ class View_Core
         } else {
             throw new Kohana_Exception(
                 'Undefined view variable: :var',
-                array(':var' => $key)
+                [':var' => $key]
             );
         }
     }

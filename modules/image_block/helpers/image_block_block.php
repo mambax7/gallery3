@@ -21,7 +21,7 @@ class image_block_block_Core
 {
     public static function get_site_list()
     {
-        return array('random_image' => t('Random image'));
+        return ['random_image' => t('Random image')];
     }
 
     public static function get($block_id, $theme)
@@ -33,7 +33,7 @@ class image_block_block_Core
       // result when there actually is one. Retry a *few* times.
       // @todo Consider another fallback if further optimizations are necessary.
       $image_count = module::get_var('image_block', 'image_count');
-      $items = array();
+      $items = [];
       for ($i = 0; $i < $image_count; $i++) {
           $attempts = 0;
           $item = null;

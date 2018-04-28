@@ -42,10 +42,9 @@ class Kohana_Config_Core implements ArrayAccess
         // If the driver has not been initialised, intialise it
         if (empty(Kohana_Config::$instance)) {
             //call a 1 time non singleton of Kohana_Config to get a list of drivers
-            $config = new Kohana_Config(array(
-                'config_drivers'=>array(
-                ), 'internal_cache'=>false
-            ));
+            $config = new Kohana_Config([
+                                            'config_drivers' => [], 'internal_cache' =>false
+                                        ]);
             $core_config = $config->get('core');
             Kohana_Config::$instance = new Kohana_Config($core_config);
         }
@@ -78,9 +77,9 @@ class Kohana_Config_Core implements ArrayAccess
         }
 
         //add array at the very end
-        $this->drivers = $drivers = array_merge($drivers, array(
+        $this->drivers = $drivers = array_merge($drivers, [
             'array'
-        ));
+        ]);
 
         foreach ($this->drivers as & $driver) {
             // Create the driver name
@@ -88,9 +87,9 @@ class Kohana_Config_Core implements ArrayAccess
 
             // Ensure the driver loads correctly
             if (!Kohana::auto_load($driver)) {
-                throw new Kohana_Exception('The :driver: driver for the :library: library could not be found.', array(
+                throw new Kohana_Exception('The :driver: driver for the :library: library could not be found.', [
                     ':driver:' => $driver, ':library:' => get_class($this)
-                ));
+                ]);
             }
 
             // Load the new driver
@@ -98,9 +97,9 @@ class Kohana_Config_Core implements ArrayAccess
 
             // Ensure the new driver is valid
             if (!$driver instanceof Config_Driver) {
-                throw new Kohana_Exception('The :driver: driver for the :library: library must implement the :interface: interface', array(
+                throw new Kohana_Exception('The :driver: driver for the :library: library must implement the :interface: interface', [
                     ':driver:' => $driver, ':library:' => get_class($this), ':interface:' => 'Config_Driver'
-                ));
+                ]);
             }
         }
     }

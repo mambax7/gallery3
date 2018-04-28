@@ -22,9 +22,11 @@ class Database_Mysqli_Result_Core extends Database_Result
             if ($result == false) {
                 throw new Database_Exception(
                     '#:errno: :error [ :query ]',
-                    array(':error' => $link->error,
-                    ':query' => $sql,
-                    ':errno' => $link->errno)
+                    [
+                        ':error' => $link->error,
+                        ':query' => $sql,
+                        ':errno' => $link->errno
+                    ]
                 );
             } else {
                 // It's a DELETE, INSERT, REPLACE, or UPDATE query
@@ -61,7 +63,7 @@ class Database_Mysqli_Result_Core extends Database_Result
             return $this->result->fetch_all(MYSQLI_ASSOC);
         }
 
-        $array = array();
+        $array = [];
 
         if ($this->total_rows > 0) {
             // Seek to the beginning of the result
@@ -88,7 +90,7 @@ class Database_Mysqli_Result_Core extends Database_Result
         }
 
         // Return a nested array of all results
-        $array = array();
+        $array = [];
 
         if ($this->total_rows > 0) {
             // Seek to the beginning of the result

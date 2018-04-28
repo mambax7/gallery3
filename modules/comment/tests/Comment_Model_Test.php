@@ -34,11 +34,11 @@ class Comment_Model_Test extends Gallery_Unit_Test_Case
             $comment->save();
         } catch (ORM_Validation_Exception $e) {
             $this->assert_equal(
-          array(
+                [
               'guest_name'  => 'required',
               'guest_email' => 'required'
-          ),
-                          $e->validation->errors()
+                ],
+                $e->validation->errors()
       );
             return;
         }
@@ -56,8 +56,8 @@ class Comment_Model_Test extends Gallery_Unit_Test_Case
             $comment->save();
         } catch (ORM_Validation_Exception $e) {
             $this->assert_equal(
-          array('guest_email' => 'invalid'),
-                          $e->validation->errors()
+                ['guest_email' => 'invalid'],
+                $e->validation->errors()
       );
             return;
         }

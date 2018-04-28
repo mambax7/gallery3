@@ -30,23 +30,24 @@ class Cache_Memcache_Driver extends Cache_Driver
 
         foreach ($config['servers'] as $server) {
             // Make sure all required keys are set
-            $server += array('host' => '127.0.0.1',
-                             'port' => 11211,
-                             'persistent' => false,
-                             'weight' => 1,
-                             'timeout' => 1,
-                             'retry_interval' => 15
-            );
+            $server += [
+                'host'           => '127.0.0.1',
+                'port'           => 11211,
+                'persistent'     => false,
+                'weight'         => 1,
+                'timeout'        => 1,
+                'retry_interval' => 15
+            ];
 
             // Add the server to the pool
-            $this->backend->addServer($server['host'], $server['port'], (bool) $server['persistent'], (int) $server['weight'], (int) $server['timeout'], (int) $server['retry_interval'], true, array($this,'_memcache_failure_callback'));
+            $this->backend->addServer($server['host'], $server['port'], (bool) $server['persistent'], (int) $server['weight'], (int) $server['timeout'], (int) $server['retry_interval'], true, [$this, '_memcache_failure_callback']);
         }
     }
 
     public function _memcache_failure_callback($host, $port)
     {
         $this->backend->setServerParams($host, $port, 1, -1, false);
-        Kohana_Log::add('error', __('Cache: Memcache server down: :host:::port:', array(':host:' => $host,':port:' => $port)));
+        Kohana_Log::add('error', __('Cache: Memcache server down: :host:::port:', [':host:' => $host, ':port:' => $port]));
     }
 
     public function set($items, $tags = null, $lifetime = null)
@@ -84,7 +85,7 @@ class Cache_Memcache_Driver extends Cache_Driver
 
             return (count($items) > 0) ? current($items) : null;
         } else {
-            return ($items === false) ? array() : $items;
+            return ($items === false) ? [] : $items;
         }
     }
 

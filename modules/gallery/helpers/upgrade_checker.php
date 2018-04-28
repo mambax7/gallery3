@@ -87,7 +87,7 @@ class upgrade_checker_Core
         Cache::instance()->set(
             'upgrade_checker_version_info',
             serialize($result),
-            array('upgrade'),
+            ['upgrade'],
         86400 * 365
     );
     }
@@ -103,9 +103,10 @@ class upgrade_checker_Core
                 if (version_compare($version_info->data['release_version'], gallery::VERSION, '>')) {
                     return t(
                         'A newer version of Gallery is available! <a href="%upgrade-url">Upgrade now</a> to version %version',
-                        array(
+                        [
                             'version'     => $version_info->data['release_version'],
-                            'upgrade-url' => $version_info->data['release_upgrade_url'])
+                            'upgrade-url' => $version_info->data['release_upgrade_url']
+                        ]
           );
                 }
             } else {
@@ -117,11 +118,12 @@ class upgrade_checker_Core
             )) {
                     return t(
                         'A newer version of Gallery is available! <a href="%upgrade-url">Upgrade now</a> to version %version (build %build on branch %branch)',
-                        array(
+                        [
                             'version'     => $version_info->data["branch_{$branch}_version"],
                             'upgrade-url' => $version_info->data["branch_{$branch}_upgrade_url"],
                             'build'       => $version_info->data["branch_{$branch}_build_number"],
-                            'branch'      => $branch)
+                            'branch'      => $branch
+                        ]
           );
                 }
             }

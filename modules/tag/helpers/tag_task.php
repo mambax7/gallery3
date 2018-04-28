@@ -35,7 +35,7 @@ class tag_task_Core
      */
     public static function clean_up_tags($task)
     {
-        $errors = array();
+        $errors = [];
         try {
             $start = microtime(true);
             $last_tag_id = $task->get('last_tag_id', null);

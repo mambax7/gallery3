@@ -20,7 +20,7 @@ class Cache_File_Driver extends Cache_Driver
         $this->config['directory'] = str_replace('\\', '/', realpath($this->config['directory'])).'/';
 
         if (! is_dir($this->config['directory']) or ! is_writable($this->config['directory'])) {
-            throw new Cache_Exception('The configured cache directory, :directory:, is not writable.', array(':directory:' => $this->config['directory']));
+            throw new Cache_Exception('The configured cache directory, :directory:, is not writable.', [':directory:' => $this->config['directory']]);
         }
     }
 
@@ -38,14 +38,14 @@ class Cache_File_Driver extends Cache_Driver
             return glob($this->config['directory'].'*~*~*');
         } elseif ($tag === true) {
             // Find all the files that have the tag name
-            $paths = array();
+            $paths = [];
 
             foreach ((array) $keys as $tag) {
                 $paths = array_merge($paths, glob($this->config['directory'].'*~*'.$tag.'*~*'));
             }
 
             // Find all tags matching the given tag
-            $files = array();
+            $files = [];
 
             foreach ($paths as $path) {
                 // Split the files
@@ -70,11 +70,11 @@ class Cache_File_Driver extends Cache_Driver
 
             return $files;
         } else {
-            $paths = array();
+            $paths = [];
 
             foreach ((array) $keys as $key) {
                 // Find the file matching the given key
-                $paths = array_merge($paths, glob($this->config['directory'].str_replace(array('/', '\\', ' '), '_', $key).'~*'));
+                $paths = array_merge($paths, glob($this->config['directory'].str_replace(['/', '\\', ' '], '_', $key) . '~*'));
             }
 
             return $paths;
@@ -104,7 +104,7 @@ class Cache_File_Driver extends Cache_Driver
             // Remove old cache file
             $this->delete($key);
 
-            if (! (bool) file_put_contents($this->config['directory'].str_replace(array('/', '\\', ' '), '_', $key).'~'.$tags.'~'.$lifetime, serialize($value))) {
+            if (! (bool) file_put_contents($this->config['directory'].str_replace(['/', '\\', ' '], '_', $key) . '~' . $tags . '~' . $lifetime, serialize($value))) {
                 $success = false;
             }
         }
@@ -114,7 +114,7 @@ class Cache_File_Driver extends Cache_Driver
 
     public function get($keys, $single = false)
     {
-        $items = array();
+        $items = [];
 
         if ($files = $this->exists($keys)) {
             // Turn off errors while reading the files
@@ -156,7 +156,7 @@ class Cache_File_Driver extends Cache_Driver
     public function get_tag($tags)
     {
         // An array will always be returned
-        $result = array();
+        $result = [];
 
         if ($paths = $this->exists($tags, true)) {
             // Find all the files with the given tag

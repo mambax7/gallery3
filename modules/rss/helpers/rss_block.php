@@ -21,7 +21,7 @@ class rss_block_Core
 {
     public static function get_site_list()
     {
-        return array('rss_feeds' => t('Available RSS feeds'));
+        return ['rss_feeds' => t('Available RSS feeds')];
     }
 
     public static function get($block_id, $theme)
@@ -29,13 +29,13 @@ class rss_block_Core
         $block = '';
         switch ($block_id) {
     case 'rss_feeds':
-      $feeds = array();
+      $feeds = [];
       foreach (module::active() as $module) {
           $class_name = "{$module->name}_rss";
           if (class_exists($class_name) && method_exists($class_name, 'available_feeds')) {
               $feeds = array_merge(
               $feeds,
-            call_user_func(array($class_name, 'available_feeds'), $theme->item(), $theme->tag())
+            call_user_func([$class_name, 'available_feeds'], $theme->item(), $theme->tag())
           );
           }
       }

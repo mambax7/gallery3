@@ -19,9 +19,9 @@
  */
 class InPlaceEdit_Core
 {
-    private $rules = array();
-    private $messages = array();
-    private $callback = array();
+    private $rules = [];
+    private $messages = [];
+    private $callback = [];
     private $initial_value;
     private $action = '';
     private $errors;
@@ -31,8 +31,8 @@ class InPlaceEdit_Core
     {
         $instance = new InPlaceEdit();
         $instance->initial_value = $initial_value;
-        $instance->form = array('input' => $initial_value);
-        $instance->errors = array('input' => '');
+        $instance->form = ['input' => $initial_value];
+        $instance->errors = ['input' => ''];
 
         return $instance;
     }

@@ -21,7 +21,7 @@ class File_Proxy_Controller_Test extends Gallery_Unit_Test_Case
 {
     public function setup()
     {
-        $this->_save = array($_SERVER);
+        $this->_save = [$_SERVER];
     }
 
     public function teardown()
@@ -35,7 +35,7 @@ class File_Proxy_Controller_Test extends Gallery_Unit_Test_Case
         $photo                  = test::random_photo();
         $_SERVER['REQUEST_URI'] = url::file("var/albums/{$photo->name}");
         $controller             = new File_Proxy_Controller();
-        $this->assert_same($photo->file_path(), $controller->__call('', array()));
+        $this->assert_same($photo->file_path(), $controller->__call('', []));
     }
 
     public function query_params_are_ignored_test()
@@ -43,7 +43,7 @@ class File_Proxy_Controller_Test extends Gallery_Unit_Test_Case
         $photo                  = test::random_photo();
         $_SERVER['REQUEST_URI'] = url::file("var/albums/{$photo->name}?a=1&b=2");
         $controller             = new File_Proxy_Controller();
-        $this->assert_same($photo->file_path(), $controller->__call('', array()));
+        $this->assert_same($photo->file_path(), $controller->__call('', []));
     }
 
     public function file_must_be_in_var_test()
@@ -51,7 +51,7 @@ class File_Proxy_Controller_Test extends Gallery_Unit_Test_Case
         $_SERVER['REQUEST_URI'] = url::file('index.php');
         $controller             = new File_Proxy_Controller();
         try {
-            $controller->__call('', array());
+            $controller->__call('', []);
             $this->assert_true(false);
         } catch (Kohana_404_Exception $e) {
             $this->assert_same(1, $e->test_fail_code);
@@ -63,7 +63,7 @@ class File_Proxy_Controller_Test extends Gallery_Unit_Test_Case
         $_SERVER['REQUEST_URI'] = url::file('var/test/var/uploads/.htaccess');
         $controller             = new File_Proxy_Controller();
         try {
-            $controller->__call('', array());
+            $controller->__call('', []);
             $this->assert_true(false);
         } catch (Kohana_404_Exception $e) {
             $this->assert_same(2, $e->test_fail_code);
@@ -76,7 +76,7 @@ class File_Proxy_Controller_Test extends Gallery_Unit_Test_Case
         $name                   = legal_file::change_extension($movie->name, 'jpg');
         $_SERVER['REQUEST_URI'] = url::file("var/thumbs/$name");
         $controller             = new File_Proxy_Controller();
-        $this->assert_same($movie->thumb_path(), $controller->__call('', array()));
+        $this->assert_same($movie->thumb_path(), $controller->__call('', []));
     }
 
     public function invalid_item_test()
@@ -85,7 +85,7 @@ class File_Proxy_Controller_Test extends Gallery_Unit_Test_Case
         $_SERVER['REQUEST_URI'] = url::file("var/albums/x_{$photo->name}");
         $controller             = new File_Proxy_Controller();
         try {
-            $controller->__call('', array());
+            $controller->__call('', []);
             $this->assert_true(false);
         } catch (Kohana_404_Exception $e) {
             $this->assert_same(3, $e->test_fail_code);
@@ -104,7 +104,7 @@ class File_Proxy_Controller_Test extends Gallery_Unit_Test_Case
         identity::set_active_user(identity::guest());
 
         try {
-            $controller->__call('', array());
+            $controller->__call('', []);
             $this->assert_true(false);
         } catch (Kohana_404_Exception $e) {
             $this->assert_same(5, $e->test_fail_code);
@@ -118,7 +118,7 @@ class File_Proxy_Controller_Test extends Gallery_Unit_Test_Case
         $controller             = new File_Proxy_Controller();
 
         try {
-            $controller->__call('', array());
+            $controller->__call('', []);
             $this->assert_true(false);
         } catch (Kohana_404_Exception $e) {
             $this->assert_same(6, $e->test_fail_code);
@@ -133,7 +133,7 @@ class File_Proxy_Controller_Test extends Gallery_Unit_Test_Case
         $controller = new File_Proxy_Controller();
 
         try {
-            $controller->__call('', array());
+            $controller->__call('', []);
             $this->assert_true(false);
         } catch (Kohana_404_Exception $e) {
             $this->assert_same(7, $e->test_fail_code);

@@ -64,25 +64,26 @@ class l10n_client_Core
 
         try {
             list($response_data, $response_status) = remote::post(
-        $url,
-          array(
+                $url,
+                [
               'version'      => $version,
               'client_token' => l10n_client::client_token(),
               'signature'    => $signature,
-              'uid'          => l10n_client::server_uid($api_key))
+              'uid'          => l10n_client::server_uid($api_key)
+                ]
       );
         } catch (ErrorException $e) {
             // Log the error, but then return a "can't make connection" error
             Kohana_Log::add('error', $e->getMessage() . "\n" . $e->getTraceAsString());
         }
         if (!isset($response_data) && !isset($response_status)) {
-            return array(false, false);
+            return [false, false];
         }
 
         if (!remote::success($response_status)) {
-            return array(true, false);
+            return [true, false];
         }
-        return array(true, true);
+        return [true, true];
     }
 
     /**
@@ -97,7 +98,7 @@ class l10n_client_Core
     public static function fetch_updates(&$num_fetched)
     {
         $request = new stdClass();
-        $request->locales = array();
+        $request->locales = [];
         $request->messages = new stdClass();
 
         $locales = locales::installed();
@@ -143,7 +144,7 @@ class l10n_client_Core
 
         $request_data = json_encode($request);
         $url = self::_server_url('fetch');
-        list($response_data, $response_status) = remote::post($url, array('data' => $request_data));
+        list($response_data, $response_status) = remote::post($url, ['data' => $request_data]);
         if (!remote::success($response_status)) {
             throw new Exception('@todo TRANSLATIONS_FETCH_REQUEST_FAILED ' . $response_status);
         }
@@ -235,12 +236,13 @@ class l10n_client_Core
         $signature = self::_sign($request_data);
 
         list($response_data, $response_status) = remote::post(
-      $url,
-        array(
+            $url,
+            [
             'data'         => $request_data,
             'client_token' => l10n_client::client_token(),
             'signature'    => $signature,
-            'uid'          => l10n_client::server_uid())
+            'uid'          => l10n_client::server_uid()
+            ]
     );
 
         if (!remote::success($response_status)) {
@@ -291,13 +293,13 @@ class l10n_client_Core
       case 'kn':
       case 'ms':
       case 'th':
-        return array('other');
+        return ['other'];
 
       case 'ar':
-        return array('zero', 'one', 'two', 'few', 'many', 'other');
+        return ['zero', 'one', 'two', 'few', 'many', 'other'];
 
       case 'lv':
-        return array('zero', 'one', 'other');
+        return ['zero', 'one', 'other'];
 
       case 'ga':
       case 'se':
@@ -306,7 +308,7 @@ class l10n_client_Core
       case 'smj':
       case 'smn':
       case 'sms':
-        return array('one', 'two', 'other');
+        return ['one', 'two', 'other'];
 
       case 'ro':
       case 'mo':
@@ -314,7 +316,7 @@ class l10n_client_Core
       case 'cs':
       case 'sk':
       case 'pl':
-        return array('one', 'few', 'other');
+        return ['one', 'few', 'other'];
 
       case 'hr':
       case 'ru':
@@ -324,16 +326,16 @@ class l10n_client_Core
       case 'bs':
       case 'sh':
       case 'mt':
-        return array('one', 'few', 'many', 'other');
+        return ['one', 'few', 'many', 'other'];
 
       case 'sl':
-        return array('one', 'two', 'few', 'other');
+        return ['one', 'two', 'few', 'other'];
 
       case 'cy':
-        return array('one', 'two', 'many', 'other');
+        return ['one', 'two', 'many', 'other'];
 
       default: // en, de, etc.
-        return array('one', 'other');
+        return ['one', 'other'];
     }
     }
 }

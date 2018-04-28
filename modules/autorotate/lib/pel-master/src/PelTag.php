@@ -1377,7 +1377,7 @@ class PelTag
     /**
      * Values for tags short names.
      */
-    protected static $exifTagsShort= array(
+    protected static $exifTagsShort= [
         self::INTEROPERABILITY_INDEX         => 'InteroperabilityIndex',
         self::INTEROPERABILITY_VERSION       => 'InteroperabilityVersion',
         self::IMAGE_WIDTH                    => 'ImageWidth',
@@ -1492,12 +1492,12 @@ class PelTag
         self::IMAGE_UNIQUE_ID                => 'ImageUniqueID',
         self::GAMMA                          => 'Gamma',
         self::PRINT_IM                       => 'PrintIM',
-    );
+    ];
 
     /**
      * Values for tags titles.
      */
-    protected static $exifTagsTitle = array(
+    protected static $exifTagsTitle = [
         self::INTEROPERABILITY_INDEX         => 'Interoperability Index',
         self::INTEROPERABILITY_VERSION       => 'Interoperability Version',
         self::IMAGE_WIDTH                    => 'Image Width',
@@ -1612,12 +1612,12 @@ class PelTag
         self::IMAGE_UNIQUE_ID                => 'Image Unique ID',
         self::GAMMA                          => 'Gamma',
         self::PRINT_IM                       => 'Print IM',
-    );
+    ];
 
     /**
      * Values for gps tags short names.
      */
-    protected static $gpsTagsShort = array(
+    protected static $gpsTagsShort = [
         self::GPS_VERSION_ID         => 'GPSVersionID',
         self::GPS_LATITUDE_REF       => 'GPSLatitudeRef',
         self::GPS_LATITUDE           => 'GPSLatitude',
@@ -1649,7 +1649,7 @@ class PelTag
         self::GPS_AREA_INFORMATION   => 'GPSAreaInformation',
         self::GPS_DATE_STAMP         => 'GPSDateStamp',
         self::GPS_DIFFERENTIAL       => 'GPSDifferential',
-    );
+    ];
 
     /**
      * Returns a string from container with key $tag and subcontainer index of $idx

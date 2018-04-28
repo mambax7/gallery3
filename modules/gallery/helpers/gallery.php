@@ -171,7 +171,7 @@ class gallery_Core
                 // is the target directory, and if it is then we're done.  This check makes
                 // sure that if Gallery is installed in a directory called "modules" or "themes"
                 // We don't parse the directory structure incorrectly.
-                if (in_array($part, array('modules', 'themes')) &&
+                if (in_array($part, ['modules', 'themes']) &&
             $idx + 2 < $count &&
             $parts[$idx + 2] == $directory) {
                     break;
@@ -189,7 +189,7 @@ class gallery_Core
      */
     public static function set_path_env($paths)
     {
-        $path_env = array();
+        $path_env = [];
         foreach ($paths as $path) {
             if ($path) {
                 array_push($path_env, $path);

@@ -21,7 +21,7 @@ class Movie_Helper_Test extends Gallery_Unit_Test_Case
 {
     public function seconds_to_hhmmssdd_test()
     {
-        $times = array(
+        $times = [
             '00:00:00.50'  => 0.5,
             '00:00:06.00'  => 6,
             '00:00:59.99'  => 59.999,
@@ -29,7 +29,8 @@ class Movie_Helper_Test extends Gallery_Unit_Test_Case
             '00:07:00.00'  => 7 * 60,
             '00:45:19.00'  => 45 * 60 + 19,
             '03:45:19.00'  => 3 * 3600 + 45 * 60 + 19,
-            '126:45:19.00' => 126 * 3600 + 45 * 60 + 19);
+            '126:45:19.00' => 126 * 3600 + 45 * 60 + 19
+        ];
         foreach ($times as $hhmmssdd => $seconds) {
             $this->assert_equal($hhmmssdd, movie::seconds_to_hhmmssdd($seconds));
         }
@@ -37,7 +38,7 @@ class Movie_Helper_Test extends Gallery_Unit_Test_Case
 
     public function hhmmssdd_to_seconds_test()
     {
-        $times = array(
+        $times = [
             '0:00:00.01'   => 0.01,
             '00:00:00.50'  => 0.5,
             '00:00:06.00'  => 6,
@@ -46,7 +47,8 @@ class Movie_Helper_Test extends Gallery_Unit_Test_Case
             '00:07:00.00'  => 7 * 60,
             '00:45:19.00'  => 45 * 60 + 19,
             '03:45:19.00'  => 3 * 3600 + 45 * 60 + 19,
-            '126:45:19.00' => 126 * 3600 + 45 * 60 + 19);
+            '126:45:19.00' => 126 * 3600 + 45 * 60 + 19
+        ];
         foreach ($times as $hhmmssdd => $seconds) {
             $this->assert_equal($seconds, movie::hhmmssdd_to_seconds($hhmmssdd));
         }
@@ -56,8 +58,8 @@ class Movie_Helper_Test extends Gallery_Unit_Test_Case
     {
         $movie = test::random_movie();
         $this->assert_equal(
-        array(360, 288, 'video/x-flv', 'flv', 6.00),
-                        movie::get_file_metadata($movie->file_path())
+            [360, 288, 'video/x-flv', 'flv', 6.00],
+            movie::get_file_metadata($movie->file_path())
     );
     }
 
@@ -115,8 +117,8 @@ class Movie_Helper_Test extends Gallery_Unit_Test_Case
         // isn't a really a security problem, since the filename doesn't have a php extension and
         // therefore will never be executed.
         $this->assert_equal(
-        array(0, 0, 'video/x-flv', 'flv', 0),
-                        movie::get_file_metadata(TMPPATH . 'test_php_with_flv_extension.flv')
+            [0, 0, 'video/x-flv', 'flv', 0],
+            movie::get_file_metadata(TMPPATH . 'test_php_with_flv_extension.flv')
     );
         unlink(TMPPATH . 'test_php_with_flv_extension.flv');
     }

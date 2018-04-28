@@ -59,7 +59,7 @@ class Pagination_Core
      * @param   array   configuration settings
      * @return  object
      */
-    public function factory($config = array())
+    public function factory($config = [])
     {
         return new Pagination($config);
     }
@@ -70,7 +70,7 @@ class Pagination_Core
      * @param   array  configuration settings
      * @return  void
      */
-    public function __construct($config = array())
+    public function __construct($config = [])
     {
         // No custom group name given
         if (! isset($config['group'])) {
@@ -88,7 +88,7 @@ class Pagination_Core
      * @param   array  configuration settings
      * @return  void
      */
-    public function initialize($config = array())
+    public function initialize($config = [])
     {
         // Load config group
         if (isset($config['group'])) {

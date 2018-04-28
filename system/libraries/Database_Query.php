@@ -59,7 +59,7 @@ class Database_Query_Core
 
         if (! empty($this->params)) {
             // Quote all of the values
-            $params = array_map(array($db, 'quote'), $this->params);
+            $params = array_map([$db, 'quote'], $this->params);
 
             // Replace the values in the SQL
             $sql = strtr($sql, $params);

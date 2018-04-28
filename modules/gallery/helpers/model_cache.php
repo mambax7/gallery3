@@ -19,7 +19,7 @@
  */
 class model_cache_Core
 {
-    private static $cache = array();
+    private static $cache = [];
 
     public static function get($model_name, $id, $field_name= 'id')
     {
@@ -36,7 +36,7 @@ class model_cache_Core
 
     public static function clear()
     {
-        self::$cache = array();
+        self::$cache = [];
     }
 
     public static function set($model)

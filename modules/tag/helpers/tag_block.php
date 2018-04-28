@@ -21,7 +21,7 @@ class tag_block_Core
 {
     public static function get_site_list()
     {
-        return array('tag' => t('Popular tags'));
+        return ['tag' => t('Popular tags')];
     }
 
     public static function get($block_id, $theme)

@@ -26,7 +26,7 @@ class Router_Core
     public static $controller_path;
 
     public static $method    = 'index';
-    public static $arguments = array();
+    public static $arguments = [];
 
     /**
      * Router setup routine. Automatically called during Kohana setup process.
@@ -70,7 +70,7 @@ class Router_Core
         if ($default_route === true) {
             Router::$complete_uri = Router::$query_string;
             Router::$current_uri = '';
-            Router::$segments = array();
+            Router::$segments = [];
         } else {
             Router::$complete_uri = Router::$current_uri.Router::$query_string;
 

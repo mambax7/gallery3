@@ -35,11 +35,11 @@ class Login_Controller extends Controller
 
         list($valid, $form) = $this->_auth('login/auth_ajax');
         if ($valid) {
-            json::reply(array('result' => 'success'));
+            json::reply(['result' => 'success']);
         } else {
             $view = new View('login_ajax.html');
             $view->form = $form;
-            json::reply(array('result' => 'error', 'html' => (string)$view));
+            json::reply(['result' => 'error', 'html' => (string)$view]);
         }
     }
 
@@ -78,7 +78,7 @@ class Login_Controller extends Controller
             if (empty($user) || !identity::is_correct_password($user, $form->login->password->value)) {
                 $form->login->inputs['name']->add_error('invalid_login', 1);
                 $name = $form->login->inputs['name']->value;
-                log::warning('user', t('Failed login for %name', array('name' => $name)));
+                log::warning('user', t('Failed login for %name', ['name' => $name]));
                 module::event('user_auth_failed', $name);
                 $valid = false;
             }
@@ -91,6 +91,6 @@ class Login_Controller extends Controller
         // Either way, regenerate the session id to avoid session trapping
         Session::instance()->regenerate();
 
-        return array($valid, $form);
+        return [$valid, $form];
     }
 }

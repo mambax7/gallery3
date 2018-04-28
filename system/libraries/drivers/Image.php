@@ -19,7 +19,7 @@ abstract class Image_Driver
     protected $tmp_image;
 
     // Processing errors
-    protected $errors = array();
+    protected $errors = [];
 
     /**
      * Executes a set of actions, defined in pairs.

@@ -99,11 +99,11 @@ class Session_Database_Driver implements Session_Driver
             return true;
         }
 
-        $data = array(
+        $data = [
             'session_id' => $id,
             'last_activity' => time(),
             'data' => ($this->encrypt === null) ? base64_encode($data) : $this->encrypt->encode($data)
-        );
+        ];
 
         if ($this->session_id === null) {
             // Insert a new session

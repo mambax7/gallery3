@@ -39,8 +39,8 @@ class items_rest_Core
      */
     public static function get($request)
     {
-        $items = array();
-        $types = array();
+        $items = [];
+        $types = [];
 
         if (isset($request->params->urls)) {
             if (isset($request->params->type)) {
@@ -82,12 +82,13 @@ class items_rest_Core
 
     private static function _format_restful_item($item, $types)
     {
-        $item_rest = array(
+        $item_rest = [
             'url'           => rest::url('item', $item),
             'entity'        => $item->as_restful_array(),
-            'relationships' => rest::relationships('item', $item));
+            'relationships' => rest::relationships('item', $item)
+        ];
         if ($item->type == 'album') {
-            $members = array();
+            $members = [];
             foreach ($item->viewable()->children() as $child) {
                 if (empty($types) || in_array($child->type, $types)) {
                     $members[] = rest::url('item', $child);

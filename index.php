@@ -75,7 +75,7 @@ if (PHP_SAPI == 'cli') {
     exit(0);
   case 'upgrade':
   case 'package':
-      $_SERVER['argv'] = array('index.php', "{$arg_1}r/$arg_1");
+      $_SERVER['argv'] = ['index.php', "{$arg_1}r/$arg_1"];
     define('TEST_MODE', 0);
     define('VARPATH', realpath('var') . '/');
     break;

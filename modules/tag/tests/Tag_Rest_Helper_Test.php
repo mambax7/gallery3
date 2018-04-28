@@ -35,15 +35,19 @@ class Tag_Rest_Helper_Test extends Gallery_Unit_Test_Case
         $request = new stdClass();
         $request->url = rest::url('tag', $tag);
         $this->assert_equal_array(
-      array(
+            [
           'url'           => rest::url('tag', $tag),
           'entity'        => $tag->as_array(),
-          'relationships' => array(
-              'items' => array(
+          'relationships' => [
+              'items' => [
                   'url'     => rest::url('tag_items', $tag),
-                  'members' => array(
-                  rest::url('tag_item', $tag, item::root()))))),
-      tag_rest::get($request)
+                  'members' => [
+                  rest::url('tag_item', $tag, item::root())
+                  ]
+              ]
+          ]
+            ],
+            tag_rest::get($request)
     );
     }
 
@@ -66,14 +70,17 @@ class Tag_Rest_Helper_Test extends Gallery_Unit_Test_Case
         $request = new stdClass();
         $request->url = rest::url('tag', $tag);
         $this->assert_equal_array(
-      array(
+            [
           'url'           => rest::url('tag', $tag),
           'entity'        => $tag->as_array(),
-          'relationships' => array(
-              'items' => array(
+          'relationships' => [
+              'items' => [
                   'url'     => rest::url('tag_items', $tag),
-                  'members' => array()))),
-      tag_rest::get($request)
+                  'members' => []
+              ]
+          ]
+            ],
+            tag_rest::get($request)
     );
     }
 

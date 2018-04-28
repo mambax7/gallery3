@@ -20,7 +20,7 @@
     <?= $theme->thumb_top($child) ?>
     <a href="<?= $child->url() ?>">
       <?php if ($child->has_thumb()): ?>
-      <?= $child->thumb_img(array('class' => 'g-thumbnail')) ?>
+      <?= $child->thumb_img(['class' => 'g-thumbnail']) ?>
       <?php endif ?>
     </a>
     <?= $theme->thumb_bottom($child) ?>
@@ -36,8 +36,8 @@
   <?php if ($user->admin || access::can('add', $item)): ?>
   <?php $addurl = url::site("uploader/index/$item->id") ?>
   <li><?= t(
-    "There aren't any photos here yet! <a %attrs>Add some</a>.",
-            array('attrs' => html::mark_clean("href=\"$addurl\" class=\"g-dialog-link\""))
+          "There aren't any photos here yet! <a %attrs>Add some</a>.",
+          ['attrs' => html::mark_clean("href=\"$addurl\" class=\"g-dialog-link\"")]
 ) ?></li>
   <?php else: ?>
   <li><?= t("There aren't any photos here yet!") ?></li>

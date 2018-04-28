@@ -48,10 +48,10 @@ class Breadcrumb_Core
     public static function array_from_item_parents($item)
     {
         if ($item->id == item::root()->id) {
-            return array();
+            return [];
         }
 
-        $bc = array_merge($item->parents()->as_array(), array($item));
+        $bc = array_merge($item->parents()->as_array(), [$item]);
         for ($i = 0; $i < count($bc) - 1; $i++) {
             $bc[$i] = new Breadcrumb($bc[$i]->title, $bc[$i]->url("show={$bc[$i+1]->id}"));
         }

@@ -40,8 +40,8 @@ class Admin_Maintenance_Controller extends Admin_Controller
                     $stalled_count
                    ),
                 t(
-                       '<a href="%url">view</a>',
-                     array('url' => html::mark_clean(url::site('admin/maintenance')))
+                    '<a href="%url">view</a>',
+                    ['url' => html::mark_clean(url::site('admin/maintenance'))]
                    )
       );
         }
@@ -81,7 +81,7 @@ class Admin_Maintenance_Controller extends Admin_Controller
             'tasks',
             t(
                 'Task %task_name started (task id %task_id)',
-                array('task_name' => $task->name, 'task_id' => $task->id)
+                ['task_name' => $task->name, 'task_id' => $task->id]
     ),
             html::anchor('admin/maintenance', t('maintenance'))
     );
@@ -105,13 +105,13 @@ class Admin_Maintenance_Controller extends Admin_Controller
 
         $task->log(t(
                        'Task %task_name resumed (task id %task_id)',
-                       array('task_name' => $task->name, 'task_id' => $task->id)
+                       ['task_name' => $task->name, 'task_id' => $task->id]
     ));
         log::info(
             'tasks',
             t(
                 'Task %task_name resumed (task id %task_id)',
-                array('task_name' => $task->name, 'task_id' => $task->id)
+                ['task_name' => $task->name, 'task_id' => $task->id]
     ),
             html::anchor('admin/maintenance', t('maintenance'))
     );
@@ -242,7 +242,7 @@ class Admin_Maintenance_Controller extends Admin_Controller
             'tasks',
             t(
                 'Task %task_name completed (task id %task_id)',
-                array('task_name' => $task->name, 'task_id' => $task->id)
+                ['task_name' => $task->name, 'task_id' => $task->id]
         ),
             html::anchor('admin/maintenance', t('maintenance'))
         );
@@ -254,7 +254,7 @@ class Admin_Maintenance_Controller extends Admin_Controller
             'tasks',
             t(
                 'Task %task_name failed (task id %task_id)',
-                array('task_name' => $task->name, 'task_id' => $task->id)
+                ['task_name' => $task->name, 'task_id' => $task->id]
         ),
             html::anchor('admin/maintenance', t('maintenance'))
         );
@@ -262,20 +262,24 @@ class Admin_Maintenance_Controller extends Admin_Controller
         break;
       }
             // Using sprintf("%F") to avoid comma as decimal separator.
-            json::reply(array(
+            json::reply([
                             'result'   => 'success',
-                            'task'     => array(
+                            'task'     => [
                                 'percent_complete' => sprintf('%F', $task->percent_complete),
                                 'status'           => (string) $task->status,
-                                'done'             => (bool) $task->done),
-                            'location' => url::site('admin/maintenance')));
+                                'done'             => (bool) $task->done
+                            ],
+                            'location' => url::site('admin/maintenance')
+                        ]);
         } else {
-            json::reply(array(
+            json::reply([
                             'result' => 'in_progress',
-                            'task'   => array(
+                            'task'   => [
                                 'percent_complete' => sprintf('%F', $task->percent_complete),
                                 'status'           => (string) $task->status,
-                                'done'             => (bool) $task->done)));
+                                'done'             => (bool) $task->done
+                            ]
+                        ]);
         }
     }
 

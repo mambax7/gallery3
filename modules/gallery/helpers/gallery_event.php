@@ -48,7 +48,7 @@ class gallery_event_Core
         if (!(rand() % 500)) {
             // Note that this code is roughly duplicated in gallery_task::file_cleanup
       $threshold = time() - 1209600; // older than 2 weeks
-      foreach (array('logs', 'tmp') as $dir) {
+      foreach (['logs', 'tmp'] as $dir) {
           $dir = VARPATH . $dir;
           if ($dh = opendir($dir)) {
               while (($file = readdir($dh)) !== false) {
@@ -135,8 +135,8 @@ class gallery_event_Core
             log::error(
                 'graphics',
                 t(
-          "Couldn't create a thumbnail or resize for %item_title",
-                               array('item_title' => $item->title)
+                    "Couldn't create a thumbnail or resize for %item_title",
+                    ['item_title' => $item->title]
       ),
                 html::anchor($item->abs_url(), t('details'))
       );
@@ -170,7 +170,7 @@ class gallery_event_Core
             // Assume that we deleted the album cover
             if (batch::in_progress()) {
                 // Remember that this parent is missing an album cover, for later.
-                $batch_missing_album_cover = Session::instance()->get('batch_missing_album_cover', array());
+                $batch_missing_album_cover = Session::instance()->get('batch_missing_album_cover', []);
                 $batch_missing_album_cover[$parent->id] = 1;
                 Session::instance()->set('batch_missing_album_cover', $batch_missing_album_cover);
             } else {
@@ -202,7 +202,7 @@ class gallery_event_Core
         // this batch.  The item may have been deleted, so don't count on it being around.  Choose the
         // first child as the new album cover.
         // NOTE: if the first child doesn't have an album cover, then this won't work.
-        foreach (array_keys(Session::instance()->get('batch_missing_album_cover', array())) as $id) {
+        foreach (array_keys(Session::instance()->get('batch_missing_album_cover', [])) as $id) {
             $item = ORM::factory('item', $id);
             if ($item->loaded() && !$item->album_cover_item_id) {
                 if ($child = $item->children(1)->current()) {
@@ -331,8 +331,8 @@ class gallery_event_Core
                         }
                     } else {
                         message::warning(t(
-                "The album '%album_name' is not writable.",
-                               array('album_name' => $item->title)
+                                             "The album '%album_name' is not writable.",
+                                             ['album_name' => $item->title]
             ));
                     }
                 }
@@ -443,7 +443,7 @@ class gallery_event_Core
                 module::event('admin_menu', $admin_menu, $theme);
 
                 $settings_menu = $admin_menu->get('settings_menu');
-                uasort($settings_menu->elements, array('Menu', 'title_comparator'));
+                uasort($settings_menu->elements, ['Menu', 'title_comparator']);
             }
         }
     }
@@ -618,13 +618,14 @@ class gallery_event_Core
     {
         $v = new View('user_profile_info.html');
 
-        $fields = array(
+        $fields = [
             'name'  => t('Name'), 'locale' => t('Language Preference'),
-            'email' => t('Email'), 'full_name' => t('Full name'), 'url' => t('Web site'));
+            'email' => t('Email'), 'full_name' => t('Full name'), 'url' => t('Web site')
+        ];
         if (!$data->user->guest) {
-            $fields = array('name' => t('Name'), 'full_name' => t('Full name'), 'url' => t('Web site'));
+            $fields = ['name' => t('Name'), 'full_name' => t('Full name'), 'url' => t('Web site')];
         }
-        $v->user_profile_data = array();
+        $v->user_profile_data = [];
         foreach ($fields as $field => $label) {
             if (!empty($data->user->$field)) {
                 $value = $data->user->$field;
@@ -636,7 +637,7 @@ class gallery_event_Core
                 $v->user_profile_data[(string) $label] = $value;
             }
         }
-        $data->content[] = (object) array('title' => t('User information'), 'view' => $v);
+        $data->content[] = (object) ['title' => t('User information'), 'view' => $v];
     }
 
     public static function user_updated($original_user, $updated_user)

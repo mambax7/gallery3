@@ -42,24 +42,26 @@ class Quick_Controller extends Controller
                 'rotate',
                 pathinfo($item->file_path(), PATHINFO_EXTENSION)
       );
-            gallery_graphics::rotate($item->file_path(), $tmpfile, array('degrees' => $degrees), $item);
+            gallery_graphics::rotate($item->file_path(), $tmpfile, ['degrees' => $degrees], $item);
             $item->set_data_file($tmpfile);
             $item->save();
         }
 
         if (Input::instance()->get('page_type') == 'collection') {
             json::reply(
-        array(
+                [
             'src'    => $item->thumb_url(),
             'width'  => $item->thumb_width,
-            'height' => $item->thumb_height)
+            'height' => $item->thumb_height
+                ]
       );
         } else {
             json::reply(
-        array(
+                [
             'src'    => $item->resize_url(),
             'width'  => $item->resize_width,
-            'height' => $item->resize_height)
+            'height' => $item->resize_height
+                ]
       );
         }
     }
@@ -73,12 +75,12 @@ class Quick_Controller extends Controller
         access::required('view', $item->parent());
         access::required('edit', $item->parent());
 
-        $msg = t("Made <b>%title</b> this album's cover", array('title' => html::purify($item->title)));
+        $msg = t("Made <b>%title</b> this album's cover", ['title' => html::purify($item->title)]);
 
         item::make_album_cover($item);
         message::success($msg);
 
-        json::reply(array('result' => 'success', 'reload' => 1));
+        json::reply(['result' => 'success', 'reload' => 1]);
     }
 
     public function form_delete($id)
@@ -101,9 +103,9 @@ class Quick_Controller extends Controller
         access::required('edit', $item);
 
         if ($item->is_album()) {
-            $msg = t('Deleted album <b>%title</b>', array('title' => html::purify($item->title)));
+            $msg = t('Deleted album <b>%title</b>', ['title' => html::purify($item->title)]);
         } else {
-            $msg = t('Deleted photo <b>%title</b>', array('title' => html::purify($item->title)));
+            $msg = t('Deleted photo <b>%title</b>', ['title' => html::purify($item->title)]);
         }
 
         $redirect = $item->parent(); // redirect to this item, if current item was deleted
@@ -115,7 +117,7 @@ class Quick_Controller extends Controller
             $item->delete();
             batch::stop();
         } else {
-            $where = array(array('type', '!=', 'album')); // evaluate redirect item before delete of current item
+            $where = [['type', '!=', 'album']]; // evaluate redirect item before delete of current item
             $position = item::get_position($item, $where);
             if ($position > 1) {
                 list($previous_item, $ignore, $next_item) =
@@ -137,9 +139,9 @@ class Quick_Controller extends Controller
         if (Input::instance()->get('page_type') == 'collection'
             &&
         $from_id != $id /* deleted the item we were viewing */) {
-            json::reply(array('result' => 'success', 'reload' => 1));
+            json::reply(['result' => 'success', 'reload' => 1]);
         } else {
-            json::reply(array('result' => 'success', 'location' => $redirect->url()));
+            json::reply(['result' => 'success', 'location' => $redirect->url()]);
         }
     }
 

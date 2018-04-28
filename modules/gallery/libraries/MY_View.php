@@ -19,7 +19,7 @@
  */
 class View extends View_Core
 {
-    public static $global_data = array();
+    public static $global_data = [];
 
     /**
      * Reimplement Kohana 2.3's View::set_global() functionality.
@@ -53,7 +53,7 @@ class View extends View_Core
         } elseif (isset($this->$key)) {
             return $this->$key;
         } else {
-            throw new Kohana_Exception('Undefined view variable: :var', array(':var' => $key));
+            throw new Kohana_Exception('Undefined view variable: :var', [':var' => $key]);
         }
     }
 

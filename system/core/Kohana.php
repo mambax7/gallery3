@@ -38,7 +38,7 @@ abstract class Kohana_Core
     protected static $cache_lifetime;
 
     // Internal caches and write status
-    protected static $internal_cache = array();
+    protected static $internal_cache = [];
     protected static $write_cache;
     protected static $internal_cache_path;
     protected static $internal_cache_key;
@@ -116,20 +116,20 @@ abstract class Kohana_Core
             Kohana::$internal_cache['find_file_paths'] = Kohana::cache('find_file_paths', Kohana::$cache_lifetime);
 
             // Enable cache saving
-            Event::add('system.shutdown', array('Kohana', 'internal_cache_save'));
+            Event::add('system.shutdown', ['Kohana', 'internal_cache_save']);
         }
 
         // Start output buffering
-        ob_start(array('Kohana', 'output_buffer'));
+        ob_start(['Kohana', 'output_buffer']);
 
         // Save buffering level
         Kohana::$buffer_level = ob_get_level();
 
         // Set autoloader
-        spl_autoload_register(array('Kohana', 'auto_load'));
+        spl_autoload_register(['Kohana', 'auto_load']);
 
         // Register a shutdown function to handle system.shutdown events
-        register_shutdown_function(array('Kohana', 'shutdown'));
+        register_shutdown_function(['Kohana', 'shutdown']);
 
         // Send default text/html UTF-8 header
         header('Content-Type: text/html; charset='.Kohana::CHARSET);
@@ -169,10 +169,10 @@ abstract class Kohana_Core
             }
 
             // Destroy the REQUEST global
-            $_REQUEST = array();
+            $_REQUEST = [];
 
             // These globals are standard and should not be removed
-            $preserve = array('GLOBALS', '_REQUEST', '_GET', '_POST', '_FILES', '_COOKIE', '_SERVER', '_ENV', '_SESSION');
+            $preserve = ['GLOBALS', '_REQUEST', '_GET', '_POST', '_FILES', '_COOKIE', '_SERVER', '_ENV', '_SESSION'];
 
             // This loop has the same effect as disabling register_globals
             foreach (array_diff(array_keys($GLOBALS), $preserve) as $key) {
@@ -188,14 +188,14 @@ abstract class Kohana_Core
         }
 
         // Enable Kohana routing
-        Event::add('system.routing', array('Router', 'find_uri'));
-        Event::add('system.routing', array('Router', 'setup'));
+        Event::add('system.routing', ['Router', 'find_uri']);
+        Event::add('system.routing', ['Router', 'setup']);
 
         // Enable Kohana controller initialization
-        Event::add('system.execute', array('Kohana', 'instance'));
+        Event::add('system.execute', ['Kohana', 'instance']);
 
         // Enable Kohana 404 pages
-        Event::add('system.404', array('Kohana_404_Exception', 'trigger'));
+        Event::add('system.404', ['Kohana_404_Exception', 'trigger']);
 
         if (Kohana::config('core.enable_hooks') === true) {
             // Find all the hook files
@@ -235,7 +235,7 @@ abstract class Kohana_Core
 
         Kohana_PHP_Exception::disable();
 
-        spl_autoload_unregister(array('Kohana', 'auto_load'));
+        spl_autoload_unregister(['Kohana', 'auto_load']);
 
         Kohana::close_buffers();
     }
@@ -301,7 +301,7 @@ abstract class Kohana_Core
                 $method = $class->getMethod('__call');
 
                 // Use arguments in __call format
-                $arguments = array(Router::$method, Router::$arguments);
+                $arguments = [Router::$method, Router::$arguments];
             }
 
             // Stop the controller setup benchmark
@@ -334,7 +334,7 @@ abstract class Kohana_Core
     {
         if ($process === true) {
             // Add APPPATH as the first path
-            Kohana::$include_paths = array(APPPATH);
+            Kohana::$include_paths = [APPPATH];
 
             foreach (Kohana::config('core.modules') as $path) {
                 if ($path = str_replace('\\', '/', realpath($path))) {
@@ -545,26 +545,26 @@ abstract class Kohana_Core
 
             // Replace the global template variables
             $output = str_replace(
-                array(
+                [
                     '{kohana_version}',
                     '{kohana_codename}',
                     '{execution_time}',
                     '{memory_usage}',
                     '{included_files}',
-                ),
-                array(
+                ],
+                [
                     KOHANA::VERSION,
                     KOHANA::CODENAME,
                     $benchmark['time'],
                     number_format($memory, 2).'MB',
                     count(get_included_files()),
-                ),
+                ],
                 $output
             );
         }
 
         if ($level = Kohana::config('core.output_compression') and ini_get('output_handler') !== 'ob_gzhandler' and (int) ini_get('zlib.output_compression') === 0) {
-            if ($compress = request::preferred_encoding(array('gzip','deflate'), true)) {
+            if ($compress = request::preferred_encoding(['gzip', 'deflate'], true)) {
                 if ($level < 1 or $level > 9) {
                     // Normalize the level to be an integer between 1 and 9. This
                     // step must be done to prevent gzencode from triggering an error
@@ -734,7 +734,7 @@ abstract class Kohana_Core
         if ($found === null) {
             if ($required === true) {
                 // If the file is required, throw an exception
-                throw new Kohana_Exception('The requested :resource:, :file:, could not be found', array(':resource:' => __($directory), ':file:' =>$filename));
+                throw new Kohana_Exception('The requested :resource:, :file:, could not be found', [':resource:' => __($directory), ':file:' =>$filename]);
             } else {
                 // Nothing was found, return FALSE
                 $found = false;
@@ -760,7 +760,7 @@ abstract class Kohana_Core
      */
     public static function list_files($directory, $recursive = false, $ext = EXT, $path = false)
     {
-        $files = array();
+        $files = [];
 
         if ($path === false) {
             $paths = array_reverse(Kohana::include_paths());
@@ -808,7 +808,7 @@ abstract class Kohana_Core
      * @param   array   additional information to insert into the line
      * @return  string  i18n language string, or the requested key if the i18n item is not found
      */
-    public static function message($key, $args = array())
+    public static function message($key, $args = [])
     {
         // Extract the main group from the key
         $group = explode('.', $key, 2);
@@ -816,7 +816,7 @@ abstract class Kohana_Core
 
         if (! isset(Kohana::$internal_cache['messages'][$group])) {
             // Messages for this group
-            $messages = array();
+            $messages = [];
 
             if ($file = Kohana::find_file('messages', $group)) {
                 include $file[0];
@@ -931,7 +931,7 @@ abstract class Kohana_Core
             if (! isset($row[$key])) {
                 if (isset($keys[$i + 1])) {
                     // Make the value an array
-                    $row[$key] = array();
+                    $row[$key] = [];
                 } else {
                     // Add the fill key
                     $row[$key] = $fill;
@@ -964,7 +964,7 @@ abstract class Kohana_Core
 
         // Get params
         $params = func_get_args();
-        $output = array();
+        $output = [];
 
         foreach ($params as $var) {
             $value = is_bool($var) ? ($var ? 'true' : 'false') : print_r($var, true);

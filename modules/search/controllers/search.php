@@ -59,15 +59,16 @@ class Search_Controller extends Controller
         $template = new Theme_View('page.html', 'collection', 'search');
         $root = item::root();
         $template->set_global(
-      array(
-          'page'           => $page,
-          'max_pages'      => $max_pages,
-          'page_size'      => $page_size,
-          'breadcrumbs'    => array(
+            [
+                'page'           => $page,
+                'max_pages'      => $max_pages,
+                'page_size'      => $page_size,
+                'breadcrumbs'    => [
               Breadcrumb::instance($root->title, $root->url())->set_first(),
               Breadcrumb::instance($q, url::abs_site('search?q=' . urlencode($q)))->set_last(),
-            ),
-          'children_count' => $count)
+                ],
+                'children_count' => $count
+            ]
     );
 
         $template->content = new View('search.html');
@@ -100,16 +101,18 @@ class Search_Controller extends Controller
                                     "&show={$item->id}");
         $root = item::root();
 
-        return array(
+        return [
             'position'          => $position,
             'previous_item'     => $previous_item,
             'next_item'         => $next_item,
             'sibling_count'     => $count,
-            'siblings_callback' => array('Search_Controller::get_siblings', array($q, $album)),
-            'breadcrumbs'       => array(
+            'siblings_callback' => ['Search_Controller::get_siblings', [$q, $album]],
+            'breadcrumbs'       => [
                 Breadcrumb::instance($root->title, $root->url())->set_first(),
-                Breadcrumb::instance(t('Search: %q', array('q' => $q)), $search_url),
-                Breadcrumb::instance($item->title, $item->url())->set_last()));
+                Breadcrumb::instance(t('Search: %q', ['q' => $q]), $search_url),
+                Breadcrumb::instance($item->title, $item->url())->set_last()
+            ]
+        ];
     }
 
     public static function get_siblings($q, $album, $limit, $offset)

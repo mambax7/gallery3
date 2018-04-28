@@ -24,10 +24,11 @@ class comment_rest_Core
         $comment = rest::resolve($request->url);
         access::required('view', $comment->item());
 
-        return array(
+        return [
             'url'           => $request->url,
             'entity'        => $comment->as_restful_array(),
-            'relationships' => rest::relationships('comment', $comment));
+            'relationships' => rest::relationships('comment', $comment)
+        ];
     }
 
     public static function put($request)
@@ -59,9 +60,11 @@ class comment_rest_Core
     {
         switch ($resource_type) {
     case 'item':
-      return array(
-          'comments' => array(
-              'url' => rest::url('item_comments', $resource)));
+      return [
+          'comments' => [
+              'url' => rest::url('item_comments', $resource)
+          ]
+      ];
     }
     }
 

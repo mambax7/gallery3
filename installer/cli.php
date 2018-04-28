@@ -86,7 +86,7 @@ function oops($message)
 
 function parse_cli_params()
 {
-    $config = array(
+    $config = [
         'host'        => 'localhost',
         'user'        => 'root',
         'password'    => '',
@@ -94,7 +94,7 @@ function parse_cli_params()
         'prefix'      => '',
         'g3_password' => '',
         'type'        => function_exists('mysqli_set_charset') ? 'mysqli' : 'mysql'
-    );
+    ];
 
     $argv = $_SERVER['argv'];
     for ($i = 1; $i < count($argv); $i++) {

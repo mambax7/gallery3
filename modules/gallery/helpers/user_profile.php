@@ -32,11 +32,11 @@ class user_profile_Core
     public static function get_contact_form($user)
     {
         $form = new Forge(
-        "user_profile/send/{$user->id}", '', 'post',
-                      array('id' => 'g-user-profile-contact-form')
+            "user_profile/send/{$user->id}", '', 'post',
+            ['id' => 'g-user-profile-contact-form']
     );
         $group = $form->group('message')
-      ->label(t('Compose message to %name', array('name' => $user->display_name())));
+      ->label(t('Compose message to %name', ['name' => $user->display_name()]));
         $group->input('reply_to')
       ->label(t('From:'))
       ->rules('required|length[1, 256]|valid_email')

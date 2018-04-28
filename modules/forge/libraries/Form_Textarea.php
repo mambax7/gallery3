@@ -11,12 +11,12 @@
  */
 class Form_Textarea_Core extends Form_Input
 {
-    protected $data = array(
+    protected $data = [
         'class' => 'textarea',
         'value' => '',
-    );
+    ];
 
-    protected $protect = array('type');
+    protected $protect = ['type'];
 
     protected function html_element()
     {

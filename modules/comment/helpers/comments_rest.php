@@ -29,7 +29,7 @@ class comments_rest_Core
      */
     public static function get($request)
     {
-        $comments = array();
+        $comments = [];
 
         $p = $request->params;
         $num = isset($p->num) ? min((int)$p->num, 100) : 10;
@@ -38,9 +38,10 @@ class comments_rest_Core
         foreach (ORM::factory('comment')->viewable()->find_all($num, $start) as $comment) {
             $comments[] = rest::url('comment', $comment);
         }
-        return array(
+        return [
             'url'     => rest::url('comments'),
-            'members' => $comments);
+            'members' => $comments
+        ];
     }
 
 
@@ -57,7 +58,7 @@ class comments_rest_Core
         $comment->text = $entity->text;
         $comment->save();
 
-        return array('url' => rest::url('comment', $comment));
+        return ['url' => rest::url('comment', $comment)];
     }
 
     public static function url()

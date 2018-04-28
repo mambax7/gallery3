@@ -11,7 +11,7 @@ class inflector_Core
 {
 
     // Cached inflections
-    protected static $cache = array();
+    protected static $cache = [];
 
     // Uncountable and irregular words
     protected static $uncountable;

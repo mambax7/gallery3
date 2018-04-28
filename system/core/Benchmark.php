@@ -22,19 +22,19 @@ final class Benchmark
     public static function start($name)
     {
         if (isset(self::$marks[$name]) and self::$marks[$name][0]['stop'] === false) {
-            throw new Kohana_Exception('A benchmark named :name is already running.', array(':name' => $name));
+            throw new Kohana_Exception('A benchmark named :name is already running.', [':name' => $name]);
         }
 
         if (! isset(self::$marks[$name])) {
-            self::$marks[$name] = array();
+            self::$marks[$name] = [];
         }
 
-        $mark = array(
+        $mark = [
             'start'        => microtime(true),
             'stop'         => false,
             'memory_start' => self::memory_usage(),
             'memory_stop'  => false
-        );
+        ];
 
         array_unshift(self::$marks[$name], $mark);
     }
@@ -63,7 +63,7 @@ final class Benchmark
     public static function get($name, $decimals = 4)
     {
         if ($name === true) {
-            $times = array();
+            $times = [];
             $names = array_keys(self::$marks);
 
             foreach ($names as $name) {
@@ -92,11 +92,11 @@ final class Benchmark
             $memory += self::$marks[$name][$i]['memory_stop'] - self::$marks[$name][$i]['memory_start'];
         }
 
-        return array(
+        return [
             'time'   => number_format($time, $decimals),
             'memory' => $memory,
             'count'  => count(self::$marks[$name])
-        );
+        ];
     }
 
     /**

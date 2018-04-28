@@ -28,9 +28,9 @@
  * -  prefix   - Adds a prefix to all keys and tags. This can have a severe performance impact.
  *
  */
-$config['default'] = array(
+$config['default'] = [
     'driver'   => 'file',
-    'params'   => array('directory' => APPPATH.'cache', 'gc_probability' => 1000),
+    'params'   => ['directory' => APPPATH . 'cache', 'gc_probability' => 1000],
     'lifetime' => 1800,
     'prefix'   => null
-);
+];

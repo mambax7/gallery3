@@ -10,18 +10,20 @@
     <?= gallery::date_time($comment->created) ?>
     <?php if ($comment->author()->guest): ?>
     <?= t(
-    '%author_name said <em>%comment_text</em>',
-          array(
+            '%author_name said <em>%comment_text</em>',
+            [
               'author_name'  => html::clean($comment->author_name()),
-              'comment_text' => text::limit_words(nl2br(html::purify($comment->text)), 50))
+              'comment_text' => text::limit_words(nl2br(html::purify($comment->text)), 50)
+            ]
 ); ?>
     <?php else: ?>
     <?= t(
-                    '<a href="%url">%author_name</a> said <em>%comment_text</em>',
-          array(
+            '<a href="%url">%author_name</a> said <em>%comment_text</em>',
+            [
               'author_name'  => html::clean($comment->author_name()),
               'url'          => user_profile::url($comment->author_id),
-              'comment_text' => text::limit_words(nl2br(html::purify($comment->text)), 50))
+              'comment_text' => text::limit_words(nl2br(html::purify($comment->text)), 50)
+            ]
                 ); ?>
     <?php endif ?>
   </li>

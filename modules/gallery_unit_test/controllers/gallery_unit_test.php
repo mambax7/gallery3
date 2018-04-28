@@ -100,9 +100,9 @@ class Gallery_Unit_Test_Controller extends Controller
             $active_modules = module::$active;
 
             // Reset our caches
-            module::$modules = array();
-            module::$active = array();
-            module::$var_cache = array();
+            module::$modules = [];
+            module::$active = [];
+            module::$var_cache = [];
             $db->clear_cache();
 
             // Rest the cascading class path
@@ -115,9 +115,9 @@ class Gallery_Unit_Test_Controller extends Controller
 
             module::install('user');
             module::activate('user');
-            $modules = $paths = array();
+            $modules = $paths = [];
             foreach (module::available() as $module_name => $unused) {
-                if (in_array($module_name, array('gallery', 'user'))) {
+                if (in_array($module_name, ['gallery', 'user'])) {
                     $paths[] = MODPATH . "{$module_name}/tests";
                     continue;
                 }

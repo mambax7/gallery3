@@ -5,12 +5,12 @@
   <p>
     <?= t(
         'The GD graphics library is an extension to PHP commonly installed most webservers.  Please refer to the <a href="%url">GD website</a> for more information.',
-        array('url' => 'http://www.boutell.com/gd')
+        ['url' => 'http://www.boutell.com/gd']
 ) ?>
   </p>
   <?php if ($tk->installed && $tk->rotate): ?>
   <div class="g-module-status g-info">
-    <?= t('You have GD version %version.', array('version' => $tk->version)) ?>
+    <?= t('You have GD version %version.', ['version' => $tk->version]) ?>
   </div>
   <p>
     <a class="g-button ui-state-default ui-corner-all"><?= t('Activate GD') ?></a>

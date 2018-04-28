@@ -27,7 +27,7 @@ class photo_Core
 {
     public static function get_edit_form($photo)
     {
-        $form = new Forge("photos/update/$photo->id", '', 'post', array('id' => 'g-edit-photo-form'));
+        $form = new Forge("photos/update/$photo->id", '', 'post', ['id' => 'g-edit-photo-form']);
         $form->hidden('from_id')->value($photo->id);
         $group = $form->group('edit_item')->label(t('Edit Photo'));
         $group->input('title')->label(t('Title'))->value($photo->title)
@@ -149,6 +149,6 @@ class photo_Core
             throw new Exception('@todo ILLEGAL_OR_UNINDENTIFIABLE_FILE');
         }
 
-        return array($metadata->width, $metadata->height, $metadata->mime_type, $metadata->extension);
+        return [$metadata->width, $metadata->height, $metadata->mime_type, $metadata->extension];
     }
 }

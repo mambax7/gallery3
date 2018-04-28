@@ -55,14 +55,14 @@ class Packager_Controller extends Controller
         dir::unlink(VARPATH . 'tmp');
 
         Database::instance()->clear_cache();
-        module::$modules = array();
-        module::$active = array();
+        module::$modules = [];
+        module::$active = [];
 
         // Use a known random seed so that subsequent packaging runs will reuse the same random
         // numbers, keeping our install.sql file more stable.
         srand(0);
 
-        foreach (array(
+        foreach ([
                      'gallery',
                      'user',
                      'comment',
@@ -72,7 +72,7 @@ class Packager_Controller extends Controller
                      'search',
                      'slideshow',
                      'tag'
-                 ) as $module_name) {
+                 ] as $module_name) {
             module::install($module_name);
             module::activate($module_name);
         }
@@ -83,8 +83,8 @@ class Packager_Controller extends Controller
         // We now have a clean install with just the packages that we want.  Make sure that the
         // database is clean too.
         $i = 1;
-        foreach (array('dashboard_sidebar', 'dashboard_center', 'site_sidebar') as $key) {
-            $blocks = array();
+        foreach (['dashboard_sidebar', 'dashboard_center', 'site_sidebar'] as $key) {
+            $blocks = [];
             foreach (unserialize(module::get_var('gallery', "blocks_{$key}")) as $rnd => $value) {
                 $blocks[++$i] = $value;
             }
@@ -95,8 +95,8 @@ class Packager_Controller extends Controller
         Database::instance()->query('TRUNCATE {sessions}');
         Database::instance()->query('TRUNCATE {logs}');
         db::build()->update('users')
-      ->set(array('password' => ''))
-      ->where('id', 'in', array(1, 2))
+      ->set(['password' => ''])
+      ->where('id', 'in', [1, 2])
       ->execute();
 
         $dbconfig = Kohana::config('database.default');
@@ -175,7 +175,7 @@ class Packager_Controller extends Controller
             return;
         }
 
-        $paths = array();
+        $paths = [];
         foreach ($objects as $name => $file) {
             $path = $file->getPath();
             $basename = $file->getBasename();

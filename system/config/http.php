@@ -12,7 +12,7 @@
  * HTTP-EQUIV type meta tags
  *
  */
-$config['meta_equiv'] = array(
+$config['meta_equiv'] = [
     'cache-control',
     'content-type', 'content-script-type', 'content-style-type',
     'content-disposition',
@@ -26,4 +26,4 @@ $config['meta_equiv'] = array(
     'set-cookie',
     'vary',
     'window-target',
-);
+];

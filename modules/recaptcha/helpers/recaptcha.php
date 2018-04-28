@@ -21,7 +21,7 @@ class recaptcha_Core
 {
     public static function get_configure_form()
     {
-        $form = new Forge('admin/recaptcha', '', 'post', array('id' => 'g-configure-recaptcha-form'));
+        $form = new Forge('admin/recaptcha', '', 'post', ['id' => 'g-configure-recaptcha-form']);
         $group = $form->group('configure_recaptcha')
       ->label(t('Configure reCAPTCHA'));
         $group->input('public_key')
@@ -51,7 +51,7 @@ class recaptcha_Core
             site_status::warning(
         t(
             'reCAPTCHA is not quite ready!  Please configure the <a href="%url">reCAPTCHA Keys</a>',
-            array('url' => html::mark_clean(url::site('admin/recaptcha')))
+            ['url' => html::mark_clean(url::site('admin/recaptcha'))]
         ), 'recaptcha_config'
       );
         } else {
@@ -74,12 +74,12 @@ class recaptcha_Core
         $remote_ip = Input::instance()->server('REMOTE_ADDR');
         $response = self::_http_post(
             'api-verify.recaptcha.net', '/verify',
-            array(
+            [
                 'privatekey' => $private_key_input->value,
                 'remoteip'   => $remote_ip,
                 'challenge'  => 'right',
                 'response'   => 'wrong'
-            )
+            ]
     );
 
         if ($response[1] == "false\ninvalid-site-private-key") {
@@ -106,11 +106,12 @@ class recaptcha_Core
 
         $response = self::_http_post(
             'api-verify.recaptcha.net', '/verify',
-            array(
+            [
                 'privatekey' => $private_key,
                 'remoteip'   => $remote_ip,
                 'challenge'  => $challenge,
-                'response'   => $response)
+                'response'   => $response
+            ]
     );
 
         $answers = explode("\n", $response [1]);
@@ -128,7 +129,7 @@ class recaptcha_Core
      */
     private static function _encode(array $data)
     {
-        $req = array();
+        $req = [];
         foreach ($data as $key => $value) {
             $req[] = "$key=" . urlencode(stripslashes($value));
         }
